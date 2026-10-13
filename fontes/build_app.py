@@ -69,11 +69,10 @@ EXD = [
   (71,88,"CH3CH2CH2C≡O+","HO·","clivagem α: ligação C(=O)–OH","CCCC#[O+]","[OH]","C4H7O+","HO·"),
   (60,88,"CH2=C(OH)2+·, pico base","CH2=CH2","McLafferty: H do carbono γ vai para o O do C=O","C=C(O)O","C=C","C2H4O2+·","C2H4"),
   (43,71,"C3H7+","CO","o íon acila perde CO","CC[CH2+]","[C-]#[O+]","C3H7+","CO")]),
- dict(n=10, nome="N,N-dimetiletilamina", f="C4H11N", M=73, g="amina terciária", ok=False, sug=True, smi="CCN(C)C", peaks=[73,72,58,44,30], rows=[
+ dict(n=10, nome="N,N-dimetiletilamina", f="C4H11N", M=73, g="amina terciária", ok=True, sug=False, smi="CCN(C)C", peaks=[73,72,58,44], rows=[
   (72,73,"C4H10N+","H·","H sai do carbono ao lado do N","CC=[N+](C)C","[H]","C4H10N+","H·"),
-  (58,73,"(CH3)2N+=CH2, pico base","CH3·","clivagem α: o CH3 do etila sai e o N fica com a carga","C=[N+](C)C","[CH3]","C3H8N+","CH3·"),
-  (44,73,"(CH3)2N+","CH3CH2·","ligação N–CH2 do etila (sugestão minha)","C[N+]C","C[CH2]","C2H6N+","C2H5·"),
-  (30,58,"CH2=NH2+","CH2=CH2","a partir do 58 (sugestão minha)","C=[NH2+]","C=C","CH4N+","C2H4")]),
+  (58,73,"(CH3)2N+=CH2, pico base (100%)","CH3·","clivagem α: o CH3 do etila sai e o N fica com a carga","C=[N+](C)C","[CH3]","C3H8N+","CH3·"),
+  (44,73,"(CH3)2N+","CH3CH2·","ligação N–CH2 do etila: sai CH3CH2· (29)","C[N+]C","C[CH2]","C2H6N+","C2H5·"),]),
  dict(n=12, nome="valeraldeído (pentanal)", f="C5H10O", M=86, g="aldeído alifático", ok=False, sug=True, smi="CCCCC=O", peaks=[86,58,57,44,43,41,29], rows=[
   (58,86,"C3H6O+·","CH2=CH2","perde eteno (sugestão minha)","CCC=O","C=C","C3H6O+·","C2H4"),
   (57,86,"C4H9+","·CHO","sai o ·CHO (29), sobra o butila","CCC[CH2+]","[CH]=O","C4H9+","·CHO"),

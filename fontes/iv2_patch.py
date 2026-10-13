@@ -24,7 +24,7 @@ DISC={
 9:[['3100','O–H de ácido carboxílico, estiramento (larga)'],['2960','CH3 estiramento assimétrico'],['2920','CH2 estiramento assimétrico'],['2867','CH3 estiramento simétrico'],['2860','CH2 estiramento simétrico'],['1710','C=O de ácido carboxílico, estiramento'],['1460','CH3 deformação assimétrica'],['1455','CH2 deformação tesoura'],['1420','CH2 vizinho à carbonila, deformação tesoura'],['1385','CH3 deformação simétrica'],['1280','C–O do C(C=O)OH, estiramento'],['920','O–H fora do plano']],
 5:[['2980','CH3 estiramento assimétrico'],['2940','CH2 estiramento assimétrico'],['2870','CH3 estiramento simétrico'],['2860','CH2 estiramento simétrico'],['1720','C=O de cetona, estiramento'],['1470','CH3 deformação assimétrica'],['1410','CH2 vizinho à carbonila, deformação tesoura'],['1380','CH3 deformação simétrica']],
 7:[['2980','CH2 estiramento assimétrico'],['2860','CH2 estiramento simétrico'],['1455','CH2 deformação tesoura'],['1120','C–O de éter alifático (Csp³–O), estiramento']],
-10:[['2980','CH3 estiramento assimétrico'],['2950','CH2 estiramento assimétrico'],['2870','CH3 estiramento simétrico'],['2820','CH2 estiramento simétrico'],['1460','CH3 deformação assimétrica'],['1450','CH2 deformação tesoura'],['1380','CH3 deformação simétrica ("guarda-chuva")'],['1270','C–N alifático (Csp³–N), estiramento']],
+10:[['2980','CH3 estiramento assimétrico'],['2970','CH2 estiramento assimétrico'],['2870','CH3 estiramento simétrico'],['2810','CH2 estiramento simétrico'],['1470','CH3 deformação assimétrica'],['1450','CH2 deformação tesoura'],['1380','CH3 deformação simétrica ("guarda-chuva")'],['1230','C–N alifático (Csp³–N), estiramento']],
 }
 for n,c in byn.items():
     c['idh']=IDH[n]; c['disc']=DISC.get(n,[])
