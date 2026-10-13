@@ -19,7 +19,7 @@
   --keep:#52C5A3; --keep-soft:#173A30; --lost:#F0907B; --lost-soft:#3B2420;
   --note:#E8C45E; --note-soft:#3A3217; --focus:#52C5A3; --blue:#8FA8FF; --amber:#F2C14E; color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:20px 48px}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:18px 96px}
 .wrap{max-width:980px;margin:0 auto}
 h1{font-size:1.6rem;line-height:1.15;margin:0 0 4px;font-weight:600;text-wrap:balance}
 .sub{color:var(--muted);margin:0 0 18px;max-width:62ch}
@@ -107,33 +107,35 @@ figure.map .w{text-transform:none;letter-spacing:0;font-weight:500;color:var(--m
 details{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 14px;margin-bottom:16px}
 summary{cursor:pointer;font-weight:500}
 details dl{margin:10px 0 0;display:grid;gap:8px}details dt{font-weight:600}details dd{margin:0;color:var(--muted)}
+.gl{margin:10px 0 0;display:grid;gap:8px}.gl dt{font-weight:600}.gl dd{margin:0;color:var(--muted)}
 .mhint{font-size:.88rem;color:var(--muted);margin:-6px 0 12px}
+h1{font-size:1.15rem}
+.scr{font-size:1.25rem;margin:4px 0 2px}.scrsub{color:var(--muted);margin:0 0 14px;max-width:70ch}
+.bnav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.bnav .tab{flex:1;max-width:170px;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:.74rem;padding:7px 4px 8px;margin:0;border:0;border-top:3px solid transparent;color:var(--muted)}
+.bnav .tab[aria-selected="true"]{color:var(--keep);border-top-color:var(--keep);border-bottom:0}
+.bnav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.bnav svg .dot{fill:currentColor;stroke:none}
+.seg{display:flex;margin:0 0 14px}
+.seg button{flex:1;font:inherit;font-weight:500;background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:8px 6px;cursor:pointer}
+.seg button:first-child{border-radius:6px 0 0 6px}.seg button:last-child{border-radius:0 6px 6px 0}.seg button+button{border-left:0}
+.seg button[aria-pressed="true"]{background:var(--keep);border-color:var(--keep);color:var(--surface)}
+.menu{display:grid;gap:10px}
+.mi{font:inherit;text-align:left;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:14px 16px;cursor:pointer;display:grid;gap:2px}
+.mi b{font-weight:600}.mi span{color:var(--muted);font-size:.9rem}
+.back{font:inherit;background:none;border:0;color:var(--keep);font-weight:500;padding:4px 0;margin:0 0 8px;cursor:pointer}
+#out.single{grid-template-columns:1fr}
+.pkh{margin:6px 0 4px;font-size:.9rem;color:var(--muted)}
 @media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}.card:hover{border-color:var(--keep)}}
 </style>
 
 <div class="wrap">
   <h1>Quebra-cabeça de massas</h1>
-  <p class="sub">Digite a massa da molécula e os picos do espectro. O app mostra o que ficou e o que saiu em cada pico, usando as tabelas do Silverstein (Apêndices B e C).</p>
-
-  <div class="tabs" role="tablist" aria-label="Seções">
-    <button class="tab" role="tab" id="t-an" aria-selected="true" aria-controls="p-an">Analisar</button>
-    <button class="tab" role="tab" id="t-tr" aria-selected="false" aria-controls="p-tr">Treinar</button>
-    <button class="tab" role="tab" id="t-tb" aria-selected="false" aria-controls="p-tb">Tabelas do livro</button>
-    <button class="tab" role="tab" id="t-iv" aria-selected="false" aria-controls="p-iv">IV</button>
-    <button class="tab" role="tab" id="t-ca" aria-selected="false" aria-controls="p-ca">Calculadora</button>
-  </div>
 
   <section id="p-an" role="tabpanel" aria-labelledby="t-an">
-    <div class="how">
-      <b>Como ler um pico</b>
-      <ol>
-        <li><b>Quanto saiu?</b> Faça M − pico.</li>
-        <li><b>O que pesa isso?</b> A coluna vermelha lista o que o livro diz para essa perda.</li>
-        <li><b>O que ficou?</b> A coluna verde lista os íons do livro com esse m/z.</li>
-        <li><b>Escolha</b> o que combina com o grupo funcional da sua molécula e marque a ligação que quebrou.</li>
-      </ol>
-    </div>
-    <details><summary>O que significam esses termos?</summary><dl id="glos"></dl></details>
+    <div id="an-in">
+    <h2 class="scr">Analisar</h2>
+    <p class="scrsub">Escolha um exercício ou digite M e os picos. Depois toque num pico para ver o que ficou e o que saiu. <button class="back" style="display:inline;margin:0" data-go="p-aj">Como ler um pico?</button></p>
     <div>Exercícios da lista (carregam M e os picos). Nos seus PDFs a numeração vai de 10 direto para 12.</div>
     <div class="chips" id="exchips"></div>
     <div class="row">
@@ -142,17 +144,26 @@ details dl{margin:10px 0 0;display:grid;gap:8px}details dt{font-weight:600}detai
       <button class="btn" id="go">Analisar</button>
     </div>
     <div id="nrule" class="mhint"></div>
+    </div>
+    <div id="an-res" hidden>
+    <button class="back" type="button" id="an-back">← Mudar exercício ou picos</button>
     <div id="exinfo"></div>
+    <div class="pkh" id="pkh"></div>
+    <div class="chips" id="pkbar" role="group" aria-label="Escolha o pico"></div>
     <div class="grid" id="out"></div>
     <div id="pairs"></div>
+    </div>
   </section>
 
   <section id="p-tr" role="tabpanel" aria-labelledby="t-tr" hidden>
-    <p class="hint">Cada rodada mostra uma molécula da sua lista e um pico. Você descobre quanto saiu, vê as possibilidades do livro e decide qual faz sentido.</p>
+    <h2 class="scr">Treinar</h2>
+    <p class="scrsub">Cada rodada mostra uma molécula da sua lista e um pico. Você descobre quanto saiu, vê as possibilidades do livro e decide qual faz sentido.</p>
     <div class="quiz" id="quiz"></div>
   </section>
 
   <section id="p-tb" role="tabpanel" aria-labelledby="t-tb" hidden>
+    <h2 class="scr">Livro</h2>
+    <p class="scrsub">Tabelas do Silverstein: o que saiu (Apêndice C) e o que ficou (Apêndice B).</p>
     <div class="row">
       <label for="tbsel">Tabela
         <select id="tbsel"><option value="C">C: o que saiu (M − pico)</option><option value="B">B: o que ficou (m/z do íon)</option></select>
@@ -164,6 +175,23 @@ details dl{margin:10px 0 0;display:grid;gap:8px}details dt{font-weight:600}detai
   </section>
 
   <section id="p-iv" role="tabpanel" aria-labelledby="t-iv" hidden>
+    <h2 class="scr">IV</h2>
+    <div class="seg" role="group" aria-label="Partes do IV">
+      <button type="button" data-v="v-comp" aria-pressed="true">Composto</button>
+      <button type="button" data-v="v-num" aria-pressed="false">Número de onda</button>
+      <button type="button" data-v="v-guia" aria-pressed="false">Guia</button>
+    </div>
+    <div id="v-comp">
+      <p class="scrsub">Escolha um composto para ver as bandas dele e a pista para o espectro de massas.</p>
+      <div class="chips" id="ivchips"></div>
+      <div id="ivout"></div>
+    </div>
+    <div id="v-num" hidden>
+      <p class="scrsub">Digite uma banda e veja que grupo ela pode ser e com qual outra banda confirmar.</p>
+      <label for="ivq">Número de onda (cm⁻¹)<input class="f-m" type="number" id="ivq" inputmode="numeric" min="400" max="4000" placeholder="ex.: 1712"></label>
+      <div id="ivres"></div>
+    </div>
+    <div id="v-guia" hidden>
     <div class="how">
       <b>Como ler um espectro de IV</b>
       <ol>
@@ -173,22 +201,33 @@ details dl{margin:10px 0 0;display:grid;gap:8px}details dt{font-weight:600}detai
         <li><b>Leve a pista para o MS.</b> O grupo funcional diz quais perdas do Apêndice C fazem sentido.</li>
       </ol>
     </div>
-    <details><summary>Por que cada banda aparece onde aparece?</summary><dl>
+
+    <h2>Por que cada banda aparece onde aparece?</h2><dl class="gl">
       <div><dt>Posição: ligação mais forte e átomo mais leve vibram mais alto</dt><dd>C≡C ~2150 &gt; C=C ~1650 &gt; C–C ~1000. C–H, N–H e O–H ficam acima de 2500 porque o H é muito leve.</dd></div>
       <div><dt>Intensidade: depende de quanto o dipolo muda</dt><dd>C=O é sempre forte porque o O é muito eletronegativo. C=C simétrico é fraco ou some, porque a vibração não muda o dipolo.</dd></div>
       <div><dt>Hibridização do carbono</dt><dd>Quanto mais caráter s, mais alto: C–H sp (alcino) ~3300; C–H sp² (anel, alceno) 3100–3000; C–H sp³ (alcano) 2960–2850. Mesma lógica no C–O: fenol (~1200) fica acima de álcool (~1050).</dd></div>
       <div><dt>Estiramento × deformação</dt><dd>Estiramento (muda o comprimento da ligação) fica sempre acima da deformação (muda o ângulo). Exemplo do C–H: estiramento 3000–2900; deformação 1470–1350.</dd></div>
-    </dl></details>
-    <details><summary>Guia por região (da apostila)</summary><div id="ivreg"></div></details>
+    </dl>
+
+      <h2 style="margin-top:18px">Guia por região (da apostila)</h2>
+      <div id="ivreg"></div>
     <p class="hint">Fontes: sua <i>Apostila de Interpretação de Espectros de IV</i>, a <i>tabela análise org II</i> e a tabela de números de onda do Drive. Os números do arquivo de dados são os do JSON que você enviou, e as atribuições dele são minhas; confira com a tabela do professor.</p>
-    <div class="chips" id="ivchips"></div>
-    <div id="ivout"></div>
-    <h2 style="margin-top:20px">Tenho um número de onda</h2>
-    <label for="ivq">Número de onda (cm⁻¹)<input class="f-m" type="number" id="ivq" inputmode="numeric" min="400" max="4000" placeholder="ex.: 1712"></label>
-    <div id="ivres"></div>
+
+    </div>
   </section>
 
-  <section id="p-ca" role="tabpanel" aria-labelledby="t-ca" hidden>
+  <section id="p-ma" role="tabpanel" aria-labelledby="t-ma" hidden>
+    <h2 class="scr">Mais</h2>
+    <div class="menu">
+      <button class="mi" type="button" data-go="p-ca"><b>Calculadora de massa</b><span>Some a fórmula de um pedaço e veja o que o livro lista para esse número.</span></button>
+      <button class="mi" type="button" data-go="p-aj"><b>Como ler um pico e glossário</b><span>Os 4 passos, o que são +, +· e ·, clivagem α e McLafferty.</span></button>
+      <button class="mi" type="button" data-go="p-fo"><b>Fontes e avisos</b><span>De onde vêm as tabelas e o que ainda precisa de conferência.</span></button>
+    </div>
+  </section>
+
+  <section id="p-ca" role="region" aria-label="Calculadora" hidden>
+    <button class="back" data-go="p-ma">← Mais</button>
+    <h2 class="scr">Calculadora de massa</h2>
     <p class="hint">Digite a fórmula de um pedaço (por exemplo C3H7O ou CH3). O app soma as massas e mostra o que o livro lista para esse número.</p>
     <div class="row">
       <label for="fm">Fórmula<input class="f-p" type="text" id="fm" value="C2H5"></label>
@@ -196,8 +235,37 @@ details dl{margin:10px 0 0;display:grid;gap:8px}details dt{font-weight:600}detai
     <div id="calcout"></div>
   </section>
 
-  <p class="foot">Fonte das tabelas: Silverstein, Webster, Kiemle, Bryce. Spectrometric Identification of Organic Compounds, 8ª ed. (2014), Apêndice B (p. 67–68) e Apêndice C (p. 69–70). O livro avisa que as listas são sugestivas e não completas. Nas entradas com anel, o nome e a estrutura são minha leitura do desenho do livro; confira na página indicada. "+ H" ou "+ 2H" indica rearranjo com transferência de hidrogênio. Exercícios 6 a 9 conferidos com a lousa do professor; 1 a 5 ainda precisam ser conferidos; 10 e 12 são sugestão minha. Nas estruturas, o desenho mostra o esqueleto; a carga + e o elétron desemparelhado (·) aparecem na legenda e, quando possível, no desenho.</p>
+
+  <section id="p-aj" role="region" aria-label="Como ler um pico" hidden>
+    <button class="back" data-go="p-ma">← Mais</button>
+    <h2 class="scr">Como ler um pico</h2>
+    <div class="how">
+      <b>Como ler um pico</b>
+      <ol>
+        <li><b>Quanto saiu?</b> Faça M − pico.</li>
+        <li><b>O que pesa isso?</b> A coluna vermelha lista o que o livro diz para essa perda.</li>
+        <li><b>O que ficou?</b> A coluna verde lista os íons do livro com esse m/z.</li>
+        <li><b>Escolha</b> o que combina com o grupo funcional da sua molécula e marque a ligação que quebrou.</li>
+      </ol>
+    </div>
+    <h2 style="margin-top:18px">Glossário</h2><dl id="glos" class="gl"></dl>
+  </section>
+
+  <section id="p-fo" role="region" aria-label="Fontes e avisos" hidden>
+    <button class="back" data-go="p-ma">← Mais</button>
+    <h2 class="scr">Fontes e avisos</h2>
+      <p>Fonte das tabelas: Silverstein, Webster, Kiemle, Bryce. Spectrometric Identification of Organic Compounds, 8ª ed. (2014), Apêndice B (p. 67–68) e Apêndice C (p. 69–70). O livro avisa que as listas são sugestivas e não completas. Nas entradas com anel, o nome e a estrutura são minha leitura do desenho do livro; confira na página indicada. "+ H" ou "+ 2H" indica rearranjo com transferência de hidrogênio. Exercícios 6 a 9 conferidos com a lousa do professor; 1 a 5 ainda precisam ser conferidos; 10 e 12 são sugestão minha. Nas estruturas, o desenho mostra o esqueleto; a carga + e o elétron desemparelhado (·) aparecem na legenda e, quando possível, no desenho.</p>
+  </section>
+
 </div>
+
+<nav class="bnav" role="tablist" aria-label="Seções">
+  <button class="tab" role="tab" id="t-an" aria-selected="true" aria-controls="p-an"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.4-4.4"/></svg>Analisar</button>
+  <button class="tab" role="tab" id="t-tr" aria-selected="false" aria-controls="p-tr"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle class="dot" cx="12" cy="12" r="1.2"/></svg>Treinar</button>
+  <button class="tab" role="tab" id="t-tb" aria-selected="false" aria-controls="p-tb"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h13v16H7a2 2 0 0 1-2-2z"/><path d="M5 18a2 2 0 0 1 2-2h11"/></svg>Livro</button>
+  <button class="tab" role="tab" id="t-iv" aria-selected="false" aria-controls="p-iv"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h3.5l2-6 4 12 2.5-6H21"/></svg>IV</button>
+  <button class="tab" role="tab" id="t-ma" aria-selected="false" aria-controls="p-ma"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="5.5" cy="12" r="1.6"/><circle class="dot" cx="12" cy="12" r="1.6"/><circle class="dot" cx="18.5" cy="12" r="1.6"/></svg>Mais</button>
+</nav>
 
 <script>
 /* ---------- dados: Apêndice C (M − pico → o que saiu) ---------- */
@@ -340,7 +408,7 @@ function stepCard(ex,row){
 function fig(k,cap,cls,w){return '<figure class="st '+cls+'"><span class="w">'+w+'</span>'+(SVG[k]||'')+'<figcaption>'+fmt(cap)+'</figcaption></figure>';}
 function strucPair(r){return '<div class="sp">'+fig(r[5],r[7],'keep','ficou')+'<span class="op">+</span>'+fig(r[6],r[8],'lost','saiu')+'</div>';}
 /* ---------- aba Analisar ---------- */
-let curEx=null;
+let curEx=null,pkSel=null;
 function buildChips(){
   const box=$('#exchips');
   box.innerHTML='';
@@ -348,7 +416,7 @@ function buildChips(){
     const b=document.createElement('button');
     b.className='chip';b.type='button';b.setAttribute('aria-pressed',curEx===e.n?'true':'false');
     b.textContent='Ex. '+e.n+' '+e.nome;
-    b.onclick=()=>{curEx=e.n;$('#inM').value=e.M;$('#inP').value=e.peaks.filter(p=>p!==e.M).join(', ');buildChips();analyze();};
+    b.onclick=()=>{curEx=e.n;pkSel=null;$('#inM').value=e.M;$('#inP').value=e.peaks.filter(p=>p!==e.M).join(', ');buildChips();analyze();anStage(true);};
     box.appendChild(b);
   });
 }
@@ -359,8 +427,8 @@ function analyze(){
   if(!ex)curEx=null;
   $('#exinfo').innerHTML=ex?'<div class="ex-head"><b>Ex. '+ex.n+': '+esc(ex.nome)+'</b><span class="mono">'+fmt(ex.f)+'</span><span>'+esc(ex.g)+'</span><span class="badge '+(ex.ok?'ok':'chk')+'">'+(ex.ok?'conferido com a lousa':'conferir com o professor')+'</span><span class="mol">'+fig(ex.smi,ex.f,'keep','molécula')+'</span></div>'+(ex.sug?'<p class="note-sug">Este exercício não tem resolução do professor nos seus arquivos. As quebras abaixo são sugestão minha a partir do livro, então confira.</p>':''):'';
   $('#nrule').innerHTML=M?'Regra do nitrogênio: M = '+M+' é <b>'+(M%2?'ímpar → número ímpar de N (1, 3...)':'par → zero ou número par de N')+'</b>.':'';
-  if(!M||!peaks.length){$('#out').innerHTML='<p class="empty">Digite M e pelo menos um pico.</p>';$('#pairs').innerHTML='';return;}
-  let html='';
+  if(!M||!peaks.length){$('#out').innerHTML='<p class="empty">Digite M e pelo menos um pico.</p>';$('#pairs').innerHTML='';$('#pkbar').innerHTML='';$('#pkh').textContent='';return;}
+  const cards={};
   peaks.forEach(p=>{
     const row=ex?ex.rows.find(r=>r[0]===p):null;
     const d=M-p;
@@ -376,9 +444,15 @@ function analyze(){
       const d2=row[1]-row[0];
       ans='<div class="ans"><span class="t">Resposta do exercício</span>'+stepCard(ex,row)+'</div>';
     }
-    html+='<div class="card">'+head+'<div class="cols">'+body+'</div>'+ans+'</div>';
+    cards[p]='<div class="card">'+head+'<div class="cols">'+body+'</div>'+ans+'</div>';
   });
-  $('#out').innerHTML=html;
+  if(pkSel!=='all'&&!peaks.includes(pkSel))pkSel=peaks[0];
+  $('#pkh').textContent='Toque num pico:';
+  $('#pkbar').innerHTML='';
+  peaks.forEach(p=>{const b=document.createElement('button');b.type='button';b.className='chip mono';b.setAttribute('aria-pressed',pkSel===p?'true':'false');b.textContent='m/z '+p+(p===M?' (M)':'');b.onclick=()=>{pkSel=p;analyze();};$('#pkbar').appendChild(b);});
+  if(peaks.length>1){const b=document.createElement('button');b.type='button';b.className='chip';b.setAttribute('aria-pressed',pkSel==='all'?'true':'false');b.textContent='Todos';b.onclick=()=>{pkSel='all';analyze();};$('#pkbar').appendChild(b);}
+  $('#out').className=pkSel==='all'?'grid':'grid single';
+  $('#out').innerHTML=pkSel==='all'?peaks.map(p=>cards[p]).join(''):cards[pkSel];
   // perdas entre picos
   const all=[M,...peaks.filter(p=>p<M)];
   const prs=[];
@@ -387,9 +461,11 @@ function analyze(){
     if(i===0)continue; // já mostrado nos cartões
     if(CM.has(d))prs.push([all[i],all[j],d]);
   }
-  $('#pairs').innerHTML=prs.length?'<h2>Perdas entre dois picos</h2><p class="hint">Quando um fragmento perde mais um pedaço, a diferença entre os dois picos também aparece no Apêndice C.</p><div class="pairs">'+prs.map(([a,b,d])=>'<div class="pair"><span class="mono">'+a+' → '+b+'</span><span class="mono">perdeu '+d+'</span><span>'+CM.get(d).map(x=>fmt(x[0])).join(', ')+'</span></div>').join('')+'</div>':'';
+  $('#pairs').innerHTML=prs.length?'<details><summary>Perdas entre dois picos ('+prs.length+')</summary><p class="hint" style="margin-top:8px">Quando um fragmento perde mais um pedaço, a diferença entre os dois picos também aparece no Apêndice C.</p><div class="pairs">'+prs.map(([a,b,d])=>'<div class="pair"><span class="mono">'+a+' → '+b+'</span><span class="mono">perdeu '+d+'</span><span>'+CM.get(d).map(x=>fmt(x[0])).join(', ')+'</span></div>').join('')+'</div></details>':'';
 }
-$('#go').onclick=()=>{curEx=null;buildChips();analyze();};
+$('#go').onclick=()=>{curEx=null;pkSel=null;buildChips();analyze();anStage(true);};
+$('#an-back').onclick=()=>anStage(false);
+function anStage(r){$('#an-in').hidden=r;$('#an-res').hidden=!r;window.scrollTo(0,0);}
 ['#inM','#inP'].forEach(s=>$(s).addEventListener('input',()=>{analyze();}));
 
 /* ---------- aba Treinar ---------- */
@@ -514,10 +590,24 @@ function drawIVReg(){
 }
 
 /* ---------- abas ---------- */
-const tabs=[['t-an','p-an'],['t-tr','p-tr'],['t-tb','p-tb'],['t-iv','p-iv'],['t-ca','p-ca']];
-tabs.forEach(([t,p])=>{$('#'+t).onclick=()=>{tabs.forEach(([t2,p2])=>{$('#'+t2).setAttribute('aria-selected',t2===t?'true':'false');$('#'+p2).hidden=p2!==p;});if(p==='p-tr'&&!q)newQ();};});
+const SCR=['p-an','p-tr','p-tb','p-iv','p-ma','p-ca','p-aj','p-fo'];
+const OWN={'p-ca':'t-ma','p-aj':'t-ma','p-fo':'t-ma'};
+const NAV=['t-an','t-tr','t-tb','t-iv','t-ma'];
+function go(id){
+  SCR.forEach(x=>{$('#'+x).hidden=x!==id;});
+  const own=OWN[id]||('t-'+id.slice(2));
+  NAV.forEach(t=>$('#'+t).setAttribute('aria-selected',t===own?'true':'false'));
+  if(id==='p-tr'&&!q)newQ();
+  window.scrollTo(0,0);
+}
+NAV.forEach((t,i)=>{const el=$('#'+t);
+  el.onclick=()=>go('p-'+t.slice(2));
+  el.addEventListener('keydown',ev=>{const d=ev.key==='ArrowRight'?1:ev.key==='ArrowLeft'?-1:0;if(!d)return;ev.preventDefault();const n=NAV[(i+d+NAV.length)%NAV.length];$('#'+n).focus();$('#'+n).click();});});
+document.addEventListener('click',ev=>{const b=ev.target.closest('[data-go]');if(b)go(b.dataset.go);});
+document.querySelectorAll('.seg').forEach(g=>g.querySelectorAll('button').forEach(b=>{b.onclick=()=>{
+  g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
+  ['v-comp','v-num','v-guia'].forEach(id=>{$('#'+id).hidden=id!==b.dataset.v;});};}));
 
-tabs.forEach(([t],i)=>{$('#'+t).addEventListener('keydown',ev=>{const d=ev.key==='ArrowRight'?1:ev.key==='ArrowLeft'?-1:0;if(!d)return;ev.preventDefault();const n=tabs[(i+d+tabs.length)%tabs.length][0];$('#'+n).focus();$('#'+n).click();});});
 /* ---------- início: exercício 6 carregado ---------- */
 $('#glos').innerHTML=[['+ (cátion)','Fragmento com carga positiva e nenhum elétron sozinho. É o que o aparelho enxerga.'],['+· (íon-radical)','Carga positiva e um elétron sozinho. O íon molecular M e os fragmentos de rearranjo são assim.'],['· (radical)','Pedaço neutro com um elétron sozinho. Sai da molécula e não aparece no espectro.'],[GLOS.alfa[0],GLOS.alfa[1]],[GLOS.mcl[0],GLOS.mcl[1]],[GLOS.neu[0],GLOS.neu[1]],[GLOS.anel[0],GLOS.anel[1]]].map(x=>'<div><dt>'+x[0]+'</dt><dd>'+x[1]+'</dd></div>').join('');
 curEx=6;$('#inM').value=60;$('#inP').value='59, 42, 31';
