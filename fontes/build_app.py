@@ -71,7 +71,7 @@ EXD = [
   (43,71,"C3H7+","CO","o íon acila perde CO","CC[CH2+]","[C-]#[O+]","C3H7+","CO")]),
  dict(n=10, nome="N,N-dimetiletilamina", f="C4H11N", M=73, g="amina terciária", ok=True, sug=False, smi="CCN(C)C", peaks=[73,72,58,44], rows=[
   (72,73,"C4H10N+","H·","H sai do carbono ao lado do N","CC=[N+](C)C","[H]","C4H10N+","H·"),
-  (58,73,"(CH3)2N+=CH2, pico base (100%)","CH3·","clivagem α: sai CH3·. No quadro o professor desenhou a saída do CH3 ligado ao N; a massa é a mesma (58), mas o íon imínio, com a carga no N, é o mais estável","C=[N+](C)C","[CH3]","C3H8N+","CH3·"),
+  (58,73,"(CH3)2N+=CH2, pico base (100%)","CH3·","clivagem α: sai CH3· da ligação C–C do etila (a lousa desenha a saída do CH3 ligado ao N; ver o porquê abaixo)","C=[N+](C)C","[CH3]","C3H8N+","CH3·"),
   (44,73,"(CH3)2N+","CH3CH2·","ligação N–CH2 do etila: sai CH3CH2· (29)","C[N+]C","C[CH2]","C2H6N+","C2H5·"),]),
  dict(n=11, nome="valerato de metila (pentanoato de metila)", f="C6H12O2", M=116, g="éster alifático", ok=True, sug=False, smi="CCCCC(=O)OC", peaks=[116,87,85,74,57,29], rows=[
   (87,116,"C4H7O2+ (32%)","CH3CH2·","rearranjo de H para o O do C=O; sai o etila (29)","C=CC(=[OH+])OC","C[CH2]","C4H7O2+","C2H5·"),
