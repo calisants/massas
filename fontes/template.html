@@ -243,7 +243,7 @@ h1{font-size:1.15rem}
     <h2 class="scr">Mais</h2>
     <div class="menu">
       <button class="mi" type="button" data-go="p-ca"><b>Calculadora de massa</b><span>Some a fórmula de um pedaço e veja o que o livro lista para esse número.</span></button>
-      <button class="mi" type="button" data-go="p-pq"><b>Por que a ligação quebra ali?</b><span>As 7 regras, cisão homolítica e heterolítica, onde fica o radical e o que é McLafferty.</span></button>
+      <button class="mi" type="button" data-go="p-pq"><b>Por que a ligação quebra ali?</b><span>As regras de quebra, cisão homolítica e heterolítica, rearranjos e o que é McLafferty.</span></button>
       <button class="mi" type="button" data-go="p-co"><b>Cor do app</b><span>Escolha o tom que for mais confortável para você.</span></button>
       <button class="mi" type="button" data-go="p-aj"><b>Como ler um pico e glossário</b><span>Os 4 passos, o que são +, +· e ·, clivagem α e McLafferty.</span></button>
       <button class="mi" type="button" data-go="p-fo"><b>Fontes e avisos</b><span>De onde vêm as tabelas e o que ainda precisa de conferência.</span></button>
@@ -280,7 +280,7 @@ h1{font-size:1.15rem}
   <section id="p-pq" role="region" aria-label="Por que a ligação quebra ali" hidden>
     <button class="back" data-go="p-ma">← Mais</button>
     <h2 class="scr">Por que a ligação quebra ali?</h2>
-    <p class="hint">Cada quebra tem um motivo. Estas 7 regras explicam quase todos os exercícios. Cada exercício, no cartão do pico, tem o &ldquo;Por que quebra aqui?&rdquo; com a regra aplicada.</p>
+    <p class="hint">Cada quebra tem um motivo. Estas regras explicam quase todos os exercícios. Cada exercício, no cartão do pico, tem o &ldquo;Por que quebra aqui?&rdquo; com a regra aplicada.</p>
 
     <div class="rule"><h3>Antes de tudo: o que é o &ldquo;radical que some&rdquo;?</h3>
       <p>No espectrômetro, a molécula perde 1 elétron e vira <b>M<sup>+·</sup></b>: tem <b>carga</b> (+) e um <b>elétron sozinho</b> (·). Quando ela quebra em 2 pedaços, só <b>um</b> fica com a carga e é visto no espectro. O outro pedaço é <b>neutro</b> e some, porque o aparelho só enxerga o que tem carga.</p>
@@ -327,6 +327,11 @@ h1{font-size:1.15rem}
     <div class="rule"><h3>7. Perda de H· (M − 1) e abertura de anel</h3>
       <p><b>M − 1:</b> sai o H mais fraco, que é o ligado ao carbono vizinho do heteroátomo (ou o H do CHO). Com o H fora, o heteroátomo fecha ligação dupla e a carga fica nele.</p>
       <p><b>Anel:</b> quebrar 1 ligação do anel não separa nada. Precisa de duas quebras: primeiro abre ao lado do heteroátomo, depois sai uma molécula neutra pequena e estável (CO, CH2O, HCN).</p></div>
+
+    <div class="rule"><h3>8. Rearranjo: o íon pode mudar de forma sem mudar de massa</h3>
+      <p>O espectro só mostra o m/z. Por isso um íon pode se rearranjar para uma forma mais estável e continuar com o mesmo número. Os rearranjos mais comuns:</p>
+      <p>• <b>Cátion primário → secundário → terciário:</b> um H (ou um CH3) passa para o carbono com carga, porque mais carbonos ligados estabilizam melhor. Ex.: n-butila → terc-butila (57).<br>• <b>Enol ⇄ ceto:</b> o H passa do O para o carbono. Ex.: CH2=CH–OH⁺· ⇄ CH3CHO⁺· (44).<br>• <b>Benzila → tropílio:</b> o CH2 entra no anel de 6 e forma um anel aromático de 7 (91).<br>• <b>H que passa para o heteroátomo:</b> deixa o N ou o O com octeto completo.</p>
+      <p class="hint">Na prova, desenhe o rearranjo que o professor desenhou. Rearranjo que ele não mostrou é possibilidade, não obrigação. Nos cartões, a caixa &ldquo;Possível rearranjo&rdquo; mostra as formas com a mesma massa.</p></div>
 
     <p class="hint">Fonte dos princípios: Silverstein et al., cap. 1 (fragmentação de EI) e as lousas do professor. As regras são tendências, não leis: quando o exercício e a regra discordarem, vale a lousa.</p>
   </section>
@@ -490,9 +495,15 @@ function cisTxt(r){
   if(k==='mcl')return '<b>homolítica</b> (setas de anzol): o H pula com 1 elétron e a ligação α–β se rompe, saindo um alqueno neutro.';
   return '<b>homolítica</b> (seta de anzol): cada lado fica com 1 elétron, e o pedaço que sai é um radical.';
 }
+function rearrBox(ex,row){
+  const r=(typeof REARR!=='undefined')&&REARR[ex.n+':'+row[0]];if(!r)return '';
+  let h='<p><b>Possível rearranjo.</b> '+fmt(esc(r[0]))+'</p>';
+  if(r[1].length){h+='<div class="sp">'+r[1].map((s,i)=>(i?'<span class="op">⇄</span>':'')+fig(s[0],s[1],'keep','forma')).join('')+'</div>';}
+  return h;
+}
 function whyBox(ex,row){
   const w=(typeof WHY!=='undefined')&&WHY[ex.n+':'+row[0]];if(!w)return '';
-  return '<div class="why"><h4>Por que quebra aqui?</h4><p><b>Onde começa.</b> '+esc(w[0])+'</p><p><b>O que acontece.</b> '+fmt(esc(w[1]))+'</p><p><b>Por que aqui e não em outro lugar.</b> '+fmt(esc(w[2]))+'</p><p><b>Tipo de cisão.</b> '+cisTxt(row)+'</p><p><small><button class="back" style="display:inline;margin:0" data-go="p-pq">Ver as 7 regras e homolítica × heterolítica</button></small></p></div>';
+  return '<div class="why"><h4>Por que quebra aqui?</h4><p><b>Onde começa.</b> '+esc(w[0])+'</p><p><b>O que acontece.</b> '+fmt(esc(w[1]))+'</p><p><b>Por que aqui e não em outro lugar.</b> '+fmt(esc(w[2]))+'</p><p><b>Tipo de cisão.</b> '+cisTxt(row)+'</p>'+rearrBox(ex,row)+'<p><small><button class="back" style="display:inline;margin:0" data-go="p-pq">Ver as regras (homolítica, heterolítica, rearranjos)</button></small></p></div>';
 }
 function stepCard(ex,row){
   const t=GLOS[tipoQ(row)],d=row[1]-row[0];

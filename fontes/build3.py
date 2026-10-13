@@ -1,6 +1,7 @@
 import re, json, sys
 sys.path.insert(0,".")
 from why import WHY
+from rearr import REARR
 from rdkit import Chem
 from rdkit.Chem.Draw import rdMolDraw2D
 src=open('build_app.py',encoding='utf-8').read().split("store = {}")[0]
@@ -68,13 +69,15 @@ for e in EXD:
     for r in e["rows"]: d["rows"].append([r[0],r[1],r[2],r[3],r[4],key(r[5]),key(r[6]),r[7],r[8]])
     out.append(d)
 
+for _k,(_t,_s) in REARR.items():
+    for _smi,_c in _s: key(_smi)
 html=open('template.html',encoding='utf-8').read()
 BL=22
 thumbs={}
 for sm in set(re.findall(r'"[^"\n]*? @([^"\n]+)"',html)):
     thumbs[sm]=svg(sm,120,88)
 store.update(thumbs)
-js="const SVG="+json.dumps(store,ensure_ascii=False)+";\nconst MAPS="+json.dumps(MAPS,ensure_ascii=False)+";\nconst EX="+json.dumps(out,ensure_ascii=False)+";\n"+"const WHY="+json.dumps({f"{k[0]}:{k[1]}":list(v) for k,v in WHY.items()},ensure_ascii=False)+";\n"
+js="const SVG="+json.dumps(store,ensure_ascii=False)+";\nconst MAPS="+json.dumps(MAPS,ensure_ascii=False)+";\nconst EX="+json.dumps(out,ensure_ascii=False)+";\n"+"const REARR="+json.dumps({f"{k[0]}:{k[1]}":[v[0],[list(x) for x in v[1]]] for k,v in REARR.items()},ensure_ascii=False)+";\n"+"const WHY="+json.dumps({f"{k[0]}:{k[1]}":list(v) for k,v in WHY.items()},ensure_ascii=False)+";\n"
 a=html.index("/* ---------- dados: exercícios"); b=html.index("/* ---------- utilidades")
 html=html[:a]+"/* ---------- dados ---------- */\n"+js+"\n"+html[b:]
 open('/home/claude/quebra_cabeca_v3.html','w',encoding='utf-8').write(html)
