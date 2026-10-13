@@ -21,3 +21,6 @@ A pasta `fontes/` tem o gabarito (`template.html`) e os scripts Python (RDKit) q
 ## Instalar no celular
 Abra https://calisants.github.io/motsparole/quebra-cabeca-massas/ e use "Adicionar à tela inicial" (Android: menu do Chrome, "Instalar app"; iPhone: Safari, Compartilhar, "Adicionar à Tela de Início"). Depois da primeira abertura, o app funciona sem internet.
 Ao publicar uma versão nova do `index.html`, troque o número em `CACHE` no `sw.js` (v1 para v2).
+
+## Pasta `fontes/`
+O gabarito (`template.html`) e os scripts em Python (RDKit) que geram as estruturas em SVG e montam o `index.html`. Os scripts têm caminhos de `/home/claude` e precisam ser ajustados para rodar em outro lugar.
