@@ -71,14 +71,20 @@ EXD = [
   (43,71,"C3H7+","CO","o íon acila perde CO","CC[CH2+]","[C-]#[O+]","C3H7+","CO")]),
  dict(n=10, nome="N,N-dimetiletilamina", f="C4H11N", M=73, g="amina terciária", ok=True, sug=False, smi="CCN(C)C", peaks=[73,72,58,44], rows=[
   (72,73,"C4H10N+","H·","H sai do carbono ao lado do N","CC=[N+](C)C","[H]","C4H10N+","H·"),
-  (58,73,"(CH3)2N+=CH2, pico base (100%)","CH3·","clivagem α: o CH3 do etila sai e o N fica com a carga","C=[N+](C)C","[CH3]","C3H8N+","CH3·"),
+  (58,73,"(CH3)2N+=CH2, pico base (100%)","CH3·","clivagem α: sai CH3·. No quadro o professor desenhou a saída do CH3 ligado ao N; a massa é a mesma (58), mas o íon imínio, com a carga no N, é o mais estável","C=[N+](C)C","[CH3]","C3H8N+","CH3·"),
   (44,73,"(CH3)2N+","CH3CH2·","ligação N–CH2 do etila: sai CH3CH2· (29)","C[N+]C","C[CH2]","C2H6N+","C2H5·"),]),
- dict(n=12, nome="valeraldeído (pentanal)", f="C5H10O", M=86, g="aldeído alifático", ok=False, sug=True, smi="CCCCC=O", peaks=[86,58,57,44,43,41,29], rows=[
-  (58,86,"C3H6O+·","CH2=CH2","perde eteno (sugestão minha)","CCC=O","C=C","C3H6O+·","C2H4"),
-  (57,86,"C4H9+","·CHO","sai o ·CHO (29), sobra o butila","CCC[CH2+]","[CH]=O","C4H9+","·CHO"),
-  (44,86,"CH2=CH–OH+·, pico base","CH2=CH–CH3","McLafferty: H do carbono γ vai para o O; sai propeno","C=CO","C=CC","C2H4O+·","C3H6"),
-  (43,86,"C3H7+","CH2=CH–O·","sai CH2=CH–O· (sugestão minha)","CC[CH2+]","C=C[O]","C3H7+","C2H3O·"),
-  (29,86,"CHO+","C4H9·","carga no CHO (sugestão minha)","C#[O+]","CCC[CH2]","CHO+","C4H9·")]),
+ dict(n=11, nome="valerato de metila (pentanoato de metila)", f="C6H12O2", M=116, g="éster alifático", ok=True, sug=False, smi="CCCCC(=O)OC", peaks=[116,87,85,74,57,29], rows=[
+  (87,116,"C4H7O2+ (32%)","CH3CH2·","rearranjo de H para o O do C=O; sai o etila (29)","C=CC(=[OH+])OC","C[CH2]","C4H7O2+","C2H5·"),
+  (85,116,"C4H9C≡O+ (acílio) (37%)","·OCH3","α ao C=O: sai ·OCH3 (31)","CCCCC#[O+]","[O]C","C5H9O+","CH3O·"),
+  (74,116,"CH2=C(OH)OCH3+· (enol do acetato de metila), pico base (100%)","CH2=CH–CH3","McLafferty: H do carbono γ vai para o O; sai propeno (42)","C=C(O)OC","C=CC","C3H6O2+·","C3H6"),
+  (57,85,"C4H9+ (37%)","CO","a partir do 85: sai CO (28)","CCC[CH2+]","[C-]#[O+]","C4H9+","CO"),
+  (29,57,"C2H5+ (40%)","CH2=CH2","a partir do 57: sai eteno (28)","C[CH2+]","C=C","C2H5+","C2H4")]),
+ dict(n=12, nome="valeraldeído (pentanal)", f="C5H10O", M=86, g="aldeído alifático", ok=True, sug=False, smi="CCCCC=O", peaks=[86,85,58,57,44,29], rows=[
+  (85,86,"C5H9O+ (2%)","H·","sai o H do CHO","CCCCC#[O+]","[H]","C5H9O+","H·"),
+  (58,86,"C3H6O+· (32%)","CH2=CH2","H passa para o O (anel de 6) e sai eteno (28)","CCC=O","C=C","C3H6O+·","C2H4"),
+  (57,85,"C4H9+ (20%)","CO","a partir do 85: sai CO (28)","CCC[CH2+]","[C-]#[O+]","C4H9+","CO"),
+  (44,86,"CH2=CH–OH+· (100%), pico base","CH2=CH–CH3","McLafferty: H do carbono γ vai para o O; sai propeno (42)","C=CO","C=CC","C2H4O+·","C3H6"),
+  (29,86,"CHO+ (52%)","C4H9·","α: sai o butila, a carga fica no CHO","C#[O+]","CCC[CH2]","CHO+","C4H9·")]),
 ]
 
 store = {}
