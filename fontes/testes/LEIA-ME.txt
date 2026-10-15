@@ -1,0 +1,3 @@
+Rode depois de python3 empacotar.py:
+  python3 testes/teste_telas.py   (modos do Treinar, progresso, menu, estouro de tela em 360 px)
+O teste usa o caminho /home/claude/massas/fontes/saida.html; ajuste se mudar de pasta.

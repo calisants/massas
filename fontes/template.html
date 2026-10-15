@@ -1037,7 +1037,7 @@ function pgInit(){
       if(k==='massas-stud'||k==='massas-perg'){LS.set(k,Array.from(new Set((cur||[]).concat(inc))));n++;}
       else if(k==='massas-rep'){const m=cur||{};Object.keys(inc).forEach(q=>{if(!m[q]||inc[q].d>m[q].d)m[q]=inc[q];});LS.set(k,m);n++;}
       else if(k==='massas-erros'){}
-      else if(k.indexOf('massas-nota-')===0){if(!cur)LS.set(k,inc);else if(cur!==inc)LS.set(k,cur+'\n— importado: '+inc);n++;}
+      else if(k.indexOf('massas-nota-')===0){if(!cur)LS.set(k,inc);else if(String(cur).indexOf(String(inc))<0){LS.set(k,cur+'\n— importado: '+inc);n++;}}
       else if(cur===null){LS.set(k,inc);n++;}
     });
     buildChips();trLabel();drawPerg();pgMsg('Importado ('+n+' itens juntados com o que já existia). Nada foi apagado.');};
