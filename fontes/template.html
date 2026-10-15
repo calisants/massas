@@ -605,7 +605,7 @@ function whyBox(ex,row){
 function arrowBox(ex,row){
   const a=(typeof ARWD!=='undefined')&&ARWD[ex.n+':'+row[0]];if(!a)return '';
   let h='<div class="arw"><b>Setas do mecanismo</b> <small>(anzol = 1 elétron; seta cheia = 1 par)</small><p class="src" style="margin-top:2px">Estrutura de partida: '+esc(a.p)+'.</p>';
-  (a.v||[]).forEach(v=>{h+=(v[0]?'<p class="arwl"><b>'+esc(v[0])+'</b></p>':'')+'<figure class="st arws">'+v[1]+'</figure><ul class="arwt">'+v[2].map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';});
+  (a.v||[]).forEach(v=>{h+=(v[0]?'<p class="arwl"><b>'+esc(v[0])+'</b></p>':'')+'<figure class="st arws">'+v[1].replace('aria-label="Estrutura com setas do mecanismo"','aria-label="'+esc(v[2].join(' ')).replace(/"/g,'&quot;')+'"')+'</figure><ul class="arwt">'+v[2].map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';});
   if(a.n)h+='<p class="src">'+esc(a.n)+'</p>';
   return h+'<p class="src">Setas desenhadas por mim a partir das regras do livro. Se o desenho da lousa for diferente, vale a lousa.</p></div>';
 }
@@ -1160,7 +1160,9 @@ function pgMsg(t,bad){const m=$('#pgMsg');m.textContent=t;m.className='fb '+(bad
 function pgInit(){
   $('#pgGen').onclick=()=>{$('#pgTxt').value=pgEnc({v:1,d:pgCollect()});pgMsg('Código gerado. Toque em Copiar e cole no outro aparelho ou app.');};
   $('#pgCopy').onclick=()=>{const t=$('#pgTxt');if(!t.value)$('#pgGen').click();t.select();
-    try{if(navigator.clipboard)navigator.clipboard.writeText(t.value);else document.execCommand('copy');pgMsg('Copiado.');}catch(e){pgMsg('Não consegui copiar sozinho. Selecione o texto e copie.',true);}};
+    const ok=()=>pgMsg('Copiado.');
+    const fail=()=>{let r=false;try{r=document.execCommand('copy');}catch(e){}r?ok():pgMsg('Não consegui copiar sozinho. O texto está selecionado: use o Copiar do seu aparelho.',true);};
+    try{if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t.value).then(ok,fail);else fail();}catch(e){fail();}};
   $('#pgImp').onclick=()=>{
     let o;try{o=pgDec($('#pgTxt').value);}catch(e){pgMsg('Código inválido. Cole o código inteiro, sem cortar.',true);return;}
     if(!o||o.v!==1||typeof o.d!=='object'){pgMsg('Código inválido.',true);return;}
