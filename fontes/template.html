@@ -634,8 +634,7 @@ function buildChips(){
   });
 }
 function intOf(ex,p){const d=ex&&typeof INTS!=='undefined'&&INTS[ex.n];if(!d)return null;return d.p[p]!==undefined?d.p[p]:-1;}
-function lousaOf(ex,p){const d=ex&&typeof LOUSA!=='undefined'&&LOUSA[ex.n];return d&&d[p]!==undefined?d[p]:null;}
-function intTxt(ex,p){const v=intOf(ex,p);if(v===null)return '';const l=lousaOf(ex,p);return 'SDBS '+fmtInt(v)+(l!==null?' · professor '+fmtInt(l):'');}
+function intTxt(ex,p){const v=intOf(ex,p);if(v===null)return '';return 'SDBS '+fmtInt(v);}
 function fmtInt(v){if(v<0)return '<1%';return (v%1===0?v.toFixed(0):v.toFixed(1)).replace('.',',')+'%';}
 function drawSpec(ex,peaks){
   const box=$('#spec');if(!box)return;
@@ -649,19 +648,16 @@ function drawSpec(ex,peaks){
   const step=(x1-x0)>80?20:10;
   for(let t=Math.ceil(x0/step)*step;t<=x1;t+=step)g+='<text x="'+X(t)+'" y="'+(H-8)+'" font-size="9" text-anchor="middle" fill="var(--muted)" font-family="IBM Plex Mono,ui-monospace,monospace">'+t+'</text>';
   const todos=peaks.indexOf(ex.M)<0?peaks.concat([ex.M]):peaks;
-  const falt=todos.filter(m=>d.p[m]===undefined);
-  let temL=false;
-  mz.concat(falt).sort((a,b)=>a-b).forEach(m=>{
-    const hit=todos.indexOf(m)>=0,clic=peaks.indexOf(m)>=0,sel=pkSel===m,val=d.p[m]===undefined?1:d.p[m];
+  mz.sort((a,b)=>a-b).forEach(m=>{
+    const hit=todos.indexOf(m)>=0,clic=peaks.indexOf(m)>=0,sel=pkSel===m,val=d.p[m];
     g+='<line x1="'+X(m)+'" x2="'+X(m)+'" y1="'+Y(0)+'" y2="'+Y(val)+'" stroke="'+(sel?'var(--amber)':hit?'var(--keep)':'var(--muted)')+'" stroke-width="'+(hit?3.2:2)+'" stroke-linecap="round" opacity="'+(hit?1:.5)+'"/>';
     if(!hit&&val>=20){g+='<text x="'+X(m)+'" y="'+(Y(val)-3)+'" font-size="8.5" text-anchor="middle" fill="var(--muted)" font-family="IBM Plex Mono,ui-monospace,monospace">'+m+'</text>';}
     if(hit){g+='<text x="'+X(m)+'" y="'+(Y(val)-4)+'" font-size="9.5" text-anchor="middle" fill="var(--ink)" font-family="IBM Plex Mono,ui-monospace,monospace">'+m+'</text>'+(clic?'<rect data-spk="'+m+'" x="'+(X(m)-8)+'" y="'+T+'" width="16" height="'+(H-T-B)+'" fill="transparent" style="cursor:pointer"/>':'');}
-    const lv=lousaOf(ex,m);if(lv!==null){temL=true;g+='<circle cx="'+X(m)+'" cy="'+Y(lv)+'" r="4" fill="none" stroke="var(--lost)" stroke-width="1.8"/>';}
   });
-  const mI=d.p[ex.M],mTxt=mI===undefined?'M+· (m/z '+ex.M+'): sem valor na tabela enviada (provavelmente abaixo de 1%, fraco).':'M+· (m/z '+ex.M+'): '+fmtInt(mI)+(mI<5?', fraco.':'.');
+  const mI=d.p[ex.M],mTxt=mI===undefined?'':'M+· (m/z '+ex.M+'): '+fmtInt(mI)+(mI<5?', fraco.':'.');
   const outros=mz.filter(m=>todos.indexOf(m)<0&&d.p[m]>=20).sort((a,b)=>d.p[b]-d.p[a]).map(m=>m+' ('+fmtInt(d.p[m])+')');
   const si=typeof pkSel==='number'?intOf(ex,pkSel):null;
-  box.innerHTML='<figure class="spec"><svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Espectro de massas de '+esc(ex.nome)+': m/z no eixo horizontal, intensidade relativa em porcentagem no vertical" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:520px">'+g+'</svg><figcaption class="src">Espectro de massas do SDBS (nº '+d.sdbs+', '+d.id+'), intensidade relativa em %. Barras em destaque: picos do exercício. Toque em um deles para abrir o cartão.'+(temL?' O círculo vermelho é a altura que o professor desenhou.':'')+(falt.length?' Em m/z '+falt.join(', ')+' não há valor na tabela enviada (provavelmente abaixo de 1%, o limiar).':'')+'</figcaption><p class="src" style="margin:4px 0">'+mTxt+(outros.length?' Picos grandes (20% ou mais) que o exercício não pede, em cinza: '+outros.join(', ')+'.':'')+'</p><figcaption class="src">'+(si!==null?' <b>m/z '+pkSel+': '+intTxt(ex,pkSel)+'.</b>':'')+'</figcaption></figure>';
+  box.innerHTML='<figure class="spec"><svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Espectro de massas de '+esc(ex.nome)+': m/z no eixo horizontal, intensidade relativa em porcentagem no vertical" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:520px">'+g+'</svg><figcaption class="src">Espectro de massas do SDBS (nº '+d.sdbs+', '+d.id+'), intensidade relativa em %. Barras em destaque: picos do exercício. Toque em um deles para abrir o cartão.'+'</figcaption><p class="src" style="margin:4px 0">'+mTxt+(outros.length?(mTxt?' ':'')+'Picos grandes (20% ou mais) que o exercício não pede, em cinza: '+outros.join(', ')+'.':'')+'</p><figcaption class="src">'+(si!==null?' <b>m/z '+pkSel+': '+intTxt(ex,pkSel)+'.</b>':'')+'</figcaption></figure>';
 }
 document.addEventListener('click',ev=>{const r=ev.target.closest&&ev.target.closest('[data-spk]');if(r){pkSel=+r.dataset.spk;analyze();}});
 function analyze(){
