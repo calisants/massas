@@ -50,6 +50,7 @@
 .tag{font-size:.72rem;border-radius:4px;padding:1px 6px;background:var(--line);color:var(--muted);font-weight:500;margin-left:6px;white-space:nowrap}
 .src{font-size:.82rem;color:var(--muted);margin:8px 0 0}
 .resumo{margin:10px 0 4px;font-weight:500}
+.hoje{padding-left:20px;margin:6px 0}.hoje li{margin:10px 0}.hoje .btn{margin-right:6px}
 .ionl{padding-left:18px;margin:6px 0}.ionl li{margin:7px 0}
 .nota{width:100%;min-height:64px;font:inherit;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px;resize:vertical}
 .chipbar{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
@@ -179,6 +180,7 @@ h1{font-size:1.15rem}
   <section id="p-an" role="tabpanel" aria-labelledby="t-an">
     <div id="an-in">
     <h2 class="scr">Analisar</h2>
+    <div class="rule" id="hoje"></div>
     <p class="scrsub">Escolha um exercício ou digite M e os picos. Depois toque num pico para ver o que ficou e o que saiu. <button class="back" style="display:inline;margin:0" data-go="p-aj">Como ler um pico?</button></p>
     <div>Exercícios da lista (carregam M e os picos). Nos seus PDFs a numeração vai de 10 direto para 12.</div>
     <details class="how" style="margin-bottom:10px"><summary style="cursor:pointer;font-weight:600">Em que ordem estudar?</summary><p class="hint" style="margin-top:8px">Do mais simples ao mais complexo: <b>6</b> (álcool, clivagem α) → <b>9</b> (ácido, McLafferty) → <b>5</b> (cetona) → <b>10</b> (amina) → <b>12</b> (aldeído) → <b>11</b> (éster) → <b>4</b> (benzofenona) → <b>1</b> (etilbenzeno) → <b>3</b> (estireno) → <b>8</b> (piridina) → <b>7</b> (dioxano) → <b>2</b> (furano). Os anéis ficam para o fim porque abrem e se rearranjam. Marque cada um como estudado depois de resolver.</p></details>
@@ -665,7 +667,7 @@ function analyze(){
 }
 $('#go').onclick=()=>{curEx=null;pkSel=null;buildChips();analyze();anStage(true);};
 $('#an-back').onclick=()=>anStage(false);
-function anStage(r){$('#an-in').hidden=r;$('#an-res').hidden=!r;window.scrollTo(0,0);}
+function anStage(r){$('#an-in').hidden=r;$('#an-res').hidden=!r;window.scrollTo(0,0);if(!r)drawHoje();}
 ['#inM','#inP'].forEach(s=>$(s).addEventListener('input',()=>{analyze();}));
 
 /* ---------- aba Treinar ---------- */
@@ -852,10 +854,15 @@ function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Ma
 function repGet(){let rp=LS.get('massas-rep',null);if(rp===null){rp={};LS.get('massas-erros',[]).forEach(k=>{rp[k]={b:0,d:0};});LS.set('massas-rep',rp);}return rp;}
 function repAdd(k){const rp=repGet();rp[k]={b:0,d:Date.now()+864e5};LS.set('massas-rep',rp);}
 function repOk(k){const rp=repGet(),o=rp[k];if(!o||o.d>Date.now())return;const DIAS=[1,3,7];if(o.b>=2)delete rp[k];else{o.b++;o.d=Date.now()+DIAS[o.b]*864e5;}LS.set('massas-rep',rp);}
+const REV_MAX=10;
+function diaKey(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+function revFeitas(){const r=LS.get('massas-revdia',null);return r&&r.d===diaKey()?r.n:0;}
+function revCount(){LS.set('massas-revdia',{d:diaKey(),n:revFeitas()+1});}
+function repAvail(){return Math.max(0,Math.min(repDue(),REV_MAX-revFeitas()));}
 function repDue(){const rp=repGet(),n=Date.now();return Object.keys(rp).filter(k=>rp[k].d<=n).length;}
 function trPool(){
   const all=[];EX.forEach(e=>e.rows.forEach(r=>all.push({e,r})));
-  if(TR.mode==='rev'){const rp=repGet(),now=Date.now();return all.filter(x=>{const o=rp[x.e.n+':'+x.r[0]];return o&&(TR.revAll||o.d<=now);});}
+  if(TR.mode==='rev'){const rp=repGet(),now=Date.now();let l=all.filter(x=>{const o=rp[x.e.n+':'+x.r[0]];return o&&(TR.revAll||o.d<=now);});if(!TR.revAll){l.sort((a,b)=>rp[a.e.n+':'+a.r[0]].d-rp[b.e.n+':'+b.r[0]].d);l=l.slice(0,Math.max(0,REV_MAX-revFeitas()));}return l;}
   return all;
 }
 function lossQ(e,r){
@@ -888,7 +895,7 @@ function trNext(){
   if(TR.mode!=='qual'){const a=cisQ(c.e,c.r);if(a)qs.push(a);qs.push(regQ(c.e,c.r));}
   TR.cur={e:c.e,r:c.r,qs,i:0,pick:null,wrong:false,done:false};TR.hint=false;trDraw();
 }
-function trLabel(){const rb=document.querySelector('#trmode [data-m="rev"]');if(rb)rb.textContent='Revisar ('+repDue()+' hoje)';}
+function trLabel(){const rb=document.querySelector('#trmode [data-m="rev"]');if(rb)rb.textContent='Revisar ('+repAvail()+' hoje)';}
 function trInit(){
   TR.sess=0;TR.score={ok:0,n:0};
   const bar=$('#trmode');
@@ -910,7 +917,7 @@ function trDraw(){
   const box=$('#quiz');
   if(!TR.cur){
     if(TR.mode==='rev'){const n=Object.keys(repGet()).length;
-      box.innerHTML=n?'<p class="empty">Nenhuma revisão vencida hoje. Você tem '+n+' guardada(s): cada erro volta 1, 3 e 7 dias depois, e sai da lista quando você acerta nas três.</p><div class="row"><button class="btn ghost" id="revall" type="button">Revisar todas agora</button></div>':'<p class="empty">Nenhum erro guardado. Faça rodadas em outros modos. Os erros aparecem aqui e voltam depois de 1, 3 e 7 dias.</p>';
+      box.innerHTML=n?'<p class="empty">'+(revFeitas()>=REV_MAX&&repDue()>0?'Você já revisou '+REV_MAX+' hoje. O resto fica para amanhã, para não pesar.':'Nenhuma revisão vencida hoje.')+' Você tem '+n+' guardada(s): cada erro volta 1, 3 e 7 dias depois, e sai da lista quando você acerta nas três.</p><div class="row"><button class="btn ghost" id="revall" type="button">Revisar todas agora</button></div>':'<p class="empty">Nenhum erro guardado. Faça rodadas em outros modos. Os erros aparecem aqui e voltam depois de 1, 3 e 7 dias.</p>';
       const ra=$('#revall');if(ra)ra.onclick=()=>{TR.revAll=true;trNext();};return;}
     box.innerHTML='<p class="empty">Nada para treinar.</p>';return;}
   const c=TR.cur,e=c.e,r=c.r;
@@ -939,11 +946,29 @@ function trDraw(){
   const n=$('#trn');if(n)n.onclick=()=>{
     if(c.i<c.qs.length-1){c.i++;c.pick=null;}else{
       c.done=true;const key=e.n+':'+r[0];
-      if(c.wrong)repAdd(key);else repOk(key);trLabel();}
+      if(c.wrong)repAdd(key);else repOk(key);if(TR.mode==='rev'&&!TR.revAll)revCount();trLabel();}
     trDraw();};
   const o=$('#tro');if(o)o.onclick=trNext;
   const hh=$('#trh');if(hh)hh.onclick=()=>{TR.hint=true;trDraw();};
 }
+
+/* ---------- Hoje ---------- */
+const ORD=[6,9,5,10,12,11,4,1,3,8,7,2];
+function drawHoje(){
+  const box=$('#hoje');if(!box)return;
+  const due=repAvail(),next=ORD.find(n=>!isStud(n)),st=LS.get('massas-stud',[]),last=st.length?st[st.length-1]:null;
+  let h='<h3>Hoje: 3 passos curtos</h3><ol class="hoje">';
+  h+='<li>'+(due?'<button class="btn" data-hj="rev" type="button">Revisar '+due+'</button> erros que voltaram hoje (no máximo '+REV_MAX+' por dia).':'Revisão: nada vencido hoje.')+'</li>';
+  h+='<li>'+(next?'<button class="btn" data-hj="ex" data-n="'+next+'" type="button">Estudar o Ex. '+next+'</button> '+esc(EX.find(e=>e.n===next).nome)+'. Marque como estudado no fim.':'Todos os exercícios estão marcados como estudados.')+'</li>';
+  h+='<li>'+(last?'<button class="btn ghost" data-hj="sim" data-n="'+last+'" type="button">Simulado do Ex. '+last+'</button> o último que você estudou, sem consultar.':'O simulado aparece depois que você marcar um exercício como estudado.')+'</li></ol>';
+  box.innerHTML=h;
+}
+document.addEventListener('click',ev=>{
+  const b=ev.target.closest('[data-hj]');if(!b)return;const k=b.dataset.hj,n=+b.dataset.n;
+  if(k==='rev'){TR.mode='rev';TR.revAll=false;go('p-tr');}
+  else if(k==='ex'){const e=EX.find(x=>x.n===n);curEx=n;pkSel=null;$('#inM').value=e.M;$('#inP').value=e.peaks.filter(p=>p!==e.M).join(', ');buildChips();analyze();anStage(true);}
+  else if(k==='sim'){TR.mode='sm';go('p-tr');$('#smsel').value=String(n);$('#smmod').value='1';$('#smgo').click();}
+});
 
 /* ---------- Elétron: de onde sai? ---------- */
 function ionNext(){
@@ -1089,7 +1114,7 @@ function drawPerg(){
 }
 
 /* ---------- Salvar e levar o progresso ---------- */
-function pgCollect(){const d={};try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.indexOf('massas-')===0)d[k]=localStorage.getItem(k);}}catch(e){}return d;}
+function pgCollect(){const d={};try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.indexOf('massas-')===0&&k!=='massas-revdia')d[k]=localStorage.getItem(k);}}catch(e){}return d;}
 function pgEnc(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o))));}
 function pgDec(t){return JSON.parse(decodeURIComponent(escape(atob(t.replace(/\s+/g,'')))));}
 function pgMsg(t,bad){const m=$('#pgMsg');m.textContent=t;m.className='fb '+(bad?'bad':'good');}
@@ -1193,6 +1218,7 @@ function go(id){
   NAV.forEach(t=>$('#'+t).setAttribute('aria-selected',t===own?'true':'false'));
   if(id==='p-tr')trInit();
   if(id==='p-pr')drawPerg();
+  if(id==='p-an')drawHoje();
   window.scrollTo(0,0);
 }
 NAV.forEach((t,i)=>{const el=$('#'+t);
@@ -1206,5 +1232,5 @@ document.querySelectorAll('.seg').forEach(g=>g.querySelectorAll('button').forEac
 /* ---------- início: exercício 6 carregado ---------- */
 $('#glos').innerHTML=[['+ (cátion)','Fragmento com carga positiva e nenhum elétron sozinho. É o que o aparelho enxerga.'],['+· (íon-radical)','Carga positiva e um elétron sozinho. O íon molecular M e os fragmentos de rearranjo são assim.'],['· (radical)','Pedaço neutro com um elétron sozinho. Sai da molécula e não aparece no espectro.'],[GLOS.alfa[0],GLOS.alfa[1]],[GLOS.mcl[0],GLOS.mcl[1]],[GLOS.neu[0],GLOS.neu[1]],[GLOS.anel[0],GLOS.anel[1]]].map(x=>'<div><dt>'+x[0]+'</dt><dd>'+x[1]+'</dd></div>').join('');
 pgInit();curEx=6;$('#inM').value=60;$('#inP').value='59, 42, 31';
-buildChips();analyze();drawTable();calc();drawIVChips();drawIV();drawIVReg();$('#ivq').addEventListener('input',ivLookup);
+buildChips();analyze();drawHoje();drawTable();calc();drawIVChips();drawIV();drawIVReg();$('#ivq').addEventListener('input',ivLookup);
 </script>
