@@ -265,8 +265,9 @@ h1{font-size:1.15rem}
     <div class="menu">
       <button class="mi" type="button" data-go="p-ca"><b>Calculadora de massa</b><span>Some a fórmula de um pedaço e veja o que o livro lista para esse número.</span></button>
       <button class="mi" type="button" data-go="p-es"><b>Espectro novo (modo detetive)</b><span>Digite fórmula, picos e bandas de IV de um composto desconhecido e veja as pistas.</span></button>
-      <button class="mi" type="button" data-go="p-se"><b>Setas dos mecanismos</b><span>Modelos com setas de anzol e seta inteira para os mecanismos que se repetem.</span></button>
-      <button class="mi" type="button" data-go="p-pq"><b>Por que a ligação quebra ali?</b><span>As regras de quebra, cisão homolítica e heterolítica, rearranjos e o que é McLafferty.</span></button>
+      <button class="mi" type="button" data-go="p-pq"><b>Entender as quebras (regras e setas)</b><span>Por que a ligação quebra ali, cisão homolítica e heterolítica, rearranjos e os modelos com setas.</span></button>
+      <button class="mi" type="button" data-go="p-pr"><b>Perguntas para o professor</b><span>As dúvidas que ainda não consegui confirmar. Marque as que já perguntou.</span></button>
+      <button class="mi" type="button" data-go="p-pg"><b>Salvar e levar o progresso</b><span>Gere um código para passar o que você estudou de um aparelho ou app para outro.</span></button>
       <button class="mi" type="button" data-go="p-co"><b>Cor do app</b><span>Escolha o tom que for mais confortável para você.</span></button>
       <button class="mi" type="button" data-go="p-aj"><b>Como ler um pico e glossário</b><span>Os 4 passos, o que são +, +· e ·, clivagem α e McLafferty.</span></button>
       <button class="mi" type="button" data-go="p-fo"><b>Fontes e avisos</b><span>De onde vêm as tabelas e o que ainda precisa de conferência.</span></button>
@@ -357,19 +358,7 @@ h1{font-size:1.15rem}
       <p class="hint">Na prova, desenhe o rearranjo que o professor desenhou. Rearranjo que ele não mostrou é possibilidade, não obrigação. Nos cartões, a caixa &ldquo;Possível rearranjo&rdquo; mostra as formas com a mesma massa.</p></div>
 
     <p class="hint">Fonte dos princípios: Silverstein et al., cap. 1 (fragmentação de EI) e as lousas do professor. As regras são tendências, não leis: quando o exercício e a regra discordarem, vale a lousa.</p>
-  </section>
-
-  <section id="p-co" role="region" aria-label="Cor do app" hidden>
-    <button class="back" data-go="p-ma">← Mais</button>
-    <h2 class="scr">Cor do app</h2>
-    <p class="hint">Toque numa cor. Ela fica salva neste aparelho. O vermelho e o âmbar dos cartões (o que saiu e o aviso) não mudam, para o significado continuar o mesmo.</p>
-    <div class="pal" id="pals"></div>
-  </section>
-
-
-  <section id="p-se" role="region" aria-label="Setas dos mecanismos" hidden>
-    <button class="back" data-go="p-ma">← Mais</button>
-    <h2 class="scr">Setas dos mecanismos</h2>
+  <div id="se-anchor">    <h2 class="scr" style="margin-top:28px">Modelos com setas</h2>
     <p class="hint"><b>Seta de anzol</b> (meia ponta) = 1 elétron andando. <b>Seta inteira</b> (ponta cheia) = um par de elétrons andando. Os números mostram a ordem. Os modelos usam letras genéricas (Y = N ou O, R = grupo alquila). Para ver onde cada um aparece, abra o &ldquo;Por que quebra aqui?&rdquo; do pico.</p>
     <div class="mdl"><h3>0. Ionização</h3><svg viewBox="0 0 340 110" role="img" aria-label="Ionização: o par livre do oxigênio perde 1 elétron e fica com um elétron sozinho e carga mais" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:520px"><text x="30" y="62" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R</text><line x1="40" y1="58" x2="62" y2="58" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="74" y="62" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">O</text><line x1="86" y1="58" x2="108" y2="58" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="120" y="62" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R'</text><circle cx="68" cy="40" r="2.4" fill="currentColor"/><circle cx="80" cy="40" r="2.4" fill="currentColor"/><text x="74" y="26" font-size="11" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">par livre</text><text x="165" y="64" font-size="22" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">→</text><text x="165" y="86" font-size="12" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">−e⁻</text><text x="215" y="62" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R</text><line x1="225" y1="58" x2="247" y2="58" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="259" y="62" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">O</text><line x1="271" y1="58" x2="293" y2="58" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="305" y="62" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R'</text><circle cx="259" cy="40" r="2.4" fill="currentColor"/><text x="272" y="42" font-size="13" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><text x="259" y="92" font-size="11" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">1 elétron sozinho</text></svg><p>O elétron mais fácil de tirar é o do par livre. Sobra um elétron sozinho no O (ou no N) e carga +. É o ponto de partida de quase todos os mecanismos.</p></div>
     <div class="mdl"><h3>1. Clivagem α (homolítica)</h3><svg viewBox="0 0 340 170" role="img" aria-label="Clivagem alfa: o elétron sozinho do heteroátomo forma a ligação dupla e o grupo R sai como radical" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:520px"><text x="40" y="98" font-size="17" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">Y</text><text x="53" y="86" font-size="12" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><circle cx="40" cy="72" r="2.4" fill="currentColor"/><line x1="52" y1="95" x2="86" y2="95" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="104" y="99" font-size="15" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">CH₂</text><line x1="124" y1="95" x2="160" y2="95" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="176" y="99" font-size="17" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R</text><path d="M40 70 Q48 40 80 84" fill="none" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round"/><path d="M80 84 L72.1 79.6" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round" fill="none"/><text x="48" y="36" font-size="12" text-anchor="middle" fill="var(--arrow)" font-weight="600" font-family="IBM Plex Mono,ui-monospace,monospace">1</text><path d="M141 93 Q158 62 172 80" fill="none" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round"/><path d="M172 80 L164.0 75.9" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round" fill="none"/><text x="158" y="58" font-size="12" text-anchor="middle" fill="var(--arrow)" font-weight="600" font-family="IBM Plex Mono,ui-monospace,monospace">2</text><text x="212" y="98" font-size="22" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">→</text><text x="256" y="90" font-size="17" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">Y</text><text x="269" y="78" font-size="12" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><line x1="268.0" y1="95.0" x2="286.0" y2="95.0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="268.0" y1="89.0" x2="286.0" y2="89.0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="306" y="96" font-size="15" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">CH₂</text><text x="256" y="140" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><circle cx="284" cy="138" r="2.4" fill="currentColor"/><text x="302" y="142" font-size="17" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R</text><text x="170" y="160" font-size="11" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R· sai (radical, neutro)</text></svg><p><b>1:</b> o elétron sozinho de Y forma a ligação dupla com o carbono. <b>2:</b> 1 elétron da ligação C–R vai com o R, que sai como radical. A carga fica em Y. Aparece em: 1-propanol (31), 3-pentanona (57), dimetiletilamina (58), benzofenona (105).</p></div>
@@ -377,6 +366,32 @@ h1{font-size:1.15rem}
     <div class="mdl"><h3>3. Cátion acílio perde CO (heterolítica)</h3><svg viewBox="0 0 340 130" role="img" aria-label="Cisão heterolítica: o cátion acílio solta CO levando o par de elétrons da ligação" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:520px"><text x="40" y="70" font-size="17" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R</text><line x1="52" y1="66" x2="100" y2="66" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="112" y="70" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">C</text><line x1="124" y1="64" x2="152" y2="64" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="124" y1="68" x2="152" y2="68" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="124" y1="60" x2="152" y2="60" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="164" y="70" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">O</text><text x="178" y="58" font-size="12" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><path d="M76 64 Q104 26 112 54" fill="none" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round"/><path d="M112 54 L106.1 47.2 L113.4 45.1Z" fill="var(--arrow)"/><text x="104" y="22" font-size="12" text-anchor="middle" fill="var(--arrow)" font-weight="600" font-family="IBM Plex Mono,ui-monospace,monospace">par</text><text x="212" y="72" font-size="22" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">→</text><text x="262" y="50" font-size="17" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R</text><text x="275" y="38" font-size="12" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><text x="256" y="100" font-size="15" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><circle cx="278" cy="92" r="2.4" fill="currentColor"/><circle cx="278" cy="100" r="2.4" fill="currentColor"/><text x="304" y="104" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">C≡O</text></svg><p>Aqui a seta é inteira: o par de elétrons da ligação R–C vai para o carbono do CO. O CO sai neutro levando o par, e a carga fica no R. Aparece em: 85 → 57 (pentanal e pentanoato), 105 → 77 (benzofenona), 57 → 29 (3-pentanona).</p></div>
     <div class="mdl"><h3>4. Perda de H· (M − 1)</h3><svg viewBox="0 0 340 170" role="img" aria-label="Perda de H: o heteroátomo forma a ligação dupla com o carbono e o H sai como radical" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:520px"><text x="40" y="98" font-size="17" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">Y</text><text x="53" y="86" font-size="12" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><circle cx="40" cy="72" r="2.4" fill="currentColor"/><line x1="52" y1="95" x2="86" y2="95" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="104" y="99" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">C</text><line x1="104" y1="86" x2="104" y2="52" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="104" y="42" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">H</text><path d="M40 70 Q54 42 84 84" fill="none" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round"/><path d="M84 84 L76.2 79.6" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round" fill="none"/><text x="54" y="38" font-size="12" text-anchor="middle" fill="var(--arrow)" font-weight="600" font-family="IBM Plex Mono,ui-monospace,monospace">1</text><path d="M108 70 Q130 46 116 44" fill="none" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round"/><path d="M116 44 L124.6 41.4" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round" fill="none"/><text x="130" y="42" font-size="12" text-anchor="middle" fill="var(--arrow)" font-weight="600" font-family="IBM Plex Mono,ui-monospace,monospace">2</text><text x="200" y="98" font-size="22" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">→</text><text x="246" y="98" font-size="17" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">Y</text><text x="259" y="86" font-size="12" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><line x1="258.0" y1="98.0" x2="288.0" y2="98.0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="258.0" y1="92.0" x2="288.0" y2="92.0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="304" y="99" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">C</text><text x="256" y="146" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><circle cx="284" cy="144" r="2.4" fill="currentColor"/><text x="302" y="148" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">H</text></svg><p><b>1:</b> o elétron sozinho de Y forma a ligação dupla. <b>2:</b> 1 elétron da ligação C–H vai com o H, que sai como radical. Aparece em: dimetiletilamina (72), pentanal (85).</p></div>
     <p class="hint">Estes são modelos. A lousa do professor vale para a prova: se ele desenhar de outro jeito, siga o dele.</p>
+  </div>
+  </section>
+
+  <section id="p-pr" role="region" aria-label="Perguntas para o professor" hidden>
+    <button class="back" data-go="p-ma">← Mais</button>
+    <h2 class="scr">Perguntas para o professor</h2>
+    <p class="hint">Estas são as dúvidas em que não tenho certeza. Marque a caixa quando perguntar. Anote a resposta dele na nota do exercício.</p>
+    <div id="pergL"></div>
+  </section>
+
+  <section id="p-pg" role="region" aria-label="Salvar e levar o progresso" hidden>
+    <button class="back" data-go="p-ma">← Mais</button>
+    <h2 class="scr">Salvar e levar o progresso</h2>
+    <p class="hint">O que você marca aqui (estudados, notas, revisões, cor) fica só neste aparelho e neste navegador. O app do GitHub e a versão aberta no Claude são cópias separadas e não conversam. Para levar de um para o outro: gere o código, copie, e cole no outro.</p>
+    <div class="row"><button class="btn" id="pgGen" type="button">1. Gerar código</button><button class="btn ghost" id="pgCopy" type="button">Copiar</button></div>
+    <textarea id="pgTxt" rows="5" aria-label="Código do progresso" style="width:100%;margin:10px 0;font-family:var(--mono);font-size:.8rem;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px"></textarea>
+    <div class="row"><button class="btn" id="pgImp" type="button">2. Importar o código colado</button></div>
+    <p class="hint">Importar junta com o que já existe e não apaga nada.</p>
+    <div id="pgMsg" role="status"></div>
+  </section>
+
+  <section id="p-co" role="region" aria-label="Cor do app" hidden>
+    <button class="back" data-go="p-ma">← Mais</button>
+    <h2 class="scr">Cor do app</h2>
+    <p class="hint">Toque numa cor. Ela fica salva neste aparelho. O vermelho e o âmbar dos cartões (o que saiu e o aviso) não mudam, para o significado continuar o mesmo.</p>
+    <div class="pal" id="pals"></div>
   </section>
 
   <section id="p-es" role="region" aria-label="Espectro novo" hidden>
@@ -539,7 +554,9 @@ function mapFig(ex,p){
   const m=MAPS[ex.n+':'+p];if(!m)return '';
   return '<figure class="st map"><span class="w">Na molécula inteira</span>'+m.s+'<figcaption class="w2"><span class="lg" style="background:var(--keep-soft);border:1px solid var(--keep)"></span> ficou &nbsp;<span class="lg" style="background:var(--lost-soft);border:1px solid var(--lost)"></span> saiu &nbsp;<span class="lg" style="background:var(--amber)"></span> ligação que quebra'+(m.a?'<br><i>cor aproximada: nesta etapa os átomos se rearranjam</i>':'')+'</figcaption></figure>';
 }
+const TIPO={"1:91": "benz", "1:77": "sim", "1:65": "neu", "1:51": "neu", "2:40": "anel", "2:39": "anel", "2:29": "sim", "3:103": "h", "3:78": "rad", "3:77": "sim", "3:52": "rad", "3:51": "neu", "4:105": "alfa", "4:77": "neu", "4:51": "neu", "5:57": "alfa", "5:29": "neu", "5:27": "neu", "6:59": "h", "6:42": "rad", "6:31": "alfa", "7:58": "anel", "7:28": "rad", "8:78": "h", "8:52": "anel", "8:51": "h", "8:50": "h", "9:73": "anel", "9:71": "alfa", "9:60": "mcl", "9:43": "neu", "10:72": "h", "10:58": "alfa", "10:44": "sim", "11:87": "sim", "11:85": "alfa", "11:74": "mcl", "11:57": "neu", "11:29": "neu", "12:85": "h", "12:58": "rad", "12:57": "neu", "12:44": "mcl", "12:29": "alfa"};
 function tipoE(ex,r){
+  const t=TIPO[ex.n+':'+r[0]];if(t)return t;
   const k=tipoQ(r);if(k!=='neu')return k;
   const p=ex.rows.find(x=>x[0]===r[1]);
   return (r[1]===ex.M||(p&&p[7].indexOf('·')>=0))?'rad':'neu';
@@ -552,6 +569,8 @@ function cisTxt(ex,r){
   if(k==='mcl')return '<b>homolítica</b> (setas de anzol): o H pula com 1 elétron e a ligação α–β se rompe, saindo um alqueno neutro.';
   return '<b>homolítica</b> (seta de anzol): cada lado fica com 1 elétron, e o pedaço que sai é um radical.';
 }
+const DUV=['10:44','10:58','6:59','11:87','12:58','9:73','8:50'];
+function duvTxt(ex,row){return DUV.indexOf(ex.n+':'+row[0])>=0?'<p class="src"><b>⚠ Mecanismo em dúvida.</b> Está na lista de perguntas para o professor.</p>':'';}
 const POSS=['3:78','8:52','10:44','2:39','11:87'];
 function origemTxt(ex){return ex.ok?'Massa, estrutura e mecanismo: da lousa do professor. O porquê é explicação minha, baseada no Silverstein.':'Ainda não conferido com o professor: tudo aqui é minha leitura do livro.';}
 function rearrBox(ex,row){
@@ -564,7 +583,7 @@ function rearrBox(ex,row){
 function whyBox(ex,row){
   const w=(typeof WHY!=='undefined')&&WHY[ex.n+':'+row[0]];if(!w)return '';
   const k=tipoE(ex,row),mdl=({alfa:1,mcl:1,neu:1,h:1})[k];
-  return '<details class="why"><summary>Mostrar o porquê</summary><p><b>Onde começa.</b> '+esc(w[0])+'</p><p><b>O que acontece.</b> '+fmt(esc(w[1]))+'</p><p><b>Por que aqui e não em outro lugar.</b> '+fmt(esc(w[2]))+'</p><p><b>Tipo de cisão.</b> '+cisTxt(ex,row)+'</p><p class="src">'+origemTxt(ex)+'</p><p><small>'+(mdl?'<button class="back" style="display:inline;margin:0" data-go="p-se">Ver o modelo com setas</button> · ':'')+'<button class="back" style="display:inline;margin:0" data-go="p-pq">Ver as regras</button></small></p></details>'+rearrBox(ex,row);
+  return '<details class="why"><summary>Mostrar o porquê</summary><p><b>Onde começa.</b> '+esc(w[0])+'</p><p><b>O que acontece.</b> '+fmt(esc(w[1]))+'</p><p><b>Por que aqui e não em outro lugar.</b> '+fmt(esc(w[2]))+'</p><p><b>Tipo de cisão.</b> '+cisTxt(ex,row)+'</p>'+duvTxt(ex,row)+'<p class="src">'+origemTxt(ex)+'</p><p><small>'+(mdl?'<button class="back" style="display:inline;margin:0" data-go="p-se">Ver o modelo com setas</button> · ':'')+'<button class="back" style="display:inline;margin:0" data-go="p-pq">Ver as regras</button></small></p></details>'+rearrBox(ex,row);
 }
 function stepCard(ex,row){
   const t=GLOS[tipoQ(row)],d=row[1]-row[0];
@@ -738,8 +757,8 @@ function drawIV(){
     h+='<p class="hint">Este composto não está na tabela da disciplina. As atribuições abaixo usam as regras da apostila.</p>';
   }
   if(c.p.length){
-    h+='<h2 style="margin-top:18px">Bandas do arquivo de dados</h2><p class="hint">Cada selo mostra a confiança: <b>alta</b> é região de tabela, <b>média</b> é atribuição típica, <b>baixa</b> é palpite ou sem atribuição segura.</p><div class="tbl"><table><thead><tr><th>Banda (cm⁻¹)</th><th>O que é</th><th>Confiança</th></tr></thead><tbody>'+
-      c.p.map(r=>'<tr><td class="n">'+r[0]+'</td><td>'+esc(r[1])+'</td><td><span class="badge '+(r[2]==='baixa'?'chk':'ok')+'">'+r[2]+'</span></td></tr>').join('')+'</tbody></table></div>';
+    h+='<h2 style="margin-top:18px">Bandas do arquivo de dados (atribuição minha, fora da tabela do curso)</h2><p class="hint">Estas atribuições são minhas, a partir do espectro do SDBS. Se a prova só aceita a tabela da disciplina, use a tabela de cima. Cada selo mostra a confiança: <b>alta</b> é região de tabela, <b>média</b> é atribuição típica, <b>baixa</b> é palpite ou sem atribuição segura.</p><div class="tbl"><table><thead><tr><th>Banda (cm⁻¹)</th><th>O que é</th><th>Confiança</th></tr></thead><tbody>'+
+      c.p.map(r=>'<tr><td class="n">'+r[0]+'</td><td>'+esc(r[1])+'</td><td><span class="badge '+(r[2]==='alta'?'ok':'chk')+'">'+r[2]+'</span></td></tr>').join('')+'</tbody></table></div>';
   }
   box.innerHTML=h;
 }
@@ -804,13 +823,18 @@ const REGRA={
  h:['Perda de H·','Sai o H mais fraco, o do carbono vizinho ao heteroátomo ou o do CHO (regra 7).'],
  benz:['Cisão benzílica','A ligação vizinha ao anel quebra porque o cátion benzila/tropílio é muito estável (regras 3 e 4).'],
  anel:['Abertura de anel','Uma ligação do anel abre ao lado do heteroátomo e depois sai uma molécula neutra (regra 7).'],
+ rad:['Perda de molécula neutra por rearranjo','O íon-radical (+·) passa um H ou abre o anel e solta uma molécula neutra (H2O, C2H4, CH2O). É homolítica (regra 7).'],
  sim:['Quebra simples','Uma ligação se rompe e o pedaço que sai leva o elétron sozinho (regras 3 e 4).']
 };
 const TR={mode:'qual',cur:null,i:0,score:{ok:0,n:0},hint:false,wrong:false};
 function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function repGet(){let rp=LS.get('massas-rep',null);if(rp===null){rp={};LS.get('massas-erros',[]).forEach(k=>{rp[k]={b:0,d:0};});LS.set('massas-rep',rp);}return rp;}
+function repAdd(k){const rp=repGet();rp[k]={b:0,d:Date.now()+864e5};LS.set('massas-rep',rp);}
+function repOk(k){const rp=repGet(),o=rp[k];if(!o||o.d>Date.now())return;const DIAS=[1,3,7];if(o.b>=2)delete rp[k];else{o.b++;o.d=Date.now()+DIAS[o.b]*864e5;}LS.set('massas-rep',rp);}
+function repDue(){const rp=repGet(),n=Date.now();return Object.keys(rp).filter(k=>rp[k].d<=n).length;}
 function trPool(){
   const all=[];EX.forEach(e=>e.rows.forEach(r=>all.push({e,r})));
-  if(TR.mode==='rev'){const er=LS.get('massas-erros',[]);return all.filter(x=>er.indexOf(x.e.n+':'+x.r[0])>=0);}
+  if(TR.mode==='rev'){const rp=repGet(),now=Date.now();return all.filter(x=>{const o=rp[x.e.n+':'+x.r[0]];return o&&(TR.revAll||o.d<=now);});}
   return all;
 }
 function lossQ(e,r){
@@ -842,23 +866,29 @@ function trNext(){
   if(TR.mode!=='qual'){const a=cisQ(c.e,c.r);if(a)qs.push(a);qs.push(regQ(c.e,c.r));}
   TR.cur={e:c.e,r:c.r,qs,i:0,pick:null,wrong:false,done:false};TR.hint=false;trDraw();
 }
-function trLabel(){const rb=document.querySelector('#trmode [data-m="rev"]');if(rb)rb.textContent='Revisar erros ('+LS.get('massas-erros',[]).length+')';}
+function trLabel(){const rb=document.querySelector('#trmode [data-m="rev"]');if(rb)rb.textContent='Revisar ('+repDue()+' hoje)';}
 function trInit(){
   const bar=$('#trmode');
   if(!bar.dataset.ok){
     bar.dataset.ok=1;
-    [['qual','Qual saiu?'],['try','Tente antes de ver'],['calc','Digitar a perda'],['rev','Revisar erros']].forEach(([m,l])=>{
+    [['qual','Qual saiu?'],['try','Tente antes de ver'],['calc','Digitar a perda'],['seta','Setas'],['sm','Simulado'],['rev','Revisar']].forEach(([m,l])=>{
       const b=document.createElement('button');b.type='button';b.className='chip';b.dataset.m=m;b.textContent=l;
-      b.onclick=()=>{TR.mode=m;trInit();};bar.appendChild(b);});
+      b.onclick=()=>{TR.mode=m;TR.revAll=false;trInit();};bar.appendChild(b);});
   }
   bar.querySelectorAll('button').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.m===TR.mode?'true':'false');
     });trLabel();
   if(TR.mode==='calc'){newQ();return;}
+  if(TR.mode==='sm'){smInit();return;}
+  if(TR.mode==='seta'){setaNext();return;}
   trNext();
 }
 function trDraw(){
   const box=$('#quiz');
-  if(!TR.cur){box.innerHTML='<p class="empty">'+(TR.mode==='rev'?'Nenhum erro guardado. Faça rodadas em &ldquo;Qual saiu?&rdquo; ou &ldquo;Tente antes de ver&rdquo;. Os erros aparecem aqui.':'Nada para treinar.')+'</p>';return;}
+  if(!TR.cur){
+    if(TR.mode==='rev'){const n=Object.keys(repGet()).length;
+      box.innerHTML=n?'<p class="empty">Nenhuma revisão vencida hoje. Você tem '+n+' guardada(s): cada erro volta 1, 3 e 7 dias depois, e sai da lista quando você acerta nas três.</p><div class="row"><button class="btn ghost" id="revall" type="button">Revisar todas agora</button></div>':'<p class="empty">Nenhum erro guardado. Faça rodadas em outros modos. Os erros aparecem aqui e voltam depois de 1, 3 e 7 dias.</p>';
+      const ra=$('#revall');if(ra)ra.onclick=()=>{TR.revAll=true;trNext();};return;}
+    box.innerHTML='<p class="empty">Nada para treinar.</p>';return;}
   const c=TR.cur,e=c.e,r=c.r;
   let h='<div class="k mono" style="color:var(--muted)">Acertos: '+TR.score.ok+' de '+TR.score.n+'</div>';
   h+='<p class="ctx">Molécula <b class="mono">'+fmt(e.f)+'</b> (M = '+e.M+')'+(TR.hint?': <b>'+esc(e.nome)+'</b>, '+esc(e.g):'')+'.</p>';
@@ -884,12 +914,133 @@ function trDraw(){
     if(q.opts[k].ok)TR.score.ok++;else c.wrong=true;trDraw();});
   const n=$('#trn');if(n)n.onclick=()=>{
     if(c.i<c.qs.length-1){c.i++;c.pick=null;}else{
-      c.done=true;const key=e.n+':'+r[0];let er=LS.get('massas-erros',[]);
-      if(c.wrong){if(er.indexOf(key)<0)er.push(key);}else er=er.filter(x=>x!==key);
-      LS.set('massas-erros',er);trLabel();}
+      c.done=true;const key=e.n+':'+r[0];
+      if(c.wrong)repAdd(key);else repOk(key);trLabel();}
     trDraw();};
   const o=$('#tro');if(o)o.onclick=trNext;
   const hh=$('#trh');if(hh)hh.onclick=()=>{TR.hint=true;trDraw();};
+}
+
+/* ---------- Simulado ---------- */
+const SM={};
+function smInit(){
+  const box=$('#quiz');
+  box.innerHTML='<p class="ctx"><b>Simulado.</b> Você escolhe um exercício e vê só a fórmula e a massa, sem dica de nome. Responde o que saiu em cada pico, uma pergunta de cada vez. No fim aparecem a nota, o tempo e o que errar. Os erros vão para &ldquo;Revisar&rdquo;.</p><div class="row"><select id="smsel" aria-label="Exercício do simulado"><option value="0">Qualquer exercício</option>'+EX.map(e=>'<option value="'+e.n+'">Ex. '+e.n+' ('+e.rows.length+' picos)</option>').join('')+'</select><button class="btn" id="smgo" type="button">Começar</button></div>';
+  $('#smgo').onclick=()=>{
+    const v=+$('#smsel').value,e=v?EX.find(x=>x.n===v):EX[Math.floor(Math.random()*EX.length)];
+    SM.e=e;SM.qs=e.rows.map(r=>({r,q:lossQ(e,r)}));SM.i=0;SM.ok=0;SM.bad=[];SM.t0=Date.now();SM.pick=null;smDraw();};
+}
+function smDraw(){
+  const box=$('#quiz'),e=SM.e;
+  if(SM.i>=SM.qs.length){
+    const sec=Math.round((Date.now()-SM.t0)/1000),mm=Math.floor(sec/60),ss=('0'+(sec%60)).slice(-2);
+    SM.bad.forEach(b=>repAdd(e.n+':'+b.r[0]));SM.qs.forEach((x,i)=>{if(SM.bad.indexOf(x)<0)repOk(e.n+':'+x.r[0]);});trLabel();
+    let h='<div class="ans" style="border-radius:6px"><span class="t">Nota: '+SM.ok+' de '+SM.qs.length+' · tempo '+mm+':'+ss+'</span>Exercício '+e.n+': <b>'+esc(e.nome)+'</b> <span class="mono">'+fmt(e.f)+'</span>.</div>';
+    if(SM.bad.length){h+='<h3>Para revisar</h3><ul>'+SM.bad.map(b=>{const d=b.r[1]-b.r[0];return '<li>Pico <b class="mono">'+b.r[0]+'</b> (de '+b.r[1]+'): saiu <b>'+d+'</b>, que foi <b>'+fmt(b.r[3])+'</b> ('+esc(b.r[4])+').</li>';}).join('')+'</ul>';}
+    else h+='<p>Sem erros. Sem nenhuma pergunta para revisar neste exercício.</p>';
+    h+='<div class="row" style="margin-top:10px"><button class="btn" id="smagain" type="button">Outro simulado</button></div>';
+    box.innerHTML=h;$('#smagain').onclick=smInit;return;
+  }
+  const x=SM.qs[SM.i],q=x.q;
+  let h='<div class="k mono" style="color:var(--muted)">Pico '+(SM.i+1)+' de '+SM.qs.length+' · acertos '+SM.ok+'</div>';
+  h+='<p class="ctx">Molécula <b class="mono">'+fmt(e.f)+'</b> (M = '+e.M+'). Picos: <span class="mono">'+e.peaks.join(', ')+'</span>.</p><p>'+q.p+'</p>';
+  q.opts.forEach((o,k)=>{let cls='optb';if(SM.pick!==null){if(o.ok)cls+=' good';else if(SM.pick===k)cls+=' bad';}
+    h+='<button type="button" class="'+cls+'" data-k="'+k+'"'+(SM.pick!==null?' disabled':'')+'>'+o.l+'</button>';});
+  if(SM.pick!==null){h+='<div class="fb '+(q.opts[SM.pick].ok?'good':'bad')+'">'+(q.opts[SM.pick].ok?'Certo. ':'Ainda não. ')+q.fb+'</div><div class="row" style="margin-top:10px"><button class="btn" id="smn" type="button">'+(SM.i<SM.qs.length-1?'Próximo pico':'Ver a nota')+'</button></div>';}
+  box.innerHTML=h;
+  box.querySelectorAll('.optb').forEach(b=>b.onclick=()=>{const k=+b.dataset.k;SM.pick=k;if(q.opts[k].ok)SM.ok++;else SM.bad.push(x);smDraw();});
+  const n=$('#smn');if(n)n.onclick=()=>{SM.i++;SM.pick=null;smDraw();};
+}
+
+/* ---------- Setas: onde vai cada seta? ---------- */
+const SETAS=[
+ {t:'Ionização (o 1º passo de todo espectro)',m:0,qs:[
+  {p:'O feixe de elétrons arranca 1 elétron da molécula. De qual elétron isso é mais fácil?',o:['Do par livre (n) do O ou do N','De uma ligação C–C (σ)','De uma ligação C–H'],fb:'A ordem de facilidade é: par livre (n) &lt; π &lt; σ. Por isso o O ou o N perde o elétron.'},
+  {p:'Depois da ionização, o que o O (ou N) fica tendo?',o:['Um elétron sozinho e carga + (íon-radical, +·)','Carga + e nenhum elétron sozinho (cátion)','Carga − e um elétron sozinho'],fb:'Perdeu 1 dos 2 elétrons do par livre: sobra 1 elétron sozinho e, como saiu um elétron (carga −), a carga fica +.'}]},
+ {t:'Clivagem α (homolítica)',m:1,qs:[
+  {p:'A seta que parte do elétron sozinho do O é de que tipo?',o:['Seta de anzol (1 elétron)','Seta inteira (par de elétrons)','Não há seta nessa etapa'],fb:'Um elétron só andando se desenha com meia ponta (anzol).'},
+  {p:'Para onde vai esse elétron do O?',o:['Forma a ligação dupla C=O','Vai para o grupo R′ que sai','Volta para o anel'],fb:'O elétron do O se junta a 1 elétron do C e vira a segunda ligação do C=O.'},
+  {p:'O que acontece com a ligação C–R′?',o:['Quebra e cada lado leva 1 elétron: R′ sai como radical (·)','Quebra e o par vai todo com R′, que sai como ânion','Não quebra; só o H sai'],fb:'O C usa 1 elétron dessa ligação para a nova C=O. O outro elétron fica com R′, que sai como radical.'}]},
+ {t:'McLafferty (homolítica, em sequência)',m:2,qs:[
+  {p:'De qual carbono vem o H que pula para o O?',o:['Do carbono γ (o 3º a partir do C=O)','Do carbono α (vizinho do C=O)','Do próprio O'],fb:'Precisa ser o H do γ: só ele alcança o O por um anel de 6 átomos.'},
+  {p:'Quantos átomos tem o anel que o H atravessa?',o:['6','4','5'],fb:'O, C do C=O, Cα, Cβ, Cγ e o H: seis.'},
+  {p:'O que sai no final?',o:['Um alqueno neutro (molécula completa)','Um radical alquila','Um ânion'],fb:'Sai um alqueno neutro. O íon que fica continua sendo íon-radical (+·), por isso a massa do pico é par se M era par.'}]},
+ {t:'Cátion acílio perde CO (heterolítica)',m:3,qs:[
+  {p:'A seta usada aqui é de que tipo?',o:['Seta inteira (um par de elétrons)','Seta de anzol (1 elétron)','Não há seta nessa etapa'],fb:'Aqui anda um par de elétrons: seta de ponta cheia.'},
+  {p:'O que sai?',o:['CO, molécula neutra','R·, um radical, e fica CO+·','O·, um radical'],fb:'O cátion (sem elétron sozinho) solta uma molécula neutra, CO. Cátion não solta radical (regra dos elétrons pares).'},
+  {p:'O que fica?',o:['Um cátion R+ (sem elétron sozinho)','Um radical R·','Um ânion R−'],fb:'Fica R+, com a carga que o íon já tinha.'}]},
+ {t:'Perda de H· (M − 1)',m:4,qs:[
+  {p:'O H sai levando quantos elétrons?',o:['1 elétron (H·)','0 elétron (H+)','2 elétrons (H−)'],fb:'Cisão homolítica: cada lado leva 1 elétron. O H sai como radical.'},
+  {p:'Que seta se usa para o elétron que sobra no heteroátomo?',o:['Seta de anzol','Seta inteira','Nenhuma'],fb:'É 1 elétron andando: anzol.'},
+  {p:'O que o heteroátomo faz com o elétron sozinho dele?',o:['Forma a ligação dupla com o carbono','Fica com o H','Perde o par livre inteiro'],fb:'O elétron do O ou do N forma a ligação dupla com o C vizinho; o H sai.'}]}
+];
+function setaNext(){
+  let c;do{c=SETAS[Math.floor(Math.random()*SETAS.length)];}while(TR.cur&&TR.cur.c===c&&SETAS.length>1);
+  TR.cur={kind:'seta',c,qs:c.qs.map(q=>({p:q.p,fb:q.fb,opts:shuf(q.o.map((l,i)=>({l,ok:i===0})))})),i:0,pick:null,done:false};setaDraw();
+}
+function setaDraw(){
+  const box=$('#quiz'),c=TR.cur;
+  let h='<div class="k mono" style="color:var(--muted)">Acertos: '+TR.score.ok+' de '+TR.score.n+'</div><p class="ctx"><b>'+c.c.t+'</b></p>';
+  if(!c.done){
+    const q=c.qs[c.i];
+    h+='<p><b>Pergunta '+(c.i+1)+' de '+c.qs.length+'.</b> '+q.p+'</p>';
+    q.opts.forEach((o,k)=>{let cls='optb';if(c.pick!==null){if(o.ok)cls+=' good';else if(c.pick===k)cls+=' bad';}
+      h+='<button type="button" class="'+cls+'" data-k="'+k+'"'+(c.pick!==null?' disabled':'')+'>'+o.l+'</button>';});
+    if(c.pick!==null)h+='<div class="fb '+(q.opts[c.pick].ok?'good':'bad')+'">'+(q.opts[c.pick].ok?'Certo. ':'Ainda não. ')+q.fb+'</div><div class="row" style="margin-top:10px"><button class="btn" id="stn" type="button">'+(c.i<c.qs.length-1?'Próxima pergunta':'Ver o modelo com setas')+'</button></div>';
+    else h+='<div class="row"><button class="btn ghost" id="sto" type="button">Outro mecanismo</button></div>';
+  }else{
+    const m=document.querySelectorAll('#se-anchor .mdl')[c.c.m];
+    h+='<div class="mdl">'+(m?m.innerHTML:'')+'</div><div class="row" style="margin-top:10px"><button class="btn" id="sto" type="button">Outro mecanismo</button></div>';
+  }
+  box.innerHTML=h;
+  box.querySelectorAll('.optb').forEach(b=>b.onclick=()=>{const k=+b.dataset.k,q=c.qs[c.i];c.pick=k;TR.score.n++;if(q.opts[k].ok)TR.score.ok++;setaDraw();});
+  const n=$('#stn');if(n)n.onclick=()=>{if(c.i<c.qs.length-1){c.i++;c.pick=null;}else c.done=true;setaDraw();};
+  const o=$('#sto');if(o)o.onclick=setaNext;
+}
+
+/* ---------- Perguntas para o professor ---------- */
+const PERG=[
+ ['Ex. 1 a 5: conferir com a lousa','Montei os exercícios 1 a 5 (etilbenzeno, furano, estireno, benzofenona, 3-pentanona) pelo livro, sem a lousa. Posso mostrar para o senhor conferir as massas e os mecanismos?'],
+ ['Ex. 1: o anel de 7 (tropílio) é obrigatório?','O senhor termina o 91 com o anel de 7 carbonos porque é mais estável. Na prova posso desenhar o íon benzila (anel de 6 com CH2+) ou tenho que desenhar o tropílio?'],
+ ['Ex. 6, pico 59','O 59 do 1-propanol é a perda do H do O–H ou de um H do carbono ao lado do OH (clivagem α)? A literatura cita a segunda; a lousa mostrou a primeira.'],
+ ['Ex. 9, pico 73','Na lousa o O fecha um anel de 4 membros quando sai CH3. Esse é o mecanismo que vale na prova?'],
+ ['Ex. 10, pico 58','A lousa desenha a saída do CH3 ligado ao N. Pela clivagem α, o mais favorável seria sair o CH3 do etila. Vale o da lousa?'],
+ ['Ex. 10, pico 44','O 44 é o nitrênio (CH3)2N+ ou o CH3–NH+=CH2? Qual desenhar?'],
+ ['Ex. 8, pico 50','O 51 (C4H3+, cátion sem elétron sozinho) perde H· e vira 50 (C4H2+·). Isso não quebra a regra dos elétrons pares? Pode ser outro caminho?'],
+ ['Ex. 11, pico 87','O 87 do valerato de metila: qual o mecanismo (rearranjo de H e saída do etila, como está na lousa)?'],
+ ['Ex. 12, pico 58','O 58 do pentanal: H que passa para o O por anel de 6 e sai eteno. É McLafferty de novo, ou outro rearranjo?'],
+ ['IV: bandas fora da tabela','Algumas bandas que usei (por exemplo CH3 simétrico perto de 2870 a 2890) não estão na tabela da disciplina. Na prova só vale a tabela?']
+];
+function drawPerg(){
+  const done=LS.get('massas-perg',[]);
+  $('#pergL').innerHTML=PERG.map((p,i)=>'<div class="rule"><label style="display:flex;gap:10px;align-items:flex-start"><input type="checkbox" data-i="'+i+'"'+(done.indexOf(i)>=0?' checked':'')+' style="margin-top:4px"><span><b>'+esc(p[0])+'</b><br>'+esc(p[1])+'</span></label></div>').join('');
+  $('#pergL').querySelectorAll('input').forEach(c=>c.onchange=()=>{let d=LS.get('massas-perg',[]);const i=+c.dataset.i;d=c.checked?d.concat([i]):d.filter(x=>x!==i);LS.set('massas-perg',d);});
+}
+
+/* ---------- Salvar e levar o progresso ---------- */
+function pgCollect(){const d={};try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.indexOf('massas-')===0)d[k]=localStorage.getItem(k);}}catch(e){}return d;}
+function pgEnc(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o))));}
+function pgDec(t){return JSON.parse(decodeURIComponent(escape(atob(t.replace(/\s+/g,'')))));}
+function pgMsg(t,bad){const m=$('#pgMsg');m.textContent=t;m.className='fb '+(bad?'bad':'good');}
+function pgInit(){
+  $('#pgGen').onclick=()=>{$('#pgTxt').value=pgEnc({v:1,d:pgCollect()});pgMsg('Código gerado. Toque em Copiar e cole no outro aparelho ou app.');};
+  $('#pgCopy').onclick=()=>{const t=$('#pgTxt');if(!t.value)$('#pgGen').click();t.select();
+    try{if(navigator.clipboard)navigator.clipboard.writeText(t.value);else document.execCommand('copy');pgMsg('Copiado.');}catch(e){pgMsg('Não consegui copiar sozinho. Selecione o texto e copie.',true);}};
+  $('#pgImp').onclick=()=>{
+    let o;try{o=pgDec($('#pgTxt').value);}catch(e){pgMsg('Código inválido. Cole o código inteiro, sem cortar.',true);return;}
+    if(!o||o.v!==1||typeof o.d!=='object'){pgMsg('Código inválido.',true);return;}
+    let n=0;
+    Object.keys(o.d).forEach(k=>{
+      if(k.indexOf('massas-')!==0)return;
+      let inc,cur;try{inc=JSON.parse(o.d[k]);}catch(e){return;}
+      cur=LS.get(k,null);
+      if(k==='massas-stud'||k==='massas-perg'){LS.set(k,Array.from(new Set((cur||[]).concat(inc))));n++;}
+      else if(k==='massas-rep'){const m=cur||{};Object.keys(inc).forEach(q=>{if(!m[q]||inc[q].d>m[q].d)m[q]=inc[q];});LS.set(k,m);n++;}
+      else if(k==='massas-erros'){}
+      else if(k.indexOf('massas-nota-')===0){if(!cur)LS.set(k,inc);else if(cur!==inc)LS.set(k,cur+'\n— importado: '+inc);n++;}
+      else if(cur===null){LS.set(k,inc);n++;}
+    });
+    buildChips();trLabel();drawPerg();pgMsg('Importado ('+n+' itens juntados com o que já existia). Nada foi apagado.');};
 }
 
 /* ---------- Espectro novo (detetive) ---------- */
@@ -961,14 +1112,16 @@ function esRun(){
 ['#esF','#esM','#esP','#esI'].forEach(s=>$(s).addEventListener('input',esRun));
 
 (function(){const v=document.getElementById('vers');if(v)v.textContent=VERSAO;})();
-const SCR=['p-an','p-tr','p-tb','p-iv','p-ma','p-ca','p-aj','p-fo','p-pq','p-co','p-se','p-es'];
-const OWN={'p-ca':'t-ma','p-aj':'t-ma','p-fo':'t-ma','p-pq':'t-ma','p-co':'t-ma','p-se':'t-ma','p-es':'t-ma'};
+const SCR=['p-an','p-tr','p-tb','p-iv','p-ma','p-ca','p-aj','p-fo','p-pq','p-co','p-es','p-pr','p-pg'];
+const OWN={'p-ca':'t-ma','p-aj':'t-ma','p-fo':'t-ma','p-pq':'t-ma','p-co':'t-ma','p-es':'t-ma','p-pr':'t-ma','p-pg':'t-ma'};
 const NAV=['t-an','t-tr','t-tb','t-iv','t-ma'];
 function go(id){
+  if(id==='p-se'){go('p-pq');const a=$('#se-anchor');if(a)a.scrollIntoView();return;}
   SCR.forEach(x=>{$('#'+x).hidden=x!==id;});
   const own=OWN[id]||('t-'+id.slice(2));
   NAV.forEach(t=>$('#'+t).setAttribute('aria-selected',t===own?'true':'false'));
   if(id==='p-tr')trInit();
+  if(id==='p-pr')drawPerg();
   window.scrollTo(0,0);
 }
 NAV.forEach((t,i)=>{const el=$('#'+t);
@@ -981,6 +1134,6 @@ document.querySelectorAll('.seg').forEach(g=>g.querySelectorAll('button').forEac
 
 /* ---------- início: exercício 6 carregado ---------- */
 $('#glos').innerHTML=[['+ (cátion)','Fragmento com carga positiva e nenhum elétron sozinho. É o que o aparelho enxerga.'],['+· (íon-radical)','Carga positiva e um elétron sozinho. O íon molecular M e os fragmentos de rearranjo são assim.'],['· (radical)','Pedaço neutro com um elétron sozinho. Sai da molécula e não aparece no espectro.'],[GLOS.alfa[0],GLOS.alfa[1]],[GLOS.mcl[0],GLOS.mcl[1]],[GLOS.neu[0],GLOS.neu[1]],[GLOS.anel[0],GLOS.anel[1]]].map(x=>'<div><dt>'+x[0]+'</dt><dd>'+x[1]+'</dd></div>').join('');
-curEx=6;$('#inM').value=60;$('#inP').value='59, 42, 31';
+pgInit();curEx=6;$('#inM').value=60;$('#inP').value='59, 42, 31';
 buildChips();analyze();drawTable();calc();drawIVChips();drawIV();drawIVReg();$('#ivq').addEventListener('input',ivLookup);
 </script>
