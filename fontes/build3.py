@@ -1,4 +1,4 @@
-import re, json, sys
+import re, json, sys, os
 sys.path.insert(0,".")
 from why import WHY
 from rearr import REARR
@@ -80,5 +80,5 @@ store.update(thumbs)
 js="const SVG="+json.dumps(store,ensure_ascii=False)+";\nconst MAPS="+json.dumps(MAPS,ensure_ascii=False)+";\nconst EX="+json.dumps(out,ensure_ascii=False)+";\n"+"const REARR="+json.dumps({f"{k[0]}:{k[1]}":[v[0],[list(x) for x in v[1]]] for k,v in REARR.items()},ensure_ascii=False)+";\n"+"const WHY="+json.dumps({f"{k[0]}:{k[1]}":list(v) for k,v in WHY.items()},ensure_ascii=False)+";\n"
 a=html.index("/* ---------- dados: exercícios"); b=html.index("/* ---------- utilidades")
 html=html[:a]+"/* ---------- dados ---------- */\n"+js+"\n"+html[b:]
-open('/home/claude/quebra_cabeca_v3.html','w',encoding='utf-8').write(html)
+open(os.environ.get('SAIDA','quebra_cabeca_v3.html'),'w',encoding='utf-8').write(html)
 print(len(thumbs),len(MAPS),len(html))

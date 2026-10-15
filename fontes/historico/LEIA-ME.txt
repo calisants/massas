@@ -1,0 +1,2 @@
+Scripts antigos que aplicaram melhorias no template.html passo a passo. Já foram aplicados:
+o fontes/template.html é a versão final. Estão aqui só como registro e não precisam rodar de novo.
