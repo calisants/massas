@@ -99,6 +99,28 @@ def _b64(f):
     return "data:image/webp;base64,"+base64.b64encode(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"mech",f),"rb").read()).decode()
 _PDF="Do seu PDF: as setas e os anzóis que você copiou do quadro."
 _FOTO="Foto do quadro, porque estes passos não estavam no seu PDF."
+
+SL=[
+("Benzamida: o exemplo-modelo do professor (slide 3)","M+• 121 (60%) → −•NH₂ → 105 (90%) → −CO → 77 (100%, pico base). Também 121 → −C₆H₅• → 44 (12%). Repare: o elétron sozinho sai do O (par livre), a ligação C–N vira a 2ª ligação e o NH₂ sai como radical.",3),
+("Como representar íons e setas (slides 13 e 14)","A forma mais correta do íon é sem localizar a carga (A). Para entender o mecanismo, usamos as formas B e C, com carga e elétron sozinho localizados. Quebra homolítica = seta de meia ponta (1 elétron). Dá para desenhar os dois elétrons (I) ou só um (II), para evitar confusão. Quebra heterolítica = seta de duas pontas (par de elétrons): cátion + radical (III) ou cátion + molécula neutra (IV).",14),
+("Anel saturado com ramificação e retro-Diels-Alder (slide 15)","Anel saturado ramificado: a carga fica no anel e a ramificação sai como radical neutro. Anel insaturado (ciclo-hexeno): retro-Diels-Alder, abre e solta eteno (28).",15),
+("Íon tropílio, m/z 91 (slide 16)","Em alquilbenzeno a quebra é na ligação β ao anel, dando o íon benzila. O slide diz: benzila, estabilizado por ressonância, ou, como é mais provável, tropílio (anel de 7, aromático). Os dois têm m/z 91.",16),
+("Rearranjo de McLafferty (slide 17)","Sai alqueno neutro (RHC=CH₂) e o íon fica como enol, com Y = H, R, OH ou OR/NH₂. O elétron sozinho aparece no carbono depois do H pular.",17),
+("Hidrocarbonetos: anel saturado (slide 19)","Anel saturado aumenta a intensidade do M+•. O anel perde fragmentos de 2 carbonos: C₂H₄ (28) e C₂H₅ (29). Ciclo-hexano: M 84, base 56 (perde C₂H₄).",19),
+("Álcoois primários, secundários e terciários (slides 22 e 23)","M+• pequeno em primário e secundário e quase ausente em terciário. Quebra da ligação C–C vizinha ao O. Primário: +CH₂–OH (31). Secundário: +CHR–OH (45, 59, 73…). Terciário: +CRR'–OH (59, 73, 87…).",22),
+("Álcoois: perda de água e álcool benzílico (slide 24)","M−18 aparece às vezes forte, mais fácil em álcool primário. O slide interpreta por perda de H (I); e água junto com alqueno (II). Álcool benzílico: M+• 108 → −H• → 107 → −CO → 79 → −H₂ → 77.",24),
+("Álcool benzílico passo a passo (slide 25)","Mecanismo do professor: 108 → 107 (sai H•), 107 → 79 (sai CO, com o anel de 7 do tropílio-OH), 79 → 77 (sai H₂).",25),
+("Cetonas (slide 27)","M+• em geral bem intenso. As quebras principais são das ligações C–C vizinhas ao O (α). Ciclo-hexanona (M 98): abre o anel, depois sai C₂H₄ + CO, dando 55 e 42.",27),
+("Ácidos carboxílicos (slide 28)","M+• pouco intenso, mas normalmente observado. Pico característico em m/z 60 pelo McLafferty (ácido decanoico, M 172).",28),
+("Exemplo de prova: benzaldeído (slide 35)","Primeiro IV (IDH, bandas), depois MS confirma: M+• 106 → −H• → 105 → −CO → 77 → −HC≡CH → 51.",35),
+("Isômeros: o-hidroxibenzaldeído (slide 37)","Orto: 122 → −H• → 121 → −CO → 93 → −OH• → 76. Há também a via da água: pela proximidade entre CHO e OH sai H₂O (−18), dando 104, e depois −CO → 76. Depois 93 → 65 → 39.",37),
+("Isômero meta (slide 39)","Sem perda de água, porque o aldeído está longe da hidroxila: 122 → 121 → 93 → 65 → 39.",39),
+("Isômero para (slide 41)","Igual ao meta, sem perda de água pelo afastamento entre aldeído e hidroxila: 122 → 121 → 93 → 65 → 39.",41),
+("Ácido benzoico (slide 43)","122 → −OH• → 105 → −CO → 77 → −HC≡CH → 51. Não perde água.",43),
+("Ácido salicílico, orto (slide 45)","Perde H₂O (138 → 120) pela proximidade entre COOH e OH, depois −CO → 92 → 64 → 38.",45),
+]
+SLIMG={n:_b64(f"../slides/s{n}.webp") for n in (3,14,15,16,17,19,22,24,25,27,28,35,37,39,41,43,45)}
+
 MECH={
  "1":[[_b64("e1.webp"),_PDF]],
  "2":[[_b64("e2.webp"),_PDF]],
@@ -114,7 +136,7 @@ MECH={
  "12":[[_b64("e12.webp"),_PDF+" Falta aqui o McLafferty do m/z 44 e do 58."],[_b64("q12.webp"),_FOTO]],
 }
 
-js="const SVG="+json.dumps(store,ensure_ascii=False)+";\nconst MAPS="+json.dumps(MAPS,ensure_ascii=False)+";\nconst EX="+json.dumps(out,ensure_ascii=False)+";\n"+"const REARR="+json.dumps({f"{k[0]}:{k[1]}":[v[0],[list(x) for x in v[1]]] for k,v in REARR.items()},ensure_ascii=False)+";\n"+"const WHY="+json.dumps({f"{k[0]}:{k[1]}":list(v) for k,v in WHY.items()},ensure_ascii=False)+";\n"+"const INTS="+json.dumps({str(k):dict(sdbs=v["sdbs"],id=v["id"],p={str(m):i for m,i in v["p"].items()}) for k,v in INTS.items()},ensure_ascii=False)+";\n"+"const ARWD="+json.dumps(ARWD,ensure_ascii=False)+";\n"+"const RESUMO="+json.dumps(RESUMO,ensure_ascii=False)+";\nconst IONI="+json.dumps({str(k):[v[0],[list(x) for x in v[1]]] for k,v in IONI.items()},ensure_ascii=False)+";\n"+"const MECH="+json.dumps(MECH,ensure_ascii=False)+";\n"
+js="const SVG="+json.dumps(store,ensure_ascii=False)+";\nconst MAPS="+json.dumps(MAPS,ensure_ascii=False)+";\nconst EX="+json.dumps(out,ensure_ascii=False)+";\n"+"const REARR="+json.dumps({f"{k[0]}:{k[1]}":[v[0],[list(x) for x in v[1]]] for k,v in REARR.items()},ensure_ascii=False)+";\n"+"const WHY="+json.dumps({f"{k[0]}:{k[1]}":list(v) for k,v in WHY.items()},ensure_ascii=False)+";\n"+"const INTS="+json.dumps({str(k):dict(sdbs=v["sdbs"],id=v["id"],p={str(m):i for m,i in v["p"].items()}) for k,v in INTS.items()},ensure_ascii=False)+";\n"+"const ARWD="+json.dumps(ARWD,ensure_ascii=False)+";\n"+"const RESUMO="+json.dumps(RESUMO,ensure_ascii=False)+";\nconst IONI="+json.dumps({str(k):[v[0],[list(x) for x in v[1]]] for k,v in IONI.items()},ensure_ascii=False)+";\n"+"const MECH="+json.dumps(MECH,ensure_ascii=False)+";\n"+"const SLD="+json.dumps([[t,x,SLIMG[n]] for t,x,n in SL],ensure_ascii=False)+";\n"
 a=html.index("/* ---------- dados: exercícios"); b=html.index("/* ---------- utilidades")
 html=html[:a]+"/* ---------- dados ---------- */\n"+js+"\n"+html[b:]
 open(os.environ.get('SAIDA','quebra_cabeca_v3.html'),'w',encoding='utf-8').write(html)
