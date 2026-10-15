@@ -5,6 +5,7 @@ from rearr import REARR
 from resumo import RESUMO
 from ioni import IONI
 from intens import INTS, LOUSA
+import arrows as ARWMOD
 from rdkit import Chem
 from rdkit.Chem.Draw import rdMolDraw2D
 src=open('build_app.py',encoding='utf-8').read().split("store = {}")[0]
@@ -80,7 +81,20 @@ thumbs={}
 for sm in set(re.findall(r'"[^"\n]*? @([^"\n]+)"',html)):
     thumbs[sm]=svg(sm,120,88)
 store.update(thumbs)
-js="const SVG="+json.dumps(store,ensure_ascii=False)+";\nconst MAPS="+json.dumps(MAPS,ensure_ascii=False)+";\nconst EX="+json.dumps(out,ensure_ascii=False)+";\n"+"const REARR="+json.dumps({f"{k[0]}:{k[1]}":[v[0],[list(x) for x in v[1]]] for k,v in REARR.items()},ensure_ascii=False)+";\n"+"const WHY="+json.dumps({f"{k[0]}:{k[1]}":list(v) for k,v in WHY.items()},ensure_ascii=False)+";\n"+"const INTS="+json.dumps({str(k):dict(sdbs=v["sdbs"],id=v["id"],p={str(m):i for m,i in v["p"].items()}) for k,v in INTS.items()},ensure_ascii=False)+";\n"+"const LOUSA="+json.dumps({str(k):{str(m):v for m,v in d.items()} for k,d in LOUSA.items()},ensure_ascii=False)+";\n"+"const RESUMO="+json.dumps(RESUMO,ensure_ascii=False)+";\nconst IONI="+json.dumps({str(k):[v[0],[list(x) for x in v[1]]] for k,v in IONI.items()},ensure_ascii=False)+";\n"
+ARWD={}
+for e in EXD:
+    byp={r[0]:r for r in e["rows"]}
+    for r in e["rows"]:
+        spec=ARWMOD.ARW.get((e["n"],r[0]))
+        assert spec is not None,("sem setas nem nota",e["n"],r[0])
+        smi=e["smi"] if r[1]==e["M"] else byp[r[1]][5]
+        ent={}
+        if spec.get("v"):
+            ent["v"]=[[lab,ARWMOD.build(smi,mk,rec),rec["t"]] for lab,mk,rec in spec["v"]]
+        if spec.get("n"): ent["n"]=spec["n"]
+        ent["p"]="íon molecular M+· (m/z %d)"%e["M"] if r[1]==e["M"] else "íon do pico m/z %d"%r[1]
+        ARWD[f'{e["n"]}:{r[0]}']=ent
+js="const SVG="+json.dumps(store,ensure_ascii=False)+";\nconst MAPS="+json.dumps(MAPS,ensure_ascii=False)+";\nconst EX="+json.dumps(out,ensure_ascii=False)+";\n"+"const REARR="+json.dumps({f"{k[0]}:{k[1]}":[v[0],[list(x) for x in v[1]]] for k,v in REARR.items()},ensure_ascii=False)+";\n"+"const WHY="+json.dumps({f"{k[0]}:{k[1]}":list(v) for k,v in WHY.items()},ensure_ascii=False)+";\n"+"const INTS="+json.dumps({str(k):dict(sdbs=v["sdbs"],id=v["id"],p={str(m):i for m,i in v["p"].items()}) for k,v in INTS.items()},ensure_ascii=False)+";\n"+"const LOUSA="+json.dumps({str(k):{str(m):v for m,v in d.items()} for k,d in LOUSA.items()},ensure_ascii=False)+";\n"+"const ARWD="+json.dumps(ARWD,ensure_ascii=False)+";\n"+"const RESUMO="+json.dumps(RESUMO,ensure_ascii=False)+";\nconst IONI="+json.dumps({str(k):[v[0],[list(x) for x in v[1]]] for k,v in IONI.items()},ensure_ascii=False)+";\n"
 a=html.index("/* ---------- dados: exercícios"); b=html.index("/* ---------- utilidades")
 html=html[:a]+"/* ---------- dados ---------- */\n"+js+"\n"+html[b:]
 open(os.environ.get('SAIDA','quebra_cabeca_v3.html'),'w',encoding='utf-8').write(html)

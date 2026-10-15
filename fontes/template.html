@@ -50,6 +50,8 @@
 .tag{font-size:.72rem;border-radius:4px;padding:1px 6px;background:var(--line);color:var(--muted);font-weight:500;margin-left:6px;white-space:nowrap}
 .src{font-size:.82rem;color:var(--muted);margin:8px 0 0}
 .resumo{margin:10px 0 4px;font-weight:500}
+.arw{margin:10px 0;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.arws{margin:6px 0;text-align:center}.arwt{padding-left:18px;margin:4px 0}.arwl{margin:10px 0 0}
 figure.spec{margin:6px 0 12px}
 .hoje{padding-left:20px;margin:6px 0}.hoje li{margin:10px 0}.hoje .btn{margin-right:6px}
 .ionl{padding-left:18px;margin:6px 0}.ionl li{margin:7px 0}
@@ -600,6 +602,13 @@ function whyBox(ex,row){
   const k=tipoE(ex,row),mdl=({alfa:1,mcl:1,neu:1,h:1})[k];
   return resumoTxt(ex,row)+'<details class="why"><summary>Mostrar o porquê</summary><p><b>Onde começa.</b> '+esc(w[0])+'</p><p><b>O que acontece.</b> '+fmt(esc(w[1]))+'</p><p><b>Por que aqui e não em outro lugar.</b> '+fmt(esc(w[2]))+'</p><p><b>Tipo de cisão.</b> '+cisTxt(ex,row)+'</p>'+duvTxt(ex,row)+'<p class="src">'+origemTxt(ex)+'</p><p><small>'+(mdl?'<button class="back" style="display:inline;margin:0" data-go="p-se">Ver o modelo com setas</button> · ':'')+'<button class="back" style="display:inline;margin:0" data-go="p-pq">Ver as regras</button></small></p></details>'+rearrBox(ex,row);
 }
+function arrowBox(ex,row){
+  const a=(typeof ARWD!=='undefined')&&ARWD[ex.n+':'+row[0]];if(!a)return '';
+  let h='<div class="arw"><b>Setas do mecanismo</b> <small>(anzol = 1 elétron; seta cheia = 1 par)</small><p class="src" style="margin-top:2px">Estrutura de partida: '+esc(a.p)+'.</p>';
+  (a.v||[]).forEach(v=>{h+=(v[0]?'<p class="arwl"><b>'+esc(v[0])+'</b></p>':'')+'<figure class="st arws">'+v[1]+'</figure><ul class="arwt">'+v[2].map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';});
+  if(a.n)h+='<p class="src">'+esc(a.n)+'</p>';
+  return h+'<p class="src">Setas desenhadas por mim a partir das regras do livro. Se o desenho da lousa for diferente, vale a lousa.</p></div>';
+}
 function stepCard(ex,row){
   const t=GLOS[tipoQ(row)],d=row[1]-row[0];
   return '<ol class="steps">'+
@@ -607,7 +616,7 @@ function stepCard(ex,row){
    '<li><b>2. Onde quebrou</b><span>'+fmt(esc(row[4]))+'</span></li>'+
    '<li><b>3. Ficou</b><span class="mono">'+fmt(row[2])+'</span></li><li><b></b><span>m/z '+row[0]+': '+estIon(row[7])+'</span></li>'+
    '<li><b>4. Saiu</b><span class="mono">'+fmt(row[3])+' (massa '+d+(row[1]!==ex.M?', a partir do pico '+row[1]:'')+')</span></li><li><b></b><span>'+estSaiu(row[8])+'</span></li>'+
-   '</ol>'+whyBox(ex,row)+'<div class="sp">'+mapFig(ex,row[0])+strucPair(row)+'</div>';
+   '</ol>'+arrowBox(ex,row)+whyBox(ex,row)+'<div class="sp">'+mapFig(ex,row[0])+strucPair(row)+'</div>';
 }
 function fig(k,cap,cls,w){return '<figure class="st '+cls+'"><span class="w">'+w+'</span>'+(SVG[k]||'')+'<figcaption>'+fmt(cap)+'</figcaption></figure>';}
 function strucPair(r){return '<div class="sp">'+fig(r[5],r[7],'keep','ficou')+'<span class="op">+</span>'+fig(r[6],r[8],'lost','saiu')+'</div>';}
