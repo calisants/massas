@@ -4,7 +4,7 @@ errs=[]
 with sync_playwright() as p:
     b=p.chromium.launch();pg=b.new_page(viewport={'width':360,'height':740})
     pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:m.type=='error' and 'fonts' not in m.text and errs.append(m.text))
-    pg.goto('file:///home/claude/massas/fontes/saida.html')
+    pg.goto('file:///home/claude/massas/index.html')
     print('tipo cobre todas:',pg.evaluate("EX.every(e=>e.rows.every(r=>TIPO[e.n+':'+r[0]]))"))
     pg.click('#t-tr')
     print('chips:',pg.evaluate("[...document.querySelectorAll('#trmode button')].map(b=>b.textContent)"))

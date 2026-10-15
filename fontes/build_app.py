@@ -29,26 +29,26 @@ def svg(smi, w=170, h=120):
 
 # row: (pico, de, ficou, saiu, ligacao, smiles_ficou, smiles_saiu, cap_ficou, cap_saiu)
 EXD = [
- dict(n=1, nome="etilbenzeno", f="C8H10", M=106, g="alquilbenzeno", ok=False, sug=False, smi="CCc1ccccc1", peaks=[106,91,77,65,51], rows=[
+ dict(n=1, nome="etilbenzeno", f="C8H10", M=106, g="alquilbenzeno", ok=True, sug=False, smi="CCc1ccccc1", peaks=[106,91,77,65,51], rows=[
   (91,106,"C7H7+ (benzila/tropílio), pico base","CH3·","ligação benzílica, entre o CH2 e o CH3","[CH2+]c1ccccc1","[CH3]","C7H7+","CH3·"),
   (77,106,"C6H5+","C2H5·","ligação anel–CH2","[c+]1ccccc1","C[CH2]","C6H5+","C2H5·"),
   (65,91,"C5H5+","CH≡CH","o anel rearranja e perde acetileno","[CH+]1C=CC=C1","C#C","C5H5+","C2H2"),
   (51,77,"C4H3+","CH≡CH","o anel rearranja e perde acetileno","C#CC=[CH+]","C#C","C4H3+","C2H2")]),
- dict(n=2, nome="furano", f="C4H4O", M=68, g="heteroaromático com O", ok=False, sug=False, smi="c1ccoc1", peaks=[68,40,39,29], rows=[
+ dict(n=2, nome="furano", f="C4H4O", M=68, g="heteroaromático com O", ok=True, sug=False, smi="c1ccoc1", peaks=[68,40,39,29], rows=[
   (40,68,"C3H4+·","CO","anel abre e sai CO","C#CC","[C-]#[O+]","C3H4+·","CO"),
   (39,68,"C3H3+ (ciclopropenil)","·CHO","anel abre ao lado do O e sai C(H)=O","[CH+]1C=C1","[CH]=O","C3H3+","·CHO"),
   (29,68,"CHO+","C3H3·","mesmo anel aberto, carga no CHO","C#[O+]","C#C[CH2]","CHO+","C3H3·")]),
- dict(n=3, nome="estireno", f="C8H8", M=104, g="alceno ligado a anel", ok=False, sug=False, smi="C=Cc1ccccc1", peaks=[104,103,78,77,52,51], rows=[
+ dict(n=3, nome="estireno", f="C8H8", M=104, g="alceno ligado a anel", ok=True, sug=False, smi="C=Cc1ccccc1", peaks=[104,103,78,77,52,51], rows=[
   (103,104,"C8H7+","H·","H sai da molécula","C=[C+]c1ccccc1","[H]","C8H7+","H·"),
   (78,104,"C6H6+·","CH≡CH","a vinila sai como acetileno","c1ccccc1","C#C","C6H6+·","C2H2"),
   (77,104,"C6H5+","CH2=CH·","ligação anel–vinila (ou 78 − H·)","[c+]1ccccc1","C=[CH]","C6H5+","C2H3·"),
   (52,78,"C4H4+·","CH≡CH","o anel perde acetileno","C=CC#C","C#C","C4H4+·","C2H2"),
   (51,77,"C4H3+","CH≡CH","o anel perde acetileno","C#CC=[CH+]","C#C","C4H3+","C2H2")]),
- dict(n=4, nome="benzofenona", f="C13H10O", M=182, g="cetona aromática", ok=False, sug=False, smi="O=C(c1ccccc1)c1ccccc1", peaks=[182,105,77,51], rows=[
+ dict(n=4, nome="benzofenona", f="C13H10O", M=182, g="cetona aromática", ok=True, sug=False, smi="O=C(c1ccccc1)c1ccccc1", peaks=[182,105,77,51], rows=[
   (105,182,"C6H5–C≡O+ (benzoíla), pico base","C6H5·","clivagem α: ligação C(=O)–anel","[O+]#Cc1ccccc1","[c]1ccccc1","C6H5CO+","C6H5·"),
   (77,105,"C6H5+","CO","o íon acila perde CO","[c+]1ccccc1","[C-]#[O+]","C6H5+","CO"),
   (51,77,"C4H3+","CH≡CH","o anel perde acetileno","C#CC=[CH+]","C#C","C4H3+","C2H2")]),
- dict(n=5, nome="3-pentanona", f="C5H10O", M=86, g="cetona alifática", ok=False, sug=False, smi="CCC(=O)CC", peaks=[86,57,29,27], rows=[
+ dict(n=5, nome="3-pentanona", f="C5H10O", M=86, g="cetona alifática", ok=True, sug=False, smi="CCC(=O)CC", peaks=[86,57,29,27], rows=[
   (57,86,"CH3CH2C≡O+ (propanoíla), pico base","CH3CH2·","clivagem α: ligação C(=O)–CH2","CCC#[O+]","C[CH2]","C2H5CO+","C2H5·"),
   (29,57,"C2H5+","CO","o íon acila perde CO","C[CH2+]","[C-]#[O+]","C2H5+","CO"),
   (27,29,"C2H3+","H2","perda de H2 do etila","C=[CH+]","[H][H]","C2H3+","H2")]),

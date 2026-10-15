@@ -49,6 +49,8 @@
 .why[open] summary{margin-bottom:8px}
 .tag{font-size:.72rem;border-radius:4px;padding:1px 6px;background:var(--line);color:var(--muted);font-weight:500;margin-left:6px;white-space:nowrap}
 .src{font-size:.82rem;color:var(--muted);margin:8px 0 0}
+.resumo{margin:10px 0 4px;font-weight:500}
+.ionl{padding-left:18px;margin:6px 0}.ionl li{margin:7px 0}
 .nota{width:100%;min-height:64px;font:inherit;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px;resize:vertical}
 .chipbar{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
 .optb{display:block;width:100%;text-align:left;font:inherit;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:10px 12px;margin:0 0 8px;cursor:pointer}
@@ -200,7 +202,7 @@ h1{font-size:1.15rem}
 
   <section id="p-tr" role="tabpanel" aria-labelledby="t-tr" hidden>
     <h2 class="scr">Treinar</h2>
-    <p class="scrsub">Escolha um modo. &ldquo;Qual saiu?&rdquo; mostra a perda entre dois picos e opções. &ldquo;Tente antes de ver&rdquo; pergunta também o tipo de cisão e a regra. O que você errar fica guardado em &ldquo;Revisar erros&rdquo;.</p>
+    <p class="scrsub">Cada rodada tem 5 cartões e depois você pode parar. Escolha um modo. &ldquo;Qual saiu?&rdquo; mostra a perda entre dois picos e opções. &ldquo;Tente antes de ver&rdquo; pergunta também o tipo de cisão e a regra. O que você errar fica guardado em &ldquo;Revisar erros&rdquo;.</p>
     <div class="chipbar" id="trmode" role="group" aria-label="Modo de treino"></div>
     <div class="quiz" id="quiz"></div>
   </section>
@@ -306,6 +308,13 @@ h1{font-size:1.15rem}
     <h2 class="scr">Por que a ligação quebra ali?</h2>
     <p class="hint">Cada quebra tem um motivo. Estas regras explicam quase todos os exercícios. Cada exercício, no cartão do pico, tem o &ldquo;Por que quebra aqui?&rdquo; com a regra aplicada.</p>
 
+    <div class="rule"><h3>De onde o elétron sai primeiro? (a ionização)</h3>
+      <p>O feixe arranca <b>1 elétron</b> da molécula, e sai o que está menos preso. Do mais fácil para o mais difícil:</p>
+      <ol><li><b>Par livre (n)</b> de O ou N: não está em nenhuma ligação, só um núcleo o segura.</li><li><b>Elétron π</b> (C=C, C=O, anel): fica dividido entre dois núcleos e fora do eixo da ligação. Com conjugação, espalha-se ainda mais e fica mais fácil.</li><li><b>Elétron σ</b> (C–C, C–H): fica no eixo, entre dois núcleos, bem preso.</li></ol>
+      <p><b>Desempates:</b></p>
+      <ul><li><b>N contra O:</b> o N é menos eletronegativo e segura o par livre mais frouxo. Amina perde elétron mais fácil que álcool ou éter.</li><li><b>Par livre em ressonância fica mais preso:</b> o O do OH do ácido e o O do OCH3 do éster &ldquo;emprestam&rdquo; o par ao C=O. Por isso sai o par do O do C=O.</li><li><b>Conjugação facilita:</b> o estireno perde elétron mais fácil que o benzeno.</li><li><b>Sem par livre e sem π</b> (alcanos), só resta σ, e o M+· costuma ser fraco.</li></ul>
+      <p>Cada exercício tem a caixa &ldquo;Por que o elétron saiu daí?&rdquo;. No Treinar, o modo <b>Elétron</b> pergunta isso.</p></div>
+
     <div class="rule"><h3>Antes de tudo: o que é o &ldquo;radical que some&rdquo;?</h3>
       <p>No espectrômetro, a molécula perde 1 elétron e vira <b>M<sup>+·</sup></b>: tem <b>carga</b> (+) e um <b>elétron sozinho</b> (·). Quando ela quebra em 2 pedaços, só <b>um</b> fica com a carga e é visto no espectro. O outro pedaço é <b>neutro</b> e some, porque o aparelho só enxerga o que tem carga.</p>
       <p>O elétron sozinho vai para um dos dois pedaços. Se ele vai para o pedaço neutro, esse pedaço é um <b>radical</b> (·CH3, por exemplo) e o íon que sobra é um cátion sem elétron sozinho. Se o pedaço neutro é uma molécula completa (CH2=CH2, CO, H2O), o elétron sozinho fica no íon (+·).</p>
@@ -359,6 +368,7 @@ h1{font-size:1.15rem}
 
     <p class="hint">Fonte dos princípios: Silverstein et al., cap. 1 (fragmentação de EI) e as lousas do professor. As regras são tendências, não leis: quando o exercício e a regra discordarem, vale a lousa.</p>
   <div id="se-anchor">    <h2 class="scr" style="margin-top:28px">Modelos com setas</h2>
+    <p class="hint"><b>Treino de papel:</b> olhe um modelo por 20 segundos, cubra, e redesenhe as setas de memória. Depois descubra e compare. O app treina a escolha; só o papel treina a mão.</p>
     <p class="hint"><b>Seta de anzol</b> (meia ponta) = 1 elétron andando. <b>Seta inteira</b> (ponta cheia) = um par de elétrons andando. Os números mostram a ordem. Os modelos usam letras genéricas (Y = N ou O, R = grupo alquila). Para ver onde cada um aparece, abra o &ldquo;Por que quebra aqui?&rdquo; do pico.</p>
     <div class="mdl"><h3>0. Ionização</h3><svg viewBox="0 0 340 110" role="img" aria-label="Ionização: o par livre do oxigênio perde 1 elétron e fica com um elétron sozinho e carga mais" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:520px"><text x="30" y="62" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R</text><line x1="40" y1="58" x2="62" y2="58" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="74" y="62" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">O</text><line x1="86" y1="58" x2="108" y2="58" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="120" y="62" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R'</text><circle cx="68" cy="40" r="2.4" fill="currentColor"/><circle cx="80" cy="40" r="2.4" fill="currentColor"/><text x="74" y="26" font-size="11" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">par livre</text><text x="165" y="64" font-size="22" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">→</text><text x="165" y="86" font-size="12" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">−e⁻</text><text x="215" y="62" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R</text><line x1="225" y1="58" x2="247" y2="58" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="259" y="62" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">O</text><line x1="271" y1="58" x2="293" y2="58" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="305" y="62" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R'</text><circle cx="259" cy="40" r="2.4" fill="currentColor"/><text x="272" y="42" font-size="13" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><text x="259" y="92" font-size="11" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">1 elétron sozinho</text></svg><p>O elétron mais fácil de tirar é o do par livre. Sobra um elétron sozinho no O (ou no N) e carga +. É o ponto de partida de quase todos os mecanismos.</p></div>
     <div class="mdl"><h3>1. Clivagem α (homolítica)</h3><svg viewBox="0 0 340 170" role="img" aria-label="Clivagem alfa: o elétron sozinho do heteroátomo forma a ligação dupla e o grupo R sai como radical" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:520px"><text x="40" y="98" font-size="17" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">Y</text><text x="53" y="86" font-size="12" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><circle cx="40" cy="72" r="2.4" fill="currentColor"/><line x1="52" y1="95" x2="86" y2="95" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="104" y="99" font-size="15" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">CH₂</text><line x1="124" y1="95" x2="160" y2="95" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="176" y="99" font-size="17" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R</text><path d="M40 70 Q48 40 80 84" fill="none" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round"/><path d="M80 84 L72.1 79.6" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round" fill="none"/><text x="48" y="36" font-size="12" text-anchor="middle" fill="var(--arrow)" font-weight="600" font-family="IBM Plex Mono,ui-monospace,monospace">1</text><path d="M141 93 Q158 62 172 80" fill="none" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round"/><path d="M172 80 L164.0 75.9" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round" fill="none"/><text x="158" y="58" font-size="12" text-anchor="middle" fill="var(--arrow)" font-weight="600" font-family="IBM Plex Mono,ui-monospace,monospace">2</text><text x="212" y="98" font-size="22" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">→</text><text x="256" y="90" font-size="17" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">Y</text><text x="269" y="78" font-size="12" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><line x1="268.0" y1="95.0" x2="286.0" y2="95.0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="268.0" y1="89.0" x2="286.0" y2="89.0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="306" y="96" font-size="15" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">CH₂</text><text x="256" y="140" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><circle cx="284" cy="138" r="2.4" fill="currentColor"/><text x="302" y="142" font-size="17" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R</text><text x="170" y="160" font-size="11" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R· sai (radical, neutro)</text></svg><p><b>1:</b> o elétron sozinho de Y forma a ligação dupla com o carbono. <b>2:</b> 1 elétron da ligação C–R vai com o R, que sai como radical. A carga fica em Y. Aparece em: 1-propanol (31), 3-pentanona (57), dimetiletilamina (58), benzofenona (105).</p></div>
@@ -411,7 +421,7 @@ h1{font-size:1.15rem}
     <button class="back" data-go="p-ma">← Mais</button>
     <h2 class="scr">Fontes e avisos</h2>
     <p class="hint">Versão do app: <b class="mono" id="vers"></b>. Se a data não for a mais recente, feche e abra o app duas vezes.</p>
-      <p>Fonte das tabelas: Silverstein, Webster, Kiemle, Bryce. Spectrometric Identification of Organic Compounds, 8ª ed. (2014), Apêndice B (p. 67–68) e Apêndice C (p. 69–70). O livro avisa que as listas são sugestivas e não completas. Nas entradas com anel, o nome e a estrutura são minha leitura do desenho do livro; confira na página indicada. "+ H" ou "+ 2H" indica rearranjo com transferência de hidrogênio. Exercícios 6 a 12 conferidos com a lousa do professor; 1 a 5 ainda precisam ser conferidos. Nas estruturas, o desenho mostra o esqueleto; a carga + e o elétron desemparelhado (·) aparecem na legenda e, quando possível, no desenho.</p>
+      <p>Fonte das tabelas: Silverstein, Webster, Kiemle, Bryce. Spectrometric Identification of Organic Compounds, 8ª ed. (2014), Apêndice B (p. 67–68) e Apêndice C (p. 69–70). O livro avisa que as listas são sugestivas e não completas. Nas entradas com anel, o nome e a estrutura são minha leitura do desenho do livro; confira na página indicada. "+ H" ou "+ 2H" indica rearranjo com transferência de hidrogênio. Exercícios 1 a 12 vêm da lousa do professor (os 1 a 5 pelas suas anotações do tablet, que são iguais às fotos do quadro; os 6 a 12 pelas fotos). O texto do porquê é minha explicação. Nas estruturas, o desenho mostra o esqueleto; a carga + e o elétron desemparelhado (·) aparecem na legenda e, quando possível, no desenho.</p>
   </section>
 
 </div>
@@ -572,7 +582,7 @@ function cisTxt(ex,r){
 const DUV=['10:44','10:58','6:59','11:87','12:58','9:73','8:50'];
 function duvTxt(ex,row){return DUV.indexOf(ex.n+':'+row[0])>=0?'<p class="src"><b>⚠ Mecanismo em dúvida.</b> Está na lista de perguntas para o professor.</p>':'';}
 const POSS=['3:78','8:52','10:44','2:39','11:87'];
-function origemTxt(ex){return ex.ok?'Massa, estrutura e mecanismo: da lousa do professor. O porquê é explicação minha, baseada no Silverstein.':'Ainda não conferido com o professor: tudo aqui é minha leitura do livro.';}
+function origemTxt(ex){return ex.ok?(ex.n<=5?'Massa, estrutura e mecanismo: da lousa do professor, pelas suas anotações do tablet (iguais às fotos do quadro). O porquê é explicação minha, baseada no Silverstein.':'Massa, estrutura e mecanismo: da lousa do professor. O porquê é explicação minha, baseada no Silverstein.'):'Ainda não conferido com o professor: tudo aqui é minha leitura do livro.';}
 function rearrBox(ex,row){
   const r=(typeof REARR!=='undefined')&&REARR[ex.n+':'+row[0]];if(!r)return '';
   const poss=POSS.indexOf(ex.n+':'+row[0])>=0;
@@ -580,10 +590,11 @@ function rearrBox(ex,row){
   if(r[1].length){h+='<div class="sp">'+r[1].map((s,i)=>(i?'<span class="op">⇄</span>':'')+fig(s[0],s[1],'keep','forma')).join('')+'</div>';}
   return h+'<p class="src">Na prova, desenhe só o que o professor desenhou.</p></details>';
 }
+function resumoTxt(ex,row){const t=(typeof RESUMO!=='undefined')&&RESUMO[ex.n+':'+row[0]];return t?'<p class="resumo"><b>Resumo.</b> '+esc(t)+'</p>':'';}
 function whyBox(ex,row){
   const w=(typeof WHY!=='undefined')&&WHY[ex.n+':'+row[0]];if(!w)return '';
   const k=tipoE(ex,row),mdl=({alfa:1,mcl:1,neu:1,h:1})[k];
-  return '<details class="why"><summary>Mostrar o porquê</summary><p><b>Onde começa.</b> '+esc(w[0])+'</p><p><b>O que acontece.</b> '+fmt(esc(w[1]))+'</p><p><b>Por que aqui e não em outro lugar.</b> '+fmt(esc(w[2]))+'</p><p><b>Tipo de cisão.</b> '+cisTxt(ex,row)+'</p>'+duvTxt(ex,row)+'<p class="src">'+origemTxt(ex)+'</p><p><small>'+(mdl?'<button class="back" style="display:inline;margin:0" data-go="p-se">Ver o modelo com setas</button> · ':'')+'<button class="back" style="display:inline;margin:0" data-go="p-pq">Ver as regras</button></small></p></details>'+rearrBox(ex,row);
+  return resumoTxt(ex,row)+'<details class="why"><summary>Mostrar o porquê</summary><p><b>Onde começa.</b> '+esc(w[0])+'</p><p><b>O que acontece.</b> '+fmt(esc(w[1]))+'</p><p><b>Por que aqui e não em outro lugar.</b> '+fmt(esc(w[2]))+'</p><p><b>Tipo de cisão.</b> '+cisTxt(ex,row)+'</p>'+duvTxt(ex,row)+'<p class="src">'+origemTxt(ex)+'</p><p><small>'+(mdl?'<button class="back" style="display:inline;margin:0" data-go="p-se">Ver o modelo com setas</button> · ':'')+'<button class="back" style="display:inline;margin:0" data-go="p-pq">Ver as regras</button></small></p></details>'+rearrBox(ex,row);
 }
 function stepCard(ex,row){
   const t=GLOS[tipoQ(row)],d=row[1]-row[0];
@@ -802,8 +813,11 @@ function drawPals(){
 const VERSAO='v9 · 15/10/2026';
 const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
 const isStud=n=>(LS.get('massas-stud',[])).indexOf(n)>=0;
+function ionBox(ex){const d=(typeof IONI!=='undefined')&&IONI[ex.n];if(!d)return '';
+  return '<details class="why ion"><summary>Por que o elétron saiu daí? (como nasce o M+·)</summary><p><b>'+esc(d[0])+'</b></p><ul class="ionl">'+d[1].map(c=>'<li><b>'+(c[1]===1?'✓ sai daqui: ':c[1]===2?'≈ quase empata: ':'✗ não sai daqui: ')+esc(c[0])+'.</b> '+esc(c[2])+'</li>').join('')+'</ul><p class="src">Ordem geral: par livre &lt; π &lt; σ. <button class="back" style="display:inline;margin:0" data-go="p-pq">Ver a explicação geral</button></p></details>';}
 function decorateEx(ex){
   const h=document.querySelector('#exinfo .ex-head');if(!ex||!h)return;
+  h.parentNode.insertAdjacentHTML('beforeend',ionBox(ex));
   const b=document.createElement('button');b.type='button';b.className='stud';b.dataset.n=ex.n;b.setAttribute('aria-pressed',isStud(ex.n)?'true':'false');b.textContent=isStud(ex.n)?'✓ estudado':'marcar como estudado';h.appendChild(b);
 }
 function notaBox(ex,p){
@@ -826,7 +840,14 @@ const REGRA={
  rad:['Perda de molécula neutra por rearranjo','O íon-radical (+·) passa um H ou abre o anel e solta uma molécula neutra (H2O, C2H4, CH2O). É homolítica (regra 7).'],
  sim:['Quebra simples','Uma ligação se rompe e o pedaço que sai leva o elétron sozinho (regras 3 e 4).']
 };
-const TR={mode:'qual',cur:null,i:0,score:{ok:0,n:0},hint:false,wrong:false};
+function sessGate(){if(TR.sess>=5){sessEnd();return true;}TR.sess++;return false;}
+function sessEnd(){
+  const box=$('#quiz');TR.cur=null;
+  box.innerHTML='<div class="ans" style="border-radius:6px"><span class="t">Sessão de 5 cartões completa</span>Perguntas certas: '+TR.score.ok+' de '+TR.score.n+'. O que você errou volta na aba Revisar amanhã. Pode parar por hoje.</div><div class="row" style="margin-top:10px"><button class="btn" id="sessMore" type="button">Mais 5 cartões</button><button class="btn ghost" id="sessStop" type="button">Terminei por hoje</button></div><p id="sessMsg" class="hint"></p>';
+  $('#sessMore').onclick=trInit;
+  $('#sessStop').onclick=()=>{$('#sessMsg').textContent='Bom trabalho. Pode fechar o app: o progresso já está guardado.';};
+}
+const TR={sess:0,mode:'qual',cur:null,i:0,score:{ok:0,n:0},hint:false,wrong:false};
 function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function repGet(){let rp=LS.get('massas-rep',null);if(rp===null){rp={};LS.get('massas-erros',[]).forEach(k=>{rp[k]={b:0,d:0};});LS.set('massas-rep',rp);}return rp;}
 function repAdd(k){const rp=repGet();rp[k]={b:0,d:Date.now()+864e5};LS.set('massas-rep',rp);}
@@ -861,6 +882,7 @@ function regQ(e,r){
 function trNext(){
   const pool=trPool();
   if(!pool.length){TR.cur=null;trDraw();return;}
+  if(sessGate())return;
   const c=pool[Math.floor(Math.random()*pool.length)];
   const qs=[lossQ(c.e,c.r)];
   if(TR.mode!=='qual'){const a=cisQ(c.e,c.r);if(a)qs.push(a);qs.push(regQ(c.e,c.r));}
@@ -868,10 +890,11 @@ function trNext(){
 }
 function trLabel(){const rb=document.querySelector('#trmode [data-m="rev"]');if(rb)rb.textContent='Revisar ('+repDue()+' hoje)';}
 function trInit(){
+  TR.sess=0;TR.score={ok:0,n:0};
   const bar=$('#trmode');
   if(!bar.dataset.ok){
     bar.dataset.ok=1;
-    [['qual','Qual saiu?'],['try','Tente antes de ver'],['calc','Digitar a perda'],['seta','Setas'],['sm','Simulado'],['rev','Revisar']].forEach(([m,l])=>{
+    [['qual','Qual saiu?'],['try','Tente antes de ver'],['calc','Digitar a perda'],['ion','Elétron'],['seta','Setas'],['sm','Simulado'],['rev','Revisar']].forEach(([m,l])=>{
       const b=document.createElement('button');b.type='button';b.className='chip';b.dataset.m=m;b.textContent=l;
       b.onclick=()=>{TR.mode=m;TR.revAll=false;trInit();};bar.appendChild(b);});
   }
@@ -880,6 +903,7 @@ function trInit(){
   if(TR.mode==='calc'){newQ();return;}
   if(TR.mode==='sm'){smInit();return;}
   if(TR.mode==='seta'){setaNext();return;}
+  if(TR.mode==='ion'){ionNext();return;}
   trNext();
 }
 function trDraw(){
@@ -921,34 +945,81 @@ function trDraw(){
   const hh=$('#trh');if(hh)hh.onclick=()=>{TR.hint=true;trDraw();};
 }
 
+/* ---------- Elétron: de onde sai? ---------- */
+function ionNext(){
+  if(sessGate())return;
+  const e=EX[Math.floor(Math.random()*EX.length)],d=IONI[e.n],good=d[1].find(c=>c[1]===1);
+  const wr=shuf(d[1].filter(c=>c[1]===0)).slice(0,3);
+  const opts=shuf([{l:good[0],ok:true,w:good[2]}].concat(wr.map(c=>({l:c[0],ok:false,w:c[2]}))));
+  TR.cur={kind:'ion',e,d,good,opts,pick:null};ionDraw();
+}
+function ionDraw(){
+  const box=$('#quiz'),c=TR.cur,e=c.e;
+  let h='<div class="k mono" style="color:var(--muted)">Acertos: '+TR.score.ok+' de '+TR.score.n+'</div>';
+  h+='<p class="ctx">Molécula <b>'+esc(e.nome)+'</b> <span class="mono">'+fmt(e.f)+'</span> (M = '+e.M+').</p><div class="mol">'+fig(e.smi,e.f,'keep','molécula')+'</div>';
+  h+='<p><b>De onde o feixe de elétrons tira o elétron primeiro?</b></p>';
+  c.opts.forEach((o,k)=>{let cls='optb';if(c.pick!==null){if(o.ok)cls+=' good';else if(c.pick===k)cls+=' bad';}
+    h+='<button type="button" class="'+cls+'" data-k="'+k+'"'+(c.pick!==null?' disabled':'')+'>'+esc(o.l)+'</button>';});
+  if(c.pick!==null){
+    const ch=c.opts[c.pick];
+    let fb='<b>Sai de: '+esc(c.good[0])+'.</b> '+esc(c.good[2]);
+    if(!ch.ok)fb+='<br><b>Por que não &ldquo;'+esc(ch.l)+'&rdquo;:</b> '+esc(ch.w);
+    c.d[1].filter(x=>x[1]===2).forEach(x=>{fb+='<br><i>'+esc(x[0])+':</i> '+esc(x[2]);});
+    h+='<div class="fb '+(ch.ok?'good':'bad')+'">'+(ch.ok?'Certo. ':'Ainda não. ')+fb+'</div>';
+  }
+  h+='<div class="row" style="margin-top:10px"><button class="btn'+(c.pick!==null?'':' ghost')+'" id="ion-n" type="button">'+(c.pick!==null?'Próxima':'Outra')+'</button></div>';
+  box.innerHTML=h;
+  box.querySelectorAll('.optb').forEach(b=>b.onclick=()=>{const k=+b.dataset.k;c.pick=k;TR.score.n++;if(c.opts[k].ok)TR.score.ok++;ionDraw();});
+  $('#ion-n').onclick=ionNext;
+}
+
 /* ---------- Simulado ---------- */
 const SM={};
+function keptQ(e,r){
+  const ok=r[7];
+  let pool=[];EX.forEach(x=>x.rows.forEach(y=>{if(y[7]!==ok&&y[0]!==r[0]&&Math.abs(y[0]-r[0])<=25)pool.push(y[7]);}));
+  pool=Array.from(new Set(pool));
+  if(pool.length<3)EX.forEach(x=>x.rows.forEach(y=>{if(y[7]!==ok&&y[0]!==r[0]&&pool.indexOf(y[7])<0)pool.push(y[7]);}));
+  const wr=shuf(pool).slice(0,3);
+  return {p:'O pico <b class="mono">'+r[0]+'</b> vem do '+(r[1]===e.M?'íon molecular (M = '+e.M+')':'pico '+r[1])+'. Qual fragmento <b>ficou</b>?',
+    opts:shuf([{l:fmt(ok),ok:true}].concat(wr.map(l=>({l:fmt(l),ok:false})))),
+    fb:'Ficou <b>'+fmt(ok)+'</b> (massa '+r[0]+'). '+estIon(r[7])+'.'};
+}
+function smItems(e,comp){
+  const it=[];
+  e.rows.forEach(r=>{
+    const qs=comp?[keptQ(e,r),lossQ(e,r)]:[lossQ(e,r)];
+    if(comp){const a=cisQ(e,r);if(a)qs.push(a);qs.push(regQ(e,r));}
+    qs.forEach(q=>it.push({r,q}));
+  });
+  return it;
+}
 function smInit(){
   const box=$('#quiz');
-  box.innerHTML='<p class="ctx"><b>Simulado.</b> Você escolhe um exercício e vê só a fórmula e a massa, sem dica de nome. Responde o que saiu em cada pico, uma pergunta de cada vez. No fim aparecem a nota, o tempo e o que errar. Os erros vão para &ldquo;Revisar&rdquo;.</p><div class="row"><select id="smsel" aria-label="Exercício do simulado"><option value="0">Qualquer exercício</option>'+EX.map(e=>'<option value="'+e.n+'">Ex. '+e.n+' ('+e.rows.length+' picos)</option>').join('')+'</select><button class="btn" id="smgo" type="button">Começar</button></div>';
+  box.innerHTML='<p class="ctx"><b>Simulado.</b> Você escolhe um exercício e vê só a fórmula, a massa e os picos, sem o nome. No fim aparecem a nota, o tempo e o que errou. Os erros vão para &ldquo;Revisar&rdquo;.</p><div class="row"><select id="smsel" aria-label="Exercício do simulado"><option value="0">Qualquer exercício</option>'+EX.map(e=>'<option value="'+e.n+'">Ex. '+e.n+' ('+e.rows.length+' picos)</option>').join('')+'</select><select id="smmod" aria-label="Tipo de simulado"><option value="0">Só o que saiu</option><option value="1">Completo: o que ficou, o que saiu, tipo e regra</option></select><button class="btn" id="smgo" type="button">Começar</button></div>';
   $('#smgo').onclick=()=>{
     const v=+$('#smsel').value,e=v?EX.find(x=>x.n===v):EX[Math.floor(Math.random()*EX.length)];
-    SM.e=e;SM.qs=e.rows.map(r=>({r,q:lossQ(e,r)}));SM.i=0;SM.ok=0;SM.bad=[];SM.t0=Date.now();SM.pick=null;smDraw();};
+    SM.e=e;SM.qs=smItems(e,$('#smmod').value==='1');SM.i=0;SM.ok=0;SM.bad=[];SM.t0=Date.now();SM.pick=null;smDraw();};
 }
 function smDraw(){
   const box=$('#quiz'),e=SM.e;
   if(SM.i>=SM.qs.length){
     const sec=Math.round((Date.now()-SM.t0)/1000),mm=Math.floor(sec/60),ss=('0'+(sec%60)).slice(-2);
-    SM.bad.forEach(b=>repAdd(e.n+':'+b.r[0]));SM.qs.forEach((x,i)=>{if(SM.bad.indexOf(x)<0)repOk(e.n+':'+x.r[0]);});trLabel();
+    SM.bad.forEach(r=>repAdd(e.n+':'+r[0]));e.rows.forEach(r=>{if(SM.bad.indexOf(r)<0)repOk(e.n+':'+r[0]);});trLabel();
     let h='<div class="ans" style="border-radius:6px"><span class="t">Nota: '+SM.ok+' de '+SM.qs.length+' · tempo '+mm+':'+ss+'</span>Exercício '+e.n+': <b>'+esc(e.nome)+'</b> <span class="mono">'+fmt(e.f)+'</span>.</div>';
-    if(SM.bad.length){h+='<h3>Para revisar</h3><ul>'+SM.bad.map(b=>{const d=b.r[1]-b.r[0];return '<li>Pico <b class="mono">'+b.r[0]+'</b> (de '+b.r[1]+'): saiu <b>'+d+'</b>, que foi <b>'+fmt(b.r[3])+'</b> ('+esc(b.r[4])+').</li>';}).join('')+'</ul>';}
-    else h+='<p>Sem erros. Sem nenhuma pergunta para revisar neste exercício.</p>';
+    if(SM.bad.length){h+='<h3>Para revisar</h3><ul>'+SM.bad.map(r=>{const d=r[1]-r[0];return '<li>Pico <b class="mono">'+r[0]+'</b> (de '+r[1]+'): saiu <b>'+d+'</b>, que foi <b>'+fmt(r[3])+'</b> ('+esc(r[4])+').</li>';}).join('')+'</ul>';}
+    else h+='<p>Sem erros neste exercício.</p>';
     h+='<div class="row" style="margin-top:10px"><button class="btn" id="smagain" type="button">Outro simulado</button></div>';
     box.innerHTML=h;$('#smagain').onclick=smInit;return;
   }
   const x=SM.qs[SM.i],q=x.q;
-  let h='<div class="k mono" style="color:var(--muted)">Pico '+(SM.i+1)+' de '+SM.qs.length+' · acertos '+SM.ok+'</div>';
+  let h='<div class="k mono" style="color:var(--muted)">Pergunta '+(SM.i+1)+' de '+SM.qs.length+' · acertos '+SM.ok+'</div>';
   h+='<p class="ctx">Molécula <b class="mono">'+fmt(e.f)+'</b> (M = '+e.M+'). Picos: <span class="mono">'+e.peaks.join(', ')+'</span>.</p><p>'+q.p+'</p>';
   q.opts.forEach((o,k)=>{let cls='optb';if(SM.pick!==null){if(o.ok)cls+=' good';else if(SM.pick===k)cls+=' bad';}
     h+='<button type="button" class="'+cls+'" data-k="'+k+'"'+(SM.pick!==null?' disabled':'')+'>'+o.l+'</button>';});
-  if(SM.pick!==null){h+='<div class="fb '+(q.opts[SM.pick].ok?'good':'bad')+'">'+(q.opts[SM.pick].ok?'Certo. ':'Ainda não. ')+q.fb+'</div><div class="row" style="margin-top:10px"><button class="btn" id="smn" type="button">'+(SM.i<SM.qs.length-1?'Próximo pico':'Ver a nota')+'</button></div>';}
+  if(SM.pick!==null){h+='<div class="fb '+(q.opts[SM.pick].ok?'good':'bad')+'">'+(q.opts[SM.pick].ok?'Certo. ':'Ainda não. ')+q.fb+'</div><div class="row" style="margin-top:10px"><button class="btn" id="smn" type="button">'+(SM.i<SM.qs.length-1?'Próxima':'Ver a nota')+'</button></div>';}
   box.innerHTML=h;
-  box.querySelectorAll('.optb').forEach(b=>b.onclick=()=>{const k=+b.dataset.k;SM.pick=k;if(q.opts[k].ok)SM.ok++;else SM.bad.push(x);smDraw();});
+  box.querySelectorAll('.optb').forEach(b=>b.onclick=()=>{const k=+b.dataset.k;SM.pick=k;if(q.opts[k].ok)SM.ok++;else if(SM.bad.indexOf(x.r)<0)SM.bad.push(x.r);smDraw();});
   const n=$('#smn');if(n)n.onclick=()=>{SM.i++;SM.pick=null;smDraw();};
 }
 
@@ -975,6 +1046,7 @@ const SETAS=[
   {p:'O que o heteroátomo faz com o elétron sozinho dele?',o:['Forma a ligação dupla com o carbono','Fica com o H','Perde o par livre inteiro'],fb:'O elétron do O ou do N forma a ligação dupla com o C vizinho; o H sai.'}]}
 ];
 function setaNext(){
+  if(sessGate())return;
   let c;do{c=SETAS[Math.floor(Math.random()*SETAS.length)];}while(TR.cur&&TR.cur.c===c&&SETAS.length>1);
   TR.cur={kind:'seta',c,qs:c.qs.map(q=>({p:q.p,fb:q.fb,opts:shuf(q.o.map((l,i)=>({l,ok:i===0})))})),i:0,pick:null,done:false};setaDraw();
 }
@@ -990,7 +1062,7 @@ function setaDraw(){
     else h+='<div class="row"><button class="btn ghost" id="sto" type="button">Outro mecanismo</button></div>';
   }else{
     const m=document.querySelectorAll('#se-anchor .mdl')[c.c.m];
-    h+='<div class="mdl">'+(m?m.innerHTML:'')+'</div><div class="row" style="margin-top:10px"><button class="btn" id="sto" type="button">Outro mecanismo</button></div>';
+    h+='<div class="mdl">'+(m?m.innerHTML:'')+'</div><p class="hint"><b>Agora no papel:</b> cubra o modelo e redesenhe as setas de memória.</p><div class="row" style="margin-top:10px"><button class="btn" id="sto" type="button">Outro mecanismo</button></div>';
   }
   box.innerHTML=h;
   box.querySelectorAll('.optb').forEach(b=>b.onclick=()=>{const k=+b.dataset.k,q=c.qs[c.i];c.pick=k;TR.score.n++;if(q.opts[k].ok)TR.score.ok++;setaDraw();});
@@ -1000,7 +1072,6 @@ function setaDraw(){
 
 /* ---------- Perguntas para o professor ---------- */
 const PERG=[
- ['Ex. 1 a 5: conferir com a lousa','Montei os exercícios 1 a 5 (etilbenzeno, furano, estireno, benzofenona, 3-pentanona) pelo livro, sem a lousa. Posso mostrar para o senhor conferir as massas e os mecanismos?'],
  ['Ex. 1: o anel de 7 (tropílio) é obrigatório?','O senhor termina o 91 com o anel de 7 carbonos porque é mais estável. Na prova posso desenhar o íon benzila (anel de 6 com CH2+) ou tenho que desenhar o tropílio?'],
  ['Ex. 6, pico 59','O 59 do 1-propanol é a perda do H do O–H ou de um H do carbono ao lado do OH (clivagem α)? A literatura cita a segunda; a lousa mostrou a primeira.'],
  ['Ex. 9, pico 73','Na lousa o O fecha um anel de 4 membros quando sai CH3. Esse é o mecanismo que vale na prova?'],
