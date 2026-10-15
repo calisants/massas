@@ -94,7 +94,26 @@ for e in EXD:
         if spec.get("n"): ent["n"]=spec["n"]
         ent["p"]="íon molecular M+· (m/z %d)"%e["M"] if r[1]==e["M"] else "íon do pico m/z %d"%r[1]
         ARWD[f'{e["n"]}:{r[0]}']=ent
-js="const SVG="+json.dumps(store,ensure_ascii=False)+";\nconst MAPS="+json.dumps(MAPS,ensure_ascii=False)+";\nconst EX="+json.dumps(out,ensure_ascii=False)+";\n"+"const REARR="+json.dumps({f"{k[0]}:{k[1]}":[v[0],[list(x) for x in v[1]]] for k,v in REARR.items()},ensure_ascii=False)+";\n"+"const WHY="+json.dumps({f"{k[0]}:{k[1]}":list(v) for k,v in WHY.items()},ensure_ascii=False)+";\n"+"const INTS="+json.dumps({str(k):dict(sdbs=v["sdbs"],id=v["id"],p={str(m):i for m,i in v["p"].items()}) for k,v in INTS.items()},ensure_ascii=False)+";\n"+"const ARWD="+json.dumps(ARWD,ensure_ascii=False)+";\n"+"const RESUMO="+json.dumps(RESUMO,ensure_ascii=False)+";\nconst IONI="+json.dumps({str(k):[v[0],[list(x) for x in v[1]]] for k,v in IONI.items()},ensure_ascii=False)+";\n"
+import base64
+def _b64(f):
+    return "data:image/webp;base64,"+base64.b64encode(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"mech",f),"rb").read()).decode()
+_PDF="Do seu PDF: as setas e os anzóis que você copiou do quadro."
+_FOTO="Foto do quadro, porque estes passos não estavam no seu PDF."
+MECH={
+ "1":[[_b64("e1.webp"),_PDF]],
+ "2":[[_b64("e2.webp"),_PDF]],
+ "3":[[_b64("e3.webp"),_PDF]],
+ "4":[[_b64("e4.webp"),_PDF]],
+ "6":[[_b64("e6.webp"),_PDF]],
+ "7":[[_b64("e7.webp"),_PDF]],
+ "8":[[_b64("e8.webp"),_PDF]],
+ "9":[[_b64("e9.webp"),_PDF]],
+ "10":[[_b64("e10.webp"),_PDF]],
+ "11":[[_b64("e11.webp"),_PDF+" Falta aqui o McLafferty do m/z 87 e do 74."],[_b64("q11.webp"),_FOTO]],
+ "12":[[_b64("e12.webp"),_PDF+" Falta aqui o McLafferty do m/z 44 e do 58."],[_b64("q12.webp"),_FOTO]],
+}
+
+js="const SVG="+json.dumps(store,ensure_ascii=False)+";\nconst MAPS="+json.dumps(MAPS,ensure_ascii=False)+";\nconst EX="+json.dumps(out,ensure_ascii=False)+";\n"+"const REARR="+json.dumps({f"{k[0]}:{k[1]}":[v[0],[list(x) for x in v[1]]] for k,v in REARR.items()},ensure_ascii=False)+";\n"+"const WHY="+json.dumps({f"{k[0]}:{k[1]}":list(v) for k,v in WHY.items()},ensure_ascii=False)+";\n"+"const INTS="+json.dumps({str(k):dict(sdbs=v["sdbs"],id=v["id"],p={str(m):i for m,i in v["p"].items()}) for k,v in INTS.items()},ensure_ascii=False)+";\n"+"const ARWD="+json.dumps(ARWD,ensure_ascii=False)+";\n"+"const RESUMO="+json.dumps(RESUMO,ensure_ascii=False)+";\nconst IONI="+json.dumps({str(k):[v[0],[list(x) for x in v[1]]] for k,v in IONI.items()},ensure_ascii=False)+";\n"+"const MECH="+json.dumps(MECH,ensure_ascii=False)+";\n"
 a=html.index("/* ---------- dados: exercícios"); b=html.index("/* ---------- utilidades")
 html=html[:a]+"/* ---------- dados ---------- */\n"+js+"\n"+html[b:]
 open(os.environ.get('SAIDA','quebra_cabeca_v3.html'),'w',encoding='utf-8').write(html)

@@ -56,6 +56,13 @@ figure.spec{margin:6px 0 12px}
 .hoje{padding-left:20px;margin:6px 0}.hoje li{margin:10px 0}.hoje .btn{margin-right:6px}
 .ionl{padding-left:18px;margin:6px 0}.ionl li{margin:7px 0}
 .nota{width:100%;min-height:64px;font:inherit;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px;resize:vertical}
+.mech{margin:8px 0}
+.mechb{display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:zoom-in;overflow:hidden;min-height:44px}
+.mechb img{display:block;width:100%;height:auto}
+.mechov{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.88);display:flex;flex-direction:column}
+.mechx{margin:10px 16px;align-self:flex-end}
+.mechsc{flex:1;overflow:auto;padding:0 8px 16px;-webkit-overflow-scrolling:touch}
+.mechsc img{display:block;width:1000px;max-width:none;background:#fff;border-radius:8px}
 .chipbar{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
 .optb{display:block;width:100%;text-align:left;font:inherit;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:10px 12px;margin:0 0 8px;cursor:pointer}
 .optb.good{background:var(--keep-soft);border-color:var(--keep)}
@@ -199,6 +206,7 @@ h1{font-size:1.15rem}
     <button class="back" type="button" id="an-back">← Mudar exercício ou picos</button>
     <div id="exinfo"></div>
     <div id="spec"></div>
+    <div id="mech"></div>
     <div class="pkh" id="pkh"></div>
     <div class="chips" id="pkbar" role="group" aria-label="Escolha o pico"></div>
     <div class="grid" id="out"></div>
@@ -636,6 +644,23 @@ function buildChips(){
 function intOf(ex,p){const d=ex&&typeof INTS!=='undefined'&&INTS[ex.n];if(!d)return null;return d.p[p]!==undefined?d.p[p]:-1;}
 function intTxt(ex,p){const v=intOf(ex,p);if(v===null)return '';return 'SDBS '+fmtInt(v);}
 function fmtInt(v){if(v<0)return '<1%';return (v%1===0?v.toFixed(0):v.toFixed(1)).replace('.',',')+'%';}
+function mechBox(ex){
+  const box=$('#mech');if(!box)return;
+  if(!ex){box.innerHTML='';return;}
+  const L=(typeof MECH!=='undefined'&&MECH[ex.n])||null;
+  if(!L){box.innerHTML='<details class="why" open><summary>Mecanismo do professor</summary><p class="src">Este exercício ainda não tem mecanismo seu nem do quadro aqui. As cartas abaixo são a minha leitura do livro.</p></details>';return;}
+  box.innerHTML='<details class="why" open><summary>Mecanismo do professor</summary>'+L.map((x,i)=>'<figure class="mech"><button type="button" class="mechb" data-mech="'+i+'" aria-label="Ampliar o mecanismo do exercício '+ex.n+(L.length>1?', imagem '+(i+1):'')+'"><img src="'+x[0]+'" alt="Mecanismo do exercício '+ex.n+' ('+esc(ex.nome)+'): setas, cargas e pares de elétrons, como o professor desenhou"></button><figcaption class="src">'+esc(x[1])+' Toque para ampliar.</figcaption></figure>').join('')+'</details>';
+  box.querySelectorAll('[data-mech]').forEach(b=>b.onclick=()=>mechZoom(L[+b.dataset.mech][0],b));
+}
+function mechZoom(src,opener){
+  const o=document.createElement('div');o.className='mechov';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label','Mecanismo ampliado');
+  o.innerHTML='<button type="button" class="btn mechx">Fechar</button><div class="mechsc"><img src="'+src+'" alt="Mecanismo ampliado"></div>';
+  const close=()=>{document.removeEventListener('keydown',kd);o.remove();if(opener)opener.focus();};
+  const kd=e=>{if(e.key==='Escape')close();};
+  document.addEventListener('keydown',kd);
+  o.querySelector('.mechx').onclick=close;
+  document.body.appendChild(o);o.querySelector('.mechx').focus();
+}
 function drawSpec(ex,peaks){
   const box=$('#spec');if(!box)return;
   const d=ex&&typeof INTS!=='undefined'&&INTS[ex.n];
@@ -688,7 +713,7 @@ function analyze(){
   });
   if(pkSel!=='all'&&!peaks.includes(pkSel))pkSel=peaks[0];
   $('#pkh').textContent='Toque num pico:';
-  $('#pkbar').innerHTML='';drawSpec(ex,peaks);
+  $('#pkbar').innerHTML='';drawSpec(ex,peaks);mechBox(ex);
   peaks.forEach(p=>{const b=document.createElement('button');b.type='button';b.className='chip mono';b.setAttribute('aria-pressed',pkSel===p?'true':'false');b.textContent='m/z '+p+(p===M?' (M)':'');b.onclick=()=>{pkSel=p;analyze();};$('#pkbar').appendChild(b);});
   if(peaks.length>1){const b=document.createElement('button');b.type='button';b.className='chip';b.setAttribute('aria-pressed',pkSel==='all'?'true':'false');b.textContent='Todos';b.onclick=()=>{pkSel='all';analyze();};$('#pkbar').appendChild(b);}
   $('#out').className=pkSel==='all'?'grid':'grid single';
