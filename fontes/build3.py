@@ -104,6 +104,7 @@ MECH={
  "2":[[_b64("e2.webp"),_PDF]],
  "3":[[_b64("e3.webp"),_PDF]],
  "4":[[_b64("e4.webp"),_PDF]],
+ "5":[[_b64("e5.webp"),"Rascunho a lápis seu, não é do quadro do professor. Atenção: o desenho do m/z 29 está errado. Depois de perder CO (28), o fragmento é CH₃–CH₂⁺ (C₂H₅⁺, m/z 29). O que está desenhado, CH₃–OH₂⁺, teria m/z 33. Confirme com o professor."]],
  "6":[[_b64("e6.webp"),_PDF]],
  "7":[[_b64("e7.webp"),_PDF]],
  "8":[[_b64("e8.webp"),_PDF]],

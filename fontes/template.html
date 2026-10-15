@@ -336,6 +336,10 @@ h1{font-size:1.15rem}
       <p><b>Setas:</b> seta de ponta inteira = 2 elétrons andando. Seta de anzol (meia ponta) = 1 elétron andando. É por isso que o professor usa anzol nos mecanismos de massa.</p>
     </div>
 
+    <div class="rule"><h3>Anel com ramificação: a carga fica no anel</h3>
+      <p>Da sua aula (cíclicas saturadas ramificadas): a tendência é a <b>carga ficar no anel</b>, e a ramificação sai como <b>radical neutro</b>. Como fica: <b>[anel–R]<sup>+·</sup> → anel<sup>+</sup> + R·</b>.</p>
+      <p><b>Conta de conferência:</b> o que sai é R·. Ex.: metilciclo-hexano (M = 98) perdendo CH<sub>3</sub>· (15) deixaria o cátion ciclo-hexila em m/z 83. É o que a regra prevê, e não um espectro que eu tenha conferido.</p></div>
+
     <div class="rule"><h3>Cisão homolítica × heterolítica</h3>
       <p>Toda quebra de ligação é de um de dois tipos, e o que muda é <b>para onde vão os 2 elétrons da ligação</b>.</p>
       <p><b>Homolítica:</b> cada lado leva <b>1 elétron</b>. Aparecem elétrons sozinhos (radicais). Seta de <b>anzol</b> (meia ponta), uma para cada elétron.<br><b>Heterolítica:</b> <b>um só lado leva os 2 elétrons</b>. O outro lado fica sem elétron e ganha carga +. Seta <b>inteira</b>, um par de elétrons andando.</p>
@@ -649,7 +653,7 @@ function mechBox(ex){
   if(!ex){box.innerHTML='';return;}
   const L=(typeof MECH!=='undefined'&&MECH[ex.n])||null;
   if(!L){box.innerHTML='<details class="why" open><summary>Mecanismo do professor</summary><p class="src">Este exercício ainda não tem mecanismo seu nem do quadro aqui. As cartas abaixo são a minha leitura do livro.</p></details>';return;}
-  box.innerHTML='<details class="why" open><summary>Mecanismo do professor</summary>'+L.map((x,i)=>'<figure class="mech"><button type="button" class="mechb" data-mech="'+i+'" aria-label="Ampliar o mecanismo do exercício '+ex.n+(L.length>1?', imagem '+(i+1):'')+'"><img src="'+x[0]+'" alt="Mecanismo do exercício '+ex.n+' ('+esc(ex.nome)+'): setas, cargas e pares de elétrons, como o professor desenhou"></button><figcaption class="src">'+esc(x[1])+' Toque para ampliar.</figcaption></figure>').join('')+'</details>';
+  box.innerHTML='<details class="why" open><summary>'+(ex.n===5?'Mecanismo (rascunho seu, não do professor)':'Mecanismo do professor')+'</summary>'+L.map((x,i)=>'<figure class="mech"><button type="button" class="mechb" data-mech="'+i+'" aria-label="Ampliar o mecanismo do exercício '+ex.n+(L.length>1?', imagem '+(i+1):'')+'"><img src="'+x[0]+'" alt="Mecanismo do exercício '+ex.n+' ('+esc(ex.nome)+'): setas, cargas e pares de elétrons, como o professor desenhou"></button><figcaption class="src">'+esc(x[1])+' Toque para ampliar.</figcaption></figure>').join('')+'</details>';
   box.querySelectorAll('[data-mech]').forEach(b=>b.onclick=()=>mechZoom(L[+b.dataset.mech][0],b));
 }
 function mechZoom(src,opener){
