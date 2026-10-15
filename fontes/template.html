@@ -50,6 +50,7 @@
 .tag{font-size:.72rem;border-radius:4px;padding:1px 6px;background:var(--line);color:var(--muted);font-weight:500;margin-left:6px;white-space:nowrap}
 .src{font-size:.82rem;color:var(--muted);margin:8px 0 0}
 .resumo{margin:10px 0 4px;font-weight:500}
+figure.spec{margin:6px 0 12px}
 .hoje{padding-left:20px;margin:6px 0}.hoje li{margin:10px 0}.hoje .btn{margin-right:6px}
 .ionl{padding-left:18px;margin:6px 0}.ionl li{margin:7px 0}
 .nota{width:100%;min-height:64px;font:inherit;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px;resize:vertical}
@@ -195,6 +196,7 @@ h1{font-size:1.15rem}
     <div id="an-res" hidden>
     <button class="back" type="button" id="an-back">← Mudar exercício ou picos</button>
     <div id="exinfo"></div>
+    <div id="spec"></div>
     <div class="pkh" id="pkh"></div>
     <div class="chips" id="pkbar" role="group" aria-label="Escolha o pico"></div>
     <div class="grid" id="out"></div>
@@ -622,6 +624,28 @@ function buildChips(){
     box.appendChild(b);
   });
 }
+function intOf(ex,p){const d=ex&&typeof INTS!=='undefined'&&INTS[ex.n];return d&&d.p[p]!==undefined?d.p[p]:null;}
+function fmtInt(v){return (v%1===0?v.toFixed(0):v.toFixed(1)).replace('.',',')+'%';}
+function drawSpec(ex,peaks){
+  const box=$('#spec');if(!box)return;
+  const d=ex&&typeof INTS!=='undefined'&&INTS[ex.n];
+  if(!d){box.innerHTML=ex?'<p class="src">Gráfico do espectro: ainda sem as intensidades deste exercício.</p>':'';return;}
+  const W=340,H=170,L=34,R=8,T=18,B=26,mz=Object.keys(d.p).map(Number);
+  const x0=Math.floor((Math.min.apply(null,mz)-4)/10)*10,x1=Math.ceil((ex.M+6)/10)*10;
+  const X=v=>L+(v-x0)/(x1-x0)*(W-L-R),Y=v=>T+(100-v)/100*(H-T-B);
+  let g='';
+  [0,50,100].forEach(t=>{g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(t)+'" y2="'+Y(t)+'" stroke="var(--line)" stroke-width="1"/><text x="'+(L-5)+'" y="'+(Y(t)+3)+'" font-size="9" text-anchor="end" fill="var(--muted)" font-family="IBM Plex Mono,ui-monospace,monospace">'+t+'</text>';});
+  const step=(x1-x0)>80?20:10;
+  for(let t=Math.ceil(x0/step)*step;t<=x1;t+=step)g+='<text x="'+X(t)+'" y="'+(H-8)+'" font-size="9" text-anchor="middle" fill="var(--muted)" font-family="IBM Plex Mono,ui-monospace,monospace">'+t+'</text>';
+  mz.sort((a,b)=>a-b).forEach(m=>{
+    const hit=peaks.indexOf(m)>=0,sel=pkSel===m;
+    g+='<line x1="'+X(m)+'" x2="'+X(m)+'" y1="'+Y(0)+'" y2="'+Y(d.p[m])+'" stroke="'+(sel?'var(--amber)':hit?'var(--keep)':'var(--muted)')+'" stroke-width="'+(hit?3.2:2)+'" stroke-linecap="round" opacity="'+(hit?1:.5)+'"/>';
+    if(hit){g+='<text x="'+X(m)+'" y="'+(Y(d.p[m])-4)+'" font-size="9.5" text-anchor="middle" fill="var(--ink)" font-family="IBM Plex Mono,ui-monospace,monospace">'+m+'</text><rect data-spk="'+m+'" x="'+(X(m)-8)+'" y="'+T+'" width="16" height="'+(H-T-B)+'" fill="transparent" style="cursor:pointer"/>';}
+  });
+  const si=typeof pkSel==='number'?intOf(ex,pkSel):null;
+  box.innerHTML='<figure class="spec"><svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Espectro de massas de '+esc(ex.nome)+': m/z no eixo horizontal, intensidade relativa em porcentagem no vertical" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:520px">'+g+'</svg><figcaption class="src">Espectro de massas do SDBS (nº '+d.sdbs+', '+d.id+'), intensidade relativa em %. Verde: picos do exercício. Toque em um deles para abrir o cartão.'+(si!==null?' <b>m/z '+pkSel+': '+fmtInt(si)+'.</b>':'')+'</figcaption></figure>';
+}
+document.addEventListener('click',ev=>{const r=ev.target.closest&&ev.target.closest('[data-spk]');if(r){pkSel=+r.dataset.spk;analyze();}});
 function analyze(){
   const M=parseInt($('#inM').value,10);
   const peaks=[...new Set(($('#inP').value.match(/\d+/g)||[]).map(Number))].filter(p=>p>0).sort((a,b)=>b-a);
@@ -634,7 +658,7 @@ function analyze(){
   peaks.forEach(p=>{
     const row=ex?ex.rows.find(r=>r[0]===p):null;
     const d=M-p;
-    const head='<h3><span class="mono">m/z '+p+'</span>'+(d>0?'<span class="d mono">M − '+p+' = '+d+'</span>':'<span class="d mono">íon molecular</span>')+(row&&/pico base/.test(row[2])?'<span class="badge ok">pico base</span>':'')+'</h3>';
+    const head='<h3><span class="mono">m/z '+p+'</span>'+(d>0?'<span class="d mono">M − '+p+' = '+d+'</span>':'<span class="d mono">íon molecular</span>')+(intOf(ex,p)!==null?'<span class="d mono">'+fmtInt(intOf(ex,p))+'</span>':'')+(row&&/pico base/.test(row[2])?'<span class="badge ok">pico base</span>':'')+'</h3>';
     let body;
     if(d<=0){
       body='<div class="col keep" style="grid-column:1/-1"><div class="k">Íon molecular</div><p class="li">É a molécula inteira que perdeu 1 elétron. Não saiu nada.</p>'+(ex&&p===ex.M?'<div class="sp">'+fig(ex.smi,ex.f+'+·','keep','M')+'</div>':'')+(BM.get(p)?'<div class="k" style="margin-top:8px">Se fosse um fragmento (livro)</div>'+ionHTML(p):'')+'</div>';
@@ -650,7 +674,7 @@ function analyze(){
   });
   if(pkSel!=='all'&&!peaks.includes(pkSel))pkSel=peaks[0];
   $('#pkh').textContent='Toque num pico:';
-  $('#pkbar').innerHTML='';
+  $('#pkbar').innerHTML='';drawSpec(ex,peaks);
   peaks.forEach(p=>{const b=document.createElement('button');b.type='button';b.className='chip mono';b.setAttribute('aria-pressed',pkSel===p?'true':'false');b.textContent='m/z '+p+(p===M?' (M)':'');b.onclick=()=>{pkSel=p;analyze();};$('#pkbar').appendChild(b);});
   if(peaks.length>1){const b=document.createElement('button');b.type='button';b.className='chip';b.setAttribute('aria-pressed',pkSel==='all'?'true':'false');b.textContent='Todos';b.onclick=()=>{pkSel='all';analyze();};$('#pkbar').appendChild(b);}
   $('#out').className=pkSel==='all'?'grid':'grid single';
