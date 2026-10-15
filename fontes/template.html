@@ -519,6 +519,7 @@ const GLOS={
  mcl:['Rearranjo de McLafferty','Só acontece com C=O e um H no carbono γ (o 3º carbono depois do C=O). Esse H pula para o O, a ligação entre os carbonos α e β quebra e sai um alceno neutro.'],
  alfa:['Clivagem α','Quebra a ligação ao lado do C que segura o O (ou do C=O). O O fica com a carga e o pedaço do outro lado sai como radical.'],
  benz:['Clivagem benzílica','Quebra a ligação entre o CH2 ligado ao anel e o carbono seguinte. O CH2 fica no anel como C7H7+.'],
+ rad:['Perda de molécula neutra por rearranjo','O íon-radical (+·) passa um H ou abre o anel e solta uma molécula neutra (H2O, C2H4, C2H2, CH2O). É homolítico (regra 7).'],
  anel:['Abertura de anel','O anel abre ao lado de um heteroátomo ou perde um pedaço pequeno e estável. A cor no mapa é aproximada, porque os átomos se rearranjam.'],
  neu:['Perda de molécula neutra','Sai uma molécula estável inteira (H2O, CO, C2H2...). Ela não tem elétron sozinho e não aparece no espectro.'],
  sim:['Quebra simples de ligação','Uma ligação se rompe e o pedaço que sai leva o elétron sozinho (radical).']
@@ -538,8 +539,14 @@ function mapFig(ex,p){
   const m=MAPS[ex.n+':'+p];if(!m)return '';
   return '<figure class="st map"><span class="w">Na molécula inteira</span>'+m.s+'<figcaption class="w2"><span class="lg" style="background:var(--keep-soft);border:1px solid var(--keep)"></span> ficou &nbsp;<span class="lg" style="background:var(--lost-soft);border:1px solid var(--lost)"></span> saiu &nbsp;<span class="lg" style="background:var(--amber)"></span> ligação que quebra'+(m.a?'<br><i>cor aproximada: nesta etapa os átomos se rearranjam</i>':'')+'</figcaption></figure>';
 }
-function cisTxt(r){
-  const k=tipoQ(r);
+function tipoE(ex,r){
+  const k=tipoQ(r);if(k!=='neu')return k;
+  const p=ex.rows.find(x=>x[0]===r[1]);
+  return (r[1]===ex.M||(p&&p[7].indexOf('·')>=0))?'rad':'neu';
+}
+function cisTxt(ex,r){
+  const k=tipoE(ex,r);
+  if(k==='rad')return '<b>homolítica</b> (setas de anzol): o elétron sozinho do íon-radical comanda a reação (H que pula ou anel que abre) e sai uma molécula neutra completa.';
   if(k==='neu')return '<b>heterolítica</b>: o cátion solta uma molécula neutra e o par de elétrons da ligação vai com ela (seta inteira).';
   if(k==='anel')return 'começa <b>homolítica</b> (abre a ligação ao lado do heteroátomo, setas de anzol) e termina soltando uma molécula neutra.';
   if(k==='mcl')return '<b>homolítica</b> (setas de anzol): o H pula com 1 elétron e a ligação α–β se rompe, saindo um alqueno neutro.';
@@ -547,13 +554,6 @@ function cisTxt(r){
 }
 const POSS=['3:78','8:52','10:44','2:39','11:87'];
 function origemTxt(ex){return ex.ok?'Massa, estrutura e mecanismo: da lousa do professor. O porquê é explicação minha, baseada no Silverstein.':'Ainda não conferido com o professor: tudo aqui é minha leitura do livro.';}
-function cisTxt(r){
-  const k=tipoQ(r);
-  if(k==='neu')return '<b>heterolítica</b>: o cátion solta uma molécula neutra e o par de elétrons da ligação vai com ela (seta inteira).';
-  if(k==='anel')return 'começa <b>homolítica</b> (abre a ligação ao lado do heteroátomo, setas de anzol) e termina soltando uma molécula neutra.';
-  if(k==='mcl')return '<b>homolítica</b> (setas de anzol): o H pula com 1 elétron e a ligação α–β se rompe, saindo um alqueno neutro.';
-  return '<b>homolítica</b> (seta de anzol): cada lado fica com 1 elétron, e o pedaço que sai é um radical.';
-}
 function rearrBox(ex,row){
   const r=(typeof REARR!=='undefined')&&REARR[ex.n+':'+row[0]];if(!r)return '';
   const poss=POSS.indexOf(ex.n+':'+row[0])>=0;
@@ -563,8 +563,8 @@ function rearrBox(ex,row){
 }
 function whyBox(ex,row){
   const w=(typeof WHY!=='undefined')&&WHY[ex.n+':'+row[0]];if(!w)return '';
-  const k=tipoQ(row),mdl=({alfa:1,mcl:1,neu:1,h:1})[k];
-  return '<details class="why"><summary>Mostrar o porquê</summary><p><b>Onde começa.</b> '+esc(w[0])+'</p><p><b>O que acontece.</b> '+fmt(esc(w[1]))+'</p><p><b>Por que aqui e não em outro lugar.</b> '+fmt(esc(w[2]))+'</p><p><b>Tipo de cisão.</b> '+cisTxt(row)+'</p><p class="src">'+origemTxt(ex)+'</p><p><small>'+(mdl?'<button class="back" style="display:inline;margin:0" data-go="p-se">Ver o modelo com setas</button> · ':'')+'<button class="back" style="display:inline;margin:0" data-go="p-pq">Ver as regras</button></small></p></details>'+rearrBox(ex,row);
+  const k=tipoE(ex,row),mdl=({alfa:1,mcl:1,neu:1,h:1})[k];
+  return '<details class="why"><summary>Mostrar o porquê</summary><p><b>Onde começa.</b> '+esc(w[0])+'</p><p><b>O que acontece.</b> '+fmt(esc(w[1]))+'</p><p><b>Por que aqui e não em outro lugar.</b> '+fmt(esc(w[2]))+'</p><p><b>Tipo de cisão.</b> '+cisTxt(ex,row)+'</p><p class="src">'+origemTxt(ex)+'</p><p><small>'+(mdl?'<button class="back" style="display:inline;margin:0" data-go="p-se">Ver o modelo com setas</button> · ':'')+'<button class="back" style="display:inline;margin:0" data-go="p-pq">Ver as regras</button></small></p></details>'+rearrBox(ex,row);
 }
 function stepCard(ex,row){
   const t=GLOS[tipoQ(row)],d=row[1]-row[0];
@@ -823,14 +823,14 @@ function lossQ(e,r){
   return {p:'Saiu <b class="mono">'+d+'</b> ('+r[1]+' → '+r[0]+'). Qual fragmento poderia ter saído?',opts,
     fb:'Para '+d+' o livro lista: '+(valid.length?valid.map(x=>fmt(x[0])).join(' · '):'(nada)')+'. Neste exercício foi <b>'+fmt(r[3])+'</b>. Qual combina é decidido pelo grupo funcional.'};
 }
-function cisQ(r){
-  const k=tipoQ(r);if(k==='anel')return null;
+function cisQ(e,r){
+  const k=tipoE(e,r);if(k==='anel')return null;
   const het=k==='neu';
   return {p:'Essa quebra foi homolítica ou heterolítica?',opts:[{l:'Homolítica (cada lado leva 1 elétron, sai um radical)',ok:!het},{l:'Heterolítica (um lado leva o par; sai molécula neutra)',ok:het}],
-    fb:cisTxt(r)};
+    fb:cisTxt(e,r)};
 }
-function regQ(r){
-  const k=tipoQ(r),keys=Object.keys(REGRA).filter(x=>x!==k);
+function regQ(e,r){
+  const k=tipoE(e,r),keys=Object.keys(REGRA).filter(x=>x!==k);
   const opts=shuf([{l:REGRA[k][0],ok:true}].concat(shuf(keys).slice(0,3).map(x=>({l:REGRA[x][0],ok:false}))));
   return {p:'Qual regra explica esse pico?',opts,fb:'<b>'+REGRA[k][0]+'.</b> '+REGRA[k][1]};
 }
@@ -839,7 +839,7 @@ function trNext(){
   if(!pool.length){TR.cur=null;trDraw();return;}
   const c=pool[Math.floor(Math.random()*pool.length)];
   const qs=[lossQ(c.e,c.r)];
-  if(TR.mode!=='qual'){const a=cisQ(c.r);if(a)qs.push(a);qs.push(regQ(c.r));}
+  if(TR.mode!=='qual'){const a=cisQ(c.e,c.r);if(a)qs.push(a);qs.push(regQ(c.e,c.r));}
   TR.cur={e:c.e,r:c.r,qs,i:0,pick:null,wrong:false,done:false};TR.hint=false;trDraw();
 }
 function trLabel(){const rb=document.querySelector('#trmode [data-m="rev"]');if(rb)rb.textContent='Revisar erros ('+LS.get('massas-erros',[]).length+')';}
