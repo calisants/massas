@@ -28,14 +28,14 @@ class S:
         return (f'<svg viewBox="0 0 {s.w} {s.h}" role="img" aria-label="{esc(label)}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:520px">'+''.join(s.o)+'</svg>')
 
 def m_ioniz():
-    s=S(340,110)
+    s=S(340,118)
     s.text(30,62,'R',16);s.line(40,58,62,58);s.text(74,62,'O',16);s.line(86,58,108,58);s.text(120,62,"R'",16)
     s.dot(68,40);s.dot(80,40)
-    s.text(74,26,'par livre',11,fill='var(--muted)')
+    s.text(74,26,'par livre: 2 e⁻',11,fill='var(--muted)');s.text(48,76,'2 e⁻',10,fill='var(--muted)');s.text(97,76,'2 e⁻',10,fill='var(--muted)')
     s.big(165,64);s.text(165,86,'−e⁻',12,fill='var(--muted)')
     s.text(215,62,'R',16);s.line(225,58,247,58);s.text(259,62,'O',16);s.line(271,58,293,58);s.text(305,62,"R'",16)
     s.dot(259,40);s.text(272,42,'+',13)
-    s.text(259,92,'1 elétron sozinho',11,fill='var(--muted)')
+    s.text(259,96,'O: 1 e⁻ sozinho',11,fill='var(--muted)');s.text(259,108,'(perdeu 1 e⁻)',11,fill='var(--muted)')
     return s.svg('Ionização: o par livre do oxigênio perde 1 elétron e fica com um elétron sozinho e carga mais')
 def m_alfa():
     s=S(340,170)
@@ -46,7 +46,8 @@ def m_alfa():
     s.text(256,90,'Y',17);s.text(269,78,'+',12)
     s.dbl(268,92,286,92);s.text(306,96,'CH₂',15)
     s.text(256,140,'+',16);s.dot(284,138);s.text(302,142,'R',17)
-    s.text(170,160,'R· sai (radical, neutro)',11,fill='var(--muted)')
+    s.text(170,160,'R· sai (radical neutro: 1 e⁻)',11,fill='var(--muted)')
+    s.text(69,112,'2 e⁻',10,fill='var(--muted)');s.text(142,112,'2 e⁻',10,fill='var(--muted)');s.text(18,76,'1 e⁻',10,fill='var(--muted)');s.text(277,112,'4 e⁻ (dupla)',10,fill='var(--muted)')
     return s.svg('Clivagem alfa: o elétron sozinho do heteroátomo forma a ligação dupla e o grupo R sai como radical')
 def m_mcl():
     s=S(340,185)
@@ -65,13 +66,14 @@ def m_mcl():
     s.text(282,120,'+  Cβ=Cγ',13);s.text(282,136,'alqueno neutro',12,fill='var(--muted)')
     return s.svg('McLafferty: o oxigênio puxa o hidrogênio do carbono gama por um anel de seis átomos, e sai um alqueno neutro')
 def m_hetero():
-    s=S(340,130)
+    s=S(340,134)
     s.text(40,70,'R',17);s.line(52,66,100,66);s.text(112,70,'C',16);s.line(124,64,152,64);s.line(124,68,152,68);s.line(124,60,152,60)
     s.text(164,70,'O',16);s.text(178,58,'+',12)
     s.arrow((76,64),(104,26),(112,54),full=True,n='par')
     s.big(212,72)
     s.text(262,50,'R',17);s.text(275,38,'+',12)
     s.text(256,100,'+',15);s.dot(278,92);s.dot(278,100);s.text(304,104,'C≡O',16)
+    s.text(76,86,'2 e⁻',10,fill='var(--muted)');s.text(138,44,'6 e⁻',10,fill='var(--muted)');s.text(278,120,'par 2 e⁻ + C≡O 6 e⁻',10,fill='var(--muted)');s.text(280,68,'sexteto: 6 e⁻',10,fill='var(--muted)')
     return s.svg('Cisão heterolítica: o cátion acílio solta CO levando o par de elétrons da ligação')
 def m_h():
     s=S(340,170)
@@ -80,6 +82,7 @@ def m_h():
     s.arrow((108,70),(130,46),(116,44),n=2)
     s.big(200,98)
     s.text(246,98,'Y',17);s.text(259,86,'+',12);s.dbl(258,95,288,95);s.text(304,99,'C',16)
-    s.text(256,146,'+',16);s.dot(284,144);s.text(302,148,'H',16)
+    s.text(256,146,'+',16);s.dot(284,144);s.text(302,148,'H·: 1 e⁻',14)
+    s.text(70,112,'2 e⁻',10,fill='var(--muted)');s.text(122,70,'2 e⁻',10,fill='var(--muted)');s.text(18,76,'1 e⁻',10,fill='var(--muted)');s.text(273,114,'4 e⁻ (dupla)',10,fill='var(--muted)')
     return s.svg('Perda de H: o heteroátomo forma a ligação dupla com o carbono e o H sai como radical')
 MODELS={'ioniz':m_ioniz(),'alfa':m_alfa(),'mcl':m_mcl(),'hetero':m_hetero(),'h':m_h()}

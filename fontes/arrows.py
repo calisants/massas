@@ -13,11 +13,16 @@ T_H=['O elétron sozinho forma a ligação dupla com o carbono (anzol 1).','Um e
 T_MCL=['O elétron sozinho do O pega o H do carbono γ (anzol 1).','A ligação Cα–Cβ se desloca e forma a dupla Cβ=Cγ (anzol 2).','O elétron da ligação C=O forma a dupla C=Cα, e o alqueno sai neutro (anzol 3).']
 T_ACIL=['Seta cheia: o par de elétrons da ligação vai com o CO, que sai como molécula neutra. A carga + fica no outro pedaço.']
 T_SIMP=['Anzol: um elétron da ligação vai com o pedaço que sai (radical). O outro elétron fica no íon.']
-def ALFA(Y,C,R):   return dict(a=[('h',('R',Y),('B',Y,C)),('h',('B',C,R),('A',R))],t=T_ALFA)
-def HLOSS(Y,C):    return dict(a=[('h',('R',Y),('B',Y,C)),('h',('B',C,'H'),('H',C))],t=T_H)
-def MCL(O,Cc,Ca,Cb,Cg): return dict(a=[('h',('B',Cg,'H'),('A',O)),('h',('B',Ca,Cb),('B',Cb,Cg)),('h',('B',Cc,O),('B',Ca,Cc))],t=T_MCL,lay=(O,Cc,Ca,Cb,Cg))
-def ACIL(a,c):     return dict(a=[('f',('B',a,c),('A',c))],t=T_ACIL)
-def SIMP(a,b):     return dict(a=[('h',('B',a,b),('A',b))],t=T_SIMP)
+E_ALFA=['ANTES (íon M+·): Y tem 1 e⁻ sozinho (ele ficou assim quando o par livre, 2 e⁻, perdeu 1 e⁻ na ionização). Ligação Y–C: 2 e⁻. Ligação C–R: 2 e⁻.','MOVIMENTO: 1 e⁻ do Y (anzol 1) + 1 e⁻ da ligação C–R (anzol 2 vai para R). Cada anzol move 1 e⁻.','DEPOIS, íon que fica: Y=C passa a ter 4 e⁻ (2 da ligação que já existia + 1 do Y + 1 da C–R). Todos os e⁻ do Y estão pareados, octeto completo. Estável (carga + com octeto).','DEPOIS, o que sai: R leva 1 e⁻ sozinho (radical neutro, 1 e⁻, não aparece no espectro).','CONTA: nenhum e⁻ some na quebra. O e⁻ perdido da molécula (−1 e⁻) foi na ionização.']
+E_H=['ANTES (íon M+·): Y tem 1 e⁻ sozinho. Ligação Y–C: 2 e⁻. Ligação C–H: 2 e⁻.','MOVIMENTO: 1 e⁻ do Y (anzol 1) e 1 e⁻ da C–H vai com o H (anzol 2).','DEPOIS, íon que fica: Y=C com 4 e⁻, tudo pareado, carga + no Y (octeto completo). Estável.','DEPOIS, o que sai: H· com 1 e⁻ sozinho (radical neutro). Por isso a massa cai 1 (M − 1).','CONTA: nenhum e⁻ some na quebra.']
+E_MCL=['ANTES (íon M+·): O tem 1 e⁻ sozinho. C=O: 4 e⁻. Cγ–H: 2 e⁻. Cα–Cβ: 2 e⁻. Cβ–Cγ: 2 e⁻.','PASSO 1 (anzol 1): o e⁻ sozinho do O + 1 e⁻ da Cγ–H formam a ligação O–H (2 e⁻). O Cγ fica com 1 e⁻ sozinho.','PASSO 2 (anzol 2): 1 e⁻ da Cα–Cβ + o e⁻ sozinho do Cγ formam a 2ª ligação Cβ=Cγ (agora 4 e⁻). O Cα fica com 1 e⁻ sozinho.','PASSO 3 (anzol 3): 1 e⁻ da C=O (4 e⁻ vira 2 e⁻) + o e⁻ sozinho do Cα formam a ligação C=Cα (4 e⁻). A ligação Cα–Cβ se desfaz.','DEPOIS, o que sai: alqueno Cβ=Cγ neutro (4 e⁻ na dupla, tudo pareado, nenhum e⁻ sozinho).','DEPOIS, íon que fica (enol): continua com carga + e 1 e⁻ sozinho (·+). A carga e o e⁻ sozinho trocaram de lugar, mas continuam no íon.']
+E_ACIL=['ANTES (acílio R–C≡O⁺): ligação R–C: 2 e⁻. Ligação C≡O: 6 e⁻ (3 pares). Nenhum e⁻ sozinho. O C tem 8 e⁻ em volta (octeto completo).','MOVIMENTO (seta cheia): os 2 e⁻ da ligação R–C vão juntos para o C (par de e⁻).','DEPOIS, o que sai: CO neutro, 10 e⁻ de valência: 6 e⁻ na tripla + 2 e⁻ de par livre no C + 2 e⁻ de par livre no O. Tudo pareado.','DEPOIS, íon que fica: R⁺ perdeu os 2 e⁻ da ligação e ficou com 6 e⁻ em volta do C (sexteto). É menos estável que o acílio, por isso só acontece com R⁺ razoavelmente estável (fenila, terc-butila…).']
+E_SIMP=['ANTES: a ligação que quebra tem 2 e⁻.','MOVIMENTO (anzol): 1 e⁻ vai com o pedaço que sai, e 1 e⁻ fica no íon.','DEPOIS, o que sai: leva 1 e⁻ sozinho (radical neutro).','DEPOIS, o íon: ficou com 1 e⁻ do lado dele. Esse e⁻ ou pareia com outro (forma ligação) ou é o e⁻ sozinho do íon. A carga + continua.','CONTA: nenhum e⁻ some na quebra.']
+def ALFA(Y,C,R):   return dict(a=[('h',('R',Y),('B',Y,C)),('h',('B',C,R),('A',R))],t=T_ALFA,e=E_ALFA)
+def HLOSS(Y,C):    return dict(a=[('h',('R',Y),('B',Y,C)),('h',('B',C,'H'),('H',C))],t=T_H,e=E_H)
+def MCL(O,Cc,Ca,Cb,Cg): return dict(a=[('h',('B',Cg,'H'),('A',O)),('h',('B',Ca,Cb),('B',Cb,Cg)),('h',('B',Cc,O),('B',Ca,Cc))],t=T_MCL,e=E_MCL,lay=(O,Cc,Ca,Cb,Cg))
+def ACIL(a,c):     return dict(a=[('f',('B',a,c),('A',c))],t=T_ACIL,e=E_ACIL)
+def SIMP(a,b):     return dict(a=[('h',('B',a,b),('A',b))],t=T_SIMP,e=E_SIMP)
 
 NOTA_ANEL="Sem setas: a perda envolve abertura ou rearranjo do anel em várias etapas, e eu não consigo desenhar isso com certeza."
 NOTA_H="Sem setas: não sei de qual C–H sai o hidrogênio, e não vou chutar."
@@ -35,7 +40,7 @@ ARW = {
  (5,57): dict(v=[('',3,ALFA(3,2,4))]),
  (5,29): dict(v=[('',None,ACIL(1,2))]),
  (5,27): dict(n="Sem setas: é uma perda de H2 do cátion, sem mecanismo simples para desenhar."),
- (6,59): dict(v=[('Como na lousa (H do O–H)',3,dict(a=[('h',('B',3,'H'),('H',3))],t=['Anzol: um elétron da O–H vai com o H, que sai como radical.'])),
+ (6,59): dict(v=[('Como na lousa (H do O–H)',3,dict(a=[('h',('B',3,'H'),('H',3))],t=['Anzol: um elétron da O–H vai com o H, que sai como radical.'],e=E_SIMP)),
                  ('Como na literatura (H do carbono ligado ao OH)',3,HLOSS(3,2))]),
  (6,42): dict(n="Sem setas: o O puxa um H de um carbono distante e sai água, em mais de uma etapa."),
  (6,31): dict(v=[('',3,ALFA(3,2,1))]),

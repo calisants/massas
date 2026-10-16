@@ -1,6 +1,6 @@
 // Service worker do Quebra-cabeça de Massas: guarda o app no aparelho para abrir sem internet.
 // Ao publicar uma versão nova do index.html, troque o número em CACHE (v1 -> v2).
-const CACHE = "massas-v39";
+const CACHE = "massas-v43";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png"];
 
 self.addEventListener("install", (e) => {

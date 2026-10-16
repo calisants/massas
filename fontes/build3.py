@@ -90,7 +90,7 @@ for e in EXD:
         smi=e["smi"] if r[1]==e["M"] else byp[r[1]][5]
         ent={}
         if spec.get("v"):
-            ent["v"]=[[lab,ARWMOD.build(smi,mk,rec),rec["t"]] for lab,mk,rec in spec["v"]]
+            ent["v"]=[[lab,ARWMOD.build(smi,mk,rec),rec["t"],rec.get("e",[])] for lab,mk,rec in spec["v"]]
         if spec.get("n"): ent["n"]=spec["n"]
         ent["p"]="íon molecular M+· (m/z %d)"%e["M"] if r[1]==e["M"] else "íon do pico m/z %d"%r[1]
         ARWD[f'{e["n"]}:{r[0]}']=ent
