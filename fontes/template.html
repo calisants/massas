@@ -636,7 +636,7 @@ function cisTxt(ex,r){
   if(k==='mcl')return '<b>homolítica</b> (setas de anzol): o H pula com 1 elétron e a ligação α–β se rompe, saindo um alqueno neutro.';
   return '<b>homolítica</b> (seta de anzol): cada lado fica com 1 elétron, e o pedaço que sai é um radical.';
 }
-const DUV=['10:44','10:58','6:59','11:87','12:58','9:73','8:50'];
+const DUV=['12:58','8:50'];
 function duvTxt(ex,row){return DUV.indexOf(ex.n+':'+row[0])>=0?'<p class="src"><b>⚠ Mecanismo em dúvida.</b> Está na lista de perguntas para o professor.</p>':'';}
 const POSS=['3:78','8:52','10:44','2:39','11:87'];
 function origemTxt(ex){return ex.ok?(ex.n<=5?'Massa, estrutura e mecanismo: da lousa do professor, pelas suas anotações do tablet (iguais às fotos do quadro). O porquê é explicação minha, baseada no Silverstein.':'Massa, estrutura e mecanismo: da lousa do professor. O porquê é explicação minha, baseada no Silverstein.'):'Ainda não conferido com o professor: tudo aqui é minha leitura do livro.';}
@@ -692,7 +692,7 @@ function mechBox(ex){
   if(!ex){box.innerHTML='';return;}
   const L=(typeof MECH!=='undefined'&&MECH[ex.n])||null;
   if(!L){box.innerHTML='<details class="why" open><summary>Mecanismo do professor</summary><p class="src">Este exercício ainda não tem mecanismo seu nem do quadro aqui. As cartas abaixo são a minha leitura do livro.</p></details>';return;}
-  box.innerHTML='<details class="why" open><summary>'+(ex.n===5?'Mecanismo (rascunho seu, não do professor)':'Mecanismo do professor')+'</summary>'+L.map((x,i)=>'<figure class="mech"><button type="button" class="mechb" data-mech="'+i+'" aria-label="Ampliar o mecanismo do exercício '+ex.n+(L.length>1?', imagem '+(i+1):'')+'"><img src="'+x[0]+'" alt="Mecanismo do exercício '+ex.n+' ('+esc(ex.nome)+'): setas, cargas e pares de elétrons, como o professor desenhou"></button><figcaption class="src">'+esc(x[1])+' Toque para ampliar.</figcaption></figure>').join('')+'</details>';
+  box.innerHTML='<details class="why" open><summary>'+(ex.n===5?'Mecanismo do professor (e seu rascunho)':'Mecanismo do professor')+'</summary>'+L.map((x,i)=>'<figure class="mech"><button type="button" class="mechb" data-mech="'+i+'" aria-label="Ampliar o mecanismo do exercício '+ex.n+(L.length>1?', imagem '+(i+1):'')+'"><img src="'+x[0]+'" alt="Mecanismo do exercício '+ex.n+' ('+esc(ex.nome)+'): setas, cargas e pares de elétrons, como o professor desenhou"></button><figcaption class="src">'+esc(x[1])+' Toque para ampliar.</figcaption></figure>').join('')+'</details>';
   box.querySelectorAll('[data-mech]').forEach(b=>b.onclick=()=>mechZoom(L[+b.dataset.mech][0],b));
 }
 function mechZoom(src,opener){
@@ -1212,13 +1212,8 @@ function setaDraw(){
 
 /* ---------- Perguntas para o professor ---------- */
 const PERG=[
- ['Ex. 1: o anel de 7 (tropílio) é obrigatório?','O senhor termina o 91 com o anel de 7 carbonos porque é mais estável. Na prova posso desenhar o íon benzila (anel de 6 com CH2+) ou tenho que desenhar o tropílio?'],
- ['Ex. 6, pico 59','O 59 do 1-propanol é a perda do H do O–H ou de um H do carbono ao lado do OH (clivagem α)? A literatura cita a segunda; a lousa mostrou a primeira.'],
- ['Ex. 9, pico 73','Na lousa o O fecha um anel de 4 membros quando sai CH3. Esse é o mecanismo que vale na prova?'],
- ['Ex. 10, pico 58','A lousa desenha a saída do CH3 ligado ao N. Pela clivagem α, o mais favorável seria sair o CH3 do etila. Vale o da lousa?'],
- ['Ex. 10, pico 44','O 44 é o nitrênio (CH3)2N+ ou o CH3–NH+=CH2? Qual desenhar?'],
+ ['Ex. 1: o anel de 7 (tropílio) é obrigatório?','Na folha de mecanismos o senhor termina o 91 no anel de 7. Nos slides, o benzila (anel de 6 com CH2+) também aparece como possível. Na prova posso parar no benzila ou tenho que chegar ao tropílio?'],
  ['Ex. 8, pico 50','O 51 (C4H3+, cátion sem elétron sozinho) perde H· e vira 50 (C4H2+·). Isso não quebra a regra dos elétrons pares? Pode ser outro caminho?'],
- ['Ex. 11, pico 87','O 87 do valerato de metila: qual o mecanismo (rearranjo de H e saída do etila, como está na lousa)?'],
  ['Ex. 12, pico 58','O 58 do pentanal: H que passa para o O por anel de 6 e sai eteno. É McLafferty de novo, ou outro rearranjo?'],
  ['IV: bandas fora da tabela','Algumas bandas que usei (por exemplo CH3 simétrico perto de 2870 a 2890) não estão na tabela da disciplina. Na prova só vale a tabela?']
 ];

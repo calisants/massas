@@ -121,19 +121,20 @@ SL=[
 ]
 SLIMG={n:_b64(f"../slides/s{n}.webp") for n in (3,14,15,16,17,19,22,24,25,27,28,35,37,39,41,43,45)}
 
+_FOLHA="Folha do professor (PDF “Mecanismos – Anal.Org. II”), recortada."
 MECH={
- "1":[[_b64("e1.webp"),_PDF]],
- "2":[[_b64("e2.webp"),_PDF]],
- "3":[[_b64("e3.webp"),_PDF]],
- "4":[[_b64("e4.webp"),_PDF]],
- "5":[[_b64("e5.webp"),"Rascunho a lápis seu, não é do quadro do professor. Atenção: o desenho do m/z 29 está errado. Depois de perder CO (28), o fragmento é CH₃–CH₂⁺ (C₂H₅⁺, m/z 29). O que está desenhado, CH₃–OH₂⁺, teria m/z 33. Confirme com o professor."]],
- "6":[[_b64("e6.webp"),_PDF]],
- "7":[[_b64("e7.webp"),_PDF]],
- "8":[[_b64("e8.webp"),_PDF]],
- "9":[[_b64("e9.webp"),_PDF]],
- "10":[[_b64("e10.webp"),_PDF]],
- "11":[[_b64("e11.webp"),_PDF+" Falta aqui o McLafferty do m/z 87 e do 74."],[_b64("q11.webp"),_FOTO]],
- "12":[[_b64("e12.webp"),_PDF+" Falta aqui o McLafferty do m/z 44 e do 58."],[_b64("q12.webp"),_FOTO]],
+ "1":[[_b64("f1.webp"),_FOLHA+" Ele termina no anel de 7 (tropílio)."],[_b64("e1.webp"),_PDF]],
+ "2":[[_b64("f2.webp"),_FOLHA],[_b64("e2.webp"),_PDF]],
+ "3":[[_b64("f3.webp"),_FOLHA+" Caminho do 103 → 77 → 51."],[_b64("f4.webp"),_FOLHA+" Caminho do 78."],[_b64("e3.webp"),_PDF]],
+ "4":[[_b64("f5.webp"),_FOLHA],[_b64("e4.webp"),_PDF]],
+ "5":[[_b64("f6.webp"),_FOLHA+" 86 → perde ·CH₂CH₃ → 57 → perde CO → 29 (CH₃–CH₂⁺)."],[_b64("e5.webp"),"Rascunho a lápis seu, de antes de a folha do professor chegar. O m/z 29 desenhado aqui está errado (CH₃–OH₂⁺ teria m/z 33). O certo, como na folha do professor acima, é CH₃–CH₂⁺ (m/z 29)."]],
+ "6":[[_b64("f7.webp"),_FOLHA+" Pico 59: sai o H do O–H."],[_b64("f8.webp"),_FOLHA+" Pico 42 (perda de água). Atenção: a folha escreve m/z = 15 no fim, mas 60 − 18 = 42, e o fragmento desenhado (C₃H₆⁺·) tem 42. Parece erro de digitação; vale confirmar."],[_b64("f9.webp"),_FOLHA+" Pico 31."],[_b64("e6.webp"),_PDF]],
+ "7":[[_b64("f10.webp"),_FOLHA],[_b64("e7.webp"),_PDF]],
+ "8":[[_b64("f11.webp"),_FOLHA],[_b64("e8.webp"),_PDF]],
+ "9":[[_b64("f12.webp"),_FOLHA+" Pico 73: o O fecha um anel de 4 membros quando sai CH₃."],[_b64("f13.webp"),_FOLHA+" Picos 71 e 43."],[_b64("f14.webp"),_FOLHA+" Pico 60 (McLafferty)."],[_b64("e9.webp"),_PDF]],
+ "10":[[_b64("f15.webp"),_FOLHA+" Pico 58."],[_b64("f16.webp"),_FOLHA+" Pico 72."],[_b64("f17.webp"),_FOLHA+" Pico 44."],[_b64("e10.webp"),_PDF]],
+ "11":[[_b64("f18.webp"),_FOLHA+" Picos 85, 57 e 29."],[_b64("f19.webp"),_FOLHA+" Pico 87."],[_b64("f20.webp"),_FOLHA+" Pico 74 (McLafferty)."],[_b64("e11.webp"),_PDF+" Falta aqui o McLafferty do m/z 87 e do 74."],[_b64("q11.webp"),_FOTO]],
+ "12":[[_b64("e12.webp"),_PDF+" Falta aqui o McLafferty do m/z 44 e do 58. A folha do professor não tem o Ex. 12."],[_b64("q12.webp"),_FOTO]],
 }
 
 js="const SVG="+json.dumps(store,ensure_ascii=False)+";\nconst MAPS="+json.dumps(MAPS,ensure_ascii=False)+";\nconst EX="+json.dumps(out,ensure_ascii=False)+";\n"+"const REARR="+json.dumps({f"{k[0]}:{k[1]}":[v[0],[list(x) for x in v[1]]] for k,v in REARR.items()},ensure_ascii=False)+";\n"+"const WHY="+json.dumps({f"{k[0]}:{k[1]}":list(v) for k,v in WHY.items()},ensure_ascii=False)+";\n"+"const INTS="+json.dumps({str(k):dict(sdbs=v["sdbs"],id=v["id"],p={str(m):i for m,i in v["p"].items()}) for k,v in INTS.items()},ensure_ascii=False)+";\n"+"const ARWD="+json.dumps(ARWD,ensure_ascii=False)+";\n"+"const RESUMO="+json.dumps(RESUMO,ensure_ascii=False)+";\nconst IONI="+json.dumps({str(k):[v[0],[list(x) for x in v[1]]] for k,v in IONI.items()},ensure_ascii=False)+";\n"+"const MECH="+json.dumps(MECH,ensure_ascii=False)+";\n"+"const SLD="+json.dumps([[t,x,SLIMG[n]] for t,x,n in SL],ensure_ascii=False)+";\n"
