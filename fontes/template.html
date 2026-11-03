@@ -248,6 +248,8 @@ h1{font-size:1.15rem}
       <button class="mi" type="button" data-go="p-iv"><b>4. Infravermelho (IV)</b><span>Bandas por composto e por número de onda, guia por região e treino.</span></button>
       <button class="mi" type="button" data-go="p-an"><b>5. Espectrometria de massas</b><span>Os exercícios do professor, o treino e as tabelas do Silverstein.</span></button>
       <button class="mi" type="button" data-go="p-id"><b>Juntar tudo: identificar um composto</b><span>Você informa o que mediu e o app lista as classes que sobram.</span></button>
+      <button class="mi" type="button" data-go="p-pb"><b>Problemas resolvidos</b><span>Cinco casos de &ldquo;descobrir o composto&rdquo;, com o raciocínio passo a passo.</span></button>
+      <button class="mi" type="button" data-go="p-cs"><b>Consulta rápida</b><span>Uma folha com grupos, cores, bandas de IV e constantes, para usar na prova.</span></button>
     </div>
     <details style="margin-top:16px"><summary>Cronograma da disciplina (do Classroom)</summary>
       <div id="inCron" style="margin-top:10px"></div>
@@ -262,6 +264,8 @@ h1{font-size:1.15rem}
       <button class="mi" type="button" data-go="p-pf"><b>Preliminares e propriedades físicas</b><span>Cor, teste de ignição, ponto de fusão e ponto de ebulição.</span></button>
       <button class="mi" type="button" data-go="p-so"><b>Solubilidade</b><span>Fluxograma, grupos S<sub>2</sub>, S<sub>A</sub>, S<sub>B</sub>, S<sub>1</sub>, A<sub>1</sub>, A<sub>2</sub>, B, MN, N e I, e treino.</span></button>
       <button class="mi" type="button" data-go="p-el"><b>Análise elementar</b><span>Testes para C, H, O, N, S, halogênios e P, com a cor de cada resultado.</span></button>
+      <button class="mi" type="button" data-go="p-pb"><b>Problemas resolvidos</b><span>Cinco casos de &ldquo;descobrir o composto&rdquo;, com o raciocínio passo a passo.</span></button>
+      <button class="mi" type="button" data-go="p-cs"><b>Consulta rápida</b><span>Uma folha com grupos, cores, bandas de IV e constantes, para usar na prova.</span></button>
       <button class="mi" type="button" data-go="p-id"><b>Identificar um composto</b><span>Junta solubilidade, elementos e IV e mostra as classes compatíveis.</span></button>
     </div>
     <p class="hint" style="margin-top:14px">Ferramenta de busca do professor (por elementos, PF, PEb, CAS e grupo funcional): <a href="https://analor.com.br/" target="_blank" rel="noopener">analor.com.br</a>. Texto e tabelas dos ensaios: <a href="https://analor.com.br/plataforma.html" target="_blank" rel="noopener">Plataforma QO é Vida</a>.</p>
@@ -323,12 +327,25 @@ h1{font-size:1.15rem}
     <div class="sgm" role="group" aria-label="Partes da solubilidade">
       <button type="button" data-so="flow" aria-pressed="true">Fluxograma</button>
       <button type="button" data-so="grp" aria-pressed="false">Grupos</button>
+      <button type="button" data-so="teo" aria-pressed="false">Teoria</button>
       <button type="button" data-so="tr" aria-pressed="false">Treinar</button>
     </div>
     <div id="so-flow">
       <details class="how" style="margin-bottom:12px"><summary>Como se faz cada teste</summary>
         <p class="hint" style="margin-top:8px">30 a 50 mg do composto com 1 mL do solvente, num tubo de ensaio (15 × 1,5 cm). Agite de 1 a 5 minutos e observe. Uma só fase = <b>solúvel</b>. Se não dissolver por completo (mesmo que dissolva em parte), conta como <b>insolúvel</b> naquele solvente. <span class="tag sv">conferido no Analor</span></p></details>
       <div id="soFlow"></div>
+    </div>
+    <div id="so-teo" hidden>
+      <p class="hint">Por que cada solvente dissolve o quê. Isso ajuda a deduzir o grupo mesmo de um composto que você nunca viu. <span class="tag sm">escrito por mim, sem fonte conferida</span></p>
+      <div class="el"><h3>Água</h3><p>Dissolve o que faz ligação de hidrogênio. Cada grupo polar (OH, NH₂, C=O, COOH) &ldquo;puxa&rdquo; cerca de 5 carbonos para dentro da água. Passou disso, a cadeia de carbono (apolar) vence e o composto não dissolve. Exemplo: etanol (2 C) mistura com água; 1-octanol (8 C) não.</p></div>
+      <div class="el"><h3>Éter</h3><p>Só entra na marcha para quem já dissolveu em água. Sais e compostos muito polares (acetato de sódio, glicina, glicose) não dissolvem em éter: são S₂. Os polares orgânicos comuns (etanol, acetona, ácido acético) dissolvem: são S₁, S<sub>A</sub> ou S<sub>B</sub>.</p></div>
+      <div class="el"><h3>Tornassol</h3><p>Diz se a solução aquosa é ácida (fica vermelho: S<sub>A</sub>), básica (fica azul: S<sub>B</sub>) ou neutra (não muda: S₁). Ácido acético acidifica a água; etilamina a torna básica; acetona não muda nada.</p></div>
+      <div class="el"><h3>NaOH 5%</h3><p>Dissolve ácidos porque os transforma em sal, que é iônico e solúvel em água: R–COOH + NaOH → R–COO⁻Na⁺ + H₂O. Vale para ácidos carboxílicos e fenóis. Exemplo: o 2-naftol não dissolve em água, mas dissolve em NaOH, pois vira o naftóxido de sódio.</p></div>
+      <div class="el"><h3>NaHCO₃ 5%</h3><p>É base mais fraca que o NaOH. Só desprotona ácidos <b>fortes</b>, como ácidos carboxílicos e fenóis com grupos retiradores (nitro em orto/para). Esses são A₁, e costumam borbulhar (sai CO₂). Fenóis comuns e outros ácidos fracos não dissolvem em NaHCO₃: são A₂. Exemplo: ácido benzoico dissolve (A₁); 2-naftol não (A₂).</p></div>
+      <div class="el"><h3>HCl 5%</h3><p>Dissolve bases, em geral aminas, porque as transforma em sal de amônio: R–NH₂ + HCl → R–NH₃⁺Cl⁻. Exemplo: N,N-dimetilanilina não dissolve em água, mas dissolve em HCl 5% (grupo B).</p></div>
+      <div class="el"><h3>Análise elementar entre HCl e H₂SO₄</h3><p>Quem não dissolveu em água, NaOH nem HCl é neutro. Se tem N ou S, vai para MN (amidas, sulfetos). Se não tem, o último teste é o H₂SO₄ 96%.</p></div>
+      <div class="el"><h3>H₂SO₄ 96% (concentrado)</h3><p>Protona o que tem par de elétrons livre (O de álcool, cetona, éter, éster) ou ligação π (alceno, aromático ativado). O composto vira um sal e dissolve, muitas vezes com calor, mudança de cor ou precipitado: é o grupo N. Alcanos, halogenetos de alquila, halogenetos de arila e aromáticos sem grupo ativante não são protonados: ficam no grupo I.</p></div>
+      <div class="el"><h3>Erros comuns</h3><ul class="steps2"><li>Dissolver só um pouco não conta como solúvel. Se sobrar sólido ou segunda fase, é insolúvel.</li><li>Sólido que some em NaOH e volta a aparecer ao acidificar confirma o caráter ácido.</li><li>Não pule o tornassol: é ele que separa S<sub>A</sub>, S<sub>B</sub> e S₁.</li></ul></div>
     </div>
     <div id="so-grp" hidden>
       <p class="hint">Os 10 grupos, com as classes de compostos que o professor lista em cada um. Onde a tabela dele deixa um caso em aberto, aparece o aviso.</p>
@@ -400,6 +417,21 @@ h1{font-size:1.15rem}
     <p class="hint">O app não tem banco de compostos. Para comparar PF/PEb com valores tabelados, use a <a href="https://analor.com.br/" target="_blank" rel="noopener">Ferramenta Analor</a> do professor.</p>
     <h2>Classes que sobram</h2>
     <div id="idOut"></div>
+  </section>
+
+  <section id="p-pb" role="region" aria-label="Problemas resolvidos" hidden>
+    <button class="back" type="button" data-go="p-en">← Ensaios</button>
+    <h2 class="scr">Problemas resolvidos</h2>
+    <p class="scrsub">Cinco problemas do tipo &ldquo;descobrir o composto&rdquo;. Tente primeiro; depois abra a resolução e compare o raciocínio. <span class="tag sm">escrito por mim, sem fonte conferida</span></p>
+    <p class="hint">Os problemas e as resoluções são meus. Os pontos de fusão e de ebulição são valores que conheço de memória: confirme na <a href="https://analor.com.br/" target="_blank" rel="noopener">Ferramenta Analor</a> antes de confiar. A ordem da resolução segue a do laboratório: solubilidade, elementos, IV, constantes físicas.</p>
+    <div id="pbList"></div>
+  </section>
+
+  <section id="p-cs" role="region" aria-label="Consulta rápida" hidden>
+    <button class="back" type="button" data-go="p-en">← Ensaios</button>
+    <h2 class="scr">Consulta rápida</h2>
+    <p class="scrsub">Tudo de ensaios em uma folha, para consultar durante a prova (que é com consulta). Os dados vêm das outras telas; a organização é minha.</p>
+    <div id="csBody"></div>
   </section>
 
   <section id="p-an" role="tabpanel" aria-labelledby="t-an" hidden>
@@ -1559,7 +1591,7 @@ function agInit(){
     const cl=r[1].indexOf('PROVA')===0?'prova':(dt<h?'past':'');
     return '<tr class="'+cl+'"><td>'+r[0]+'</td><td>'+esc(r[1])+'</td></tr>';}).join('')+'</tbody></table></div>';
   sgmBind('so','so-');sgmBind('el','el-');
-  soInit();elInit();pfInit();idInit();ivQuizInit();
+  soInit();elInit();pfInit();idInit();ivQuizInit();pbInit();
 }
 /* botões segmentados: attr = data-so / data-el; prefixo dos painéis */
 function sgmBind(attr,pre){
@@ -1830,8 +1862,45 @@ function ivQuizInit(){
   miniQuiz('#ivQuiz',Q,'Pergunta');
 }
 
-const SCR=['p-in','p-en','p-pf','p-so','p-el','p-id','p-an','p-tr','p-tb','p-iv','p-ma','p-ca','p-aj','p-fo','p-pq','p-sl','p-co','p-es','p-pr','p-pg'];
-const OWN={'p-pf':'t-en','p-so':'t-en','p-el':'t-en','p-id':'t-en','p-tr':'t-an','p-tb':'t-an','p-ca':'t-ma','p-aj':'t-ma','p-fo':'t-ma','p-pq':'t-ma','p-sl':'t-ma','p-co':'t-ma','p-es':'t-ma','p-pr':'t-ma','p-pg':'t-ma'};
+/* ================= PROBLEMAS RESOLVIDOS ================= */
+const PB=[
+ {t:'Problema 1: sólido branco',d:[['Aspecto','sólido branco'],['PF','121–122 °C'],['Solubilidade','insolúvel em água; dissolve em NaOH 5% e em NaHCO₃ 5%'],['Elementar','só C, H e O (N, S e halogênio negativos)'],['IV','banda muito larga de 3300 a 2500; C=O forte em ~1690; bandas em 1600 e 1450; 710 e 690']],
+  p:['<b>Solubilidade.</b> Insolúvel em água, solúvel em NaOH <b>e</b> em NaHCO₃: é ácido forte, grupo <b>A₁</b>. Entram aí ácidos carboxílicos com mais de 6 C e fenóis com grupos retiradores.','<b>Elementar.</b> Sem N, S e halogênio: o composto só tem C, H e O. Isso descarta fenóis nitrados (teriam N).','<b>IV.</b> O–H muito larga (3300–2500) mais C=O perto de 1700 é a assinatura do <b>ácido carboxílico</b>. C=O em ~1690, abaixo de 1710, indica conjugação com anel. As bandas em 1600/1450 são do anel, e 710/690 do anel monossubstituído.','<b>Constante física.</b> PF de 121–122 °C e faixa estreita combinam com substância pura.'],
+  r:'Ácido benzoico (C₇H₆O₂). Fecha com A₁, ácido carboxílico aromático e anel monossubstituído.'},
+ {t:'Problema 2: líquido de cheiro adocicado',d:[['Aspecto','líquido incolor'],['PEb','~202 °C'],['Solubilidade','insolúvel em água, NaOH 5% e HCl 5%; dissolve em H₂SO₄ 96%'],['Elementar','N, S e halogênio negativos'],['IV','C=O forte em ~1685; sem O–H; sem bandas em 2820 e 2720; 1600 e 1450; 750 e 690']],
+  p:['<b>Solubilidade.</b> Insolúvel em água, NaOH e HCl: neutro. Sem N nem S, vai para o H₂SO₄. Dissolveu: grupo <b>N</b> (compostos com O, protonáveis).','<b>IV.</b> C=O forte e nenhum O–H: cetona, aldeído, éster ou amida. Sem N (amida descartada). Sem as duas bandas em 2820 e 2720 (aldeído descartado). Éster ficaria em 1750–1735, bem acima de 1685. Sobra <b>cetona</b>.','<b>C=O em ~1685.</b> Cetona saturada fica em 1725–1705. Estar 20 a 40 cm⁻¹ abaixo indica conjugação com anel: <b>cetona aromática</b>. Confirma o anel monossubstituído (750 e 690).','<b>PEb.</b> Cerca de 202 °C é compatível com uma cetona aromática de 8 C.'],
+  r:'Acetofenona (C₈H₈O). Grupo N, cetona conjugada com anel monossubstituído.'},
+ {t:'Problema 3: sólido que não dissolveu em nada',d:[['Aspecto','sólido cristalino incolor'],['PF','~114 °C'],['Solubilidade','insolúvel em água, NaOH 5% e HCl 5%'],['Elementar','N positivo; S e halogênio negativos'],['IV','uma banda N–H em ~3300; C=O forte em ~1660; 1600 e 1500; 750 e 690']],
+  p:['<b>Solubilidade.</b> Insolúvel em água, NaOH e HCl: neutro. A análise elementar achou N, então o caminho é <b>MN</b>, sem passar pelo H₂SO₄.','<b>IV.</b> C=O em ~1660 (faixa de amida, 1700–1630) com N–H: <b>amida</b>. Uma banda só em 3300 indica N–H de amida secundária (a primária teria duas).','<b>Anel.</b> 1600/1500 e 750/690: anel monossubstituído, então o N está ligado a um fenil (amida de anilina).','<b>PF.</b> ~114 °C confere com amida aromática pura.'],
+  r:'Acetanilida (C₈H₉NO). Grupo MN, amida secundária aromática.'},
+ {t:'Problema 4: líquido com cloro',d:[['Aspecto','líquido incolor'],['PEb','~132 °C'],['Solubilidade','insolúvel em tudo, inclusive em H₂SO₄ 96%'],['Elementar','halogênio positivo (Cl); N e S negativos'],['IV','3100–3000 fracas; sem O–H, N–H ou C=O; 1580 e 1480; 750 e 690']],
+  p:['<b>Solubilidade.</b> Insolúvel até em H₂SO₄ concentrado: grupo <b>I</b>. Cabem hidrocarbonetos saturados, halogenetos de alquila e de arila e aromáticos sem grupo ativante.','<b>Elementar.</b> Halogênio positivo: só podem ser halogenetos. Hidrocarbonetos puros ficam de fora.','<b>IV.</b> Sem O–H, N–H e C=O: nada oxigenado ou nitrogenado. C–H acima de 3000 e bandas de anel (1580, 1480): é aromático. 750 e 690: monossubstituído. Halogenetos de arila ficam em I.','<b>Qual halogênio.</b> O ensaio de halogênios: amido iodetado azula com Cl₂ ou Br₂; para separar, o reagente de Villier (Cl₂) ou a fluoresceína (Br₂).'],
+  r:'Clorobenzeno (C₆H₅Cl). Grupo I, halogeneto de arila monossubstituído.'},
+ {t:'Problema 5: líquido que dissolve em ácido',d:[['Aspecto','líquido amarelado'],['PEb','~194 °C'],['Solubilidade','insolúvel em água e em NaOH 5%; dissolve em HCl 5%'],['Elementar','N positivo'],['IV','sem N–H, sem O–H, sem C=O; 1600 e 1500; C–N em ~1340–1250; 750 e 690']],
+  p:['<b>Solubilidade.</b> Insolúvel em água e NaOH, mas dissolve em HCl 5%: é base, grupo <b>B</b> (aminas alifáticas grandes, anilinas).','<b>Elementar.</b> N positivo confirma amina.','<b>IV.</b> Sem N–H: amina <b>terciária</b> (primária teria duas bandas em 3500–3300, secundária uma). Sem C=O: não é amida. C–N em 1340–1250 é a faixa de amina aromática; 1600/1500 e 750/690 mostram anel monossubstituído.','<b>PEb.</b> ~194 °C é compatível com uma anilina terciária de 8 C.'],
+  r:'N,N-dimetilanilina (C₈H₁₁N). Grupo B, amina aromática terciária.'}
+];
+function pbInit(){
+  const b=$('#pbList');if(!b)return;
+  b.innerHTML=PB.map(x=>'<div class="rule"><h3>'+x.t+'</h3><div class="tbl"><table class="cola"><tbody>'+x.d.map(r=>'<tr><th scope="row">'+r[0]+'</th><td>'+r[1]+'</td></tr>').join('')+'</tbody></table></div><details style="margin-top:10px"><summary>Ver a resolução</summary><ol class="steps2" style="margin-top:8px">'+x.p.map(s=>'<li>'+s+'</li>').join('')+'</ol><div class="why"><b>Resposta: </b>'+x.r+'</div></details></div>').join('');
+}
+
+/* ================= CONSULTA RÁPIDA ================= */
+function csDraw(){
+  const b=$('#csBody');if(!b||b.dataset.ok)return;b.dataset.ok='1';
+  const T=(h,rows,cl)=>'<div class="tbl"><table class="cola"><thead><tr>'+h.map(x=>'<th>'+x+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map(x=>'<td>'+x+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';
+  let h='<h2>1. Solubilidade em uma linha</h2><div class="el"><p>Água → (sim) éter → tornassol → S₂ / S<sub>A</sub> / S<sub>B</sub> / S₁.<br>Água → (não) NaOH → (sim) NaHCO₃ → A₁ / A₂.<br>NaOH → (não) HCl → (sim) B.<br>HCl → (não) N ou S na elementar? → (sim) MN; (não) H₂SO₄ 96% → N (dissolve) ou I (não).</p></div>';
+  h+=T(['Grupo','Resultados','Entram'],SOLG.map(G=>['<b>'+SOLN[G.k]+'</b>',SOLR[G.k].map(r=>r[0]+': '+r[1]).join('; '),G.c.join('; ')]));
+  h+='<p class="src"><span class="tag sv">classes conferidas no Analor</span> Pendências: β-dicetonas em A₁ e A₂; bloco sem rótulo sob N; leitura da linha tracejada até MN.</p>';
+  h+='<h2>2. Cores da análise elementar</h2>'+T(['Elemento','Reagente no papel','Cor'],[['C','acetato de benzidina + acetato de cobre II (HCN)','azul'],['H','acetato de chumbo / nitroprussiato (H₂S, pirólise com S)','castanha / violeta'],['O','iodo / Fe(SCN)₃','castanho / vermelho'],['N','Nessler / prata-manganês / tornassol vermelho (NH₃)','castanho-alaranjada / negra / azul'],['S','acetato de chumbo / nitroprussiato (H₂S)','castanha / violeta'],['P','molibdato + acetato de benzidina','azul'],['Cl₂ ou Br₂','amido iodetado','azul'],['Cl₂','Villier','azul arroxeado'],['Br₂','fluoresceína / Schiff','eosina (carmim) / fúcsia'],['I₂','amido','azul']]);
+  h+='<p class="src"><span class="tag sv">conferido no Analor</span> Costa Neto, 2004, e Feigl, 1966, como citados no site.</p>';
+  h+='<h2>3. IV por região (cm⁻¹)</h2>'+T(['Faixa','O que é','Como ler'],IRREG.map(r=>['<b>'+r[0]+'</b>',r[1],r[2]]));
+  h+='<h2>4. Constantes físicas</h2><div class="el"><p><b>PF:</b> 3 capilares, Thiele com óleo, ~1 °C por minuto perto da fusão; anote a faixa (início a fusão total). Faixa estreita: substância pura.</p><p><b>PEb:</b> 10–15 gotas no microtubo, capilar selado com a ponta aberta no líquido; aqueça até fluxo contínuo de bolhas, retire a chama e anote a temperatura em que as bolhas param e o líquido volta ao capilar.</p><p><b>Ignição:</b> chama amarela fuliginosa = aromático; menos fuliginosa = alifático; cada vez mais clara = mais oxigênio.</p></div>';
+  b.innerHTML=h;
+}
+
+const SCR=['p-pb','p-cs','p-in','p-en','p-pf','p-so','p-el','p-id','p-an','p-tr','p-tb','p-iv','p-ma','p-ca','p-aj','p-fo','p-pq','p-sl','p-co','p-es','p-pr','p-pg'];
+const OWN={'p-pb':'t-en','p-cs':'t-en','p-pf':'t-en','p-so':'t-en','p-el':'t-en','p-id':'t-en','p-tr':'t-an','p-tb':'t-an','p-ca':'t-ma','p-aj':'t-ma','p-fo':'t-ma','p-pq':'t-ma','p-sl':'t-ma','p-co':'t-ma','p-es':'t-ma','p-pr':'t-ma','p-pg':'t-ma'};
 const NAV=['t-in','t-en','t-iv','t-an','t-ma'];
 function drawSl(){const b=$('#slBody');if(!b||b.dataset.ok||typeof SLD==='undefined')return;b.dataset.ok='1';
   b.innerHTML=SLD.map((s,i)=>'<div class="rule"><h3>'+esc(s[0])+'</h3><p>'+esc(s[1])+'</p><figure class="mech"><button type="button" class="mechb" data-sl="'+i+'"><img src="'+s[2]+'" alt="Slide do professor: '+esc(s[0])+'"></button></figure></div>').join('');
@@ -1843,6 +1912,7 @@ function go(id){
   NAV.forEach(t=>$('#'+t).setAttribute('aria-selected',t===own?'true':'false'));
   document.querySelectorAll('.msub button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.go===id?'true':'false'));
   if(id==='p-in')agInit2();
+  if(id==='p-cs')csDraw();
   if(id==='p-tr')trInit();
   if(id==='p-pr')drawPerg();
   if(id==='p-sl')drawSl();
