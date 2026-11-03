@@ -250,6 +250,7 @@ h1{font-size:1.15rem}
       <button class="mi" type="button" data-go="p-id"><b>Juntar tudo: identificar um composto</b><span>Você informa o que mediu e o app lista as classes que sobram.</span></button>
       <button class="mi" type="button" data-go="p-pb"><b>Problemas resolvidos</b><span>Cinco casos de &ldquo;descobrir o composto&rdquo;, com o raciocínio passo a passo.</span></button>
       <button class="mi" type="button" data-go="p-cs"><b>Consulta rápida</b><span>Uma folha com grupos, cores, bandas de IV e constantes, para usar na prova.</span></button>
+      <button class="mi" type="button" data-go="p-ec"><b>Notação ECGF</b><span>Código de cada grupo funcional (Acx, Alc, Ald, Oxo, Est...), com treino.</span></button>
     </div>
     <details style="margin-top:16px"><summary>Cronograma da disciplina (do Classroom)</summary>
       <div id="inCron" style="margin-top:10px"></div>
@@ -266,6 +267,7 @@ h1{font-size:1.15rem}
       <button class="mi" type="button" data-go="p-el"><b>Análise elementar</b><span>Testes para C, H, O, N, S, halogênios e P, com a cor de cada resultado.</span></button>
       <button class="mi" type="button" data-go="p-pb"><b>Problemas resolvidos</b><span>Cinco casos de &ldquo;descobrir o composto&rdquo;, com o raciocínio passo a passo.</span></button>
       <button class="mi" type="button" data-go="p-cs"><b>Consulta rápida</b><span>Uma folha com grupos, cores, bandas de IV e constantes, para usar na prova.</span></button>
+      <button class="mi" type="button" data-go="p-ec"><b>Notação ECGF</b><span>Código de cada grupo funcional (Acx, Alc, Ald, Oxo, Est...), com treino.</span></button>
       <button class="mi" type="button" data-go="p-id"><b>Identificar um composto</b><span>Junta solubilidade, elementos e IV e mostra as classes compatíveis.</span></button>
     </div>
     <p class="hint" style="margin-top:14px">Ferramenta de busca do professor (por elementos, PF, PEb, CAS e grupo funcional): <a href="https://analor.com.br/" target="_blank" rel="noopener">analor.com.br</a>. Texto e tabelas dos ensaios: <a href="https://analor.com.br/plataforma.html" target="_blank" rel="noopener">Plataforma QO é Vida</a>.</p>
@@ -432,6 +434,18 @@ h1{font-size:1.15rem}
     <h2 class="scr">Consulta rápida</h2>
     <p class="scrsub">Tudo de ensaios em uma folha, para consultar durante a prova (que é com consulta). Os dados vêm das outras telas; a organização é minha.</p>
     <div id="csBody"></div>
+  </section>
+
+  <section id="p-ec" role="region" aria-label="Notação ECGF" hidden>
+    <button class="back" type="button" data-go="p-en">← Ensaios</button>
+    <h2 class="scr">Notação ECGF</h2>
+    <p class="scrsub">ECGF significa Esqueletos de Carbono e Grupos Funcionais. É uma notação linear que escreve a molécula com números, sinais e caracteres, deixando explícitos o esqueleto e os grupos funcionais. É ela que a Ferramenta Analor usa para buscar compostos no banco de dados. <span class="tag sv">conferido no Analor</span></p>
+    <div class="why">O site diz que a notação tem <b>18 regras</b>, descritas em Costa Neto (2004, p. 1336). Eu <b>não consegui ler essas regras</b>. Abaixo estão só os códigos de cada grupo funcional, que o site lista página por página. O <b>método dos cortes</b>, citado no cronograma, também não achei no site.</div>
+    <label for="ecq" style="margin-top:12px">Filtrar por grupo ou código<input class="f-p" type="text" id="ecq" placeholder="ex.: cetona, Est, Aro"></label>
+    <div id="ecTbl"></div>
+    <p class="src"><span class="tag sv">conferido no Analor</span> descrição de cada página de &ldquo;Grupos funcionais&rdquo; (grupo, estrutura e notação ECGF). O site representa hidrocarboneto saturado por um número inteiro. A regra de como combinar os códigos numa molécula inteira não está nessas páginas.</p>
+    <h2>Treinar</h2>
+    <div id="ecQuiz"></div>
   </section>
 
   <section id="p-an" role="tabpanel" aria-labelledby="t-an" hidden>
@@ -1591,7 +1605,7 @@ function agInit(){
     const cl=r[1].indexOf('PROVA')===0?'prova':(dt<h?'past':'');
     return '<tr class="'+cl+'"><td>'+r[0]+'</td><td>'+esc(r[1])+'</td></tr>';}).join('')+'</tbody></table></div>';
   sgmBind('so','so-');sgmBind('el','el-');
-  soInit();elInit();pfInit();idInit();ivQuizInit();pbInit();
+  soInit();elInit();pfInit();idInit();ivQuizInit();pbInit();ecInit();
 }
 /* botões segmentados: attr = data-so / data-el; prefixo dos painéis */
 function sgmBind(attr,pre){
@@ -1899,8 +1913,28 @@ function csDraw(){
   b.innerHTML=h;
 }
 
-const SCR=['p-pb','p-cs','p-in','p-en','p-pf','p-so','p-el','p-id','p-an','p-tr','p-tb','p-iv','p-ma','p-ca','p-aj','p-fo','p-pq','p-sl','p-co','p-es','p-pr','p-pg'];
-const OWN={'p-pb':'t-en','p-cs':'t-en','p-pf':'t-en','p-so':'t-en','p-el':'t-en','p-id':'t-en','p-tr':'t-an','p-tb':'t-an','p-ca':'t-ma','p-aj':'t-ma','p-fo':'t-ma','p-pq':'t-ma','p-sl':'t-ma','p-co':'t-ma','p-es':'t-ma','p-pr':'t-ma','p-pg':'t-ma'};
+/* ================= ECGF ================= */
+const ECG=[['Ácido carboxílico','RC(=O)OH','Acx'],['Ácido sulfônico','RSO₃H','Aso'],['Álcool','ROH','Alc'],['Aldeído','RC(=O)H','Ald'],['Amida primária','RC(=O)NH₂','Amd_pri'],['Amida secundária','RC(=O)NHR′','Amd_sec'],['Amida terciária','RC(=O)NR′R″','Amd_ter'],['Amina primária','RNH₂','Amn_pri'],['Amina secundária','RNHR′','Amn_sec'],['Amina terciária','RNR′R″','Amn_ter'],['Aminoácido','RNH₂C(=O)OH','Amn; Acx'],['Anidrido','RC(=O)OC(=O)R′','Ani'],['Azocomposto','RN=NR′','Azo'],['Azoxicomposto','RN⁺(O⁻)=NR′','Azx'],['Carboidrato','cetonas/aldeídos poliidroxilados (aberta); acetais/cetais cíclicos (fechada)','Oxo;Alc / Ald;Alc / Ace;Alc'],['Cetona','RC(=O)R′','Oxo'],['Cloreto de sulfonila','RSO₂Cl','Cls'],['Éster','RC(=O)OR′','Est'],['Éster de ácido inorgânico','RONO (nitrito); RON⁺(=O)O⁻ (nitrato); ROSO₂OR (sulfato)','Ntt (nitrito); Ntr (nitrato); Suf (sulfato)'],['Éter','ROR′','Oxi'],['Fenol','ArOH','Fol'],['Halogeneto de acila','RC(=O)X','Fla; Cla; Bra ou Ioa'],['Halogeneto de alcenila','RC=CXR′','(Flu, Clo, Bro e/ou Iod) + Eno'],['Halogeneto de alquila','RX (X = F, Cl, Br, I)','Flu, Clo, Bro, Iod'],['Halogeneto polialogenado','RXₙYₘ','Flu, Clo, Bro, Iod'],['Halogeneto de arila','ArX','(Flu, Clo, Bro, Iod) + Aro'],['Hidrazocomposto','RNHNHR′','Hdz'],['Hidrocarboneto aromático','anel aromático mono ou polinuclear','Aro'],['Hidrocarboneto saturado','alcanos e cicloalcanos','número inteiro'],['Hidrocarboneto insaturado','C=C e C≡C','Eno; Ino'],['Mercaptana (tiol)','RSH','Tio'],['Nitrila','RCN','Nil'],['Nitrocomposto','RNO₂','Nit'],['Nitrosocomposto','RNO','Nto'],['Sulfonamida','RSO₂NH₂; RSO₂NHR′; RSO₂NR′R″','Smd'],['Tioureia','H₂NC(=S)NHR','Tua (Tim; Tua)']];
+function ecDraw(){
+  const b=$('#ecTbl');if(!b)return;
+  const q=($('#ecq').value||'').toLowerCase().trim();
+  const rows=ECG.filter(r=>!q||(r[0]+' '+r[2]).toLowerCase().indexOf(q)>=0);
+  b.innerHTML=rows.length?'<div class="tbl"><table class="cola"><thead><tr><th>Grupo</th><th>Estrutura</th><th>ECGF</th></tr></thead><tbody>'+rows.map(r=>'<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td><td><b>'+esc(r[2])+'</b></td></tr>').join('')+'</tbody></table></div>':'<p class="empty">Nada encontrado.</p>';
+}
+function ecInit(){
+  const q=$('#ecq');if(q)q.addEventListener('input',ecDraw);
+  const S=ECG.filter(r=>r[2].indexOf(';')<0&&r[2].indexOf('(')<0&&r[2].indexOf('/')<0&&r[2].indexOf(',')<0&&r[2]!=='número inteiro');
+  const bank=[];
+  S.forEach(r=>{
+    const wrong=S.filter(x=>x[2]!==r[2]).sort(()=>Math.random()-.5).slice(0,3).map(x=>x[2]);
+    const o=[r[2]].concat(wrong);
+    bank.push({q:'Qual é a notação ECGF de <b>'+esc(r[0].toLowerCase())+'</b> ('+esc(r[1])+')?',o:o,ok:0,w:esc(r[0])+' é <b>'+esc(r[2])+'</b> na notação ECGF.'});
+  });
+  miniQuiz('#ecQuiz',bank,'Pergunta');
+}
+
+const SCR=['p-ec','p-pb','p-cs','p-in','p-en','p-pf','p-so','p-el','p-id','p-an','p-tr','p-tb','p-iv','p-ma','p-ca','p-aj','p-fo','p-pq','p-sl','p-co','p-es','p-pr','p-pg'];
+const OWN={'p-ec':'t-en','p-pb':'t-en','p-cs':'t-en','p-pf':'t-en','p-so':'t-en','p-el':'t-en','p-id':'t-en','p-tr':'t-an','p-tb':'t-an','p-ca':'t-ma','p-aj':'t-ma','p-fo':'t-ma','p-pq':'t-ma','p-sl':'t-ma','p-co':'t-ma','p-es':'t-ma','p-pr':'t-ma','p-pg':'t-ma'};
 const NAV=['t-in','t-en','t-iv','t-an','t-ma'];
 function drawSl(){const b=$('#slBody');if(!b||b.dataset.ok||typeof SLD==='undefined')return;b.dataset.ok='1';
   b.innerHTML=SLD.map((s,i)=>'<div class="rule"><h3>'+esc(s[0])+'</h3><p>'+esc(s[1])+'</p><figure class="mech"><button type="button" class="mechb" data-sl="'+i+'"><img src="'+s[2]+'" alt="Slide do professor: '+esc(s[0])+'"></button></figure></div>').join('');
@@ -1913,6 +1947,7 @@ function go(id){
   document.querySelectorAll('.msub button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.go===id?'true':'false'));
   if(id==='p-in')agInit2();
   if(id==='p-cs')csDraw();
+  if(id==='p-ec')ecDraw();
   if(id==='p-tr')trInit();
   if(id==='p-pr')drawPerg();
   if(id==='p-sl')drawSl();
