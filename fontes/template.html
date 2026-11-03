@@ -250,6 +250,16 @@ h1::before{content:"";width:30px;height:30px;border-radius:9px;flex:none;backgro
 .bnav .tab[aria-selected="true"]{border-top-color:transparent}
 button.back{border-radius:10px}
 @media (prefers-reduced-motion:reduce){.sgm button,.chip{transition:none}}
+/* ===== Menos poluição (v59) ===== */
+.menu{gap:8px}
+.mi{border-radius:12px;padding:11px 14px;position:relative;padding-right:34px;box-shadow:var(--sh)}
+.mi::after{content:"›";position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:1.4rem;line-height:1;color:var(--muted)}
+.mi span{font-size:.86rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mh{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:20px 0 8px}
+.tools{margin:6px 0 4px}
+#exchips,#ivchips{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding:2px 16px 8px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+#exchips .chip,#ivchips .chip{flex:none;white-space:nowrap}
+#p-in .scrsub{margin-bottom:12px}
 /* BEGIN temas */
 :root[data-pal="quimica"]{--bg:#F2F7F8;--surface:#FFFFFF;--ink:#142629;--muted:#536B6E;--line:#D0DFE2;--keep:#0A6F7A;--focus:#0A6F7A;--keep-soft:#DDF0F3;--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%230A6F7A' stroke-opacity='.16' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate%2822 24%29 rotate%286%29'%3E%3Cpath d='M-5-13h10M-3-13v9l-9 17a3 3 0 0 0 3 4h18a3 3 0 0 0 3-4l-9-17v-9M-9 8h18'/%3E%3C/g%3E%3Cg transform='translate%2882 18%29 rotate%288%29'%3E%3Ccircle r='3'/%3E%3Ccircle cx='9' cy='-8' r='2'/%3E%3Ccircle cx='-8' cy='-9' r='1.5'/%3E%3C/g%3E%3Cg transform='translate%2852 52%29 rotate%28-20%29'%3E%3Cpath d='M-4-14v22a4 4 0 0 0 8 0v-22M-5-14h10M-4 2h8'/%3E%3C/g%3E%3Cg transform='translate%28104 62%29 rotate%2814%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Cpath d='M0-7l6 3.5v7L0 7l-6-3.5v-7z'/%3E%3C/g%3E%3Cg transform='translate%2820 86%29 rotate%2818%29'%3E%3Ccircle r='3'/%3E%3Ccircle cx='9' cy='-8' r='2'/%3E%3Ccircle cx='-8' cy='-9' r='1.5'/%3E%3C/g%3E%3Cg transform='translate%2874 100%29 rotate%28-2%29'%3E%3Cpath d='M-5-13h10M-3-13v9l-9 17a3 3 0 0 0 3 4h18a3 3 0 0 0 3-4l-9-17v-9M-9 8h18'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"])[data-pal="quimica"]{--bg:#0D1617;--surface:#152123;--ink:#E1EDEF;--muted:#9DB5B8;--line:#2B3D40;--keep:#7BD3E0;--focus:#7BD3E0;--keep-soft:#1C3F45;--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%237BD3E0' stroke-opacity='.2' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate%2822 24%29 rotate%286%29'%3E%3Cpath d='M-5-13h10M-3-13v9l-9 17a3 3 0 0 0 3 4h18a3 3 0 0 0 3-4l-9-17v-9M-9 8h18'/%3E%3C/g%3E%3Cg transform='translate%2882 18%29 rotate%288%29'%3E%3Ccircle r='3'/%3E%3Ccircle cx='9' cy='-8' r='2'/%3E%3Ccircle cx='-8' cy='-9' r='1.5'/%3E%3C/g%3E%3Cg transform='translate%2852 52%29 rotate%28-20%29'%3E%3Cpath d='M-4-14v22a4 4 0 0 0 8 0v-22M-5-14h10M-4 2h8'/%3E%3C/g%3E%3Cg transform='translate%28104 62%29 rotate%2814%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Cpath d='M0-7l6 3.5v7L0 7l-6-3.5v-7z'/%3E%3C/g%3E%3Cg transform='translate%2820 86%29 rotate%2818%29'%3E%3Ccircle r='3'/%3E%3Ccircle cx='9' cy='-8' r='2'/%3E%3Ccircle cx='-8' cy='-9' r='1.5'/%3E%3C/g%3E%3Cg transform='translate%2874 100%29 rotate%28-2%29'%3E%3Cpath d='M-5-13h10M-3-13v9l-9 17a3 3 0 0 0 3 4h18a3 3 0 0 0 3-4l-9-17v-9M-9 8h18'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}}
@@ -293,15 +303,18 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     </div>
     <h2>Passos da análise</h2>
     <div class="menu">
-      <button class="mi" type="button" data-go="p-pf"><b>1. Preliminares e propriedades físicas</b><span>Cor, teste de ignição (a chama), ponto de fusão e ponto de ebulição.</span></button>
-      <button class="mi" type="button" data-go="p-so"><b>2. Solubilidade</b><span>Fluxograma passo a passo, os 10 grupos (S<sub>2</sub> a I) e treino.</span></button>
-      <button class="mi" type="button" data-go="p-el"><b>3. Análise elementar</b><span>Como testar C, H, O, N, S, halogênios e P, e que cor indica o quê.</span></button>
-      <button class="mi" type="button" data-go="p-iv"><b>4. Infravermelho (IV)</b><span>Bandas por composto e por número de onda, guia por região e treino.</span></button>
-      <button class="mi" type="button" data-go="p-an"><b>5. Espectrometria de massas</b><span>Os exercícios do professor, o treino e as tabelas do Silverstein.</span></button>
-      <button class="mi" type="button" data-go="p-id"><b>Juntar tudo: identificar um composto</b><span>Você informa o que mediu e o app lista as classes que sobram.</span></button>
-      <button class="mi" type="button" data-go="p-pb"><b>Problemas resolvidos</b><span>Cinco casos de &ldquo;descobrir o composto&rdquo;, com o raciocínio passo a passo.</span></button>
-      <button class="mi" type="button" data-go="p-cs"><b>Consulta rápida</b><span>Uma folha com grupos, cores, bandas de IV e constantes, para usar na prova.</span></button>
-      <button class="mi" type="button" data-go="p-ec"><b>Notação ECGF</b><span>Código de cada grupo funcional (Acx, Alc, Ald, Oxo, Est...), com treino.</span></button>
+      <button class="mi" type="button" data-go="p-pf"><b>1. Preliminares e propriedades físicas</b><span>Cor, ignição, ponto de fusão e de ebulição.</span></button>
+      <button class="mi" type="button" data-go="p-so"><b>2. Solubilidade</b><span>Fluxograma, os 10 grupos e treino.</span></button>
+      <button class="mi" type="button" data-go="p-el"><b>3. Análise elementar</b><span>Testes para C, H, O, N, S, halogênios e P.</span></button>
+      <button class="mi" type="button" data-go="p-iv"><b>4. Infravermelho (IV)</b><span>Bandas por composto e por número de onda.</span></button>
+      <button class="mi" type="button" data-go="p-an"><b>5. Espectrometria de massas</b><span>Exercícios do professor, treino e tabelas.</span></button>
+    </div>
+    <h2>Para a prova</h2>
+    <div class="chips tools">
+      <button class="chip" type="button" data-go="p-id">Identificar um composto</button>
+      <button class="chip" type="button" data-go="p-pb">Problemas resolvidos</button>
+      <button class="chip" type="button" data-go="p-cs">Consulta rápida</button>
+      <button class="chip" type="button" data-go="p-ec">Notação ECGF</button>
     </div>
     <details style="margin-top:16px"><summary>Cronograma da disciplina (do Classroom)</summary>
       <div id="inCron" style="margin-top:10px"></div>
@@ -313,13 +326,16 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <h2 class="scr">Ensaios</h2>
     <p class="scrsub">Os ensaios de bancada (via úmida), na ordem em que são feitos.</p>
     <div class="menu">
-      <button class="mi" type="button" data-go="p-pf"><b>Preliminares e propriedades físicas</b><span>Cor, teste de ignição, ponto de fusão e ponto de ebulição.</span></button>
-      <button class="mi" type="button" data-go="p-so"><b>Solubilidade</b><span>Fluxograma, grupos S<sub>2</sub>, S<sub>A</sub>, S<sub>B</sub>, S<sub>1</sub>, A<sub>1</sub>, A<sub>2</sub>, B, MN, N e I, e treino.</span></button>
-      <button class="mi" type="button" data-go="p-el"><b>Análise elementar</b><span>Testes para C, H, O, N, S, halogênios e P, com a cor de cada resultado.</span></button>
-      <button class="mi" type="button" data-go="p-pb"><b>Problemas resolvidos</b><span>Cinco casos de &ldquo;descobrir o composto&rdquo;, com o raciocínio passo a passo.</span></button>
-      <button class="mi" type="button" data-go="p-cs"><b>Consulta rápida</b><span>Uma folha com grupos, cores, bandas de IV e constantes, para usar na prova.</span></button>
-      <button class="mi" type="button" data-go="p-ec"><b>Notação ECGF</b><span>Código de cada grupo funcional (Acx, Alc, Ald, Oxo, Est...), com treino.</span></button>
+      <button class="mi" type="button" data-go="p-pf"><b>Preliminares e propriedades físicas</b><span>Cor, ignição, ponto de fusão e de ebulição.</span></button>
+      <button class="mi" type="button" data-go="p-so"><b>Solubilidade</b><span>Fluxograma, grupos S<sub>2</sub> a I e treino.</span></button>
+      <button class="mi" type="button" data-go="p-el"><b>Análise elementar</b><span>Testes para C, H, O, N, S, halogênios e P, com as cores.</span></button>
+    </div>
+    <h2 class="mh">Ferramentas para a prova</h2>
+    <div class="menu">
       <button class="mi" type="button" data-go="p-id"><b>Identificar um composto</b><span>Junta solubilidade, elementos e IV e mostra as classes compatíveis.</span></button>
+      <button class="mi" type="button" data-go="p-pb"><b>Problemas resolvidos</b><span>Cinco casos de &ldquo;descobrir o composto&rdquo;, passo a passo.</span></button>
+      <button class="mi" type="button" data-go="p-cs"><b>Consulta rápida</b><span>Uma folha com grupos, cores, bandas de IV e constantes.</span></button>
+      <button class="mi" type="button" data-go="p-ec"><b>Notação ECGF</b><span>Código de cada grupo funcional, com treino.</span></button>
     </div>
     <p class="hint" style="margin-top:14px">Ferramenta de busca do professor (por elementos, PF, PEb, CAS e grupo funcional): <a href="https://analor.com.br/" target="_blank" rel="noopener">analor.com.br</a>. Texto e tabelas dos ensaios: <a href="https://analor.com.br/plataforma.html" target="_blank" rel="noopener">Plataforma QO é Vida</a>.</p>
   </section>
@@ -505,7 +521,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <h2 class="scr">Espectrometria de massas</h2>
     <div class="rule" id="hoje"></div>
     <p class="scrsub">Escolha um exercício ou digite M e os picos. Depois toque num pico para ver o que ficou e o que saiu. <button class="back" style="display:inline;margin:0" data-go="p-aj">Como ler um pico?</button></p>
-    <div>Exercícios da lista (carregam M e os picos). Nos seus PDFs a numeração vai de 10 direto para 12.</div>
+    <div class="hint" style="margin:0 0 6px">Exercícios da lista (nos PDFs a numeração vai do 10 direto ao 12):</div>
     <details class="how" style="margin-bottom:10px"><summary style="cursor:pointer;font-weight:600">Em que ordem estudar?</summary><p class="hint" style="margin-top:8px">Do mais simples ao mais complexo: <b>6</b> (álcool, clivagem α) → <b>9</b> (ácido, McLafferty) → <b>5</b> (cetona) → <b>10</b> (amina) → <b>12</b> (aldeído) → <b>11</b> (éster) → <b>4</b> (benzofenona) → <b>1</b> (etilbenzeno) → <b>3</b> (estireno) → <b>8</b> (piridina) → <b>7</b> (dioxano) → <b>2</b> (furano). Os anéis ficam para o fim porque abrem e se rearranjam. Marque cada um como estudado depois de resolver.</p></details>
     <div class="chips" id="exchips"></div>
     <div class="row">
@@ -615,15 +631,22 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
 
   <section id="p-ma" role="tabpanel" aria-labelledby="t-ma" hidden>
     <h2 class="scr">Mais</h2>
+    <h2 class="mh">Espectrometria de massas</h2>
     <div class="menu">
       <button class="mi" type="button" data-go="p-ca"><b>Calculadora de massa</b><span>Some a fórmula de um pedaço e veja o que o livro lista para esse número.</span></button>
       <button class="mi" type="button" data-go="p-es"><b>Espectro novo (modo detetive)</b><span>Digite fórmula, picos e bandas de IV de um composto desconhecido e veja as pistas.</span></button>
       <button class="mi" type="button" data-go="p-sl"><b>Slides do professor</b><span>Regras e mecanismos do deck dele: benzamida, álcoois, cetonas, ácidos, isômeros.</span></button>
       <button class="mi" type="button" data-go="p-pq"><b>Entender as quebras (regras e setas)</b><span>Por que a ligação quebra ali, cisão homolítica e heterolítica, rearranjos e os modelos com setas.</span></button>
+      <button class="mi" type="button" data-go="p-aj"><b>Como ler um pico e glossário</b><span>Os 4 passos, o que são +, +· e ·, clivagem α e McLafferty.</span></button>
+    </div>
+    <h2 class="mh">Estudo</h2>
+    <div class="menu">
       <button class="mi" type="button" data-go="p-pr"><b>Perguntas para o professor</b><span>As dúvidas que ainda não consegui confirmar. Marque as que já perguntou.</span></button>
+    </div>
+    <h2 class="mh">O app</h2>
+    <div class="menu">
       <button class="mi" type="button" data-go="p-pg"><b>Salvar e levar o progresso</b><span>Gere um código para passar o que você estudou de um aparelho ou app para outro.</span></button>
       <button class="mi" type="button" data-go="p-co"><b>Cor do app</b><span>Escolha o tom que for mais confortável para você.</span></button>
-      <button class="mi" type="button" data-go="p-aj"><b>Como ler um pico e glossário</b><span>Os 4 passos, o que são +, +· e ·, clivagem α e McLafferty.</span></button>
       <button class="mi" type="button" data-go="p-fo"><b>Fontes e avisos</b><span>De onde vêm as tabelas e o que ainda precisa de conferência.</span></button>
     </div>
   </section>
