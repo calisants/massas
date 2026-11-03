@@ -3,7 +3,7 @@ errs=[]
 with sync_playwright() as p:
     b=p.chromium.launch();pg=b.new_page(viewport={'width':360,'height':780})
     pg.on('pageerror',lambda e:errs.append(str(e)))
-    pg.goto('file:///home/claude/massas/index.html')
+    pg.goto('file:///home/claude/massas/index.html');pg.wait_for_timeout(400);pg.evaluate("go('p-an')")
     print('hoje inicial:',pg.inner_text('#hoje').replace('\n',' | ')[:230])
     pg.click('[data-hj=ex]');print('abriu ex:',pg.evaluate("curEx"),'| res visível:',not pg.evaluate("$('#an-res').hidden"))
     pg.click('.stud');pg.click('#an-back');print('depois:',pg.inner_text('#hoje').replace('\n',' | ')[:260])
@@ -17,8 +17,8 @@ with sync_playwright() as p:
             pg.click('#tro') if False else None
             # responde tudo até concluir o cartão
             for _ in range(4):
-                if pg.query_selector('.optb:not([disabled])'):
-                    pg.click('.optb:not([disabled]) >> nth=0')
+                if pg.query_selector('.optb:visible:not([disabled])'):
+                    pg.click('.optb:visible:not([disabled]) >> nth=0')
                     if pg.query_selector('#trn'):pg.click('#trn')
             if pg.query_selector('#tro') and pg.query_selector('.ans'):pg.click('#tro')
         if pg.query_selector('#sessMore'):pg.click('#sessMore')

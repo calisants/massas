@@ -1,4 +1,4 @@
-<title>Quebra-cabeça de Massas</title>
+<title>Analorg</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
@@ -183,14 +183,229 @@ h1{font-size:1.15rem}
 #out.single{grid-template-columns:1fr}
 .pkh{margin:6px 0 4px;font-size:.9rem;color:var(--muted)}
 @media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}.card:hover{border-color:var(--keep)}}
+/* ---------- Analorg: estilos dos módulos novos ---------- */
+.tag.sv{background:var(--keep-soft);color:var(--keep)}
+.tag.sm{background:var(--note-soft);color:var(--note)}
+.sgm{display:flex;margin:0 0 14px}
+.sgm button{flex:1;font:inherit;font-weight:500;background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:9px 6px;cursor:pointer;min-height:44px}
+.sgm button:first-child{border-radius:6px 0 0 6px}.sgm button:last-child{border-radius:0 6px 6px 0}.sgm button+button{border-left:0}
+.sgm button[aria-pressed="true"]{background:var(--keep);border-color:var(--keep);color:var(--surface)}
+.msub{margin-bottom:12px}
+.steps2{margin:6px 0 0;padding-left:20px;display:grid;gap:4px}
+.gcard h3{margin:0 0 4px;font-size:1.05rem}
+.gcard .gres{font-weight:600;margin:0 0 6px}
+.gcard ul{margin:2px 0 8px;padding-left:20px}
+.gcard li{margin:2px 0}
+.gl2{font-family:var(--mono);font-weight:600;background:var(--keep-soft);color:var(--keep);border-radius:4px;padding:1px 7px;margin-right:6px}
+.flowq{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:0 0 12px}
+.flowq .q{font-size:1.12rem;font-weight:600;margin:0 0 10px}
+.flowq .ops{display:flex;flex-wrap:wrap;gap:8px}
+.flowq .ops .btn{min-height:44px;padding:9px 16px}
+.trace{margin:0 0 12px;padding-left:20px;color:var(--muted);font-size:.92rem}
+.trace li{margin:2px 0}.trace b{color:var(--ink)}
+.cron{width:100%;min-width:0}
+.cron td:first-child{white-space:nowrap;font-family:var(--mono);width:1%}
+.cron tr.past td{color:var(--muted)}
+.cron tr.prova td{background:var(--note-soft);font-weight:600}
+.el{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 14px;margin-bottom:10px}
+.el h3{margin:0 0 4px;font-size:1rem}.el p{margin:0 0 6px}.el p:last-child{margin:0}
+.el .pos{background:var(--keep-soft);border-radius:6px;padding:6px 10px;font-size:.92rem}
+.tri{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0 0 10px}
+.tri .tl{flex:1 1 200px;font-size:.92rem}
+.tri .tb{display:flex}
+.tri .tb button{font:inherit;font-size:.86rem;background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:6px 12px;min-height:40px;cursor:pointer}
+.tri .tb button:first-child{border-radius:6px 0 0 6px}.tri .tb button:last-child{border-radius:0 6px 6px 0}.tri .tb button+button{border-left:0}
+.tri .tb button[aria-pressed="true"]{background:var(--keep);border-color:var(--keep);color:var(--surface)}
+.tri .tb button[data-v="nao"][aria-pressed="true"]{background:var(--lost);border-color:var(--lost)}
+.rescls{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--keep);border-radius:6px;padding:10px 14px;margin:0 0 8px}
+.rescls h3{margin:0 0 2px;font-size:1rem}.rescls p{margin:0 0 4px;font-size:.92rem}
+.rescls.out{border-left-color:var(--line);opacity:.85}
+.mqs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px;align-items:center}
+.mqn{margin-top:10px}
+.cola th,.cola td{font-size:.88rem}
 </style>
 
 <div class="wrap">
-  <h1>Quebra-cabeça de massas</h1>
+  <h1>Analorg</h1>
 
-  <section id="p-an" role="tabpanel" aria-labelledby="t-an">
+  <!-- ===== Analorg: telas novas ===== -->
+  <section id="p-in" role="tabpanel" aria-labelledby="t-in">
+    <h2 class="scr">Início</h2>
+    <p class="scrsub">Análise orgânica na ordem em que se faz no laboratório. Toque no passo que quer estudar.</p>
+    <div class="rule" id="inProva" hidden>
+      <h3>Aviso da turma: prova teórica em 3/11, às 9h</h3>
+      <p>Individual e com consulta (aviso do professor no Classroom). Segundo ele, caem: teste de solubilidade, descobrir o composto a partir das propriedades que ele der e análise de IV. O cronograma da disciplina lista &ldquo;infravermelho, ensaio de solubilidade, problemas de análise orgânica&rdquo;.</p>
+      <div class="row" style="margin:8px 0 0">
+        <button class="btn" type="button" data-go="p-id">Resolver um problema</button>
+        <button class="btn ghost" type="button" data-go="p-so">Treinar solubilidade</button>
+      </div>
+    </div>
+    <h2>Passos da análise</h2>
+    <div class="menu">
+      <button class="mi" type="button" data-go="p-pf"><b>1. Preliminares e propriedades físicas</b><span>Cor, teste de ignição (a chama), ponto de fusão e ponto de ebulição.</span></button>
+      <button class="mi" type="button" data-go="p-so"><b>2. Solubilidade</b><span>Fluxograma passo a passo, os 10 grupos (S<sub>2</sub> a I) e treino.</span></button>
+      <button class="mi" type="button" data-go="p-el"><b>3. Análise elementar</b><span>Como testar C, H, O, N, S, halogênios e P, e que cor indica o quê.</span></button>
+      <button class="mi" type="button" data-go="p-iv"><b>4. Infravermelho (IV)</b><span>Bandas por composto e por número de onda, guia por região e treino.</span></button>
+      <button class="mi" type="button" data-go="p-an"><b>5. Espectrometria de massas</b><span>Os exercícios do professor, o treino e as tabelas do Silverstein.</span></button>
+      <button class="mi" type="button" data-go="p-id"><b>Juntar tudo: identificar um composto</b><span>Você informa o que mediu e o app lista as classes que sobram.</span></button>
+    </div>
+    <details style="margin-top:16px"><summary>Cronograma da disciplina (do Classroom)</summary>
+      <div id="inCron" style="margin-top:10px"></div>
+      <p class="hint">Fonte: imagem &ldquo;Cronograma de AO I (2026-2)&rdquo;, postada pelo professor no Classroom em 6/8. É o plano da disciplina, não um registro do que foi dado.</p>
+    </details>
+  </section>
+
+  <section id="p-en" role="tabpanel" aria-labelledby="t-en" hidden>
+    <h2 class="scr">Ensaios</h2>
+    <p class="scrsub">Os ensaios de bancada (via úmida), na ordem em que são feitos.</p>
+    <div class="menu">
+      <button class="mi" type="button" data-go="p-pf"><b>Preliminares e propriedades físicas</b><span>Cor, teste de ignição, ponto de fusão e ponto de ebulição.</span></button>
+      <button class="mi" type="button" data-go="p-so"><b>Solubilidade</b><span>Fluxograma, grupos S<sub>2</sub>, S<sub>A</sub>, S<sub>B</sub>, S<sub>1</sub>, A<sub>1</sub>, A<sub>2</sub>, B, MN, N e I, e treino.</span></button>
+      <button class="mi" type="button" data-go="p-el"><b>Análise elementar</b><span>Testes para C, H, O, N, S, halogênios e P, com a cor de cada resultado.</span></button>
+      <button class="mi" type="button" data-go="p-id"><b>Identificar um composto</b><span>Junta solubilidade, elementos e IV e mostra as classes compatíveis.</span></button>
+    </div>
+    <p class="hint" style="margin-top:14px">Ferramenta de busca do professor (por elementos, PF, PEb, CAS e grupo funcional): <a href="https://analor.com.br/" target="_blank" rel="noopener">analor.com.br</a>. Texto e tabelas dos ensaios: <a href="https://analor.com.br/plataforma.html" target="_blank" rel="noopener">Plataforma QO é Vida</a>.</p>
+  </section>
+
+  <section id="p-pf" role="region" aria-label="Preliminares e propriedades físicas" hidden>
+    <button class="back" type="button" data-go="p-en">← Ensaios</button>
+    <h2 class="scr">Preliminares e propriedades físicas</h2>
+    <p class="scrsub">Primeiros dados do composto desconhecido. Cada bloco diz de onde vem: <span class="tag sv">conferido no Analor</span> ou <span class="tag sm">escrito por mim, sem fonte conferida</span>.</p>
+
+    <div class="el"><h3>Cor</h3>
+      <p>Muitos compostos orgânicos são incolores. A cor aparece quando há <b>cromóforos</b>, que são ligações múltiplas (C=C, C≡C, C=O, C=N, N=N, N=O, C≡N) que absorvem luz no UV/visível.</p>
+      <p><b>Auxocromos</b> (&ndash;OH, &ndash;OR, &ndash;NH<sub>2</sub>, &ndash;SH, &ndash;halogênio) têm par de elétrons livre. Ligados a um cromóforo, deslocam a absorção para comprimento de onda maior e a intensificam. Sozinhos, não absorvem acima de 200 nm.</p>
+      <p class="src"><span class="tag sv">conferido no Analor</span> página &ldquo;Cor&rdquo;, em Ensaios preliminares.</p></div>
+
+    <div class="el"><h3>Teste de ignição (a chama)</h3>
+      <p><b>O que olhar:</b> a cor e a fuligem da chama.</p>
+      <ul class="steps2">
+        <li><b>Chama amarela e fuliginosa:</b> hidrocarboneto aromático (teor de carbono alto).</li>
+        <li><b>Chama amarela, bem menos fuliginosa:</b> hidrocarboneto alifático.</li>
+        <li><b>Chama cada vez mais clara (azulada):</b> quanto mais oxigênio no composto, mais clara.</li>
+        <li><b>Sobrou resíduo inorgânico:</b> examinar o resíduo para elementos metálicos.</li>
+      </ul>
+      <p>O teste também avisa se o composto é inflamável ou explosivo, e se vale medir o ponto de fusão de um sólido.</p>
+      <p><b>Três pontos que se confundem:</b> <i>ponto de fulgor</i> (inflama, mas se apaga logo: pouco vapor); <i>ponto de combustão</i> (a chama no contato fica contínua); <i>ponto de ignição</i> (os vapores queimam mesmo sem contato direto com a chama).</p>
+      <p class="src"><span class="tag sv">conferido no Analor</span> página &ldquo;Teste de ignição&rdquo;.</p></div>
+
+    <div class="el"><h3>Ponto de fusão (sólidos)</h3>
+      <ol class="steps2">
+        <li>Prepare <b>3 capilares</b> por amostra, fechados numa ponta, com um pouco de amostra pulverizada.</li>
+        <li>Prenda o capilar ao termômetro com anel de borracha.</li>
+        <li>Tubo de Thiele com óleo de soja <b>sem água</b> até o começo da alça lateral. O bulbo do termômetro fica na altura média da alça lateral ou abaixo dela.</li>
+        <li>Aqueça com chama branda. Perto do ponto de fusão, <b>cerca de 1 °C por minuto</b>.</li>
+        <li>Anote a <b>faixa de fusão</b>: da temperatura em que começa a liquefazer até a em que fundiu tudo.</li>
+        <li>Repita mais duas vezes.</li></ol>
+      <p class="src"><span class="tag sv">conferido no Analor</span> página &ldquo;Ponto de fusão&rdquo;.</p></div>
+
+    <div class="el"><h3>Ponto de ebulição (líquidos)</h3>
+      <ol class="steps2">
+        <li>Coloque <b>10 a 15 gotas</b> do líquido num microtubo.</li>
+        <li>Ponha dentro um <b>capilar selado numa ponta</b>, com a ponta aberta mergulhada no líquido.</li>
+        <li>Prenda o microtubo ao termômetro e leve ao tubo de Thiele com óleo.</li>
+        <li>Aqueça com chama branda. Quando sair um <b>fluxo contínuo de bolhas</b> (colar), a temperatura já é igual ou maior que o ponto de ebulição. Mantenha cerca de 1 minuto.</li>
+        <li>Retire a chama. O ponto de ebulição é a temperatura em que as <b>bolhas param e o líquido volta para dentro do capilar</b>.</li></ol>
+      <p class="src"><span class="tag sv">conferido no Analor</span> página &ldquo;Ponto de ebulição&rdquo;.</p></div>
+
+    <div class="el"><h3>Para que servem o PF e o PEb na identificação</h3>
+      <p>Depois da solubilidade e da análise elementar sobram algumas classes. O PF (sólido) ou o PEb (líquido) mede-se e compara-se com valores tabelados: na Ferramenta Analor dá para buscar por PF, PEb e elementos ao mesmo tempo. Uma faixa de fusão estreita (1 a 2 °C) sugere substância pura; faixa larga e mais baixa sugere impureza.</p>
+      <p class="src"><span class="tag sm">escrito por mim, sem fonte conferida</span> regra geral; confirme com o professor como ele quer a resposta na prova.</p></div>
+
+    <h2>Treinar</h2>
+    <div id="pfQuiz"></div>
+  </section>
+
+  <section id="p-so" role="region" aria-label="Solubilidade" hidden>
+    <button class="back" type="button" data-go="p-en">← Ensaios</button>
+    <h2 class="scr">Solubilidade</h2>
+    <p class="scrsub">A marcha de solubilidade coloca o composto em um de <b>10 grupos</b>, pela polaridade, pela acidez ou basicidade e pela reatividade. Junto com a análise elementar, ela reduz o número de possibilidades e de ensaios funcionais.</p>
+    <div class="sgm" role="group" aria-label="Partes da solubilidade">
+      <button type="button" data-so="flow" aria-pressed="true">Fluxograma</button>
+      <button type="button" data-so="grp" aria-pressed="false">Grupos</button>
+      <button type="button" data-so="tr" aria-pressed="false">Treinar</button>
+    </div>
+    <div id="so-flow">
+      <details class="how" style="margin-bottom:12px"><summary>Como se faz cada teste</summary>
+        <p class="hint" style="margin-top:8px">30 a 50 mg do composto com 1 mL do solvente, num tubo de ensaio (15 × 1,5 cm). Agite de 1 a 5 minutos e observe. Uma só fase = <b>solúvel</b>. Se não dissolver por completo (mesmo que dissolva em parte), conta como <b>insolúvel</b> naquele solvente. <span class="tag sv">conferido no Analor</span></p></details>
+      <div id="soFlow"></div>
+    </div>
+    <div id="so-grp" hidden>
+      <p class="hint">Os 10 grupos, com as classes de compostos que o professor lista em cada um. Onde a tabela dele deixa um caso em aberto, aparece o aviso.</p>
+      <div id="soGrp"></div>
+    </div>
+    <div id="so-tr" hidden>
+      <div class="chipbar" id="soMode" role="group" aria-label="Modo de treino">
+        <button class="chip" type="button" data-m="res" aria-pressed="true">Resultados → grupo</button>
+        <button class="chip" type="button" data-m="comp" aria-pressed="false">Composto → grupo</button>
+      </div>
+      <div id="soQuiz"></div>
+    </div>
+  </section>
+
+  <section id="p-el" role="region" aria-label="Análise elementar" hidden>
+    <button class="back" type="button" data-go="p-en">← Ensaios</button>
+    <h2 class="scr">Análise elementar</h2>
+    <p class="scrsub">Como saber quais elementos o composto tem. Cada teste vira o elemento em um gás ou íon que mancha um papel com um reagente. <span class="tag sv">conferido no Analor</span></p>
+    <div class="sgm" role="group" aria-label="Partes da análise elementar">
+      <button type="button" data-el="ele" aria-pressed="true">Elementos</button>
+      <button type="button" data-el="hal" aria-pressed="false">Halogênios</button>
+      <button type="button" data-el="met" aria-pressed="false">Métodos</button>
+      <button type="button" data-el="tr" aria-pressed="false">Treinar</button>
+    </div>
+    <div id="el-ele"><div id="elCards"></div></div>
+    <div id="el-hal" hidden>
+      <div class="el"><h3>Como se faz</h3>
+        <p>Num microtubo, amostra do tamanho de um grão de alpiste. Uma gota de <b>dicromato de sódio</b> (para Cl e/ou Br) ou de <b>dicromato de potássio</b> (para I). Cinco gotas de H<sub>2</sub>SO<sub>4</sub> 98% e banho-maria. O X<sub>2</sub> que se forma é recebido num papel umedecido com o reagente escolhido na tabela.</p></div>
+      <div class="tbl"><table class="cola"><thead><tr><th>No papel</th><th>Cor</th></tr></thead><tbody>
+        <tr><td>Cl<sub>2</sub> (ou Br<sub>2</sub>) + amido iodetado</td><td>azul</td></tr>
+        <tr><td>Cl<sub>2</sub> (ou Br<sub>2</sub>) + fluoresceína + Br<sup>&minus;</sup></td><td>eosina (carmim)</td></tr>
+        <tr><td>Cl<sub>2</sub> + reagente de Villier</td><td>azul arroxeado</td></tr>
+        <tr><td>Br<sub>2</sub> + fluoresceína</td><td>eosina (carmim)</td></tr>
+        <tr><td>Br<sub>2</sub> + reagente de Schiff</td><td>fúcsia</td></tr>
+        <tr><td>I<sub>2</sub> + amido</td><td>azul</td></tr></tbody></table></div>
+      <p class="hint" style="margin-top:8px">Reação no tubo: composto orgânico com halogênio + H<sub>2</sub>SO<sub>4</sub>·CrO<sub>3</sub> a 100 °C dá X<sub>2</sub>. O amido iodetado azula com Cl<sub>2</sub> ou Br<sub>2</sub>, então não separa os dois. Para separar, use Villier (Cl<sub>2</sub>) ou fluoresceína e Schiff (Br<sub>2</sub>). <span class="tag sv">conferido no Analor</span> tabela &ldquo;Ensaios para halogênios&rdquo;.</p>
+    </div>
+    <div id="el-met" hidden>
+      <div class="el"><h3>Pirólise reativa</h3>
+        <p>Monte <b>3 microtubos</b>: (1) amostra + reagentes; (2) só reagentes, o <b>branco</b>; (3) um <b>padrão</b> + reagentes, o ensaio positivo.</p>
+        <p>A amostra (um grão de mostarda) é misturada com o reagente na proporção de <b>1:10</b> e fica no fundo do tubo, coberta por 0,5 a 1,0 cm de reagente puro. Na boca do tubo vai o papel de filtro com o reagente que detecta o elemento. Depois, aquece-se.</p>
+        <p class="src"><span class="tag sv">conferido no Analor</span> Procedimentos gerais.</p></div>
+      <div class="el"><h3>Mineralização (ensaio de Lassaigne)</h3>
+        <p>Transforma os elementos em íons: <b>N em cianeto, S em sulfeto, halogênios em halogenetos</b>. O ensaio original usa sódio metálico, perigoso, e por isso o site restringe seu uso a alunos. Variantes: K<sub>2</sub>CO<sub>3</sub> com Mg (2:1), ou Na<sub>2</sub>CO<sub>3</sub> anidro com Zn em pó (Middleton), menos perigosa e que evita a interferência do nitrogênio do ar.</p>
+        <p class="src"><span class="tag sv">conferido no Analor</span> Mineralização (ensaio de Lassaigne).</p></div>
+    </div>
+    <div id="el-tr" hidden><div id="elQuiz"></div></div>
+  </section>
+
+  <section id="p-id" role="region" aria-label="Identificar um composto" hidden>
+    <button class="back" type="button" data-go="p-en">← Ensaios</button>
+    <h2 class="scr">Identificar um composto</h2>
+    <p class="scrsub">Marque o que você mediu. O app descarta as classes que não combinam e lista as que sobram. Deixe em &ldquo;Não sei&rdquo; o que ainda não testou.</p>
+    <div class="row" style="margin-bottom:8px"><button class="btn ghost" type="button" id="idEx">Preencher um exemplo</button><button class="btn ghost" type="button" id="idClear">Limpar</button></div>
+    <h2 style="margin-top:6px">1. Solubilidade</h2>
+    <p class="hint">Em que grupo caiu? (Use o fluxograma se não souber.)</p>
+    <div class="chips" id="idGrp" role="group" aria-label="Grupo de solubilidade"></div>
+    <h2>2. Análise elementar (além de C e H)</h2>
+    <div id="idEl"></div>
+    <h2>3. Infravermelho</h2>
+    <div id="idIr"></div>
+    <label for="idBands">Outras bandas que você viu (cm⁻¹, separadas por vírgula ou espaço)<input class="f-p" type="text" id="idBands" placeholder="ex.: 1715, 2720, 3300"></label>
+    <div id="idBandOut"></div>
+    <h2>4. Constantes físicas</h2>
+    <div class="row">
+      <label for="idPf">Ponto de fusão (°C)<input class="f-m" type="text" id="idPf" placeholder="ex.: 121–122"></label>
+      <label for="idPeb">Ponto de ebulição (°C)<input class="f-m" type="text" id="idPeb" placeholder="ex.: 178"></label>
+    </div>
+    <p class="hint">O app não tem banco de compostos. Para comparar PF/PEb com valores tabelados, use a <a href="https://analor.com.br/" target="_blank" rel="noopener">Ferramenta Analor</a> do professor.</p>
+    <h2>Classes que sobram</h2>
+    <div id="idOut"></div>
+  </section>
+
+  <section id="p-an" role="tabpanel" aria-labelledby="t-an" hidden>
+    <div class="sgm msub" role="group" aria-label="Massas"><button type="button" data-go="p-an" aria-pressed="false">Analisar</button><button type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button type="button" data-go="p-tb" aria-pressed="false">Livro</button></div>
     <div id="an-in">
-    <h2 class="scr">Analisar</h2>
+    <h2 class="scr">Espectrometria de massas</h2>
     <div class="rule" id="hoje"></div>
     <p class="scrsub">Escolha um exercício ou digite M e os picos. Depois toque num pico para ver o que ficou e o que saiu. <button class="back" style="display:inline;margin:0" data-go="p-aj">Como ler um pico?</button></p>
     <div>Exercícios da lista (carregam M e os picos). Nos seus PDFs a numeração vai de 10 direto para 12.</div>
@@ -216,13 +431,15 @@ h1{font-size:1.15rem}
   </section>
 
   <section id="p-tr" role="tabpanel" aria-labelledby="t-tr" hidden>
-    <h2 class="scr">Treinar</h2>
+    <div class="sgm msub" role="group" aria-label="Massas"><button type="button" data-go="p-an" aria-pressed="false">Analisar</button><button type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button type="button" data-go="p-tb" aria-pressed="false">Livro</button></div>
+    <h2 class="scr">Treinar massas</h2>
     <p class="scrsub">Cada rodada tem 5 cartões e depois você pode parar. Escolha um modo. &ldquo;Qual saiu?&rdquo; mostra a perda entre dois picos e opções. &ldquo;Tente antes de ver&rdquo; pergunta também o tipo de cisão e a regra. O que você errar fica guardado em &ldquo;Revisar erros&rdquo;.</p>
     <div class="chipbar" id="trmode" role="group" aria-label="Modo de treino"></div>
     <div class="quiz" id="quiz"></div>
   </section>
 
   <section id="p-tb" role="tabpanel" aria-labelledby="t-tb" hidden>
+    <div class="sgm msub" role="group" aria-label="Massas"><button type="button" data-go="p-an" aria-pressed="false">Analisar</button><button type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button type="button" data-go="p-tb" aria-pressed="false">Livro</button></div>
     <h2 class="scr">Livro</h2>
     <p class="scrsub">Tabelas do Silverstein: o que saiu (Apêndice C) e o que ficou (Apêndice B).</p>
     <div class="row">
@@ -241,6 +458,7 @@ h1{font-size:1.15rem}
       <button type="button" data-v="v-comp" aria-pressed="true">Composto</button>
       <button type="button" data-v="v-num" aria-pressed="false">Número de onda</button>
       <button type="button" data-v="v-guia" aria-pressed="false">Guia</button>
+      <button type="button" data-v="v-tr" aria-pressed="false">Treinar</button>
     </div>
     <div id="v-comp">
       <p class="scrsub">Escolha um composto para ver as bandas dele e a pista para o espectro de massas.</p>
@@ -291,6 +509,10 @@ h1{font-size:1.15rem}
       <div id="irtbl"></div>
     <p class="hint">Fontes: sua <i>Apostila de Interpretação de Espectros de IV</i>, a <i>tabela análise org II</i>, a tabela de números de onda do Drive e, nas linhas marcadas, a tabela de IV do LibreTexts. Os números do arquivo de dados são os do JSON que você enviou, e as atribuições dele são minhas; confira com a tabela do professor.</p>
 
+    </div>
+    <div id="v-tr" hidden>
+      <p class="scrsub">Perguntas sobre bandas e grupos. Escolha, veja o porquê e siga para a próxima.</p>
+      <div id="ivQuiz"></div>
     </div>
   </section>
 
@@ -479,15 +701,19 @@ h1{font-size:1.15rem}
     <h2 class="scr">Fontes e avisos</h2>
     <p class="hint">Versão do app: <b class="mono" id="vers"></b>. Se a data não for a mais recente, feche e abra o app duas vezes.</p>
       <p>Fonte das tabelas: Silverstein, Webster, Kiemle, Bryce. Spectrometric Identification of Organic Compounds, 8ª ed. (2014), Apêndice B (p. 67–68) e Apêndice C (p. 69–70). O livro avisa que as listas são sugestivas e não completas. Nas entradas com anel, o nome e a estrutura são minha leitura do desenho do livro; confira na página indicada. "+ H" ou "+ 2H" indica rearranjo com transferência de hidrogênio. Exercícios 1 a 12 vêm da lousa do professor (os 1 a 5 pelas suas anotações do tablet, que são iguais às fotos do quadro; os 6 a 12 pelas fotos). O texto do porquê é minha explicação. Nas estruturas, o desenho mostra o esqueleto; a carga + e o elétron desemparelhado (·) aparecem na legenda e, quando possível, no desenho.</p>
+    <h2>Sobre o conteúdo de ensaios (Analorg)</h2>
+      <p>Solubilidade, análise elementar, ignição, cor, ponto de fusão e ponto de ebulição seguem a <i>Plataforma QO é Vida</i> do Prof. Marcelo Sierpe Pedrosa (analor.com.br e as páginas dele no Google Sites). O texto é parafraseado por mim, não copiado. Os procedimentos de análise elementar citam Costa Neto (2004) e Feigl (1966), como o site. O cronograma vem da imagem postada no Classroom.</p>
+      <p>As etiquetas <span class="tag sv">conferido no Analor</span> e <span class="tag sm">escrito por mim, sem fonte conferida</span> dizem de onde vem cada bloco. São minhas: os exemplos de compostos, as perguntas de treino, a lista de classes e as regras da tela &ldquo;Identificar&rdquo;, o uso do PF como indício de pureza e a leitura da linha tracejada do fluxograma (N ou S leva a MN).</p>
+      <p>Pontos em aberto: β-dicetonas aparecem em A₁ e em A₂ na tabela do professor; há um bloco sem rótulo sob N; a ligação até MN. Pergunte a ele se cair.</p>
   </section>
 
 </div>
 
 <nav class="bnav" role="tablist" aria-label="Seções">
-  <button class="tab" role="tab" id="t-an" aria-selected="true" aria-controls="p-an"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.4-4.4"/></svg>Analisar</button>
-  <button class="tab" role="tab" id="t-tr" aria-selected="false" aria-controls="p-tr"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle class="dot" cx="12" cy="12" r="1.2"/></svg>Treinar</button>
-  <button class="tab" role="tab" id="t-tb" aria-selected="false" aria-controls="p-tb"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h13v16H7a2 2 0 0 1-2-2z"/><path d="M5 18a2 2 0 0 1 2-2h11"/></svg>Livro</button>
+  <button class="tab" role="tab" id="t-in" aria-selected="true" aria-controls="p-in"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg>Início</button>
+  <button class="tab" role="tab" id="t-en" aria-selected="false" aria-controls="p-en"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/></svg>Ensaios</button>
   <button class="tab" role="tab" id="t-iv" aria-selected="false" aria-controls="p-iv"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h3.5l2-6 4 12 2.5-6H21"/></svg>IV</button>
+  <button class="tab" role="tab" id="t-an" aria-selected="false" aria-controls="p-an"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.4-4.4"/></svg>Massas</button>
   <button class="tab" role="tab" id="t-ma" aria-selected="false" aria-controls="p-ma"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="5.5" cy="12" r="1.6"/><circle class="dot" cx="12" cy="12" r="1.6"/><circle class="dot" cx="18.5" cy="12" r="1.6"/></svg>Mais</button>
 </nav>
 
@@ -1320,9 +1546,293 @@ function esRun(){
 ['#esF','#esM','#esP','#esI'].forEach(s=>$(s).addEventListener('input',esRun));
 
 (function(){const v=document.getElementById('vers');if(v)v.textContent=VERSAO;})();
-const SCR=['p-an','p-tr','p-tb','p-iv','p-ma','p-ca','p-aj','p-fo','p-pq','p-sl','p-co','p-es','p-pr','p-pg'];
-const OWN={'p-ca':'t-ma','p-aj':'t-ma','p-fo':'t-ma','p-pq':'t-ma','p-sl':'t-ma','p-co':'t-ma','p-es':'t-ma','p-pr':'t-ma','p-pg':'t-ma'};
-const NAV=['t-an','t-tr','t-tb','t-iv','t-ma'];
+/* ---------- Analorg: módulos novos (início, ensaios, solubilidade, elementar, identificar) ---------- */
+const CRON=[['11/08','Apresentação do curso; revisão de conceitos de QO 1; aplicações e métodos de análise orgânica'],['18/08','Ensaio de solubilidade e notação linear ECGF, ANALOR e método dos cortes'],['25/08','Ensaio de solubilidade: lista de exercício'],['01/09','Espectroscopia IV, parte 1'],['08/09','Espectroscopia IV, parte 2; exercícios de infravermelho (Pavia)'],['15/09','Exercícios de infravermelho (Pavia)'],['22/09','Exercícios de infravermelho: teoria e entrega de analitos, testes preliminares, queima e solubilidade'],['29/09','Exercícios de infravermelho e constantes físicas, parte 1 (ponto de ebulição)'],['06/10','Exercícios de infravermelho e constantes físicas, parte 2 (ponto de fusão)'],['13/10','Análise elementar de halogênios'],['20/10','Análise elementar de oxigênio, nitrogênio e enxofre; envio final dos resultados'],['27/10','Retificação de experimentos e uso da plataforma ANALOR'],['03/11','PROVA: infravermelho, ensaio de solubilidade, problemas de análise orgânica']];
+function agHoje(){const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
+function agInit2(){const ip=$('#inProva');if(ip)ip.hidden=!(agHoje()<=new Date(2026,10,3));}
+function agInit(){
+  const h=agHoje(),lim=new Date(2026,10,3);
+  const ip=$('#inProva');if(ip)ip.hidden=!(h.getFullYear()===2026&&h<=lim);
+  const cr=$('#inCron');
+  if(cr)cr.innerHTML='<div class="tbl"><table class="cron"><thead><tr><th>Data</th><th>Assunto</th></tr></thead><tbody>'+CRON.map(r=>{
+    const p=r[0].split('/'),dt=new Date(2026,+p[1]-1,+p[0]);
+    const cl=r[1].indexOf('PROVA')===0?'prova':(dt<h?'past':'');
+    return '<tr class="'+cl+'"><td>'+r[0]+'</td><td>'+esc(r[1])+'</td></tr>';}).join('')+'</tbody></table></div>';
+  sgmBind('so','so-');sgmBind('el','el-');
+  soInit();elInit();pfInit();idInit();ivQuizInit();
+}
+/* botões segmentados: attr = data-so / data-el; prefixo dos painéis */
+function sgmBind(attr,pre){
+  document.querySelectorAll('.sgm [data-'+attr+']').forEach(b=>{b.onclick=()=>{
+    b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
+    b.parentNode.querySelectorAll('button').forEach(x=>{const p=$('#'+pre+x.dataset[attr]);if(p)p.hidden=x!==b;});};});
+}
+/* quiz curto reutilizável: bank = [{q, o:[opções], ok:índice, w:explicação}] */
+function miniQuiz(sel,bank,rot){
+  const box=$(sel);if(!box)return;
+  let ord=bank.map((_,i)=>i).sort(()=>Math.random()-.5),k=0,acertos=0,fez=0;
+  function show(){
+    if(k>=ord.length){box.innerHTML='<div class="rule"><h3>Fim da rodada</h3><p>Você acertou '+acertos+' de '+fez+'.</p><button class="btn" type="button" id="mqr">Outra rodada</button></div>';
+      $(sel+' #mqr').onclick=()=>{ord=bank.map((_,i)=>i).sort(()=>Math.random()-.5);k=0;acertos=0;fez=0;show();};return;}
+    const q=bank[ord[k]],idx=q.o.map((_,i)=>i).sort(()=>Math.random()-.5);let pick=null;
+    function draw(){
+      box.innerHTML='<p class="hint">'+(rot||'Pergunta')+' '+(k+1)+' de '+ord.length+'</p><div class="rule"><p style="margin:0 0 10px"><b>'+q.q+'</b></p><div id="mqo"></div><div id="mqw"></div></div>';
+      const o=$(sel+' #mqo');
+      idx.forEach(i=>{const b=document.createElement('button');b.type='button';let c='optb';
+        if(pick!==null){if(i===q.ok)c+=' good';else if(pick===i)c+=' bad';b.disabled=true;}
+        b.className=c;b.innerHTML=q.o[i];
+        b.onclick=()=>{if(pick!==null)return;pick=i;fez++;if(i===q.ok)acertos++;draw();};o.appendChild(b);});
+      if(pick!==null){$(sel+' #mqw').innerHTML='<div class="why"><b>'+(pick===q.ok?'Certo. ':'Não foi essa. ')+'</b>'+q.w+'</div><div class="mqn"><button class="btn" type="button" id="mqx">'+(k+1<ord.length?'Próxima':'Ver resultado')+'</button></div>';
+        $(sel+' #mqx').onclick=()=>{k++;show();};}
+    }
+    draw();
+  }
+  show();
+}
+
+/* ================= SOLUBILIDADE ================= */
+const SOLG=[
+ {k:'S2',t:'Solúvel em água; não dissolve em éter',
+  c:['Sais de ácidos orgânicos (RCO₂Na, RSO₃Na)','Cloridratos de amina','Aminoácidos','Polifuncionais: açúcares, poliidroxilados, ácidos polibásicos'],
+  ex:'acetato de sódio, glicina, glicose'},
+ {k:'SA',t:'Solúvel em água e em éter; deixa o tornassol vermelho (ácida)',
+  c:['Ácidos monocarboxílicos de até 5 C','Ácidos arenossulfônicos'],
+  ex:'ácido acético, ácido benzenossulfônico'},
+ {k:'SB',t:'Solúvel em água e em éter; deixa o tornassol azul (básica)',
+  c:['Aminas monofuncionais de até 6 C'],ex:'etilamina'},
+ {k:'S1',t:'Solúvel em água e em éter; tornassol não muda (neutra)',
+  c:['Álcoois, aldeídos, cetonas, ésteres, nitrilas e amidas de até 5 C'],ex:'etanol, acetona, acetamida, acetato de etila'},
+ {k:'A1',t:'Insolúvel em água; dissolve em NaOH 5% e em NaHCO₃ 5% (ácido forte)',
+  c:['Ácidos carboxílicos com mais de 6 C','Fenóis com grupos eletrofílicos em orto/para','β-dicetonas'],
+  ex:'ácido benzoico, 2,4-dinitrofenol',av:'A tabela do professor lista as β-dicetonas tanto em A₁ quanto em A₂. Não consegui descobrir qual é a regra; pergunte a ele se cair.'},
+ {k:'A2',t:'Insolúvel em água; dissolve em NaOH 5%, mas não em NaHCO₃ 5% (ácido fraco)',
+  c:['Fenóis','Enóis','Oximas','Imidas','Sulfonamidas','Tiofenóis (mais de 5 C)','β-dicetonas','Nitrocompostos com H em α'],
+  ex:'2-naftol'},
+ {k:'B',t:'Insolúvel em água e em NaOH; dissolve em HCl 5% (base)',
+  c:['Aminas alifáticas com 8 C ou mais','Anilinas','Alguns oxiéteres'],ex:'N,N-dimetilanilina'},
+ {k:'MN',t:'Insolúvel em água, NaOH e HCl; a análise elementar achou N ou S (neutro)',
+  c:['Neutros diversos com N ou S e mais de 5 C (amidas, sulfetos)'],ex:'acetanilida',
+  av:'No fluxograma do professor, o caminho que leva a MN é uma linha tracejada. Li como “achou N ou S na análise elementar”; confirme com ele.'},
+ {k:'N',t:'Insolúvel em água, NaOH e HCl; sem N nem S; dissolve em H₂SO₄ 96%',
+  c:['Álcoois, aldeídos, metilcetonas, cetonas cíclicas e ésteres de um grupo com mais de 5 e menos de 9 C','Éteres com menos de 8 C','Epóxidos','Bloco sem rótulo na tabela: alcenos, alcinos, éteres, alguns aromáticos com grupos ativantes, cetonas (exceto N₁)'],
+  ex:'acetofenona, benzaldeído',av:'Na tabela do professor há um bloco sem rótulo sob N. Não consegui confirmar se ele corresponde a N₁/N₂.'},
+ {k:'I',t:'Insolúvel em tudo, inclusive em H₂SO₄ 96%',
+  c:['Hidrocarbonetos saturados','Alcanos halogenados','Halogenetos de arila','Éteres diarílicos','Aromáticos sem grupos ativantes'],ex:'hexano, benzeno, clorobenzeno'}
+];
+const SOLN={S2:'S₂',SA:'S<sub>A</sub>',SB:'S<sub>B</sub>',S1:'S₁',A1:'A₁',A2:'A₂',B:'B',MN:'MN',N:'N',I:'I'};
+const SOLR={S2:[['Água','solúvel'],['Éter','insolúvel']],SA:[['Água','solúvel'],['Éter','solúvel'],['Tornassol','vermelho']],SB:[['Água','solúvel'],['Éter','solúvel'],['Tornassol','azul']],S1:[['Água','solúvel'],['Éter','solúvel'],['Tornassol','não muda']],A1:[['Água','insolúvel'],['NaOH 5%','solúvel'],['NaHCO₃ 5%','solúvel']],A2:[['Água','insolúvel'],['NaOH 5%','solúvel'],['NaHCO₃ 5%','insolúvel']],B:[['Água','insolúvel'],['NaOH 5%','insolúvel'],['HCl 5%','solúvel']],MN:[['Água','insolúvel'],['NaOH 5%','insolúvel'],['HCl 5%','insolúvel'],['Análise elementar','achou N ou S']],N:[['Água','insolúvel'],['NaOH 5%','insolúvel'],['HCl 5%','insolúvel'],['Análise elementar','sem N nem S'],['H₂SO₄ 96%','solúvel']],I:[['Água','insolúvel'],['NaOH 5%','insolúvel'],['HCl 5%','insolúvel'],['Análise elementar','sem N nem S'],['H₂SO₄ 96%','insolúvel']]};
+const FLOW={
+ agua:{q:'Dissolve em água?',o:[['Sim','eter'],['Não','naoh']]},
+ eter:{q:'Dissolve em éter?',o:[['Sim','tor'],['Não','=S2']]},
+ tor:{q:'O que o papel de tornassol mostra na solução aquosa?',o:[['Fica vermelho (ácida)','=SA'],['Fica azul (básica)','=SB'],['Não muda (neutra)','=S1']]},
+ naoh:{q:'Dissolve em NaOH 5%?',o:[['Sim','nahco3'],['Não','hcl']]},
+ nahco3:{q:'Dissolve em NaHCO₃ 5%?',o:[['Sim','=A1'],['Não','=A2']]},
+ hcl:{q:'Dissolve em HCl 5%?',o:[['Sim','=B'],['Não','elem']]},
+ elem:{q:'A análise elementar achou N ou S?',o:[['Sim','=MN'],['Não','h2so4']],n:'A ligação “N ou S → MN” é a linha tracejada do fluxograma do professor; é a minha leitura.'},
+ h2so4:{q:'Dissolve em H₂SO₄ 96% (concentrado)?',o:[['Sim','=N'],['Não','=I']]}
+};
+let soSt={path:[],cur:'agua'};
+function soFlowDraw(){
+  const b=$('#soFlow');if(!b)return;
+  let h='';
+  if(soSt.path.length)h+='<ol class="trace">'+soSt.path.map(p=>'<li>'+FLOW[p[0]].q+' <b>'+p[1]+'</b></li>').join('')+'</ol>';
+  if(soSt.cur.charAt(0)==='='){
+    const g=soSt.cur.slice(1);
+    h+='<div class="rule gcard"><h3>Grupo <span class="gl2">'+SOLN[g]+'</span></h3>'+soCard(g)+'</div>';
+    h+='<div class="row"><button class="btn ghost" type="button" id="soBack">Voltar um passo</button><button class="btn" type="button" id="soRe">Recomeçar</button></div>';
+  }else{
+    const n=FLOW[soSt.cur];
+    h+='<div class="flowq"><p class="q">'+n.q+'</p><div class="ops">'+n.o.map((o,i)=>'<button class="btn" type="button" data-fo="'+i+'">'+o[0]+'</button>').join('')+'</div>'+(n.n?'<p class="hint" style="margin:10px 0 0">'+n.n+'</p>':'')+'</div>';
+    h+='<div class="row">'+(soSt.path.length?'<button class="btn ghost" type="button" id="soBack">Voltar um passo</button>':'')+'</div>';
+  }
+  b.innerHTML=h;
+  b.querySelectorAll('[data-fo]').forEach(x=>x.onclick=()=>{const n=FLOW[soSt.cur],o=n.o[+x.dataset.fo];soSt.path.push([soSt.cur,o[0]]);soSt.cur=o[1];soFlowDraw();});
+  const bk=$('#soBack');if(bk)bk.onclick=()=>{const p=soSt.path.pop();soSt.cur=p[0];soFlowDraw();};
+  const re=$('#soRe');if(re)re.onclick=()=>{soSt={path:[],cur:'agua'};soFlowDraw();};
+}
+function soCard(g){
+  const G=SOLG.filter(x=>x.k===g)[0];
+  return '<p class="gres">'+G.t+'</p><p class="hint" style="margin:0 0 4px">Entram aqui:</p><ul>'+G.c.map(x=>'<li>'+x+'</li>').join('')+'</ul>'
+   +'<p class="hint" style="margin:0">Exemplos: '+G.ex+' <span class="tag sm">exemplos meus</span></p>'
+   +(G.av?'<div class="why">'+G.av+'</div>':'')
+   +'<p class="src"><span class="tag sv">classes conferidas no Analor</span> tabela e fluxograma de solubilidade.</p>';
+}
+function soGrpDraw(){
+  const b=$('#soGrp');if(!b)return;
+  b.innerHTML=SOLG.map(G=>'<div class="rule gcard"><h3><span class="gl2">'+SOLN[G.k]+'</span></h3>'+soCard(G.k)+'</div>').join('');
+}
+/* treino: composto → grupo (exemplos meus, aplicando as classes da tabela) */
+const SOLC=[['acetato de sódio','S2','sal de ácido orgânico'],['glicina','S2','aminoácido'],['glicose','S2','açúcar (polifuncional)'],['cloridrato de metilamina','S2','cloridrato de amina'],['ácido acético','SA','ácido monocarboxílico de até 5 C'],['ácido benzenossulfônico','SA','ácido arenossulfônico'],['etilamina','SB','amina monofuncional de até 6 C'],['etanol','S1','álcool de até 5 C'],['acetona','S1','cetona de até 5 C'],['acetato de etila','S1','éster de até 5 C'],['acetamida','S1','amida de até 5 C'],['ácido benzoico','A1','ácido carboxílico com mais de 6 C'],['2,4-dinitrofenol','A1','fenol com grupos eletrofílicos em orto/para'],['2-naftol','A2','fenol'],['N,N-dimetilanilina','B','anilina'],['acetanilida','MN','amida com N e mais de 5 C'],['acetofenona','N','cetona com mais de 5 C e menos de 9 C'],['benzaldeído','N','aldeído com mais de 5 C e menos de 9 C'],['hexano','I','hidrocarboneto saturado'],['benzeno','I','aromático sem grupo ativante'],['clorobenzeno','I','halogeneto de arila']];
+let soMode='res',soQ=null;
+function soTrain(){
+  const b=$('#soQuiz');if(!b)return;
+  const bank=[];
+  if(soMode==='res'){SOLG.forEach(G=>bank.push({q:'Resultados: '+SOLR[G.k].map(r=>r[0]+' '+r[1]).join('; ')+'. Qual é o grupo?',o:SOLG.map(x=>SOLN[x.k]),ok:SOLG.indexOf(G),w:'É o grupo <b>'+SOLN[G.k]+'</b>: '+G.t.charAt(0).toLowerCase()+G.t.slice(1)+'.'}));}
+  else{SOLC.forEach(c=>{const i=SOLG.map(x=>x.k).indexOf(c[1]);bank.push({q:'Em que grupo de solubilidade cai <b>'+c[0]+'</b>?',o:SOLG.map(x=>SOLN[x.k]),ok:i,w:c[0]+' é '+c[2]+', então cai em <b>'+SOLN[c[1]]+'</b>. <span class="tag sm">exemplo escolhido por mim</span>'});});}
+  miniQuiz('#soQuiz',bank,'Pergunta');
+}
+function soInit(){
+  soSt={path:[],cur:'agua'};soFlowDraw();soGrpDraw();
+  document.querySelectorAll('#soMode .chip').forEach(c=>{c.onclick=()=>{document.querySelectorAll('#soMode .chip').forEach(x=>x.setAttribute('aria-pressed',x===c?'true':'false'));soMode=c.dataset.m;soTrain();};});
+  soTrain();
+}
+
+/* ================= ANÁLISE ELEMENTAR ================= */
+const ELEM=[
+ {e:'Carbono',f:'C',p:'Em microtubo, misture a amostra com cloreto iminomercúrico ou com cloreto de amônio + óxido de mercúrio II (5 partes para 1). Aqueça forte. Receba os vapores em papel umedecido com acetato de benzidina + acetato de cobre II, em partes iguais.',r:'Mancha <b>azul</b>: HCN nos gases, logo há carbono.',s:'Feigl, 1966, p. 547'},
+ {e:'Hidrogênio',f:'H',p:'Pirolise uma mistura da amostra com enxofre em pó ou pirita moída na hora. Os vapores (H₂S) vão para um papel com acetato de chumbo, ou com nitroprussiato de sódio + 1 gota de NaOH 5%.',r:'Mancha <b>castanha</b> (acetato de chumbo) ou <b>violeta</b> (nitroprussiato). A violeta some rápido.',s:'Costa Neto, 2004, p. 302'},
+ {e:'Oxigênio',f:'O',p:'Ensaio com iodo: dissolva um microcristal de iodo em 1 gota da amostra. Ensaio com tiocianato férrico: papel de filtro com Fe(SCN)₃ em metanol (feito na hora) e algumas gotas da amostra.',r:'Iodo <b>castanho</b>: composto oxigenado. Iodo <b>violeta</b>: hidrocarboneto saturado ou halogenado. Entre castanho e vermelho: alguns aromáticos. Tiocianato férrico <b>vermelho</b>: oxigenado.',s:'Costa Neto, 2004, p. 303; Feigl, 1966, p. 76-77. Compostos com N, S, grupos ácidos e oxidantes podem interferir'},
+ {e:'Nitrogênio',f:'N',p:'Misture a amostra com cal sodada + zinco em pó (10:1), cubra com mais reagente e calcine. Receba o NH₃ em papel com reagente de Nessler, com reagente prata-manganês ou em tornassol vermelho umedecido.',r:'Nessler: mancha <b>castanho-alaranjada</b>. Prata-manganês: <b>negra</b>. Tornassol vermelho: fica <b>azul</b>.',s:'Costa Neto, 2004, p. 305'},
+ {e:'Enxofre',f:'S',p:'Misture a amostra com formiato de sódio ou oxalato de cálcio, cubra com cerca de 1 cm de reagente e aqueça com microchama até carbonizar. Receba o H₂S em papel com acetato de chumbo ou com nitroprussiato de sódio + NaOH 5%.',r:'Mancha <b>castanha</b> (acetato de chumbo) ou <b>violeta</b> (nitroprussiato): H₂S, logo há enxofre.',s:'Costa Neto, 2004, p. 308'},
+ {e:'Fósforo',f:'P',p:'Mineralize pelo método de Lassaigne ou pirolise com 10 vezes o volume de CaO ao rubro. Dissolva o produto com HNO₃ 2N, adicione molibdato de amônio; depois de 2 minutos, acetato de benzidina; neutralize com amônia.',r:'Cor <b>azul</b>: fósforo.',s:'Costa Neto, 2004, p. 317'}
+];
+function elInit(){
+  const b=$('#elCards');if(!b)return;
+  b.innerHTML=ELEM.map(x=>'<div class="el"><h3><span class="gl2">'+x.f+'</span>'+x.e+'</h3><p>'+x.p+'</p><p class="pos">'+x.r+'</p><p class="src"><span class="tag sv">conferido no Analor</span> '+x.s+'.</p></div>').join('')
+   +'<div class="el"><h3>Resumo de cores</h3><div class="tbl"><table class="cola"><thead><tr><th>Elemento</th><th>Gás no papel</th><th>Cor</th></tr></thead><tbody><tr><td>C</td><td>HCN</td><td>azul</td></tr><tr><td>H</td><td>H₂S</td><td>castanha ou violeta</td></tr><tr><td>N</td><td>NH₃</td><td>castanho-alaranjada, negra ou azul</td></tr><tr><td>S</td><td>H₂S</td><td>castanha ou violeta</td></tr><tr><td>P</td><td>(molibdato)</td><td>azul</td></tr></tbody></table></div></div>';
+  const Q=[
+   {q:'Você aquece a amostra com cal sodada e zinco e o papel de tornassol vermelho umedecido fica azul. Qual elemento está presente?',o:['Nitrogênio','Enxofre','Oxigênio','Halogênio'],ok:0,w:'A cal sodada com zinco libera NH₃ (gás básico), que azula o tornassol vermelho. Assim se detecta N.'},
+   {q:'Mancha azul em papel com acetato de benzidina e acetato de cobre II, depois de pirolisar com cloreto de amônio e HgO. O que isso mostra?',o:['Há HCN nos gases: o composto tem carbono','Há H₂S: o composto tem enxofre','Há NH₃: o composto tem nitrogênio','Há Cl₂: o composto tem cloro'],ok:0,w:'Esse é o ensaio de carbono. A benzidina com cobre azula na presença de HCN.'},
+   {q:'Pirólise com enxofre em pó e papel com acetato de chumbo que fica castanho. O que se detecta?',o:['Hidrogênio','Enxofre','Carbono','Fósforo'],ok:0,w:'O hidrogênio da amostra reage com o enxofre e forma H₂S, que escurece o acetato de chumbo. Cuidado: o mesmo papel castanho é o ensaio de <b>enxofre</b> quando o reagente de pirólise é formiato de sódio ou oxalato de cálcio. O que muda é o reagente da pirólise.'},
+   {q:'Ensaio de enxofre: pirólise com formiato de sódio e papel com nitroprussiato + NaOH. Que cor indica enxofre?',o:['Violeta','Azul','Castanho-alaranjada','Vermelha'],ok:0,w:'Violeta (nitroprussiato). Com acetato de chumbo, a cor seria castanha. A violeta é fugaz.'},
+   {q:'Você dissolve um microcristal de iodo numa gota da amostra e a solução fica castanha. O que sugere?',o:['Composto oxigenado','Hidrocarboneto saturado','Composto com enxofre','Composto com fósforo'],ok:0,w:'Oxigenados formam um complexo de transferência de carga com o iodo, de cor castanha. Hidrocarbonetos saturados e halogenados dão violeta.'},
+   {q:'No ensaio de halogênios, o papel de amido iodetado azulou. Dá para dizer se é cloro ou bromo?',o:['Não: Cl₂ e Br₂ azulam igual','Sim: é cloro','Sim: é bromo','Sim: é iodo'],ok:0,w:'O amido iodetado azula com Cl₂ ou Br₂. Para separar, use o reagente de Villier (Cl₂) ou fluoresceína e Schiff (Br₂).'},
+   {q:'Papel com fluoresceína fica eosina (carmim) no ensaio de halogênios. Qual halogênio?',o:['Bromo','Cloro','Iodo','Flúor'],ok:0,w:'A fluoresceína é bromada a eosina pelo Br₂.'},
+   {q:'No ensaio de Lassaigne, o que acontece com o nitrogênio, o enxofre e os halogênios do composto?',o:['N vira cianeto, S vira sulfeto, halogênios viram halogenetos','N vira nitrato, S vira sulfato, halogênios viram halatos','Todos viram óxidos','Todos viram gases elementares'],ok:0,w:'A mineralização transforma os elementos em íons: cianeto, sulfeto e halogenetos.'},
+   {q:'Qual a vantagem do método de Middleton (Na₂CO₃ anidro com zinco) sobre o de Lassaigne com sódio?',o:['É menos perigoso e evita a interferência do nitrogênio do ar','É mais rápido porque usa sódio','Detecta oxigênio','Não precisa aquecer'],ok:0,w:'O zinco é menos reativo que o sódio, então a reação é mais tranquila. Segundo o site, ele também evita o nitrogênio atmosférico.'},
+   {q:'Na pirólise reativa, para que serve o tubo “branco”?',o:['Só reagentes, sem amostra: mostra se o reagente sozinho já dá cor','Só amostra, sem reagentes','Contém um padrão positivo','Serve para esfriar os gases'],ok:0,w:'São 3 tubos: amostra, branco (só reagentes) e padrão (ensaio positivo). O branco mostra se a cor vem do próprio reagente.'}
+  ];
+  miniQuiz('#elQuiz',Q,'Pergunta');
+}
+
+/* ================= PRELIMINARES ================= */
+function pfInit(){
+  const Q=[
+   {q:'Chama amarela e muito fuliginosa no teste de ignição. O que sugere?',o:['Hidrocarboneto aromático (muito carbono)','Composto muito oxigenado','Composto inorgânico','Hidrocarboneto alifático'],ok:0,w:'Fuligem indica alto teor de carbono, típico de aromáticos. Os alifáticos queimam com chama amarela bem menos fuliginosa.'},
+   {q:'Quanto mais oxigênio no composto, a chama fica:',o:['Mais clara (azulada)','Mais fuliginosa','Verde','Igual'],ok:0,w:'Segundo a página de ignição do Analor, a chama vai ficando cada vez mais clara com mais oxigênio.'},
+   {q:'Os vapores queimam mesmo sem contato direto com a chama. Isso é o ponto de:',o:['Ignição','Fulgor','Combustão','Fusão'],ok:0,w:'Fulgor: inflama e apaga logo. Combustão: a chama fica contínua no contato. Ignição: os vapores queimam sem contato direto com a chama.'},
+   {q:'Quantos capilares se preparam por amostra no ponto de fusão?',o:['3','1','2','5'],ok:0,w:'São 3 capilares por amostra, para repetir a medida.'},
+   {q:'Perto do ponto de fusão, qual a velocidade de aquecimento?',o:['Cerca de 1 °C por minuto','Cerca de 10 °C por minuto','Cerca de 20 °C por minuto','O máximo que a chama der'],ok:0,w:'Aquecer devagar perto da fusão permite anotar a faixa com precisão.'},
+   {q:'No ponto de ebulição pelo método do capilar, qual temperatura você anota?',o:['A em que as bolhas param e o líquido volta para dentro do capilar','A em que começa o primeiro fio de bolhas','A em que sai fluxo contínuo de bolhas','A do óleo do banho no fim'],ok:0,w:'Quando o fluxo de bolhas já era contínuo, você passou do ponto. Retire a chama: o PEb é onde as bolhas param e o líquido entra no capilar.'},
+   {q:'O que é um cromóforo?',o:['Ligação múltipla que absorve no UV/visível (C=C, C=O, N=N...)','Grupo com par de elétrons livres que intensifica a absorção','Solvente colorido','Sal inorgânico'],ok:0,w:'Os grupos com par livre (–OH, –NH₂, –halogênio) são os auxocromos.'},
+   {q:'O que é um auxocromo?',o:['Grupo com par de elétrons livre (–OH, –OR, –NH₂, –SH, –X) que, ligado a um cromóforo, desloca e intensifica a absorção','Qualquer ligação dupla','Um tipo de solvente','Uma impureza que dá cor'],ok:0,w:'Sozinho, o auxocromo não absorve acima de 200 nm. Ligado a um cromóforo, ele muda a cor.'}
+  ];
+  miniQuiz('#pfQuiz',Q,'Pergunta');
+}
+
+/* ================= IDENTIFICAR ================= */
+/* regras: g = grupos de solubilidade possíveis; el = elementos (1 exige, 0 proíbe); ir = bandas (1 exige, 0 proíbe) */
+const IDEL=[['N','Nitrogênio'],['S','Enxofre'],['X','Halogênio (Cl, Br ou I)'],['O','Oxigênio']];
+const IDIR=[['oh','O–H (banda larga, 3550–3200)'],['nh','N–H (3500–3300)'],['co','C=O (forte, 1850–1630)'],['ald','C–H de aldeído (2820 e 2720)'],['cn','C≡N (2260–2210)'],['cc','C≡C (2260–2100)'],['dc','C=C de alceno (1680–1620)'],['no2','NO₂ (1550–1500 e 1370–1300)'],['ar','Anel aromático (1600–1450)']];
+const IDCLS=[
+ {n:'Sal de ácido orgânico ou sulfonato',g:['S2'],ir:{oh:0}},
+ {n:'Aminoácido',g:['S2'],el:{N:1,O:1}},
+ {n:'Cloridrato de amina',g:['S2'],el:{N:1}},
+ {n:'Açúcar ou poliol',g:['S2'],el:{N:0,O:1},ir:{oh:1,co:0}},
+ {n:'Ácido carboxílico',g:['SA','A1','S2'],el:{O:1},ir:{oh:1,co:1,ald:0}},
+ {n:'Ácido sulfônico',g:['SA'],el:{S:1}},
+ {n:'Amina primária ou secundária',g:['SB','B'],el:{N:1,O:0},ir:{nh:1,co:0}},
+ {n:'Amina terciária',g:['SB','B'],el:{N:1},ir:{nh:0,co:0,oh:0}},
+ {n:'Anilina (amina aromática)',g:['B'],el:{N:1},ir:{ar:1,co:0}},
+ {n:'Álcool',g:['S1','N'],el:{O:1,N:0,S:0},ir:{oh:1,co:0}},
+ {n:'Fenol',g:['A1','A2'],el:{O:1},ir:{oh:1,ar:1}},
+ {n:'Aldeído',g:['S1','N'],el:{O:1},ir:{co:1,ald:1,oh:0}},
+ {n:'Cetona',g:['S1','N'],el:{O:1,N:0,S:0},ir:{co:1,ald:0,oh:0}},
+ {n:'Éster',g:['S1','N'],el:{O:1,N:0},ir:{co:1,oh:0,ald:0}},
+ {n:'Amida',g:['S1','MN'],el:{N:1,O:1},ir:{co:1}},
+ {n:'Nitrila',g:['S1'],el:{N:1},ir:{cn:1,co:0}},
+ {n:'Nitrocomposto',g:['A2','MN'],el:{N:1,O:1},ir:{no2:1}},
+ {n:'Éter',g:['N','I'],el:{O:1,N:0,S:0},ir:{oh:0,co:0,nh:0}},
+ {n:'Alceno',g:['N','I'],el:{O:0,N:0,S:0},ir:{dc:1,co:0,oh:0}},
+ {n:'Alcino',g:['N'],el:{O:0,N:0,S:0},ir:{cc:1,co:0,oh:0}},
+ {n:'Hidrocarboneto saturado',g:['I'],el:{O:0,N:0,S:0,X:0},ir:{oh:0,nh:0,co:0,cn:0,cc:0,dc:0,no2:0,ar:0}},
+ {n:'Hidrocarboneto aromático',g:['I'],el:{O:0,N:0,S:0,X:0},ir:{ar:1,oh:0,nh:0,co:0}},
+ {n:'Haleto de alquila ou de arila',g:['I'],el:{X:1,N:0,S:0},ir:{oh:0,co:0}},
+ {n:'Sulfeto, dissulfeto ou tiol',g:['MN'],el:{S:1},ir:{co:0}},
+ {n:'Imida, oxima ou sulfonamida',g:['A2'],el:{N:1}},
+ {n:'β-dicetona',g:['A1','A2'],el:{O:1,N:0},ir:{co:1}}
+];
+const IDHINT={'Ácido carboxílico':'Confirme: O–H muito larga (3300–2500) e C=O em 1725–1700.','Aldeído':'Confirme: as duas bandas fracas em ~2820 e ~2720.','Cetona':'Confirme: C=O em 1725–1705 (conjugada ou aromática baixa uns 20 cm⁻¹) e ausência de 2820/2720.','Éster':'Confirme: C=O em 1750–1735 e C–O forte em 1300–1000.','Amida':'Confirme: C=O em 1700–1630 e N–H em 3500–3100 (se não for terciária).','Álcool':'Confirme: O–H larga e C–O forte (1º ~1050, 2º ~1100, 3º ~1150).','Fenol':'Confirme: O–H larga, anel (1600–1450) e C–O em 1250–1200.','Nitrila':'Confirme: banda média e fina em 2260–2210.','Nitrocomposto':'Confirme: duas bandas fortes, 1550–1500 e 1370–1300.','Amina primária ou secundária':'Confirme: duas bandas N–H (primária) ou uma (secundária) em 3500–3300.','Alcino':'Se terminal: ≡C–H fina em ~3300 e C≡C em 2150–2100.'};
+let idSt={g:'',el:{},ir:{}};
+function triRow(kind,key,label){
+  const cur=idSt[kind][key]||'';
+  return '<div class="tri"><span class="tl">'+label+'</span><span class="tb" role="group" aria-label="'+esc(label.replace(/<[^>]*>/g,''))+'">'+[['sim','Sim'],['nao','Não'],['','Não sei']].map(v=>'<button type="button" data-k="'+kind+'" data-i="'+key+'" data-v="'+v[0]+'" aria-pressed="'+(cur===v[0]?'true':'false')+'">'+v[1]+'</button>').join('')+'</span></div>';
+}
+function idDraw(){
+  $('#idGrp').innerHTML=[['','Não sei']].concat(SOLG.map(x=>[x.k,SOLN[x.k]])).map(g=>'<button class="chip" type="button" data-grp="'+g[0]+'" aria-pressed="'+(idSt.g===g[0]?'true':'false')+'">'+g[1]+'</button>').join('');
+  $('#idEl').innerHTML=IDEL.map(x=>triRow('el',x[0],x[1])).join('');
+  $('#idIr').innerHTML=IDIR.map(x=>triRow('ir',x[0],x[1])).join('');
+  document.querySelectorAll('#idGrp [data-grp]').forEach(b=>b.onclick=()=>{idSt.g=b.dataset.grp;idDraw();idRun();});
+  document.querySelectorAll('.tri [data-k]').forEach(b=>b.onclick=()=>{const m=idSt[b.dataset.k];if(b.dataset.v)m[b.dataset.i]=b.dataset.v;else delete m[b.dataset.i];idDraw();idRun();});
+}
+function idBands(){
+  const v=($('#idBands').value.match(/\d{3,4}/g)||[]).map(Number).filter(x=>x>=400&&x<=4000);
+  if(!v.length){$('#idBandOut').innerHTML='';return;}
+  $('#idBandOut').innerHTML=v.map(x=>{
+    const hit=IRT.filter(r=>x<=r[0]+(r[0]===r[1]?5:0)&&x>=r[1]-(r[0]===r[1]?5:0));
+    const seen={},nm=[];hit.forEach(r=>{if(!seen[r[2]]){seen[r[2]]=1;nm.push(r[2]);}});
+    return '<p class="hint" style="margin:6px 0"><b>'+x+' cm⁻¹</b>: '+(nm.length?esc(nm.slice(0,5).join('; '))+(nm.length>5?'; ...':''):'nada na tabela do app')+'</p>';}).join('')
+   +'<p class="hint">As faixas se sobrepõem. Use isso como pista e confirme com a outra banda indicada na tela IV.</p>';
+}
+function idRun(){
+  idBands();
+  const grp=idSt.g,ok=[],out=[];
+  IDCLS.forEach(c=>{
+    let why=[],bad='',pts=0;
+    if(grp){if(c.g.indexOf(grp)<0)bad='o grupo '+SOLN[grp].replace(/<[^>]*>/g,'')+' não combina (essa classe cai em '+c.g.map(x=>SOLN[x].replace(/<[^>]*>/g,'')).join(', ')+')';else{pts++;why.push('grupo '+SOLN[grp].replace(/<[^>]*>/g,''));}}
+    [['el',IDEL],['ir',IDIR]].forEach(P=>{
+      const req=c[P[0]]||{};
+      P[1].forEach(x=>{const u=idSt[P[0]][x[0]],r=req[x[0]];
+        if(!u||r===undefined)return;
+        const lab=x[1].replace(/ \(.*/,'');
+        if(u==='sim'&&r===1){pts++;why.push(lab+' presente');}
+        else if(u==='nao'&&r===0){pts++;why.push(lab+' ausente');}
+        else if(!bad){bad=(r===1?'exige ':'não tem ')+lab+(r===1?', mas você marcou Não':', mas você marcou Sim');}});});
+    (bad?out:ok).push({c:c,pts:pts,why:why,bad:bad});});
+  ok.sort((a,b)=>b.pts-a.pts);
+  const any=grp||Object.keys(idSt.el).length||Object.keys(idSt.ir).length;
+  let h='';
+  if(!any)h='<p class="empty">Marque pelo menos um dado acima.</p>';
+  else{
+    h+='<p class="hint">'+ok.length+' de '+IDCLS.length+' classes sobram. Elas vêm primeiro as que casam com mais dos seus dados.</p>';
+    h+=ok.length?ok.map(o=>'<div class="rescls"><h3>'+o.c.n+'</h3><p>Grupos possíveis: '+o.c.g.map(x=>SOLN[x]).join(', ')+'</p>'+(o.why.length?'<p>Combina: '+o.why.join('; ')+'.</p>':'')+(IDHINT[o.c.n]?'<p>'+IDHINT[o.c.n]+'</p>':'')+'</div>').join(''):'<p class="empty">Nenhuma classe da lista combina. Releia os dados (um “Sim” marcado errado elimina a classe certa).</p>';
+    if(out.length)h+='<details style="margin-top:10px"><summary>Descartadas ('+out.length+')</summary>'+out.map(o=>'<div class="rescls out"><h3>'+o.c.n+'</h3><p>'+o.bad+'.</p></div>').join('')+'</details>';
+    h+='<p class="src"><span class="tag sm">escrito por mim, sem fonte conferida</span> As regras dessa lista (quais bandas e elementos cada classe exige) são minhas, montadas a partir da tabela de grupos do Analor e das bandas de IV do app. Ela não tem todas as classes. Use para raciocinar, não como gabarito.</p>';}
+  $('#idOut').innerHTML=h;
+}
+function idInit(){
+  idSt={g:'',el:{},ir:{}};idDraw();
+  $('#idBands').addEventListener('input',idBands);
+  $('#idEx').onclick=()=>{idSt={g:'MN',el:{N:'sim',S:'nao',X:'nao'},ir:{co:'sim',nh:'sim',ar:'sim',oh:'nao'}};idDraw();idRun();};
+  $('#idClear').onclick=()=>{idSt={g:'',el:{},ir:{}};$('#idBands').value='';$('#idPf').value='';$('#idPeb').value='';idDraw();idRun();};
+  idRun();
+}
+
+/* ================= IV: treino ================= */
+function ivQuizInit(){
+  const Q=[
+   {q:'Banda larguíssima de 3300 a 2500 cm⁻¹ e banda forte em ~1710. Que grupo é?',o:['Ácido carboxílico','Álcool','Amida','Cetona'],ok:0,w:'O–H de ácido é muito larga (3300–2500) e o C=O do dímero fica em 1725–1700.'},
+   {q:'C=O em ~1730 e duas bandas fracas em ~2820 e ~2720. Que grupo é?',o:['Aldeído','Cetona','Éster','Ácido'],ok:0,w:'As duas bandas fracas do C–H de aldeído (2820 e 2720) separam o aldeído da cetona.'},
+   {q:'Banda média e fina em 2260–2210, sem C=O. O que é?',o:['Nitrila (C≡N)','Alcino interno simétrico','Cetena','Isocianato'],ok:0,w:'C≡N de nitrila: 2260–2210, média a forte e estreita.'},
+   {q:'Duas bandas N–H em 3500–3300. Que grupo é?',o:['Amina ou amida primária','Amina secundária','Amina terciária','Álcool'],ok:0,w:'Primária tem duas bandas (assimétrica e simétrica). Secundária tem uma. Terciária não tem N–H.'},
+   {q:'Duas bandas fortes em ~1520 e ~1350 cm⁻¹. Que grupo é?',o:['Nitro (NO₂)','Éster','Amida','Anel aromático'],ok:0,w:'N=O assimétrico em 1550–1500 e simétrico em 1370–1300.'},
+   {q:'≡C–H fina em ~3300 e banda fraca em ~2120. Que grupo é?',o:['Alcino terminal','Nitrila','Alceno','Aldeído'],ok:0,w:'≡C–H em ~3300 e C≡C em 2150–2100 (fraca a média).'},
+   {q:'C=O em 1815–1790. Que grupo é?',o:['Cloreto de ácido','Cetona','Amida','Ácido'],ok:0,w:'Cloreto de ácido: C=O em 1815–1790, o mais alto desta lista.'},
+   {q:'Duas bandas C=O, em ~1820 e ~1760. Que grupo é?',o:['Anidrido','Éster','Cetona','Cloreto de ácido'],ok:0,w:'Anidrido: estiramento C=O assimétrico (~1820) e simétrico (~1760).'},
+   {q:'Bandas fortes em ~750 e ~700 cm⁻¹, mais overtones fracos em 2000–1660. Qual é o padrão?',o:['Anel monossubstituído','Anel para-dissubstituído','Alceno trans','Alcino'],ok:0,w:'Monossubstituído: 770–730 e 710–690, mais o “escadinha” de overtones.'},
+   {q:'Bandas fortes em ~990 e ~910. Qual é o padrão?',o:['Vinila monossubstituída (RCH=CH₂)','Alceno cis','Anel orto','Isopropila'],ok:0,w:'RCH=CH₂ tem C–H fora do plano em ~990 e ~910, e C=C em ~1655.'},
+   {q:'Qual C=O aparece em número de onda MAIS ALTO?',o:['Ciclopentanona (~1745)','Cetona acíclica (1725–1705)','Cetona aromática (1685–1666)','Amida (1700–1630)'],ok:0,w:'Quanto menor o anel, mais alta a banda. A conjugação com anel aromático abaixa o C=O.'},
+   {q:'O que a conjugação (C=O ligado a anel aromático) faz com a banda de C=O?',o:['Abaixa cerca de 20 cm⁻¹','Sobe cerca de 20 cm⁻¹','Não muda','Faz desaparecer'],ok:0,w:'É a regra da tabela da disciplina: cetona aromática fica em 1705–1680, contra 1725–1705 da cetona saturada.'},
+   {q:'Banda forte e larga em 3550–3200 e C–O forte perto de 1050. Que grupo é?',o:['Álcool primário','Fenol','Éter','Ácido'],ok:0,w:'O–H de álcool: 3550–3200, larga. C–O: primário ~1050, secundário ~1100, terciário ~1150.'},
+   {q:'Nada em 3600–3200, nada em 1850–1650. Qual conclusão vale?',o:['Não há O–H, N–H nem C=O','Há um ácido carboxílico','Há uma amida','Há um álcool'],ok:0,w:'Ficam hidrocarbonetos, éteres, halogenetos e afins. Procure C–O em 1300–1000 e o anel em 1600–1450.'},
+   {q:'C=O em 1750–1735 e C–O forte em 1300–1000. Que grupo é?',o:['Éster','Cetona','Aldeído','Amida'],ok:0,w:'Éster: C=O em 1750–1735 e C–O em 1300–1000.'}
+  ];
+  miniQuiz('#ivQuiz',Q,'Pergunta');
+}
+
+const SCR=['p-in','p-en','p-pf','p-so','p-el','p-id','p-an','p-tr','p-tb','p-iv','p-ma','p-ca','p-aj','p-fo','p-pq','p-sl','p-co','p-es','p-pr','p-pg'];
+const OWN={'p-pf':'t-en','p-so':'t-en','p-el':'t-en','p-id':'t-en','p-tr':'t-an','p-tb':'t-an','p-ca':'t-ma','p-aj':'t-ma','p-fo':'t-ma','p-pq':'t-ma','p-sl':'t-ma','p-co':'t-ma','p-es':'t-ma','p-pr':'t-ma','p-pg':'t-ma'};
+const NAV=['t-in','t-en','t-iv','t-an','t-ma'];
 function drawSl(){const b=$('#slBody');if(!b||b.dataset.ok||typeof SLD==='undefined')return;b.dataset.ok='1';
   b.innerHTML=SLD.map((s,i)=>'<div class="rule"><h3>'+esc(s[0])+'</h3><p>'+esc(s[1])+'</p><figure class="mech"><button type="button" class="mechb" data-sl="'+i+'"><img src="'+s[2]+'" alt="Slide do professor: '+esc(s[0])+'"></button></figure></div>').join('');
   b.querySelectorAll('[data-sl]').forEach(x=>x.onclick=()=>mechZoom(SLD[+x.dataset.sl][2],x));}
@@ -1331,6 +1841,8 @@ function go(id){
   SCR.forEach(x=>{$('#'+x).hidden=x!==id;});
   const own=OWN[id]||('t-'+id.slice(2));
   NAV.forEach(t=>$('#'+t).setAttribute('aria-selected',t===own?'true':'false'));
+  document.querySelectorAll('.msub button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.go===id?'true':'false'));
+  if(id==='p-in')agInit2();
   if(id==='p-tr')trInit();
   if(id==='p-pr')drawPerg();
   if(id==='p-sl')drawSl();
@@ -1343,10 +1855,11 @@ NAV.forEach((t,i)=>{const el=$('#'+t);
 document.addEventListener('click',ev=>{const b=ev.target.closest('[data-go]');if(b)go(b.dataset.go);});
 document.querySelectorAll('.seg').forEach(g=>g.querySelectorAll('button').forEach(b=>{b.onclick=()=>{
   g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
-  ['v-comp','v-num','v-guia'].forEach(id=>{$('#'+id).hidden=id!==b.dataset.v;});};}));
+  ['v-comp','v-num','v-guia','v-tr'].forEach(id=>{$('#'+id).hidden=id!==b.dataset.v;});};}));
 
 /* ---------- início: exercício 6 carregado ---------- */
 $('#glos').innerHTML=[['+ (cátion)','Fragmento com carga positiva e nenhum elétron sozinho. É o que o aparelho enxerga.'],['+· (íon-radical)','Carga positiva e um elétron sozinho. O íon molecular M e os fragmentos de rearranjo são assim.'],['· (radical)','Pedaço neutro com um elétron sozinho. Sai da molécula e não aparece no espectro.'],[GLOS.alfa[0],GLOS.alfa[1]],[GLOS.mcl[0],GLOS.mcl[1]],[GLOS.neu[0],GLOS.neu[1]],[GLOS.anel[0],GLOS.anel[1]]].map(x=>'<div><dt>'+x[0]+'</dt><dd>'+x[1]+'</dd></div>').join('');
 pgInit();curEx=6;$('#inM').value=60;$('#inP').value='59, 42, 31';
-buildChips();analyze();drawHoje();drawTable();calc();drawIVChips();drawIV();drawIVReg();drawIRT();$('#ivq').addEventListener('input',ivLookup);
+agInit();buildChips();analyze();drawHoje();drawTable();calc();drawIVChips();drawIV();drawIVReg();drawIRT();$('#ivq').addEventListener('input',ivLookup);
+go('p-in');
 </script>

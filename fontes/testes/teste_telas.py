@@ -6,19 +6,19 @@ with sync_playwright() as p:
     pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:m.type=='error' and 'fonts' not in m.text and errs.append(m.text))
     pg.goto('file:///home/claude/massas/index.html')
     print('tipo cobre todas:',pg.evaluate("EX.every(e=>e.rows.every(r=>TIPO[e.n+':'+r[0]]))"))
-    pg.click('#t-tr')
+    pg.evaluate("go('p-tr')")
     print('chips:',pg.evaluate("[...document.querySelectorAll('#trmode button')].map(b=>b.textContent)"))
     # seta
     pg.click('#trmode [data-m=seta]')
     for _ in range(3):
         for _ in range(pg.evaluate("TR.cur.qs.length")):
-            pg.click('.optb >> nth=0');pg.click('#stn')
+            pg.click('.optb:visible >> nth=0');pg.click('#stn')
         pg.wait_for_selector('#quiz .mdl svg');print('svg final ok');pg.click('#sto')
     # simulado
     pg.click('#trmode [data-m=sm]');pg.select_option('#smsel','12');pg.click('#smgo')
     n=pg.evaluate("SM.qs.length")
     for i in range(n):
-        pg.click('.optb >> nth=0' if i%2 else '.optb >> nth=1');pg.click('#smn')
+        pg.click('.optb:visible >> nth=0' if i%2 else '.optb:visible >> nth=1');pg.click('#smn')
     print(pg.inner_text('#quiz')[:200])
     print('rep:',pg.evaluate("localStorage.getItem('massas-rep')"))
     pg.click('#trmode [data-m=rev]');print(pg.inner_text('#trmode')[-30:]);print(pg.inner_text('#quiz')[:150])
@@ -35,7 +35,7 @@ with sync_playwright() as p:
     print('menu:',pg.evaluate("[...document.querySelectorAll('#p-ma .mi b')].map(b=>b.textContent)"))
     # overflow sweep
     pg.evaluate("TR.mode='qual'")
-    for sc in ['p-an','p-tr','p-tb','p-iv','p-ma','p-pq','p-pr','p-pg','p-es','p-co','p-fo','p-aj']:
+    for sc in ['p-in','p-en','p-pf','p-so','p-el','p-id','p-an','p-tr','p-tb','p-iv','p-ma','p-pq','p-pr','p-pg','p-es','p-co','p-fo','p-aj']:
         pg.evaluate(f"go('{sc}')");w=pg.evaluate("document.documentElement.scrollWidth")
         if w>360:print('OVERFLOW',sc,w)
 print('ERROS:',errs)

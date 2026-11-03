@@ -4,6 +4,7 @@ with sync_playwright() as p:
     b=p.chromium.launch();pg=b.new_page(viewport={'width':360,'height':740})
     pg.on('pageerror',lambda e:errs.append(str(e)))
     pg.goto('file:///home/claude/massas/index.html')
+    pg.wait_for_timeout(500);pg.evaluate("go('p-an')")
     for n in range(1,13):
         pg.evaluate(f"curEx={n};const e=EX.find(x=>x.n=={n});$('#inM').value=e.M;$('#inP').value=e.peaks.filter(p=>p!==e.M).join(', ');analyze()")
         imgs=pg.query_selector_all('#mech img');txt=pg.inner_text('#mech')[:70].replace('\n',' ')

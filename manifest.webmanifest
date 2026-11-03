@@ -1,7 +1,7 @@
 {
-  "name": "Quebra-cabeça de Massas",
-  "short_name": "Massas",
-  "description": "Espectrometria de massas e IV: o que ficou, o que saiu, com estruturas e tabelas do Silverstein.",
+  "name": "Analorg",
+  "short_name": "Analorg",
+  "description": "Análise Orgânica I: solubilidade, análise elementar, IV, espectrometria de massas e identificação de compostos.",
   "lang": "pt-BR",
   "start_url": "./",
   "scope": "./",

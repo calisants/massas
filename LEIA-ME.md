@@ -1,13 +1,17 @@
-# Quebra-cabeça de massas
+# Analorg
 
-App de uma página (`index.html`, instalável no celular) para estudar espectrometria de massas (EI-MS) e IV de Análise Orgânica. Endereço: https://calisants.github.io/massas/
+(Antes chamado "Quebra-cabeça de massas". O endereço continua o mesmo.)
+
+App de uma página (`index.html`, instalável no celular) para estudar Análise Orgânica I: ensaios de bancada (solubilidade, análise elementar, ignição, PF e PEb), infravermelho, espectrometria de massas (EI-MS) e identificação de compostos. Endereço: https://calisants.github.io/massas/
 
 ## Telas (menu fixo embaixo)
-- **Analisar:** exercícios 1 a 12 ou seus próprios picos. Um pico por vez: o que ficou (Apêndice B), o que saiu (Apêndice C), estruturas, mapa na molécula, "Mostrar o porquê" e "Possível rearranjo".
-- **Treinar:** quatro modos: "Qual saiu?" (múltipla escolha), "Tente antes de ver" (o que saiu, tipo de cisão, regra), "Digitar a perda" e "Revisar erros".
-- **Livro:** Apêndices B e C do Silverstein com busca.
-- **IV:** bandas por composto, por número de onda e um guia por região.
-- **Mais:** calculadora de massa, espectro novo (modo detetive), setas dos mecanismos, regras de quebra (homolítica, heterolítica, rearranjos), cor do app, glossário e fontes.
+- **Início:** aviso da prova, caminho de estudo na ordem do laboratório e cronograma da disciplina.
+- **Ensaios:** preliminares (cor, ignição, PF, PEb), solubilidade (fluxograma passo a passo, os 10 grupos e treino), análise elementar (C, H, O, N, S, P, halogênios, com cores) e **Identificar um composto** (marque o que mediu e veja as classes que sobram).
+- **IV:** bandas por composto, por número de onda, guia por região e treino.
+- **Massas:** Analisar (exercícios 1 a 12 ou seus picos), Treinar e Livro (Apêndices B e C do Silverstein).
+- **Mais:** calculadora de massa, espectro novo (modo detetive), setas dos mecanismos, regras de quebra, cor do app, glossário e fontes.
+
+Os blocos de ensaios trazem etiqueta: "conferido no Analor" (vem da Plataforma QO é Vida do professor) ou "escrito por mim, sem fonte conferida".
 
 ## Avisos sobre os dados
 - Exercícios 6 a 12 foram conferidos com a lousa do professor. Exercícios 1 a 5 ainda precisam de conferência.
