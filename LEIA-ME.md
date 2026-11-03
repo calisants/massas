@@ -1,6 +1,6 @@
 # Analorg
 
-(Antes chamado "Quebra-cabeça de massas". O endereço continua o mesmo.)
+(Antes chamado "Quebra-cabeça de massas". Agora é o Analorg. O endereço continua o mesmo.)
 
 App de uma página (`index.html`, instalável no celular) para estudar Análise Orgânica I: ensaios de bancada (solubilidade, análise elementar, ignição, PF e PEb), infravermelho, espectrometria de massas (EI-MS) e identificação de compostos. Endereço: https://calisants.github.io/massas/
 

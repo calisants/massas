@@ -233,6 +233,23 @@ table.stk td:first-child{font-size:1rem;padding:6px 0 4px;border-bottom:1px soli
 table.stk td:not(:first-child)::before{content:attr(data-l);display:block;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:1px}
 table.stk td:empty{display:none}
 }
+/* ===== Polimento visual (v57) ===== */
+:root{--sh:0 1px 2px rgba(20,32,46,.06),0 4px 14px rgba(20,32,46,.05)}
+.rule,.el,.card,.rescls,.tbl{border-radius:12px;box-shadow:var(--sh)}
+.rule,.el{padding:14px 16px}
+.rule h3,.el h3{font-weight:600}
+.sgm button:first-child{border-radius:10px 0 0 10px}.sgm button:last-child{border-radius:0 10px 10px 0}
+.sgm button{transition:background .15s,color .15s}
+.chip{transition:background .15s,border-color .15s;box-shadow:0 1px 1px rgba(20,32,46,.04)}
+h1{display:flex;align-items:center;gap:10px;font-size:1.3rem;letter-spacing:-.01em}
+h1::before{content:"";width:30px;height:30px;border-radius:9px;flex:none;background:var(--keep) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M12.5 6h7M14 6v7.5L8 24.5A2.2 2.2 0 0 0 10 28h12a2.2 2.2 0 0 0 2-3.5L18 13.5V6' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M11.2 20h9.6' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center/20px no-repeat}
+.scr{font-size:1.35rem;letter-spacing:-.01em}
+.bnav{box-shadow:0 -4px 16px rgba(20,32,46,.07)}
+.bnav .tab{position:relative;border-bottom:0;border-radius:12px;margin:4px 2px}
+.bnav .tab[aria-selected="true"]{background:var(--keep-soft);color:var(--keep)}
+.bnav .tab[aria-selected="true"]{border-top-color:transparent}
+button.back{border-radius:10px}
+@media (prefers-reduced-motion:reduce){.sgm button,.chip{transition:none}}
 </style>
 
 <div class="wrap">
