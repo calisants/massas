@@ -84,3 +84,7 @@ body{line-height:1.55}
 .hint{max-width:62ch}
 .tbl:has(table.nostk){border:0;box-shadow:none;background:none}
 .sec h3{font-size:.98rem;margin:14px 0 4px}
+
+/* Tabela de grupos funcionais com estrutura desenhada */
+.gfs svg{width:130px;max-width:100%;height:auto;display:block}
+.gfs{min-width:130px}.gfn{min-width:7.6em;overflow-wrap:normal;word-break:normal}

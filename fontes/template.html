@@ -92,7 +92,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .chip[aria-pressed="true"]{background:var(--keep);border-color:var(--keep);color:var(--surface)}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:16px}
 label{display:grid;gap:4px;font-size:.84rem;color:var(--muted);font-weight:500;min-width:0}
-input[type=text],input[type=number],select{font:inherit;font-family:var(--mono);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-width:0}
+input[type=text],input[type=number],input[type=search],select{font:inherit;font-family:var(--mono);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-width:0}
 .f-m{width:110px}.f-p{width:min(100%,420px)}
 .btn{font:inherit;font-weight:500;background:var(--keep);color:var(--surface);border:0;border-radius:6px;padding:9px 14px;cursor:pointer}
 .btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
@@ -506,7 +506,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <div id="an-in">
     <h2 class="scr">Espectrometria de massas</h2>
     <p class="scrsub">Escolha um composto ou digite M e os picos. Depois toque num pico para ver o que ficou e o que saiu. <button class="back" style="display:inline;margin:0" data-go="p-aj">Como ler um pico?</button></p>
-    <label for="msSel">Composto<select id="msSel" class="f-m"></select></label>
+    <label for="msSel">Composto<select id="msSel" class="f-p"></select></label>
     <div class="row">
       <label for="inM">M (íon molecular)<input class="f-m" type="number" id="inM" inputmode="numeric" min="1" max="999" value="60"></label>
       <label for="inP">Picos (separe por vírgula ou espaço)<input class="f-p" type="text" id="inP" value="59, 42, 31"></label>
@@ -561,8 +561,8 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     </div>
     <div id="v-comp">
       <p class="scrsub">Escolha um composto para ver o espectro de IV simulado e a tabela de bandas.</p>
-      <label for="ivQ">Buscar<input class="f-m" type="search" id="ivQ" placeholder="nome, fórmula ou CAS"></label>
-      <label for="ivSel">Composto<select id="ivSel" class="f-m"></select></label>
+      <label for="ivQ">Buscar<input class="f-p" type="search" id="ivQ" placeholder="nome, fórmula ou CAS"></label>
+      <label for="ivSel">Composto<select id="ivSel" class="f-p"></select></label>
       <div id="ivout"></div>
     </div>
     <div id="v-num" hidden>

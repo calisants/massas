@@ -141,7 +141,11 @@ js="const SVG="+json.dumps(store,ensure_ascii=False)+";\nconst MAPS="+json.dumps
 import compostos
 js+="const COMP="+json.dumps(compostos.build_comp(svg,EXD),ensure_ascii=False)+";\n"
 for _ph,_f in (("<!--@@ANALORG2_HTML@@-->","analorg2.html"),("/*@@ANALORG2_CSS@@*/","analorg2.css"),("/*@@ANALORG3_CSS@@*/","analorg3.css"),("/*@@ANALORG2_JS@@*/","analorg2.js"),("/*@@ANALORG3_JS@@*/","analorg3.js")):
-    html=html.replace(_ph,open(_f,encoding="utf-8").read())
+    _t=open(_f,encoding="utf-8").read()
+    if _f=="analorg2.html":
+        import gf_tabela
+        _t=re.sub(r'<div class="tbl"><table class="obt"><thead><tr><th>Grupo</th><th>Estrutura</th><th>Exemplo</th><th>Nome</th></tr></thead>.*?</table></div>',lambda m_:gf_tabela.tabela(),_t,count=1,flags=re.S)
+    html=html.replace(_ph,_t)
 a=html.index("/* ---------- dados: exercícios"); b=html.index("/* ---------- utilidades")
 html=html[:a]+"/* ---------- dados ---------- */\n"+js+"\n"+html[b:]
 open(os.environ.get('SAIDA','quebra_cabeca_v3.html'),'w',encoding='utf-8').write(html)
