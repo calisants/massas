@@ -404,16 +404,30 @@ def nmr_h(m):
                 for h in y.GetNeighbors():
                     if h.GetAtomicNum() == 1 and rk[h.GetIdx()] != r: n += 1
             mult = _mult(n)
-        out.append(dict(t=lab, h=nH, m=mult, lo=lo, hi=hi))
+        out.append(dict(t=lab, h=nH, m=mult, lo=lo, hi=hi, on=sorted({mh.GetAtomWithIdx(h).GetNeighbors()[0].GetIdx() for h in hs})))
     # H aromáticos de um mesmo anel se sobrepõem no espectro real: juntos num sinal só
     mer = {}; res = []
     for d in out:
         if d["t"] == "H aromático":
-            if "ar" in mer: mer["ar"]["h"] += d["h"]
+            if "ar" in mer: mer["ar"]["h"] += d["h"]; mer["ar"]["on"] = sorted(set(mer["ar"]["on"]) | set(d["on"]))
             else: mer["ar"] = d; res.append(d)
         else: res.append(d)
     res.sort(key=lambda d: -(d["lo"] + d["hi"]))
     return res
+
+def _pos_anel(m, ai):
+    """orto, meta ou para em relação ao único substituinte do anel benzênico (só para CH aromático de anel monossubstituído)."""
+    a = m.GetAtomWithIdx(ai)
+    if not a.GetIsAromatic() or a.GetTotalNumHs() == 0: return ""
+    for ring in m.GetRingInfo().AtomRings():
+        if len(ring) != 6 or ai not in ring: continue
+        at = [m.GetAtomWithIdx(i) for i in ring]
+        if not all(x.GetSymbol() == 'C' and x.GetIsAromatic() for x in at): return ""
+        subs = [k for k, x in enumerate(at) if x.GetTotalNumHs() == 0]
+        if len(subs) != 1: return ""
+        k = ring.index(ai); d = min((k - subs[0]) % 6, (subs[0] - k) % 6)
+        return {1: "orto", 2: "meta", 3: "para"}.get(d, "")
+    return ""
 
 def nmr_c(m):
     rk = list(Chem.CanonicalRankAtoms(m, breakTies=False))
@@ -457,7 +471,7 @@ def nmr_c(m):
             elif any(n.GetIsAromatic() for n in nbs): t, lo, hi = "C sp³ benzílico", 20, 45
             elif h == 3: t, lo, hi = "CH₃", 5, 30
             else: t, lo, hi = "C sp³ alifático", 15, 55
-        out.append(dict(t=t, n=len(cs), lo=lo, hi=hi))
+        out.append(dict(t=t, n=len(cs), lo=lo, hi=hi, at=sorted(cs), pos=_pos_anel(m, cs[0])))
     out.sort(key=lambda d: -(d["lo"] + d["hi"]))
     return out
 
@@ -476,6 +490,41 @@ def cas_ok(c):
     d = c.replace("-", ""); body, chk = d[:-1], int(d[-1])
     return sum((i+1)*int(ch) for i, ch in enumerate(reversed(body))) % 10 == chk
 
+def svg_numerado(m, c13, w=270, h=180):
+    """Estrutura com cada carbono marcado pelo número do sinal de 13C (carbonos equivalentes levam o mesmo número)."""
+    import re
+    from rdkit.Chem.Draw import rdMolDraw2D
+    mm = Chem.Mol(m)
+    for k, sg in enumerate(c13, 1):
+        for ai in sg["at"]:
+            mm.GetAtomWithIdx(ai).SetProp("atomNote", str(k))
+    d = rdMolDraw2D.MolDraw2DSVG(w, h); o = d.drawOptions()
+    o.clearBackground = False; o.fixedBondLength = 34; o.padding = 0.14; o.bondLineWidth = 2
+    o.annotationFontScale = 0.85
+    d.DrawMolecule(mm); d.FinishDrawing()
+    t = d.GetDrawingText()
+    t = re.sub(r'<\?xml.*?\?>', '', t)
+    t = re.sub(r"<rect[^>]*?style='opacity:1\.0;fill:#FFFFFF[^>]*?/>", '', t)
+    t = t.replace('#000000', 'currentColor').replace('#FF0000', 'var(--lost)').replace('#0000FF', 'var(--blue)')
+    t = re.sub(r"<svg[^>]*>", f'<svg viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg" role="img">', t, count=1)
+    t = re.sub(r'<!--.*?-->', '', t); t = re.sub(r'\s+', ' ', t)
+    return t.strip()
+
+def liga_h_c(m, h1, c13):
+    """texto 'H do C2' para cada sinal de 1H, usando a numeração dos sinais de 13C."""
+    num = {}
+    for k, sg in enumerate(c13, 1):
+        for ai in sg["at"]: num[ai] = k
+    for sg in h1:
+        cs = sorted({num[i] for i in sg["on"] if i in num})
+        het = sorted({m.GetAtomWithIdx(i).GetSymbol() for i in sg["on"] if i not in num})
+        parts = []
+        if cs:
+            l = ["C" + str(x) for x in cs]
+            parts.append(l[0] if len(l) == 1 else ", ".join(l[:-1]) + " e " + l[-1])
+        parts += het
+        sg["c"] = " e ".join(parts)
+
 from compostos_sdbs import SDBSMS, IRMEIO
 from compostos_pub import PUB, DIV, DATA as PUB_DATA
 
@@ -491,6 +540,7 @@ def build_comp(svgfn, EXD):
         d = dict(i=i, n=nome, a=alts, f=f, mw=round(Descriptors.MolWt(m), 2), M=M, smi=smi, s=svgfn(smi, 170, 120),
                  cas=cas, est=est, cor=cor, pf=pf, pe=pe, g=g, ex=exn, obs=obs, gdh=gdh(m),
                  gf=grupos, iv=[list(b) for b in bands], ivf=[list(x) for x in ivf], h1=nmr_h(m), c13=nmr_c(m))
+        d["sn"] = svg_numerado(m, d["c13"]); liga_h_c(m, d["h1"], d["c13"])
         if exn:
             e = exm[exn]; assert e["M"] == M or True
             d["ms"] = [p for p in e["peaks"]]; d["msv"] = 1; d["M"] = e["M"]

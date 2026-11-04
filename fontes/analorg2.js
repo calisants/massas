@@ -39,14 +39,14 @@ function nmrBlock(c){
   let h='<p class="srcl" style="margin:0 0 6px"><span class="tag sm">Escrito por Claude, sem fonte conferida</span> <b>Espectro simulado, não é o medido.</b> Número de sinais, integração e multiplicidade (regra n+1) saem da estrutura. A posição de cada sinal é o meio da faixa de tabela, então não bate com o espectro real. Os desdobramentos foram aumentados e sinais com a mesma faixa foram afastados um pouco, para dar para ver. O espectro medido está no SDBS.</p>';
   h+='<h4 style="margin:10px 0 4px">¹H: '+c.h1.length+(c.h1.length>1?' sinais':' sinal')+' ('+c.h1.reduce((a,x)=>a+x.h,0)+' H no total)</h4>';
   h+='<div class="nmrwrap">'+nmrSpec(c,'h')+'<button class="chip" type="button" data-nmrint aria-pressed="false">Mostrar a integração</button></div>';
-  h+='<div class="tbl"><table class="obt nostk cmp cmp-nmr"><thead><tr><th>#</th><th>Sinal</th><th>δ típico (ppm)</th></tr></thead><tbody>'+c.h1.map((x,i)=>'<tr><td><b>'+(i+1)+'</b></td><td>'+esc(x.t)+'<div class="mut sm">'+x.h+' H · '+esc(x.m)+'</div></td><td class="n">'+fr(x.lo)+'–'+fr(x.hi)+'</td></tr>').join('')+'</tbody></table></div>';
+  h+='<div class="tbl"><table class="obt nostk cmp cmp-nmr"><thead><tr><th>#</th><th>Sinal</th><th>δ típico (ppm)</th></tr></thead><tbody>'+c.h1.map((x,i)=>'<tr><td><b>'+(i+1)+'</b></td><td>'+esc(x.t)+'<div class="mut sm">'+x.h+' H'+(x.c?' em '+esc(x.c):'')+' · '+esc(x.m)+'</div></td><td class="n">'+fr(x.lo)+'–'+fr(x.hi)+'</td></tr>').join('')+'</tbody></table></div>';
   h+='<h4 style="margin:12px 0 4px">¹³C: '+c.c13.length+(c.c13.length>1?' sinais':' sinal')+' (de '+c.c13.reduce((a,x)=>a+x.n,0)+' C)</h4>';
   h+='<div class="nmrwrap">'+nmrSpec(cc,'c')+'<p class="mut" style="margin:2px 0 6px">Cada linha é um tipo de C. A altura é só ilustrativa (mais C equivalentes, linha um pouco maior).</p></div>';
-  h+='<div class="tbl"><table class="obt nostk cmp cmp-nmr"><thead><tr><th>#</th><th>Sinal</th><th>δ típico (ppm)</th></tr></thead><tbody>'+c13.map((x,i)=>'<tr><td><b>'+(i+1)+'</b></td><td>'+esc(x.t)+'<div class="mut sm">'+x.n+' C equivalente'+(x.n>1?'s':'')+'</div></td><td class="n">'+x.lo+'–'+x.hi+'</td></tr>').join('')+'</tbody></table></div>';
+  h+='<div class="tbl"><table class="obt nostk cmp cmp-nmr"><thead><tr><th>C</th><th>Sinal</th><th>δ típico (ppm)</th></tr></thead><tbody>'+c13.map((x,i)=>'<tr><td><b>'+(i+1)+'</b></td><td>'+esc(x.t)+'<div class="mut sm">'+x.n+' C equivalente'+(x.n>1?'s':'')+(x.pos?' · posição '+x.pos+' ao substituinte':'')+'</div></td><td class="n">'+x.lo+'–'+x.hi+'</td></tr>').join('')+'</tbody></table></div>';
   return h;
 }
 function rmDraw(){const c=COMP[+$('#rmSel').value||COMP.findIndex(x=>x.n===$('#rmSel').options[0].textContent)];if(!c)return;
-  $('#rmOut').innerHTML='<div class="cfh" style="margin-top:10px"><figure class="st"><div>'+c.s+'</div><figcaption>'+fmt(c.f)+'</figcaption></figure><div>'+nmrBlock(c)+'</div></div>';}
+  $('#rmOut').innerHTML='<div class="cfh" style="margin-top:10px"><figure class="st"><div>'+(c.sn||c.s)+'</div><figcaption>'+fmt(c.f)+'</figcaption></figure><div>'+nmrBlock(c)+'</div></div>';}
 
 /* ---------- ficha do composto ---------- */
 function openMS(n){const e=EX.find(x=>x.n===n);if(!e)return;curEx=n;pkSel=null;$('#inM').value=e.M;$('#inP').value=e.peaks.filter(p=>p!==e.M).join(', ');buildChips();analyze();anStage(true);go('p-an');$('#an-in').hidden=true;$('#an-res').hidden=false;}
@@ -56,7 +56,7 @@ function cfDraw(i){
   const sd=c.sdbs||(c.ex&&typeof INTS!=='undefined'&&INTS[c.ex]?INTS[c.ex].sdbs:null);
   let h='<h2 class="scr">'+esc(c.n)+'</h2>'+(c.a.length?'<p class="scrsub">Também: '+c.a.map(esc).join(', ')+'</p>':'');
   const rowd=(k,v)=>'<div class="cfr"><dt>'+k+'</dt><dd>'+v+'</dd></div>';
-  h+='<figure class="cfs"><div>'+c.s+'</div><figcaption>'+fmt(c.f)+' · '+String(c.mw).replace('.',',')+' g/mol</figcaption></figure>'
+  h+='<figure class="cfs"><div>'+(c.sn||c.s)+'</div><figcaption>'+fmt(c.f)+' · '+String(c.mw).replace('.',',')+' g/mol'+(c.sn?'<br><span class="mut sm">Os números nos carbonos são os sinais de ¹³C da seção de RMN (carbonos equivalentes têm o mesmo número).</span>':'')+'</figcaption></figure>'
    +'<div class="cfq">'
    +'<div class="cfqi"><span>Estado a 25 °C</span><b>'+esc(c.est)+'</b></div>'
    +'<div class="cfqi"><span>Cor</span><b>'+esc(c.cor)+'</b></div>'

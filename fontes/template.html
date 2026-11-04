@@ -1594,23 +1594,6 @@ function pgInit(){
 }
 
 /* ---------- Espectro novo (detetive) ---------- */
-const IRR=[
- [3650,3200,'O–H (álcool, fenol) ou N–H','Banda larga é O–H. Duas bandas finas é NH2 de amina primária. Uma banda fina é amina secundária.'],
- [3320,3280,'≡C–H de alcino terminal','Banda fina e forte perto de 3300.'],
- [3100,3000,'C–H sp² (anel aromático ou alceno)','Acima de 3000 é sp²; abaixo de 3000 é sp³.'],
- [3000,2850,'C–H sp³ (CH3, CH2)','Quase todo composto orgânico tem.'],
- [2850,2800,'C–H de aldeído (1ª banda de Fermi)','Aldeído tem duas bandas: ~2820 e ~2720.'],
- [2750,2700,'C–H de aldeído (2ª banda de Fermi)','A banda perto de 2720 é a mais característica.'],
- [2260,2210,'C≡N (nitrilo)','Banda fina, intensidade média.'],
- [2260,2100,'C≡C (alcino)','Fraca; pode sumir se for simétrico.'],
- [1850,1650,'C=O','Veja o valor exato abaixo.'],
- [1680,1620,'C=C de alceno (ou C=O de amida)','C=C costuma ser fraca.'],
- [1600,1450,'Anel aromático (C=C)','Bandas perto de 1600, 1580, 1500 e 1450.'],
- [1470,1430,'Deformação de CH2/CH3','Quase todo composto com C sp³.'],
- [1390,1370,'CH3, deformação simétrica (guarda-chuva)',''],
- [1300,1000,'C–O (álcool, éter, éster, ácido) ou C–N','Éster costuma ter duas bandas fortes, ~1250 e ~1030.'],
- [900,690,'C–H fora do plano de anel aromático','750 + 700: monossubstituído. ~750: orto.']
-];
 function coHint(v){
   if(v>=1750&&v<=1735)return 'éster saturado (~1740)';
   if(v<1735&&v>=1720)return 'aldeído ou éster saturado (1740–1720)';

@@ -6,7 +6,7 @@ App de uma página (`index.html`, instalável no celular) de consulta e estudo d
 
 ## Telas (menu fixo embaixo)
 - **Início:** a ordem da análise em 6 passos e atalhos para Revisar, Orgânica Básica, Ensaios e Espectros.
-- **Compostos:** 105 fichas (busca por nome, fórmula ou CAS; filtro por estado e grupo de solubilidade) com estrutura, fórmula, massa, GDH, cor, estado, PF, PE, solubilidade, CAS, bandas de IV esperadas, picos de MS, RMN estimado de ¹H e ¹³C e link para o SDBS.
+- **Compostos:** 108 fichas (busca por nome, fórmula ou CAS; filtro por estado e grupo de solubilidade) com estrutura, fórmula, massa, GDH, cor, estado, PF, PE, solubilidade, CAS, bandas de IV esperadas, picos de MS, RMN estimado de ¹H e ¹³C e link para o SDBS.
 - **Identificar:** uma tela só. Seções numeradas (aspecto, solubilidade, constantes físicas, análise elementar, IV, e fórmula/massas/RMN como opcional). Mostra as classes de compostos que sobram e o ranking de compostos do banco. O botão "Ver como funciona" preenche com um composto de exemplo. O que você digita fica salvo.
 - **Ensaios:** preliminares, solubilidade, análise elementar, problemas resolvidos, consulta rápida e notação ECGF.
 - **Espectros:** IV (qualquer um dos 106 compostos, espectro simulado e tabela de bandas numerada; Guia com a tabela completa), espectrometria de massas (escolha de composto, mecanismos, treino, livro, ferramentas de massas) e RMN (teoria, tabelas, espectros ¹H e ¹³C simulados por composto, com integração opcional).
@@ -42,4 +42,4 @@ O botão em Mais só aparece quando `FORM_URL` (em `fontes/analorg3.js`) tem o l
 Abra o endereço acima. Android: menu do Chrome, "Instalar app". iPhone: Safari, Compartilhar, "Adicionar à Tela de Início". Depois da primeira abertura com internet, o app funciona sem internet (as fontes do Google também ficam guardadas).
 
 ## Pasta `fontes/`
-`template.html` (página), `build_app.py` e `build3.py` (exercícios e estruturas em SVG com RDKit), `why.py` e `rearr.py` (explicações), `svgmodels.py` (modelos com setas) e `empacotar.py`. A pasta `historico/` guarda scripts antigos já aplicados.
+`template.html` (página), `build_app.py` e `build3.py` (exercícios e estruturas em SVG com RDKit), `why.py` e `rearr.py` (explicações), `svgmodels.py` (modelos com setas) e `empacotar.py`. Os scripts antigos já aplicados ficam só no histórico do Git.
