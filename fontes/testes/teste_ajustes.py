@@ -21,7 +21,7 @@ with sync_playwright() as p:
     chk('dica some com o ajuste ligado',pg.query_selector('#trh') is None)
     pg.evaluate("go('p-st')");pg.uncheck('#stSem')
     # revisão de perguntas: errar um quiz guarda a pergunta
-    pg.evaluate("go('p-iv')");pg.click('.seg [data-v=v-tr]')
+    pg.evaluate("go('p-iv')");pg.click('.ivseg [data-v=v-tr]')
     pg.wait_for_selector('#ivQuiz .optb')
     pg.evaluate("document.querySelectorAll('#ivQuiz .optb')");
     q=pg.evaluate("(()=>{const o=[...document.querySelectorAll('#ivQuiz .optb')];return o.length})()")
@@ -50,8 +50,8 @@ with sync_playwright() as p:
     chk('sem "escrito por mim"','escrito por mim' not in txt.lower())
     # menus
     chk('Início sem ferramentas de massas',pg.evaluate("go('p-in'),document.getElementById('p-in').innerText.indexOf('Calculadora')<0"))
-    chk('Massas com ferramentas de massas',pg.evaluate("go('p-ms'),document.getElementById('p-ms').innerText.indexOf('Calculadora')>=0"))
-    for sc in ['p-in','p-en','p-ms','p-ic','p-st','p-nv','p-rv','p-co','p-fo','p-cf','p-cp','p-ob','p-rm','p-iv']:
+    chk('Massas com ferramentas de massas',pg.evaluate("go('p-ca'),document.getElementById('p-ca').innerText.indexOf('Calculadora')>=0"))
+    for sc in ['p-in','p-en','p-sp','p-ic','p-st','p-nv','p-rv','p-co','p-fo','p-cf','p-cp','p-ob','p-rm','p-iv']:
         pg.evaluate(f"go('{sc}')");w=pg.evaluate("document.documentElement.scrollWidth")
         if w>360:chk('sem estouro em '+sc+' ('+str(w)+')',False)
 print('erros de página:',errs)

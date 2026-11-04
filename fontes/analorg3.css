@@ -78,7 +78,7 @@ tr.hlr.sel td{background:var(--keep-soft)}
 .hlfig.stuck svg{width:170px;max-width:100%;height:auto;margin:0 auto}
 .hlfig.stuck figcaption{display:none}
 .ivfig{margin:8px auto 4px;max-width:360px;justify-items:center}
-.ivfig svg{width:100%;max-width:320px;height:auto}
+.ivfig svg,figure.st.ivfig svg{width:100%;max-width:230px;height:auto}
 .ivfig.stuck{max-width:none}
 .nmrwrap::after{content:"";display:block;clear:both}
 .zbtn{float:right;margin:4px 0 6px 6px;font:inherit;font-size:.82rem;padding:3px 10px;min-height:32px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;cursor:pointer}

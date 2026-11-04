@@ -6,7 +6,7 @@ with sync_playwright() as p:
     b=p.chromium.launch();pg=b.new_page(viewport={'width':360,'height':780})
     pg.on('pageerror',lambda e:errs.append(str(e)))
     pg.goto('file:///home/claude/massas/index.html')
-    screens=['p-an','p-tr','p-tb','p-iv','p-ms','p-ca','p-aj','p-fo','p-pq','p-co','p-es','p-pr','p-pg']
+    screens=['p-an','p-tr','p-tb','p-iv','p-sp','p-ca','p-aj','p-fo','p-pq','p-co','p-es','p-pr','p-pg']
     for rodada in range(260):
         sc=random.choice(screens)
         pg.evaluate(f"go('{sc}')")

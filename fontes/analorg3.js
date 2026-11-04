@@ -22,9 +22,9 @@ function stInit(){
 /* ---------- Novidades e aviso de atualização ---------- */
 const NOVID=[
  {v:0,d:'04/11/2026',t:[
-  'Abas por assunto: Início, Compostos, Ensaios, IV, Massas e RMN. Tudo de massas (teoria, prática, livro e calculadora) fica na aba Massas. O que era o "Mais" foi para o Início.',
+  'Abas: Início, Compostos, Ensaios e Espectros. Em Espectros ficam IV, Massas e RMN, e o antigo "Mais" foi para o Início. As páginas de cada assunto têm o mesmo layout: título, resumo e uma faixa de seções, como na aba RMN.',
   'RMN: nova aba com os quatro passos num espectro real (acetato de etila, SDBS), régua do deslocamento, laboratório de acoplamento, calculadoras de Hz e ppm, integração e GDH, macetes e dois problemas resolvidos.',
-  'Toque num pico, banda ou sinal (IV, massas e RMN) e o trecho da molécula fica colorido. Os espectros simulados ganharam o botão Ampliar, e a estrutura do IV ficou maior e centralizada.',
+  'Toque num pico, banda ou sinal (IV, massas e RMN) e o trecho da molécula fica colorido. Os espectros simulados ganharam o botão Ampliar, e a estrutura do IV ficou do mesmo tamanho da do RMN e centralizada.',
   'RMN de 13C: 69 compostos conferidos na tabela de ppm do SDBS. O valor medido aparece na ficha. Corrigi faixas de tabela que não incluíam o valor real.',
   'RMN de 1H: 65 compostos mostram o δ medido nos prints do SDBS. Corrigi faixas que não incluíam o valor real (clorofórmio, DMSO, DMF, formiatos, salicilatos, enonas e outras).',
   'Compostos: a ficha não mostra mais os números dos carbonos. Os números ficam só na aba RMN.',

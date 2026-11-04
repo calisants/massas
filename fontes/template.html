@@ -290,7 +290,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
       <button class="chip" type="button" data-go="p-so">2 Solubilidade</button>
       <button class="chip" type="button" data-go="p-el">3 Elementar</button>
       <button class="chip" type="button" data-go="p-iv">4 IV</button>
-      <button class="chip" type="button" data-go="p-ms">5 Massas</button>
+      <button class="chip" type="button" data-go="p-an">5 Massas</button>
       <button class="chip" type="button" data-go="p-rm">6 RMN</button>
     </div>
     <h2 class="mh">Estudar</h2>
@@ -335,6 +335,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <button class="back" type="button" data-go="p-en">← Ensaios</button>
     <h2 class="scr">Preliminares e propriedades físicas</h2>
     <p class="scrsub">Primeiros dados do composto desconhecido.</p>
+    <div class="chipbar rseg msub" role="group" aria-label="Ensaios"><button class="chip" type="button" data-go="p-pf" aria-pressed="false">Preliminares</button><button class="chip" type="button" data-go="p-so" aria-pressed="false">Solubilidade</button><button class="chip" type="button" data-go="p-el" aria-pressed="false">Elementar</button><button class="chip" type="button" data-go="p-pb" aria-pressed="false">Problemas</button><button class="chip" type="button" data-go="p-cs" aria-pressed="false">Consulta rápida</button><button class="chip" type="button" data-go="p-ec" aria-pressed="false">ECGF</button></div>
 
     <div class="el"><h3>Cor</h3>
       <p>Muitos compostos orgânicos são incolores. A cor aparece quando há <b>cromóforos</b>, que são ligações múltiplas (C=C, C≡C, C=O, C=N, N=N, N=O, C≡N) que absorvem luz no UV/visível.</p>
@@ -413,6 +414,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <button class="back" type="button" data-go="p-en">← Ensaios</button>
     <h2 class="scr">Solubilidade</h2>
     <p class="scrsub">A marcha de solubilidade coloca o composto em um de <b>10 grupos</b>, pela polaridade, pela acidez ou basicidade e pela reatividade. Junto com a análise elementar, ela reduz o número de possibilidades e de ensaios funcionais.</p>
+    <div class="chipbar rseg msub" role="group" aria-label="Ensaios"><button class="chip" type="button" data-go="p-pf" aria-pressed="false">Preliminares</button><button class="chip" type="button" data-go="p-so" aria-pressed="false">Solubilidade</button><button class="chip" type="button" data-go="p-el" aria-pressed="false">Elementar</button><button class="chip" type="button" data-go="p-pb" aria-pressed="false">Problemas</button><button class="chip" type="button" data-go="p-cs" aria-pressed="false">Consulta rápida</button><button class="chip" type="button" data-go="p-ec" aria-pressed="false">ECGF</button></div>
     <div class="sgm" role="group" aria-label="Partes da solubilidade">
       <button type="button" data-so="flow" aria-pressed="true">Fluxograma</button>
       <button type="button" data-so="grp" aria-pressed="false">Grupos</button>
@@ -454,6 +456,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <button class="back" type="button" data-go="p-en">← Ensaios</button>
     <h2 class="scr">Análise elementar</h2>
     <p class="scrsub">Como saber quais elementos o composto tem. Cada teste vira o elemento em um gás ou íon que mancha um papel com um reagente.</p>
+    <div class="chipbar rseg msub" role="group" aria-label="Ensaios"><button class="chip" type="button" data-go="p-pf" aria-pressed="false">Preliminares</button><button class="chip" type="button" data-go="p-so" aria-pressed="false">Solubilidade</button><button class="chip" type="button" data-go="p-el" aria-pressed="false">Elementar</button><button class="chip" type="button" data-go="p-pb" aria-pressed="false">Problemas</button><button class="chip" type="button" data-go="p-cs" aria-pressed="false">Consulta rápida</button><button class="chip" type="button" data-go="p-ec" aria-pressed="false">ECGF</button></div>
     <div class="sgm" role="group" aria-label="Partes da análise elementar">
       <button type="button" data-el="ele" aria-pressed="true">Elementos</button>
       <button type="button" data-el="hal" aria-pressed="false">Halogênios</button>
@@ -489,6 +492,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <button class="back" type="button" data-go="p-en">← Ensaios</button>
     <h2 class="scr">Problemas resolvidos</h2>
     <p class="scrsub">Cinco problemas do tipo &ldquo;descobrir o composto&rdquo;. Tente primeiro; depois abra a resolução e compare o raciocínio.</p>
+    <div class="chipbar rseg msub" role="group" aria-label="Ensaios"><button class="chip" type="button" data-go="p-pf" aria-pressed="false">Preliminares</button><button class="chip" type="button" data-go="p-so" aria-pressed="false">Solubilidade</button><button class="chip" type="button" data-go="p-el" aria-pressed="false">Elementar</button><button class="chip" type="button" data-go="p-pb" aria-pressed="false">Problemas</button><button class="chip" type="button" data-go="p-cs" aria-pressed="false">Consulta rápida</button><button class="chip" type="button" data-go="p-ec" aria-pressed="false">ECGF</button></div>
     <p class="hint">Problemas e resoluções sem fonte conferida. Os pontos de fusão e de ebulição são valores de memória: confirme na <a href="https://analor.com.br/" target="_blank" rel="noopener">Ferramenta Analor</a> antes de confiar. A ordem da resolução segue a do laboratório: solubilidade, elementos, IV, constantes físicas.</p>
     <div id="pbList"></div>
   </section>
@@ -497,6 +501,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <button class="back" type="button" data-go="p-en">← Ensaios</button>
     <h2 class="scr">Consulta rápida</h2>
     <p class="scrsub">Tudo de ensaios em uma folha, para consultar com rapidez. Os dados vêm das outras telas.</p>
+    <div class="chipbar rseg msub" role="group" aria-label="Ensaios"><button class="chip" type="button" data-go="p-pf" aria-pressed="false">Preliminares</button><button class="chip" type="button" data-go="p-so" aria-pressed="false">Solubilidade</button><button class="chip" type="button" data-go="p-el" aria-pressed="false">Elementar</button><button class="chip" type="button" data-go="p-pb" aria-pressed="false">Problemas</button><button class="chip" type="button" data-go="p-cs" aria-pressed="false">Consulta rápida</button><button class="chip" type="button" data-go="p-ec" aria-pressed="false">ECGF</button></div>
     <div id="csBody"></div>
   </section>
 
@@ -504,6 +509,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <button class="back" type="button" data-go="p-en">← Ensaios</button>
     <h2 class="scr">Notação ECGF</h2>
     <p class="scrsub">ECGF significa Esqueletos de Carbono e Grupos Funcionais. É uma notação linear que escreve a molécula com números, sinais e caracteres, deixando explícitos o esqueleto e os grupos funcionais. É ela que a Ferramenta Analor usa para buscar compostos no banco de dados. <span class="tag sv">Conferido: Analor</span></p>
+    <div class="chipbar rseg msub" role="group" aria-label="Ensaios"><button class="chip" type="button" data-go="p-pf" aria-pressed="false">Preliminares</button><button class="chip" type="button" data-go="p-so" aria-pressed="false">Solubilidade</button><button class="chip" type="button" data-go="p-el" aria-pressed="false">Elementar</button><button class="chip" type="button" data-go="p-pb" aria-pressed="false">Problemas</button><button class="chip" type="button" data-go="p-cs" aria-pressed="false">Consulta rápida</button><button class="chip" type="button" data-go="p-ec" aria-pressed="false">ECGF</button></div>
     <div class="why">O site diz que a notação tem <b>18 regras</b>, descritas em Costa Neto (2004, p. 1336). As regras em si <b>não estão no site</b>. Abaixo estão só os códigos de cada grupo funcional, que o site lista página por página. O <b>método dos cortes</b>, citado no cronograma, também não consta no site.</div>
     <label for="ecq" style="margin-top:12px">Filtrar por grupo ou código<input class="f-p" type="text" id="ecq" placeholder="ex.: cetona, Est, Aro"></label>
     <div id="ecTbl"></div>
@@ -513,11 +519,11 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-an" role="tabpanel" aria-labelledby="t-an" hidden>
-    <button class="back" type="button" data-go="p-ms">← Massas</button>
-    <div class="sgm msub" role="group" aria-label="Massas"><button type="button" data-go="p-an" aria-pressed="false">Analisar</button><button type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button type="button" data-go="p-tb" aria-pressed="false">Livro</button></div>
-    <div id="an-in">
+    <button class="back" type="button" data-go="p-sp">← Espectros</button>
     <h2 class="scr">Espectrometria de massas</h2>
     <p class="scrsub">Escolha um composto ou digite M e os picos. Depois toque num pico para ver o que ficou e o que saiu. <button class="back" style="display:inline;margin:0" data-go="p-aj">Como ler um pico?</button></p>
+    <div class="chipbar rseg msub" role="group" aria-label="Massas"><button class="chip" type="button" data-go="p-an" aria-pressed="false">Analisar</button><button class="chip" type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button class="chip" type="button" data-go="p-tb" aria-pressed="false">Livro</button><button class="chip" type="button" data-go="p-aj" aria-pressed="false">Como ler um pico</button><button class="chip" type="button" data-go="p-pq" aria-pressed="false">Entender as quebras</button><button class="chip" type="button" data-go="p-sl" aria-pressed="false">Slides</button><button class="chip" type="button" data-go="p-ca" aria-pressed="false">Calculadora</button></div>
+    <div id="an-in">
     <label for="msSel">Composto<select id="msSel" class="f-p"></select></label>
     <div class="row">
       <label for="inM">M (íon molecular)<input class="f-m" type="number" id="inM" inputmode="numeric" min="1" max="999" value="60"></label>
@@ -539,19 +545,19 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-tr" role="tabpanel" aria-labelledby="t-tr" hidden>
-    <button class="back" type="button" data-go="p-ms">← Massas</button>
-    <div class="sgm msub" role="group" aria-label="Massas"><button type="button" data-go="p-an" aria-pressed="false">Analisar</button><button type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button type="button" data-go="p-tb" aria-pressed="false">Livro</button></div>
+    <button class="back" type="button" data-go="p-sp">← Espectros</button>
     <h2 class="scr">Treinar massas</h2>
     <p class="scrsub">Cada rodada tem 5 cartões e depois você pode parar. Escolha um modo. &ldquo;Qual saiu?&rdquo; mostra a perda entre dois picos e opções. &ldquo;Tente antes de ver&rdquo; pergunta também o tipo de cisão e a regra. O que você errar fica guardado em &ldquo;Revisar erros&rdquo;.</p>
+    <div class="chipbar rseg msub" role="group" aria-label="Massas"><button class="chip" type="button" data-go="p-an" aria-pressed="false">Analisar</button><button class="chip" type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button class="chip" type="button" data-go="p-tb" aria-pressed="false">Livro</button><button class="chip" type="button" data-go="p-aj" aria-pressed="false">Como ler um pico</button><button class="chip" type="button" data-go="p-pq" aria-pressed="false">Entender as quebras</button><button class="chip" type="button" data-go="p-sl" aria-pressed="false">Slides</button><button class="chip" type="button" data-go="p-ca" aria-pressed="false">Calculadora</button></div>
     <div class="chipbar" id="trmode" role="group" aria-label="Modo de treino"></div>
     <div class="quiz" id="quiz"></div>
   </section>
 
   <section id="p-tb" role="tabpanel" aria-labelledby="t-tb" hidden>
-    <button class="back" type="button" data-go="p-ms">← Massas</button>
-    <div class="sgm msub" role="group" aria-label="Massas"><button type="button" data-go="p-an" aria-pressed="false">Analisar</button><button type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button type="button" data-go="p-tb" aria-pressed="false">Livro</button></div>
+    <button class="back" type="button" data-go="p-sp">← Espectros</button>
     <h2 class="scr">Livro</h2>
     <p class="scrsub">Tabelas do Silverstein: o que saiu (Apêndice C) e o que ficou (Apêndice B).</p>
+    <div class="chipbar rseg msub" role="group" aria-label="Massas"><button class="chip" type="button" data-go="p-an" aria-pressed="false">Analisar</button><button class="chip" type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button class="chip" type="button" data-go="p-tb" aria-pressed="false">Livro</button><button class="chip" type="button" data-go="p-aj" aria-pressed="false">Como ler um pico</button><button class="chip" type="button" data-go="p-pq" aria-pressed="false">Entender as quebras</button><button class="chip" type="button" data-go="p-sl" aria-pressed="false">Slides</button><button class="chip" type="button" data-go="p-ca" aria-pressed="false">Calculadora</button></div>
     <div class="row">
       <label for="tbsel">Tabela
         <select id="tbsel"><option value="C">C: o que saiu (M − pico)</option><option value="B">B: o que ficou (m/z do íon)</option></select>
@@ -562,13 +568,15 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <div class="tbl"><table><thead id="tbhead"></thead><tbody id="tbbody"></tbody></table></div>
   </section>
 
-  <section id="p-iv" role="tabpanel" aria-labelledby="t-iv" hidden>
+  <section id="p-iv" role="tabpanel" aria-labelledby="t-sp" hidden>
+    <button class="back" type="button" data-go="p-sp">← Espectros</button>
     <h2 class="scr">Infravermelho (IV)</h2>
-    <div class="seg" role="group" aria-label="Partes do IV">
-      <button type="button" data-v="v-comp" aria-pressed="true">Composto</button>
-      <button type="button" data-v="v-num" aria-pressed="false">Número de onda</button>
-      <button type="button" data-v="v-guia" aria-pressed="false">Guia</button>
-      <button type="button" data-v="v-tr" aria-pressed="false">Treinar</button>
+    <p class="scrsub">Cada banda é uma ligação que vibra. Veja as bandas por composto, por número de onda, o guia por região e treine.</p>
+    <div class="chipbar rseg ivseg" role="group" aria-label="Partes do IV">
+      <button class="chip" type="button" data-v="v-comp" aria-pressed="true">Composto</button>
+      <button class="chip" type="button" data-v="v-num" aria-pressed="false">Número de onda</button>
+      <button class="chip" type="button" data-v="v-guia" aria-pressed="false">Guia</button>
+      <button class="chip" type="button" data-v="v-tr" aria-pressed="false">Treinar</button>
     </div>
     <div id="v-comp">
       <p class="scrsub">Escolha um composto para ver o espectro de IV simulado e a tabela de bandas.</p>
@@ -654,8 +662,9 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-ca" role="region" aria-label="Calculadora" hidden>
-    <button class="back" data-go="p-ms">← Massas</button>
+    <button class="back" type="button" data-go="p-sp">← Espectros</button>
     <h2 class="scr">Calculadora de massa</h2>
+    <div class="chipbar rseg msub" role="group" aria-label="Massas"><button class="chip" type="button" data-go="p-an" aria-pressed="false">Analisar</button><button class="chip" type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button class="chip" type="button" data-go="p-tb" aria-pressed="false">Livro</button><button class="chip" type="button" data-go="p-aj" aria-pressed="false">Como ler um pico</button><button class="chip" type="button" data-go="p-pq" aria-pressed="false">Entender as quebras</button><button class="chip" type="button" data-go="p-sl" aria-pressed="false">Slides</button><button class="chip" type="button" data-go="p-ca" aria-pressed="false">Calculadora</button></div>
     <p class="hint">Digite a fórmula de um pedaço (por exemplo C3H7O ou CH3). O app soma as massas e mostra o que o livro lista para esse número.</p>
     <div class="row">
       <label for="fm">Fórmula<input class="f-p" type="text" id="fm" value="C2H5"></label>
@@ -665,8 +674,9 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
 
 
   <section id="p-aj" role="region" aria-label="Como ler um pico" hidden>
-    <button class="back" data-go="p-ms">← Massas</button>
+    <button class="back" type="button" data-go="p-sp">← Espectros</button>
     <h2 class="scr">Como ler um pico</h2>
+    <div class="chipbar rseg msub" role="group" aria-label="Massas"><button class="chip" type="button" data-go="p-an" aria-pressed="false">Analisar</button><button class="chip" type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button class="chip" type="button" data-go="p-tb" aria-pressed="false">Livro</button><button class="chip" type="button" data-go="p-aj" aria-pressed="false">Como ler um pico</button><button class="chip" type="button" data-go="p-pq" aria-pressed="false">Entender as quebras</button><button class="chip" type="button" data-go="p-sl" aria-pressed="false">Slides</button><button class="chip" type="button" data-go="p-ca" aria-pressed="false">Calculadora</button></div>
     <div class="how">
       <b>Como ler um pico</b>
       <ol>
@@ -681,8 +691,9 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
 
 
   <section id="p-pq" role="region" aria-label="Por que a ligação quebra ali" hidden>
-    <button class="back" data-go="p-ms">← Massas</button>
+    <button class="back" type="button" data-go="p-sp">← Espectros</button>
     <h2 class="scr">Por que a ligação quebra ali?</h2>
+    <div class="chipbar rseg msub" role="group" aria-label="Massas"><button class="chip" type="button" data-go="p-an" aria-pressed="false">Analisar</button><button class="chip" type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button class="chip" type="button" data-go="p-tb" aria-pressed="false">Livro</button><button class="chip" type="button" data-go="p-aj" aria-pressed="false">Como ler um pico</button><button class="chip" type="button" data-go="p-pq" aria-pressed="false">Entender as quebras</button><button class="chip" type="button" data-go="p-sl" aria-pressed="false">Slides</button><button class="chip" type="button" data-go="p-ca" aria-pressed="false">Calculadora</button></div>
     <p class="hint">Cada quebra tem um motivo. Estas regras explicam quase todas as quebras do app. O cartão de cada pico traz o &ldquo;Por que quebra aqui?&rdquo; com a regra aplicada.</p>
 
     <div class="rule"><h3>Contagem de elétrons: quanto vale cada coisa</h3>
@@ -771,8 +782,9 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-sl" role="region" aria-label="Slides de mecanismos" hidden>
-    <button class="back" data-go="p-ms">← Massas</button>
+    <button class="back" type="button" data-go="p-sp">← Espectros</button>
     <h2 class="scr">Slides de mecanismos</h2>
+    <div class="chipbar rseg msub" role="group" aria-label="Massas"><button class="chip" type="button" data-go="p-an" aria-pressed="false">Analisar</button><button class="chip" type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button class="chip" type="button" data-go="p-tb" aria-pressed="false">Livro</button><button class="chip" type="button" data-go="p-aj" aria-pressed="false">Como ler um pico</button><button class="chip" type="button" data-go="p-pq" aria-pressed="false">Entender as quebras</button><button class="chip" type="button" data-go="p-sl" aria-pressed="false">Slides</button><button class="chip" type="button" data-go="p-ca" aria-pressed="false">Calculadora</button></div>
     <p class="hint">Resumo do deck &ldquo;Análise Orgânica II, Espectroscopia de Massas&rdquo; (Prof. Jeronimo). Texto e figuras vêm dos slides dele. Toque na figura para ampliar.</p>
     <div class="rule"><h3>Regras do slide (resumo)</h3>
       <ul><li><b>Regra do nitrogênio:</b> massa par = nenhum N ou N par. Massa ímpar = N ímpar. Íon molecular par: quebra de ligação simples dá fragmento ímpar. Íon molecular ímpar: dá fragmento par. O fragmento deve conter todos os N.</li><li><b>M+• mais intenso:</b> aromáticos &gt; alquenos conjugados &gt; cíclicos &gt; sulfetos &gt; alcanos normais curtos &gt; mercaptanas.</li><li><b>Por grupo:</b> cetonas &gt; aminas &gt; ésteres &gt; éteres &gt; ácidos = aldeídos = amidas = halogenetos.</li><li><b>Em geral não aparece M+•:</b> álcoois alifáticos, nitritos, nitratos, nitro, nitrilas e compostos muito ramificados.</li><li><b>Elétron mais fácil de tirar:</b> não ligante &gt; π &gt; σ.</li></ul></div>
@@ -798,8 +810,8 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-es" role="region" aria-label="Espectro novo" hidden>
-    <button class="back" data-go="p-cp">← Compostos</button>
     <h2 class="scr">Espectro novo (modo detetive)</h2>
+    <div class="chipbar rseg msub" role="group" aria-label="Compostos"><button class="chip" type="button" data-go="p-cp" aria-pressed="false">Fichas</button><button class="chip" type="button" data-go="p-ic" aria-pressed="false">Identificar</button><button class="chip" type="button" data-go="p-es" aria-pressed="false">Espectro novo</button></div>
     <p class="hint">Para um composto que você ainda não resolveu. Preencha o que tiver. O app dá pistas, não a resposta: quem decide é você.</p>
     <div class="row">
       <label for="esF">Fórmula (opcional)<input type="text" id="esF" placeholder="ex.: C6H12O2"></label>
@@ -827,9 +839,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   <button class="tab" role="tab" id="t-in" aria-selected="true" aria-controls="p-in"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg>Início</button>
   <button class="tab" role="tab" id="t-cp" aria-selected="false" aria-controls="p-cp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 4v8l-7 4-7-4V7z"/><path d="M12 11v8M5 7l7 4 7-4"/></svg>Compostos</button>
   <button class="tab" role="tab" id="t-en" aria-selected="false" aria-controls="p-en"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/></svg>Ensaios</button>
-  <button class="tab" role="tab" id="t-iv" aria-selected="false" aria-controls="p-iv"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h3l2-5 3 10 3-8 2 3h5"/></svg>IV</button>
-  <button class="tab" role="tab" id="t-ms" aria-selected="false" aria-controls="p-ms"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M10 20V4M15 20v-7M20 20V8"/></svg>Massas</button>
-  <button class="tab" role="tab" id="t-rm" aria-selected="false" aria-controls="p-rm"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17h4l1.5-9 2 12 2.5-9 1.5 6H21"/><path d="M3 21h18"/></svg>RMN</button>
+  <button class="tab" role="tab" id="t-sp" aria-selected="false" aria-controls="p-sp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h3.5l2-6 4 12 2.5-6H21"/></svg>Espectros</button>
 </nav>
 
 <script>
@@ -1924,9 +1934,9 @@ function ecInit(){
   miniQuiz('#ecQuiz',bank,'Pergunta');
 }
 
-const SCR=['p-ec','p-pb','p-cs','p-in','p-en','p-pf','p-so','p-el','p-an','p-tr','p-tb','p-iv','p-ms','p-ca','p-aj','p-fo','p-pq','p-sl','p-co','p-es','p-pg','p-cp','p-cf','p-ic','p-rm','p-ob','p-st','p-nv','p-rv'];
-const OWN={'p-ec':'t-en','p-pb':'t-en','p-cs':'t-en','p-pf':'t-en','p-so':'t-en','p-el':'t-en','p-tr':'t-ms','p-tb':'t-ms','p-an':'t-ms','p-ca':'t-ms','p-aj':'t-ms','p-pq':'t-ms','p-sl':'t-ms','p-cf':'t-cp','p-ic':'t-cp','p-es':'t-cp','p-ob':'t-in','p-fo':'t-in','p-co':'t-in','p-pg':'t-in','p-st':'t-in','p-nv':'t-in','p-rv':'t-in'};
-const NAV=['t-in','t-cp','t-en','t-iv','t-ms','t-rm'];
+const SCR=['p-ec','p-pb','p-cs','p-in','p-en','p-pf','p-so','p-el','p-an','p-tr','p-tb','p-iv','p-sp','p-ca','p-aj','p-fo','p-pq','p-sl','p-co','p-es','p-pg','p-cp','p-cf','p-ic','p-rm','p-ob','p-st','p-nv','p-rv'];
+const OWN={'p-ec':'t-en','p-pb':'t-en','p-cs':'t-en','p-pf':'t-en','p-so':'t-en','p-el':'t-en','p-tr':'t-sp','p-tb':'t-sp','p-an':'t-sp','p-ca':'t-sp','p-aj':'t-sp','p-pq':'t-sp','p-sl':'t-sp','p-iv':'t-sp','p-rm':'t-sp','p-cf':'t-cp','p-ic':'t-cp','p-es':'t-cp','p-ob':'t-in','p-fo':'t-in','p-co':'t-in','p-pg':'t-in','p-st':'t-in','p-nv':'t-in','p-rv':'t-in'};
+const NAV=['t-in','t-cp','t-en','t-sp'];
 function drawSl(){const b=$('#slBody');if(!b||b.dataset.ok||typeof SLD==='undefined')return;b.dataset.ok='1';
   b.innerHTML=SLD.map((s,i)=>'<div class="rule"><h3>'+esc(s[0])+'</h3><p>'+esc(s[1])+'</p><figure class="mech"><button type="button" class="mechb" data-sl="'+i+'"><img src="'+s[2]+'" alt="Slide do professor: '+esc(s[0])+'"></button></figure></div>').join('');
   b.querySelectorAll('[data-sl]').forEach(x=>x.onclick=()=>mechZoom(SLD[+x.dataset.sl][2],x));}
@@ -1952,7 +1962,7 @@ NAV.forEach((t,i)=>{const el=$('#'+t);
   el.onclick=()=>go('p-'+t.slice(2));
   el.addEventListener('keydown',ev=>{const d=ev.key==='ArrowRight'?1:ev.key==='ArrowLeft'?-1:0;if(!d)return;ev.preventDefault();const n=NAV[(i+d+NAV.length)%NAV.length];$('#'+n).focus();$('#'+n).click();});});
 document.addEventListener('click',ev=>{const b=ev.target.closest('[data-go]');if(b)go(b.dataset.go);});
-document.querySelectorAll('.seg').forEach(g=>g.querySelectorAll('button').forEach(b=>{b.onclick=()=>{if(b.dataset.go||!b.dataset.v)return;
+document.querySelectorAll('.seg,.ivseg').forEach(g=>g.querySelectorAll('button').forEach(b=>{b.onclick=()=>{if(b.dataset.go||!b.dataset.v)return;
   g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
   ['v-comp','v-num','v-guia','v-tr'].forEach(id=>{$('#'+id).hidden=id!==b.dataset.v;});};}));
 

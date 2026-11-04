@@ -2,14 +2,11 @@
   <section id="p-cp" role="tabpanel" aria-labelledby="t-cp" hidden>
     <h2 class="scr">Compostos</h2>
     <p class="scrsub">Uma ficha por composto: estrutura, fórmula, grupo de solubilidade, cor, estado, PF e PE, e o que esperar em IV, MS e RMN.</p>
+    <div class="chipbar rseg msub" role="group" aria-label="Compostos"><button class="chip" type="button" data-go="p-cp" aria-pressed="false">Fichas</button><button class="chip" type="button" data-go="p-ic" aria-pressed="false">Identificar</button><button class="chip" type="button" data-go="p-es" aria-pressed="false">Espectro novo</button></div>
     <div class="cpq">
       <input type="search" id="cpQ" placeholder="Buscar por nome, fórmula ou CAS" aria-label="Buscar composto" autocomplete="off">
       <label>Estado<select id="cpE"><option value="">Todos</option><option value="líquido">Líquido</option><option value="sólido">Sólido</option></select></label>
       <label>Grupo de solubilidade<select id="cpG"><option value="">Todos</option></select></label>
-    </div>
-    <div class="menu" style="margin-bottom:10px">
-      <button class="mi" type="button" data-go="p-ic"><b>Identificar um composto desconhecido</b><span>Junta o que você mediu e mostra os compostos mais compatíveis.</span></button>
-      <button class="mi" type="button" data-go="p-es"><b>Espectro novo (modo detetive)</b><span>Fórmula, picos e bandas de IV: o app dá pistas.</span></button>
     </div>
     <p class="hint" id="cpN"></p>
     <div class="cpgrid" id="cpL"></div>
@@ -20,24 +17,13 @@
     <div data-hlscope id="cfB"></div>
   </section>
 
-  <section id="p-ms" role="tabpanel" aria-labelledby="t-ms" hidden>
-    <h2 class="scr">Massas</h2>
-    <p class="scrsub">Espectrometria de massas: teoria, prática e consulta no mesmo lugar.</p>
-    <h2 class="mh">Teoria</h2>
+  <section id="p-sp" role="tabpanel" aria-labelledby="t-sp" hidden>
+    <h2 class="scr">Espectros</h2>
+    <p class="scrsub">Os três métodos para descobrir a estrutura de um composto.</p>
     <div class="menu">
-      <button class="mi" type="button" data-go="p-aj"><b>Como ler um pico e glossário</b><span>Os 4 passos, o que são +, +· e ·, clivagem α e McLafferty.</span></button>
-      <button class="mi" type="button" data-go="p-pq"><b>Entender as quebras</b><span>Por que a ligação quebra ali, cisão homolítica e heterolítica, rearranjos.</span></button>
-      <button class="mi" type="button" data-go="p-sl"><b>Slides de mecanismos</b><span>Regras e mecanismos de aula: benzamida, álcoois, cetonas, ácidos.</span></button>
-    </div>
-    <h2 class="mh">Prática</h2>
-    <div class="menu">
-      <button class="mi" type="button" data-go="p-an"><b>Analisar um espectro</b><span>Escolha um composto ou digite M e os picos; toque num pico para ver o que ficou e o que saiu.</span></button>
-      <button class="mi" type="button" data-go="p-tr"><b>Treinar</b><span>Cartões de 5 em 5: qual fragmento saiu, qual pico vem de qual perda.</span></button>
-    </div>
-    <h2 class="mh">Consulta</h2>
-    <div class="menu">
-      <button class="mi" type="button" data-go="p-tb"><b>Livro (tabelas do Silverstein)</b><span>O que saiu (Apêndice C) e o que ficou (Apêndice B).</span></button>
-      <button class="mi" type="button" data-go="p-ca"><b>Calculadora de massa</b><span>Some a fórmula de um pedaço e veja o que o livro lista.</span></button>
+      <button class="mi" type="button" data-go="p-iv"><b>Infravermelho (IV)</b><span>Bandas por composto e por número de onda, guia por região e treino.</span></button>
+      <button class="mi" type="button" data-go="p-an"><b>Espectrometria de massas (MS)</b><span>Analisar picos, treinar, livro, calculadora, teoria e mecanismos de fragmentação.</span></button>
+      <button class="mi" type="button" data-go="p-rm"><b>RMN de ¹H e ¹³C</b><span>Os quatro passos, acoplamento, cálculos, macetes e tabelas.</span></button>
     </div>
     <p class="hint" style="margin-top:14px">Espectros reais: <a href="https://sdbs.db.aist.go.jp/" target="_blank" rel="noopener">SDBS (AIST)</a>. Cada ficha de composto tem o botão para abrir lá. Ao usar dados do SDBS, cite a fonte (o app mostra o texto pronto).</p>
   </section>
@@ -45,6 +31,7 @@
   <section id="p-ic" role="tabpanel" aria-labelledby="t-cp" hidden>
     <h2 class="scr">Identificar o Composto</h2>
     <p class="scrsub">Marque o que você mediu. O que ficar em &ldquo;Não sei&rdquo; não entra na conta. O app mostra as classes que sobram e os compostos do banco mais compatíveis.</p>
+    <div class="chipbar rseg msub" role="group" aria-label="Compostos"><button class="chip" type="button" data-go="p-cp" aria-pressed="false">Fichas</button><button class="chip" type="button" data-go="p-ic" aria-pressed="false">Identificar</button><button class="chip" type="button" data-go="p-es" aria-pressed="false">Espectro novo</button></div>
     <button class="icsum" type="button" id="icSum" aria-live="polite">Marque pelo menos um dado.</button>
     <div class="row" style="margin-bottom:6px">
       <button class="btn ghost" type="button" id="icClr">Limpar</button>
@@ -100,7 +87,8 @@
     <div id="icOut" class="icres" aria-live="polite"></div>
   </section>
 
-  <section id="p-rm" role="tabpanel" aria-labelledby="t-rm" hidden>
+  <section id="p-rm" role="tabpanel" aria-labelledby="t-sp" hidden>
+    <button class="back" type="button" data-go="p-sp">← Espectros</button>
     <h2 class="scr">RMN de ¹H e ¹³C</h2>
     <p class="scrsub">Cada sinal é um grupo de núcleos equivalentes. Quatro perguntas: quantos sinais, onde, quanto vale cada um e como se divide.</p>
     <div class="chipbar rseg" role="group" aria-label="Partes do RMN">
