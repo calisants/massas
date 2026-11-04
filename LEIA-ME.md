@@ -13,7 +13,7 @@ App de uma página (`index.html`, instalável no celular) de consulta e estudo d
 - **Mais:** calculadora de massa, modo detetive, regras de quebra, slides de mecanismos, cor do app, fontes.
 
 ## Avisos sobre os dados
-- Estado, cor, PF, PE, CAS e grupo de solubilidade dos 105 compostos foram escritos sem fonte conferida; fórmula, massa, GDH, estrutura, número de sinais de RMN e multiplicidade são calculados pelo RDKit; os δ de RMN são faixas típicas de tabela.
+- PF e PE de 185 valores foram conferidos no PubChem (mediana de HSDB, ICSC, HMDB e outras; 7 divergiram e ficam marcados); estado, cor, CAS (só o dígito verificador) e grupo de solubilidade foram escritos sem fonte conferida; fórmula, massa, GDH, estrutura, número de sinais de RMN e multiplicidade são calculados pelo RDKit; os δ de RMN são faixas típicas de tabela.
 - O banco de MS tem picos conferidos (lousa e SDBS) só para os 12 compostos dos exemplos com mecanismo; nos demais são picos típicos escritos sem fonte conferida.
 - SDBS (AIST): o app só liga para o site e mostra o texto de citação. O SDBS proíbe coleta automática e download em massa.
 - A teoria de RMN resume os slides de RMN do Prof. Jeronimo (IFRJ). Os slides trazem δ de H do estireno em dois valores diferentes (6,73 e 6,37).

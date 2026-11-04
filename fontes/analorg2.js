@@ -6,6 +6,7 @@ const tC=v=>v==null?'—':(String(v).replace('.',',')+' °C');
 const gTxt=k=>{const g=(typeof SOLG!=='undefined'?SOLG:[]).find(x=>x.k===k);return g?g.t:'';};
 const ivr=b=>[Math.min(b[0],b[1]),Math.max(b[0],b[1])];
 const nCl=f=>{const m=String(f).match(/Cl(\d*)/);return m?(m[1]?+m[1]:1):0;};
+const pfTag=s=>s==='c'?' <span class="tag sv">conferido</span>':s==='d'?' <span class="tag sm">fontes divergem</span>':'';
 function srcTag(ok,txt){return '<span class="tag '+(ok?'sv':'sm')+'">'+esc(txt)+'</span>';}
 function copyTxt(t,btn){
   const done=()=>{if(btn){const o=btn.textContent;btn.textContent='Copiado';setTimeout(()=>btn.textContent=o,1200);}};
@@ -18,7 +19,7 @@ function cpInit(){
   GORD.forEach(k=>{[g,g2].forEach(s=>{const o=document.createElement('option');o.value=k;o.textContent=SOLNM[k];s.appendChild(o);});});
   const byName=[...COMP].sort((a,b)=>a.n.localeCompare(b.n,'pt'));
   byName.forEach(c=>{[sel,ex].forEach(s=>{const o=document.createElement('option');o.value=c.i;o.textContent=c.n;s.appendChild(o);});});
-  ['#cpQ','#cpE','#cpG'].forEach(id=>{$(id).addEventListener('input',cpDraw);$(id).addEventListener('change',cpDraw);});
+  $('#cpQ').addEventListener('input',cpDraw);['#cpE','#cpG'].forEach(id=>$(id).addEventListener('change',cpDraw));
   sel.onchange=rmDraw;
   cpDraw();rmDraw();
 }
@@ -65,11 +66,14 @@ function cfDraw(i){
    +'<tr><th>GDH</th><td>'+c.gdh+'</td></tr>'
    +'<tr><th>Grupo funcional</th><td>'+esc(c.gf.join(', ')||'hidrocarboneto sem grupo funcional')+'</td></tr>'
    +'<tr><th>Estado (25 °C)</th><td>'+esc(c.est)+'</td></tr><tr><th>Cor</th><td>'+esc(c.cor)+'</td></tr>'
-   +'<tr><th>Ponto de fusão</th><td>'+tC(c.pf)+'</td></tr><tr><th>Ponto de ebulição</th><td>'+tC(c.pe)+'</td></tr>'
+   +'<tr><th>Ponto de fusão</th><td>'+tC(c.pf)+pfTag(c.pfs)+'</td></tr><tr><th>Ponto de ebulição</th><td>'+tC(c.pe)+pfTag(c.pes)+'</td></tr>'
    +'<tr><th>Grupo de solubilidade</th><td><span class="gl2">'+SOLNM[c.g]+'</span>'+esc(gTxt(c.g))+'</td></tr>'
    +'<tr><th>CAS</th><td class="mono">'+esc(c.cas)+'</td></tr>'
    +(c.obs?'<tr><th>Observação</th><td>'+esc(c.obs)+'</td></tr>':'')+'</tbody></table></div>';
-  h+='<p class="srcl"><b>Fonte:</b> estado, cor, PF, PE, grupo de solubilidade e CAS foram escritos por mim, <b>sem fonte conferida</b> nesta sessão (confirme no SDBS ou na Plataforma do professor antes de usar em relatório). Fórmula, massa, GDH e estrutura são calculados a partir da estrutura (RDKit).</p>';
+  {const pubs=c.pubsrc&&c.pubsrc.length;
+   h+='<p class="srcl"><b>Fonte:</b> '+(pubs?'PF e PE marcados "conferido" vêm do PubChem (mediana dos valores de '+c.pubsrc.map(esc).join(', ')+'), acessado em 04/11/2026'+(c.cid?' (CID '+c.cid+')':'')+'. ':'')
+   +((c.pfs==='d'||c.pes==='d')?'Onde aparece "fontes divergem", o PubChem traz valores diferentes entre si e eu mantive o valor que já estava no app. ':'')
+   +'Estado, cor, grupo de solubilidade e CAS foram escritos por mim, <b>sem fonte conferida</b> nesta sessão'+(pubs?'':', assim como PF e PE')+' (confirme no SDBS ou na Plataforma do professor antes de usar em relatório). Fórmula, massa, GDH e estrutura são calculados a partir da estrutura (RDKit).</p>';}
   // IV
   const iv=c.iv.slice().sort((a,b)=>ivr(b)[1]-ivr(a)[1]);
   h+='<details class="sec" open><summary>Infravermelho: bandas esperadas</summary>'

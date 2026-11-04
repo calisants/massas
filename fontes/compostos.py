@@ -361,6 +361,8 @@ def cas_ok(c):
     d = c.replace("-", ""); body, chk = d[:-1], int(d[-1])
     return sum((i+1)*int(ch) for i, ch in enumerate(reversed(body))) % 10 == chk
 
+from compostos_pub import PUB, DIV, DATA as PUB_DATA
+
 def build_comp(svgfn, EXD):
     exm = {e["n"]: e for e in EXD}
     out = []
@@ -380,5 +382,12 @@ def build_comp(svgfn, EXD):
             d["ms"] = MSK[nome]; d["msv"] = 0
         else:
             d["ms"] = None; d["msv"] = 0
+        pb = PUB.get(nome, {})
+        d["cid"] = pb.get("cid")
+        d["pfs"] = "c" if "pf" in pb else ("d" if "pf" in DIV.get(nome, []) else "")
+        d["pes"] = "c" if "pe" in pb else ("d" if "pe" in DIV.get(nome, []) else "")
+        if "pf" in pb: d["pf"] = pb["pf"][0]
+        if "pe" in pb: d["pe"] = pb["pe"][0]
+        d["pubsrc"] = sorted({s for k in ("pf", "pe") if k in pb for s in pb[k][2].split(", ")})
         out.append(d)
     return out
