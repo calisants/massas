@@ -236,7 +236,7 @@ def classify_h(x, nH):
     if x.GetIsAromatic():
         ring_het = any(n.GetSymbol() != 'C' and n.GetIsAromatic() for n in x.GetNeighbors())
         if ring_het: return ("H de anel heteroaromático", 6.3, 8.8, 0)
-        return ("H aromático", 6.5, 8.0, 0)
+        return ("H aromático", 6.5, 8.4, 0)
     hyb = x.GetHybridization()
     if _is_carbonyl_C(x): return ("H de aldeído", 9.3, 10.1, 0)
     if hyb == Chem.HybridizationType.SP: return ("≡C–H", 2.0, 3.1, 0)
@@ -340,7 +340,7 @@ def nmr_c(m):
             elif any(s in ("Cl", "Br", "I") for s in syms): t, lo, hi = "C sp³ ligado a halogênio", 25, 80
             elif any(_is_carbonyl_C(n) for n in nbs): t, lo, hi = "C sp³ α à carbonila", 20, 50
             elif any(n.GetIsAromatic() for n in nbs): t, lo, hi = "C sp³ benzílico", 20, 45
-            elif h == 3: t, lo, hi = "CH₃", 8, 30
+            elif h == 3: t, lo, hi = "CH₃", 5, 30
             else: t, lo, hi = "C sp³ alifático", 15, 55
         out.append(dict(t=t, n=len(cs), lo=lo, hi=hi))
     out.sort(key=lambda d: -(d["lo"] + d["hi"]))
