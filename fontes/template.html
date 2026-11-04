@@ -2071,7 +2071,7 @@ go('p-in');
   function stk(){
     document.querySelectorAll('.tbl table').forEach(t=>{
       const th=t.querySelectorAll('thead th');
-      if(th.length<3||t.classList.contains('stk'))return;
+      if(th.length<3||t.classList.contains('stk')||t.classList.contains('nostk'))return;
       const L=[...th].map(x=>x.textContent.trim());
       t.querySelectorAll('tbody tr').forEach(tr=>[...tr.children].forEach((c,i)=>{if(L[i])c.setAttribute('data-l',L[i])}));
       t.classList.add('stk');

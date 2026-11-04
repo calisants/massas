@@ -59,26 +59,30 @@ function cfDraw(i){
   const c=COMP[i],hoje=new Date().toLocaleDateString('pt-BR');
   const sd=c.sdbs||(c.ex&&typeof INTS!=='undefined'&&INTS[c.ex]?INTS[c.ex].sdbs:null);
   let h='<h2 class="scr">'+esc(c.n)+'</h2>'+(c.a.length?'<p class="scrsub">Também: '+c.a.map(esc).join(', ')+'</p>':'');
-  h+='<div class="cfh"><figure class="st"><div>'+c.s+'</div><figcaption>'+fmt(c.f)+'</figcaption></figure><table class="cft"><tbody>'
-   +'<tr><th>Fórmula molecular</th><td>'+fmt(c.f)+'</td></tr>'
-   +'<tr><th>Massa molar</th><td>'+String(c.mw).replace('.',',')+' g/mol</td></tr>'
-   +'<tr><th>M do íon molecular (MS)</th><td>'+c.M+'</td></tr>'
-   +'<tr><th>GDH</th><td>'+c.gdh+'</td></tr>'
-   +'<tr><th>Grupo funcional</th><td>'+esc(c.gf.join(', ')||'hidrocarboneto sem grupo funcional')+'</td></tr>'
-   +'<tr><th>Estado (25 °C)</th><td>'+esc(c.est)+'</td></tr><tr><th>Cor</th><td>'+esc(c.cor)+'</td></tr>'
-   +'<tr><th>Ponto de fusão</th><td>'+tC(c.pf)+pfTag(c.pfs)+'</td></tr><tr><th>Ponto de ebulição</th><td>'+tC(c.pe)+pfTag(c.pes)+'</td></tr>'
-   +'<tr><th>Grupo de solubilidade</th><td><span class="gl2">'+SOLNM[c.g]+'</span>'+esc(gTxt(c.g))+'</td></tr>'
-   +'<tr><th>CAS</th><td class="mono">'+esc(c.cas)+'</td></tr>'
-   +(c.obs?'<tr><th>Observação</th><td>'+esc(c.obs)+'</td></tr>':'')+'</tbody></table></div>';
+  const rowd=(k,v)=>'<div class="cfr"><dt>'+k+'</dt><dd>'+v+'</dd></div>';
+  h+='<figure class="cfs"><div>'+c.s+'</div><figcaption>'+fmt(c.f)+' · '+String(c.mw).replace('.',',')+' g/mol</figcaption></figure>'
+   +'<div class="cfq">'
+   +'<div class="cfqi"><span>Estado a 25 °C</span><b>'+esc(c.est)+'</b></div>'
+   +'<div class="cfqi"><span>Cor</span><b>'+esc(c.cor)+'</b></div>'
+   +'<div class="cfqi"><span>Ponto de fusão</span><b>'+tC(c.pf)+'</b>'+pfTag(c.pfs)+'</div>'
+   +'<div class="cfqi"><span>Ponto de ebulição</span><b>'+tC(c.pe)+'</b>'+pfTag(c.pes)+'</div></div>'
+   +'<dl class="cfd">'
+   +rowd('Grupo de solubilidade','<span class="gl2">'+SOLNM[c.g]+'</span> '+esc(gTxt(c.g)))
+   +rowd('Grupo funcional',esc(c.gf.join(', ')||'hidrocarboneto sem grupo funcional'))
+   +rowd('GDH','<b>'+c.gdh+'</b> <span class="mut">(anéis + ligações π)</span>')
+   +rowd('M do íon molecular','<b>'+c.M+'</b>')
+   +rowd('CAS','<span class="mono">'+esc(c.cas)+'</span>')
+   +(c.obs?rowd('Observação',esc(c.obs)):'')+'</dl>';
+  let srcH='';
   {const pubs=c.pubsrc&&c.pubsrc.length;
-   h+='<p class="srcl"><b>Fonte:</b> '+(pubs?'PF e PE marcados "conferido" vêm do PubChem (mediana dos valores de '+c.pubsrc.map(esc).join(', ')+'), acessado em 04/11/2026'+(c.cid?' (CID '+c.cid+')':'')+'. ':'')
+   srcH='<p class="srcl"><b>Fonte:</b> '+(pubs?'PF e PE marcados "conferido" vêm do PubChem (mediana dos valores de '+c.pubsrc.map(esc).join(', ')+'), acessado em 04/11/2026'+(c.cid?' (CID '+c.cid+')':'')+'. ':'')
    +((c.pfs==='d'||c.pes==='d')?'Onde aparece "fontes divergem", o PubChem traz valores diferentes entre si e eu mantive o valor que já estava no app. ':'')
    +'Estado, cor, grupo de solubilidade e CAS foram escritos por mim, <b>sem fonte conferida</b> nesta sessão'+(pubs?'':', assim como PF e PE')+' (confirme no SDBS ou na Plataforma do professor antes de usar em relatório). Fórmula, massa, GDH e estrutura são calculados a partir da estrutura (RDKit).</p>';}
   // IV
   const iv=c.iv.slice().sort((a,b)=>ivr(b)[1]-ivr(a)[1]);
   h+='<details class="sec" open><summary>Infravermelho: bandas esperadas</summary>'
-   +(iv.length?'<div class="tbl"><table class="obt"><thead><tr><th>cm⁻¹</th><th>Atribuição</th><th>Intensidade</th><th>Fonte</th></tr></thead><tbody>'+iv.map(b=>'<tr><td class="mono">'+ivr(b)[0]+'–'+ivr(b)[1]+'</td><td>'+esc(b[2])+(b[4]?' <span class="tag sv">chave</span>':'')+'</td><td>'+esc(b[3])+'</td><td>'+(b[5]==='a'?'Apostila de IV':b[5]==='s'?'fontes citadas em "O que pode deslocar" e prints do SDBS':'tabela geral, sem fonte conferida')+'</td></tr>').join('')+'</tbody></table></div>':'<p class="empty">Sem bandas cadastradas.</p>')
-   +'<p class="srcl" style="margin-top:6px">As faixas vêm do grupo funcional e dos fatores abaixo (não é o espectro medido). Bandas "chave" são as que decidem a identificação.</p>'
+   +(iv.length?'<div class="tbl"><table class="obt nostk"><thead><tr><th>cm⁻¹</th><th>O que é</th></tr></thead><tbody>'+iv.map(b=>'<tr><td class="mono n">'+ivr(b)[0]+'–'+ivr(b)[1]+'</td><td><b>'+esc(b[2].replace(' (estiramento)',''))+'</b>'+(b[4]?' <span class="tag sv">chave</span>':'')+'<span class="mut sm">Intensidade '+esc(b[3])+' · '+(b[5]==='a'?'apostila':b[5]==='s'?'fontes citadas abaixo':'tabela geral, sem fonte conferida')+'</span></td></tr>').join('')+'</tbody></table></div>':'<p class="empty">Sem bandas cadastradas.</p>')
+   +'<p class="srcl" style="margin-top:8px">Faixas esperadas pelo grupo funcional, não o espectro medido. "Chave" = banda que decide a identificação.</p>'
    +(c.irc?'<p class="srcl">'+srcTag(true,c.irc===1?'conferido no SDBS':'conferido em parte no SDBS')+' '+(c.irc===1?'As bandas-chave do espectro de IV do SDBS No. '+c.sdbs+' ('+esc(c.irm)+') caem nas faixas acima.':'Do IV do SDBS No. '+c.sdbs+' ('+esc(c.irm)+') só conferi o O–H largo e o C–O.')+' Lido dos prints enviados, acessado em 04/11/2026. O meio importa: ligação de H e solvente mudam a posição das bandas.</p>':'')
    +((c.ivf&&c.ivf.length)?'<h3 style="margin:12px 0 4px">O que pode deslocar as bandas deste composto</h3><ul class="fatl">'+c.ivf.map(f=>'<li><b>'+esc(f[0])+'.</b> '+esc(f[1])+'</li>').join('')+'</ul>':'')
    +'</details>';
@@ -93,11 +97,12 @@ function cfDraw(i){
   // RMN
   h+='<details class="sec"><summary>RMN de ¹H e ¹³C</summary>'+nmrBlock(c)+'</details>';
   // SDBS
-  h+='<details class="sec" open><summary>SDBS (espectros reais)</summary><p>O SDBS tem IV, MS, ¹H-RMN e ¹³C-RMN medidos deste composto. Busque pelo nome ou pelo CAS.</p><div class="row" style="margin:0 0 8px">'
+  h+='<details class="sec"><summary>SDBS (espectros reais)</summary><p>O SDBS tem IV, MS, ¹H-RMN e ¹³C-RMN medidos deste composto. Busque pelo nome ou pelo CAS.</p><div class="row" style="margin:0 0 8px">'
    +'<a class="btn" href="'+(sd?'https://sdbs.db.aist.go.jp/sdbs/cgi-bin/landingpage?sdbsno='+sd:'https://sdbs.db.aist.go.jp/')+'" target="_blank" rel="noopener">Abrir o SDBS</a>'
    +'<button class="btn ghost" type="button" data-copy="'+esc(c.n)+'">Copiar nome</button><button class="btn ghost" type="button" data-copy="'+esc(c.cas)+'">Copiar CAS</button></div>'
    +(sd?'<p class="srcl">Nº SDBS: <b>'+sd+'</b>. Se o link abrir a página inicial, aceite o aviso e busque por esse número.</p>':'<p class="srcl">Nº SDBS não cadastrado aqui. Use o nome ou o CAS na busca.</p>')
    +'<p class="srcl">Ao usar dados do SDBS, cite: SDBS, National Institute of Advanced Industrial Science and Technology (AIST), https://sdbs.db.aist.go.jp, acessado em '+hoje+'. O SDBS não permite coleta automática nem download em massa; por isso o app só liga para ele.</p></details>';
+  h+='<details class="sec"><summary>De onde vêm os dados</summary>'+srcH+'</details>';
   h+='<div class="row"><button class="btn ghost" type="button" data-icfill="'+c.i+'">Usar na Identificação do Composto</button></div>';
   $('#cfB').innerHTML=h;
 }
