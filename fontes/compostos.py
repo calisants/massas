@@ -118,6 +118,7 @@ RAW = [
  ("antraceno", [], "c1ccc2cc3ccccc3cc2c1", "120-12-7", "sólido", "incolor (fluoresce azul)", 216, 340, "I", None, ""),
  ("cânfora", [], "CC1(C)C2CCC1(C)C(=O)C2", "76-22-2", "sólido", "branco", 176, 204, "N", None, "sublima; cheiro característico"),
  ("ácido 5-formilsalicílico", ["ácido formilsalicílico", "ácido 5-formil-2-hidroxibenzoico", "5-formilsalicylic acid"], "O=Cc1ccc(O)c(c1)C(=O)O", "616-76-2", "sólido", "branco a amarelo", 250, None, "A1", None, "decompõe na fusão (PF 250 °C com decomposição, TCI e Sigma-Aldrich); aldeído, fenol e ácido carboxílico na mesma molécula"),
+ ("1-nitroso-2-naftol", ["1-nitroso-2-naphthol", "1-nitrosonaftalen-2-ol", "α-nitroso-β-naftol"], "Oc1ccc2ccccc2c1N=O", "131-91-9", "sólido", "laranja a marrom (TCI); amarelo-amarronzado (Wikipedia)", 107, None, "A2", None, "PF 106 a 110 °C (TCI); fenol com grupo nitroso; forma quelatos coloridos com Fe(II) e Co(II); tautomeria nitroso/oxima"),
 ]
 
 # Picos de MS (EI, 70 eV) escritos à mão a partir de espectros comuns. Os dos exercícios 1 a 12 vêm do EX (lousa/SDBS) e não passam por aqui.
@@ -160,6 +161,7 @@ IVG = [
  ("[CX2]#[NX1]", "nitrila", [(2260,2210,"C≡N (estiramento)","M–F, estreita",1,"a")]),
  ("[CX2]#[CX2;H1]", "alcino terminal", [(3310,3300,"≡C–H (estiramento)","f, estreita",1,"a"),(2150,2100,"C≡C (estiramento)","f–M",1,"a")]),
  ("[N+](=O)[O-]", "nitro", [(1550,1500,"N=O assimétrico","F",1,"a"),(1370,1300,"N=O simétrico","F",1,"a")]),
+ ("[#6][NX2]=O", "nitroso", [(1550,1480,"N=O de nitroso (estiramento)","M–F",1,"a")]),
  ("[CX4][Cl]", "cloreto de alquila", [(800,600,"C–Cl (estiramento)","F",0,"a")]),
  ("c[Cl]", "cloreto de arila", [(800,600,"C–Cl (estiramento)","F",0,"a"),(1100,1020,"C–H no plano, sensível ao halogênio (anel)","M–F",0,"s")]),
  ("c[OX2][CX4]", "éter de aril e alquila", [(1275,1200,"C–O–C assimétrico (aril alquil éter)","F",0,"s"),(1075,1020,"C–O–C simétrico (aril alquil éter)","F",0,"s")]),

@@ -42,7 +42,7 @@ const NOVID=[
   'Limpeza: apaguei arquivos soltos do app e do GitHub.'
  ]},
  {v:85,d:'04/11/2026',t:[
-  'IV: dá para escolher qualquer um dos 109 compostos (com busca). Cada um mostra um espectro simulado, parecido com o do SDBS, e a tabela de bandas numerada. Os 15 primeiros compostos e têm as bandas-chave conferidas.',
+  'IV: dá para escolher qualquer um dos 110 compostos (com busca). Cada um mostra um espectro simulado, parecido com o do SDBS, e a tabela de bandas numerada. Os 15 primeiros compostos e têm as bandas-chave conferidas.',
   'Guia do IV: mais de 55 linhas novas (isocianatos, tiocianatos, amidas, alcenos por substituição, epóxidos, grupos com P, Si, S e outros). Cada linha diz a fonte.',
   'Cada composto ganhou mais bandas no IV: C–O por tipo de álcool, deformações de CH₃ e CH₂, haletos, sulfonas, anidridos e outros grupos.',
     'Ensaios: as tabelas ficaram legíveis no celular (palavras não são mais cortadas).',
