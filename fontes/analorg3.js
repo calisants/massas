@@ -22,7 +22,14 @@ function stInit(){
 /* ---------- Novidades e aviso de atualização ---------- */
 const NOVID=[
  {v:0,d:'04/11/2026',t:[
-  '@@PENDENTE@@'
+  'Abas por assunto: Início, Compostos, Ensaios, IV, Massas e RMN. Tudo de massas (teoria, prática, livro e calculadora) fica na aba Massas. O que era o "Mais" foi para o Início.',
+  'RMN: nova aba com os quatro passos num espectro real (acetato de etila, SDBS), régua do deslocamento, laboratório de acoplamento, calculadoras de Hz e ppm, integração e GDH, macetes e dois problemas resolvidos.',
+  'Toque num pico, banda ou sinal (IV, massas e RMN) e o trecho da molécula fica colorido. Os espectros simulados ganharam o botão Ampliar, e a estrutura do IV ficou maior e centralizada.',
+  'RMN de 13C: 69 compostos conferidos na tabela de ppm do SDBS. O valor medido aparece na ficha. Corrigi faixas de tabela que não incluíam o valor real.',
+  'RMN de 1H: 65 compostos mostram o δ medido nos prints do SDBS. Corrigi faixas que não incluíam o valor real (clorofórmio, DMSO, DMF, formiatos, salicilatos, enonas e outras).',
+  'Compostos: a ficha não mostra mais os números dos carbonos. Os números ficam só na aba RMN.',
+  'Fontes: ficaram discretas, num item "Fonte" recolhido. Saíram o aviso dos exercícios 1 a 12 e as etiquetas repetidas.',
+  'Aviso de atualização: passou a mostrar a nota da versão em uso.'
  ]},
  {v:97,r:'86 a 97',d:'04/11/2026',t:[
   'IV: as bandas de 72 compostos foram conferidas na tabela de picos dos prints do SDBS. Corrigi as faixas de álcool, fenol, ácido, amina, amida, anidrido, éster aromático, vinila, furano e haletos.',
@@ -33,22 +40,19 @@ const NOVID=[
   'Limpeza: apaguei arquivos soltos do app e do GitHub.'
  ]},
  {v:85,d:'04/11/2026',t:[
-  'IV: dá para escolher qualquer um dos 106 compostos (com busca). Cada um mostra um espectro simulado, parecido com o do SDBS, e a tabela de bandas numerada. Os 15 compostos que você enviou do SDBS vêm primeiro e têm as bandas-chave conferidas.',
+  'IV: dá para escolher qualquer um dos 106 compostos (com busca). Cada um mostra um espectro simulado, parecido com o do SDBS, e a tabela de bandas numerada. Os 15 primeiros compostos e têm as bandas-chave conferidas.',
   'Guia do IV: mais de 55 linhas novas (isocianatos, tiocianatos, amidas, alcenos por substituição, epóxidos, grupos com P, Si, S e outros). Cada linha diz a fonte.',
   'Cada composto ganhou mais bandas no IV: C–O por tipo de álcool, deformações de CH₃ e CH₂, haletos, sulfonas, anidridos e outros grupos.',
-  'Massas: o exercício 1 a 12 deixou de ficar em destaque. Escolha qualquer composto numa lista só.',
-  'Ensaios: as tabelas ficaram legíveis no celular (palavras não são mais cortadas).',
+    'Ensaios: as tabelas ficaram legíveis no celular (palavras não são mais cortadas).',
   'Identificar: seções que abrem e fecham, com a contagem do que você marcou, e linhas mais baixas.',
   'Cor: Astronomia voltou. Início: a caixa Hoje saiu (Revisar tem atalho no Início). Avisos para o professor saíram.'
  ]},
  {v:83,d:'04/11/2026',t:[
   'Identificar: as duas telas viraram uma só, com o layout de Ensaios e todos os campos. Mostra as classes que sobram e os compostos mais compatíveis.',
-  'Início, Ensaios, Espectros e Mais foram reorganizados, sem cartões repetidos. As ferramentas de massas foram para Espectros.',
-  'Início tem a caixa Hoje: revisão, próximo exercício e simulado.',
-  'Mais > Ajustes: zoom com os dedos (desligado por padrão) e treinos sem pistas (opcional).',
-  'Mais > Revisar: pergunta errada nos quizzes volta em 1, 3 e 7 dias.',
+    'Início > Ajustes: zoom com os dedos (desligado por padrão) e treinos sem pistas (opcional).',
+  'Início > Revisar: pergunta errada nos quizzes volta em 1, 3 e 7 dias.',
   'O app lembra a tela e o que você digitou quando você sai e volta.',
-  'Fontes ficam recolhidas, com a etiqueta visível. Etiquetas: "Conferido: [fonte]" ou "Escrito por Claude, sem fonte conferida".',
+  'Fontes ficam recolhidas, com a etiqueta visível. Cada bloco diz de onde vem o dado.',
   'Cores: ficaram 5 (Azul, Grafite, Roxo, Química e Orgânica).',
   'RMN: espectros de 1H e 13C simulados para cada composto, com sinais numerados e integração opcional. Não são os medidos (esses estão no SDBS).',
   'IV: o botão Treinar voltou (estava sem acesso).'
@@ -138,7 +142,7 @@ function fontesRecolher(root){
     p.dataset.fr='1';
     const d=document.createElement('details');d.className='fonte';
     const sm=document.createElement('summary');
-    if(tags.length){tags.forEach(t=>{sm.appendChild(t.cloneNode(true));t.remove();});sm.insertAdjacentHTML('beforeend','<span class="mut"> ver fonte</span>');}
+    if(tags.length){const ok=tags.some(t=>t.classList.contains('sv'));tags.forEach(t=>{t.replaceWith(document.createTextNode(t.textContent+'.'));});sm.textContent=ok?'Fonte':'Fonte não conferida';}
     else sm.textContent='Fonte';
     p.parentNode.insertBefore(d,p);d.appendChild(sm);d.appendChild(p);
   });
@@ -321,7 +325,7 @@ function drawIV(){
   if(e)h+='<div class="ans" style="border-radius:6px;margin:10px 0"><span class="t">Pista do IV para o espectro de massas</span>'+esc(e.pista)+'</div>';
   const sd=c.sdbs||(c.ex&&typeof INTS!=='undefined'&&INTS[c.ex]?INTS[c.ex].sdbs:null);
   h+='<h3 style="margin:12px 0 4px">Espectro simulado</h3><div class="nmrwrap">'+ivSpec(c,bs)+'<button class="zbtn" type="button" data-zoom>Ampliar</button></div>';
-  h+='<p class="srcl" style="margin:0 0 8px">'+(c.irc?srcTag(true,c.irc===1?'Conferido: SDBS':'Conferido em parte: SDBS')+' As bandas-chave foram conferidas no espectro do SDBS que você enviou (medido em '+esc(c.irm)+'). ':srcTag(false,'Escrito por Claude, sem fonte conferida')+' ')
+  h+='<p class="srcl" style="margin:0 0 8px">'+(c.irc?srcTag(true,c.irc===1?'Conferido: SDBS':'Conferido em parte: SDBS')+' As bandas-chave foram conferidas no espectro do SDBS (medido em '+esc(c.irm)+'). ':srcTag(false,'Sem fonte conferida')+' ')
     +'<b>O desenho é simulado, não é o medido.</b> Cada banda é posta no meio da faixa da tabela, com a intensidade típica. Os números dos círculos são os da tabela abaixo. No espectro real, conjugação, ligação de H e o meio da medida deslocam as bandas.'+(sd?' Nº SDBS: <b>'+sd+'</b>.':'')+'</p>';
   h+='<div class="tbl"><table class="obt nostk cmp cmp-iv"><thead><tr><th>#</th><th>cm⁻¹</th><th>O que é</th></tr></thead><tbody>'+bs.map((b,i)=>'<tr'+(b.at&&b.at.length?' class="hlr" data-at="'+b.at.join(',')+'" data-hk="b'+(i+1)+'" data-tx="'+ea('Banda '+(i+1)+': '+b.t+' · '+(b.hi===b.lo?'~'+b.hi:b.lo+'–'+b.hi)+' cm⁻¹')+'"':'')+'><td><b>'+(i+1)+'</b></td><td class="n">'+(b.hi===b.lo?'~'+b.hi:b.lo+'–'+b.hi)+'</td><td>'+esc(b.t)+'<div class="mut sm">'+esc(ivIw(b.i))+' · '+esc(IVSRC[b.s]||b.s)+'</div></td></tr>').join('')+'</tbody></table></div>';
   if(c.ivf&&c.ivf.length)h+='<h3 style="margin:14px 0 4px">O que desloca as bandas deste composto</h3><dl class="gl">'+c.ivf.map(f=>'<div><dt>'+esc(f[0])+'</dt><dd>'+esc(f[1])+'</dd></div>').join('')+'</dl>';
@@ -379,3 +383,189 @@ function zoomOpen(btn){
   o.querySelector('.zmx').onclick=close;
   document.body.classList.add('zmopen');document.body.appendChild(o);o.querySelector('.zmx').focus();
 }
+
+/* ---------- RMN: aba didática (figuras, laboratório de acoplamento, cálculos, macetes) ---------- */
+(function(){
+  const NS='http://www.w3.org/2000/svg',fr=(x,d)=>(+x).toFixed(d==null?2:d).replace('.',',');
+  const NM={0:'singleto',1:'dubleto',2:'tripleto',3:'quarteto',4:'quinteto',5:'sexteto',6:'septeto'},AB={0:'s',1:'d',2:'t',3:'q',4:'quint',5:'sext',6:'sept'};
+  const PASC=n=>{let r=[1];for(let i=0;i<n;i++){const s=[1];for(let k=1;k<r.length;k++)s.push(r[k-1]+r[k]);s.push(1);r=s;}return r;};
+  /* um sinal lorentziano com as linhas de n+1 */
+  function sinal(d0,n,J,pw,span,hi){return PASC(n).map((w,k)=>({x:d0+(k-n/2)*J,w:w}));}
+  /* ---- figura 1: acetato de etila anotado ---- */
+  function fig1(){
+    const W=340,H=210,L=12,R=12,top=40,base=196,hi=5,lo=0,px=d=>L+(hi-d)/(hi-lo)*(W-L-R);
+    const S=[{d:4.119,n:3,h:2,l:'q',lab:'CH₂'},{d:2.038,n:0,h:3,l:'s',lab:'CH₃–C=O'},{d:1.26,n:2,h:3,l:'t',lab:'CH₃'}];
+    const J=0.075,g=0.012,N=700,pw=W-L-R;let ys=[];let mx=0;
+    for(let k=0;k<=N;k++){const d=hi-k/N*(hi-lo);let y=0;
+      S.forEach(s=>{const ls=sinal(s.d,s.n,J),sw=ls.reduce((a,b)=>a+b.w,0);ls.forEach(l=>{const t=d-l.x;y+=s.h*(l.w/sw)*g/Math.PI/(t*t+g*g);});});
+      ys.push(y);if(y>mx)mx=y;}
+    const Y=v=>base-v/mx*80;let p='';ys.forEach((y,k)=>p+=(k?'L':'M')+(L+k/N*pw).toFixed(1)+','+Y(y).toFixed(1));
+    let tk='';for(let d=0;d<=5;d++){tk+='<line class="tk" x1="'+px(d)+'" y1="'+base+'" x2="'+px(d)+'" y2="'+(base+4)+'"/><text class="tl" x="'+px(d)+'" y="'+(base+15)+'" text-anchor="middle">'+d+'</text>';}
+    /* integração em degraus: sobe da esquerda para a direita (δ alto → baixo) */
+    let acc=0,ip='M'+L+','+(base-96),tot=8;const step=h=>h/tot*40;
+    let ibase=108,iy=ibase;ip='M'+L+','+iy.toFixed(1);
+    let ilab='';
+    S.forEach(s=>{const x0=px(s.d+0.45),x1=px(s.d-0.45),y1=iy-step(s.h);ip+='L'+x0.toFixed(1)+','+iy.toFixed(1)+'L'+x1.toFixed(1)+','+y1.toFixed(1);iy=y1;
+      ilab+='<text class="rmt" x="'+(px(s.d)+0).toFixed(1)+'" y="'+(iy-4).toFixed(1)+'" text-anchor="middle" fill="var(--blue)">'+s.h+' H</text>';});
+    ip+='L'+(W-R)+','+iy.toFixed(1);
+    const badge=(x,y,n)=>'<circle cx="'+x+'" cy="'+y+'" r="8" fill="var(--keep)"/><text x="'+x+'" y="'+(y+3.6)+'" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--surface)">'+n+'</text>';
+    let lbl='';S.forEach(s=>{lbl+='<text class="rmt" x="'+px(s.d).toFixed(1)+'" y="'+(base+40)+'" text-anchor="middle">'+s.l+'</text>'
+      +'<text class="rmt mut" x="'+px(s.d).toFixed(1)+'" y="'+(base+53)+'" text-anchor="middle">'+s.lab+'</text>';
+      lbl+='<text class="rmt" x="'+px(s.d).toFixed(1)+'" y="'+(base+66)+'" text-anchor="middle" style="font-size:9.5px">'+fr(s.d,2)+'</text>';});
+    return '<svg viewBox="0 0 '+W+' '+(base+74)+'" class="nmrspec" role="img" aria-label="Espectro de 1H do acetato de etila com os quatro passos de leitura">'
+      +'<path d="'+ip+'" fill="none" stroke="var(--blue)" stroke-width="1.4"/>'+ilab
+      +'<path class="sp" d="'+p+'"/><line class="ax" x1="'+L+'" y1="'+base+'" x2="'+(W-R)+'" y2="'+base+'"/>'+tk
+      +'<text class="tl" x="'+(W/2)+'" y="'+(base+28)+'" text-anchor="middle" style="font-size:9px">δ (ppm)</text>'+lbl
+      +badge(20,16,1)+'<text class="rmt" x="34" y="19.5">3 sinais</text>'
+      +badge(130,16,2)+'<text class="rmt" x="144" y="19.5">posição em ppm</text>'
+      +badge(20,34,3)+'<text class="rmt" x="34" y="37.5" fill="var(--blue)">integral (degraus)</text>'
+      +badge(200,34,4)+'<text class="rmt" x="214" y="37.5">forma: q, s, t</text>'
+      +'</svg>';
+  }
+  /* ---- régua de deslocamento ---- */
+  function ruler(){
+    const W=340,L0=96,R0=8,mx=13,pxd=d=>L0+(mx-d)/mx*(W-L0-R0),rh=19,top=34;
+    const B=[['Alifático (CH₃, CH₂, CH)',0.8,2.0,'--keep'],['α a C=O, anel ou N',2.0,3.2,'--blue'],['H–C–O e H–C–X',3.0,4.4,'--amber'],['Alceno',4.5,6.5,'--lost'],['Aromático',6.5,8.4,'--blue'],['Aldeído',9.3,10.1,'--keep'],['Ácido COOH',10,13,'--lost'],['O–H, N–H (varia)',0.5,8.5,'--muted',1]];
+    const H=top+B.length*rh+30;let s='';
+    s+='<text class="rmt mut" x="'+(W-R0)+'" y="12" text-anchor="end">blindado ← mais elétrons em volta</text><text class="rmt mut" x="'+L0+'" y="12">desblindado →</text>';
+    s+='<line x1="'+L0+'" y1="19" x2="'+(W-R0)+'" y2="19" stroke="var(--muted)" stroke-width="1" marker-end="none"/>';
+    B.forEach((b,i)=>{const y=top+i*rh,x0=pxd(b[2]),x1=pxd(b[1]);
+      s+='<text class="rmt" x="2" y="'+(y+12)+'" style="font-size:9.5px">'+b[0]+'</text>'
+        +'<rect x="'+x0.toFixed(1)+'" y="'+y+'" width="'+(x1-x0).toFixed(1)+'" height="14" rx="3" fill="var('+b[3]+')" opacity="'+(b[4]?.28:.75)+'"'+(b[4]?' stroke="var(--muted)" stroke-dasharray="3 2"':'')+'/>';});
+    const yb=top+B.length*rh+2;s+='<line class="ax" x1="'+L0+'" y1="'+yb+'" x2="'+(W-R0)+'" y2="'+yb+'"/>';
+    for(let d=0;d<=13;d++){s+='<line class="tk" x1="'+pxd(d)+'" y1="'+yb+'" x2="'+pxd(d)+'" y2="'+(yb+4)+'"/><text class="tl" x="'+pxd(d)+'" y="'+(yb+15)+'" text-anchor="middle">'+d+'</text>';}
+    s+='<text class="rmt mut" x="'+(W-R0)+'" y="'+(yb+28)+'" text-anchor="end" style="font-size:9px">0 = TMS</text><text class="tl" x="'+L0+'" y="'+(yb+28)+'" style="font-size:9px">δ (ppm)</text>';
+    return '<svg viewBox="0 0 '+W+' '+H+'" class="nmrspec" role="img" aria-label="Régua com as regiões de deslocamento químico de 1H">'+s+'</svg>';
+  }
+  /* ---- laboratório de acoplamento ---- */
+  function lab(){
+    const o=document.getElementById('lbOut');if(!o)return;
+    let n1=+$('#lbN1').value,n2=+$('#lbN2').value,J1=Math.max(.5,+$('#lbJ1').value||7),J2=Math.max(.5,+$('#lbJ2').value||2);
+    let gr=[];if(n1>0)gr.push({n:n1,J:J1,c:0});if(n2>0)gr.push({n:n2,J:J2,c:1});
+    const eq=gr.length===2&&Math.abs(J1-J2)<0.05;
+    if(eq)gr=[{n:n1+n2,J:J1,c:0}];
+    gr.sort((a,b)=>b.J-a.J);
+    const steps=[];gr.forEach(g=>{for(let i=0;i<g.n;i++)steps.push([g.J,g.c]);});
+    if(steps.length>8){o.innerHTML='<p class="srcl">O desenho vai até 8 H vizinhos no total.</p>';return;}
+    let cur=[{x:0,w:1}];const lv=[cur],ed=[];
+    steps.forEach(st=>{const nx={},e=[];cur.forEach(l=>{[-1,1].forEach(sg=>{const x=+(l.x+sg*st[0]/2).toFixed(3);(nx[x]=nx[x]||{x:x,w:0}).w+=l.w;e.push([l.x,x]);});});
+      cur=Object.values(nx).sort((a,b)=>a.x-b.x);lv.push(cur);ed.push(e);});
+    const span=steps.reduce((a,b)=>a+b[0],0),W=340,cx=W/2,sc=Math.min(14,250/Math.max(span,10)),dy=20,top=22,K=steps.length;
+    const base=top+K*dy+54,mw=Math.max(...cur.map(l=>l.w));
+    let s='<text class="rmt mut" x="'+cx+'" y="12" text-anchor="middle">um H, sem vizinhos</text>';
+    s+='<line x1="'+cx+'" y1="'+(top-6)+'" x2="'+cx+'" y2="'+top+'" stroke="var(--ink)" stroke-width="1.6"/>';
+    ed.forEach((e,i)=>{const y0=top+i*dy,y1=y0+dy,col=steps[i][1]?'var(--blue)':'var(--ink)';
+      e.forEach(p=>{s+='<line x1="'+(cx+p[0]*sc).toFixed(1)+'" y1="'+y0+'" x2="'+(cx+p[1]*sc).toFixed(1)+'" y2="'+y1+'" stroke="'+col+'" stroke-width="1" opacity=".75"/>';});});
+    const yE=top+K*dy;
+    cur.forEach(l=>{const x=(cx+l.x*sc).toFixed(1),h=8+l.w/mw*34;
+      s+='<line x1="'+x+'" y1="'+yE+'" x2="'+x+'" y2="'+(yE+h)+'" stroke="var(--ink)" stroke-width="2.2"/><text class="rmt" x="'+x+'" y="'+(yE+h+12)+'" text-anchor="middle" style="font-size:10px">'+l.w+'</text>';});
+    if(!K)s+='<text class="rmt" x="'+cx+'" y="'+(top+30)+'" text-anchor="middle">1 linha: singleto</text>';
+    const nl=cur.length,ws=cur.map(l=>l.w).join(' : ');
+    let nome;
+    if(!K)nome='singleto (s)';
+    else if(gr.length===1)nome=(NM[gr[0].n]||'multipleto')+(AB[gr[0].n]?' ('+AB[gr[0].n]+')':'');
+    else{const a=AB[gr[0].n],b=AB[gr[1].n];nome=(a&&b)?'"'+(NM[gr[0].n])+' de '+NM[gr[1].n].replace('dubleto','dubletos').replace('tripleto','tripletos').replace('quarteto','quartetos').replace('quinteto','quintetos')+'" ('+a+b+')':'multipleto (m)';}
+    let txt='<p style="margin:8px 0 0"><b>'+nome+'</b>: '+nl+(nl>1?' linhas':' linha')+(K?', alturas '+ws+'.':'.')+'</p>';
+    if(eq)txt+='<p class="srcl">As duas J são iguais, então as linhas se sobrepõem e vale n+1 com n = '+(n1+n2)+'.</p>';
+    else if(gr.length===2)txt+='<p class="srcl">Cada linha do grupo de J maior ('+fr(gr[0].J,1)+' Hz) se divide de novo pelo grupo de J menor ('+fr(gr[1].J,1)+' Hz). Linhas: ('+(gr[0].n+1)+') × ('+(gr[1].n+1)+') = '+(gr[0].n+1)*(gr[1].n+1)+'.</p>';
+    else if(K)txt+='<p class="srcl">'+gr[0].n+' H vizinhos: n + 1 = '+(gr[0].n+1)+' linhas. A distância entre linhas vizinhas é a J = '+fr(gr[0].J,1)+' Hz.</p>';
+    o.innerHTML='<svg viewBox="0 0 '+W+' '+(base+6)+'" class="nmrspec" role="img" aria-label="Desdobramento do sinal: '+nome+'">'+s+'<line class="ax" x1="12" y1="'+(yE+46)+'" x2="'+(W-12)+'" y2="'+(yE+46)+'" style="display:none"/></svg>'+txt;
+  }
+  /* ---- calculadoras ---- */
+  function calcF(){
+    const F=+$('#cxF').value,D=+$('#cxD').value,J=+$('#cxJ').value,o=$('#cxOut');if(!(F>0)){o.innerHTML='';return;}
+    o.innerHTML='<div class="rmcalcr"><span>δ em Hz do TMS</span><b>'+fr(D*F,1)+' Hz</b><em>'+fr(D,2)+' ppm × '+fr(F,1)+' MHz</em></div>'
+      +'<div class="rmcalcr"><span>J em ppm</span><b>'+fr(J/F,4)+' ppm</b><em>'+fr(J,1)+' Hz ÷ '+fr(F,1)+' MHz</em></div>'
+      +'<div class="rmcalcr"><span>Campo magnético B₀</span><b>'+fr(F/42.577,2)+' T</b><em>¹H: 42,577 MHz por tesla</em></div>'
+      +'<div class="rmcalcr"><span>Frequência do ¹³C neste campo</span><b>'+fr(F*0.25145,1)+' MHz</b><em>cerca de ¼ da do ¹H</em></div>';
+    const T=$('#cxTab');
+    T.innerHTML='<div class="tbl"><table class="obt nostk"><thead><tr><th>Aparelho</th><th>Sinal de '+fr(D,2)+' ppm, em Hz</th><th>J de '+fr(J,1)+' Hz, em ppm</th></tr></thead><tbody>'
+      +[60,90,300,400,600].map(f=>'<tr><td>'+f+' MHz</td><td class="n">'+fr(D*f,0)+'</td><td class="n">'+fr(J/f,4)+'</td></tr>').join('')+'</tbody></table></div>';
+  }
+  function calcI(){
+    const v=$('#cgI').value.split(/[\s;]+/).map(x=>parseFloat(x.replace(',','.'))).filter(x=>x>0),T=+$('#cgT').value,o=$('#cgOut');
+    if(!v.length){o.innerHTML='<p class="srcl">Digite os valores das integrais.</p>';return;}
+    const mn=Math.min(...v),r=v.map(x=>x/mn);let k=0;
+    for(let m=1;m<=8&&!k;m++)if(r.every(x=>Math.abs(x*m-Math.round(x*m))<0.15))k=m;
+    let h='<div class="tbl"><table class="obt nostk"><thead><tr><th>Sinal</th><th>Valor</th><th>÷ menor</th>'+(k>1?'<th>× '+k+'</th>':'')+(T>0?'<th>× '+T+' ÷ soma</th>':'')+'</tr></thead><tbody>';
+    const sum=v.reduce((a,b)=>a+b,0);
+    v.forEach((x,i)=>{h+='<tr><td>'+(i+1)+'</td><td class="n">'+fr(x,1)+'</td><td class="n">'+fr(r[i],2)+'</td>'+(k>1?'<td class="n">'+fr(r[i]*k,2)+'</td>':'')+(T>0?'<td class="n"><b>'+fr(x/sum*T,2)+'</b></td>':'')+'</tr>';});
+    h+='</tbody></table></div>';
+    if(k){const ints=r.map(x=>Math.round(x*k));h+='<p style="margin:8px 0 0"><b>Proporção: '+ints.join(' : ')+'</b> (soma '+ints.reduce((a,b)=>a+b,0)+').'+(T>0?(ints.reduce((a,b)=>a+b,0)===T?' Bate com os '+T+' H da fórmula.':' A fórmula tem '+T+' H: '+(T%ints.reduce((a,b)=>a+b,0)===0?'multiplique a proporção por '+T/ints.reduce((a,b)=>a+b,0)+'.':'confira se falta um sinal ou se a proporção está certa.')):'')+'</p>';}
+    else h+='<p class="srcl" style="margin-top:8px">Não deu proporção de números inteiros pequenos. Confira as medidas ou procure um sinal sobreposto.</p>';
+    if(T>0)h+='<p class="srcl">A última coluna distribui o total de H da fórmula na proporção das áreas. O valor mais próximo de um inteiro é o número de H do sinal.</p>';
+    o.innerHTML=h;
+  }
+  function calcG(){
+    const C=+$('#gdC').value,H=+$('#gdH').value,N=+$('#gdN').value,X=+$('#gdX').value,o=$('#gdOut'),g=(2*C+2+N-H-X)/2;
+    let m;
+    if(!Number.isInteger(g)||g<0)m='Resultado inválido: confira a fórmula (para uma molécula neutra o GDH é inteiro e não negativo).';
+    else if(g===0)m='Sem anel e sem ligação π: cadeia saturada. No ¹H, não espere sinais acima de ~4,5 ppm além de O–H e N–H.';
+    else if(g===1)m='Um anel <b>ou</b> uma ligação π (C=O, C=C). O IV ajuda a decidir: banda de C=O perto de 1700 aponta para carbonila.';
+    else if(g>=4)m='4 ou mais: pense em anel benzênico (3 ligações π + 1 anel = 4). Procure sinais em 6,5 a 8,5 ppm.';
+    else m='Duas ou três insaturações: combine anéis, C=C, C=O, C≡C (conta 2) e C≡N (conta 2).';
+    o.innerHTML='<div class="rmcalcr"><span>GDH</span><b>'+(Number.isFinite(g)?fr(g,Number.isInteger(g)?0:1):'—')+'</b><em>(2·'+C+' + 2 + '+N+' − '+H+' − '+X+') ÷ 2</em></div><p style="margin:6px 0 0">'+m+'</p>';
+  }
+  function tabSinais(){
+    const el=$('#cqTab');if(!el||typeof COMP==='undefined')return;
+    const want=['etanol','acetona','éter dietílico','ciclohexano','tolueno','benzeno','acetato de etila','2-butanona'];
+    const rows=[];want.forEach(w=>{const c=COMP.find(x=>x.n.toLowerCase()===w);if(c&&c.h1&&c.c13)rows.push('<tr><td>'+esc(c.n)+' <span class="mut sm">'+fmt(c.f)+'</span></td><td class="n">'+c.h1.length+'</td><td class="n">'+c.c13.length+'</td></tr>');});
+    el.innerHTML=rows.length?'<div class="tbl"><table class="obt nostk"><thead><tr><th>Composto</th><th>Sinais de ¹H</th><th>Sinais de ¹³C</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></div><p class="srcl" style="margin-top:6px">Contagem teórica, pela simetria da estrutura. No espectro real, sinais com δ muito parecido podem se sobrepor e aparecer como um só.</p>':'';
+  }
+  /* ---- macetes ---- */
+  function mini(t){
+    const one=(n,x)=>PASC(n).map((w,k)=>{const xx=x+(k-n/2)*7,h=4+w/Math.max(...PASC(n))*16;return '<line x1="'+xx+'" y1="30" x2="'+xx+'" y2="'+(30-h)+'" stroke="var(--ink)" stroke-width="2"/>';}).join('');
+    const map={s:[[0,20]],d:[[1,20]],t:[[2,20]],q:[[3,20]],'t+q':[[2,22],[3,66]],'d+sept':[[1,22],[6,70]],'d+d':[[1,22],[1,66]]};
+    const lst=map[t]||map.s;
+    return '<svg viewBox="0 0 100 34" width="100" height="34" aria-hidden="true">'+lst.map(a=>one(a[0],a[1])).join('')+'<line x1="2" y1="31" x2="98" y2="31" stroke="var(--line)"/></svg>';
+  }
+  const MAC=[
+    ['Ordem de ataque',null,'Fórmula → GDH → número de sinais → integração → δ → multiplicidade → monte os pedaços. Pular um passo é onde mais se erra.'],
+    ['A soma das integrais é o total de H',null,'Se a conta não fecha, falta um sinal (um O–H largo, por exemplo) ou a proporção está errada. Confira antes de interpretar.'],
+    ['Etila: tripleto + quarteto','t+q','CH₃ em tripleto (~1,2) e CH₂ em quarteto, com a mesma J (~7 Hz). Onde o quarteto cai mostra quem está ligado ao CH₂: ~2,4 ao lado de C=O (2-butanona, 2,449), ~3,4 a 3,5 em éter e ~4,1 em éster (acetato de etila, 4,119).'],
+    ['Isopropila: dubleto de 6 H + septeto de 1 H','d+sept','Dois CH₃ iguais presos a um mesmo CH. O CH vê 6 H e vira septeto; os CH₃ veem 1 H e viram dubleto.'],
+    ['tert-butila: singleto grande de 9 H','s','Nove H iguais e nenhum vizinho com H. Um singleto altíssimo, em torno de 1,0 a 1,3.'],
+    ['Singleto de 3 H: olhe o δ','s','~2,1: CH₃–C=O (2-butanona, 2,139). ~2,3: CH₃ preso a anel (tolueno). ~3,3 a 3,9: CH₃–O (anisol, 3,745; salicilato de metila, 3,926).'],
+    ['Quem corta o acoplamento',null,'O, N, C=O e carbono sem H não passam o acoplamento. Os H de um lado e do outro deles não se enxergam. Por isso CH₃–O e CH₃–C=O saem em singleto.'],
+    ['Sinal largo que some com D₂O',null,'É O–H, N–H ou COOH. Uma gota de D₂O troca o H por D e o sinal desaparece. Esse H também não desdobra os vizinhos, em geral.'],
+    ['Região de cada coisa, de relance',null,'Acima de 10: ácido carboxílico. 9 a 10: aldeído. 6,5 a 8,5: aromático. 4,5 a 6,5: alceno. 3 a 4,5: H em carbono com O ou halogênio. 2 a 3: ao lado de C=O ou de anel. Abaixo de 2: alcano.'],
+    ['Aldeído: o sinal solitário',null,'Um pico de 1 H entre 9 e 10 ppm. Se há CH ao lado, vira tripleto ou dubleto fino (J de 1 a 3 Hz). Se for aromático (benzaldeído), é singleto.'],
+    ['Anel aromático',null,'Monossubstituído: 5 H juntos perto de 7,1 a 7,4. Para com grupos diferentes: dois "dubletos" de 2 H, J ≈ 8 Hz. Para com grupos iguais: um só singleto.'],
+    ['A mesma J nos dois sinais','d+d','Dois grupos que se acoplam mostram a mesma J. Para ligar pedaços, procure pares com a mesma J: tripleto de 7 Hz só combina com quarteto de 7 Hz.'],
+    ['Erro comum: contar os H do próprio carbono',null,'Na regra n+1, n são os H dos carbonos <b>vizinhos</b>. Os H do próprio grupo não desdobram o sinal dele.'],
+    ['Telhado aponta para o parceiro',null,'Dois sinais acoplados e próximos se inclinam um para o outro, como um telhado. O lado mais alto aponta para o H com que ele se acopla.'],
+    ['¹³C: conte carbonos diferentes',null,'Simetria junta carbonos iguais num só sinal. Benzeno monossubstituído: 4 sinais para 6 C (ipso, orto, meta, para). Para-xileno: 3 sinais (CH₃, C do anel com CH₃, CH do anel).'],
+    ['¹³C: onde cada coisa cai',null,'Abaixo de 90: sp³. 100 a 150: alceno e aromático. 160 a 185: éster, ácido, amida. 190 a 220: aldeído e cetona. Carbono sem H (C=O, quaternário) costuma sair mais baixo que os outros.'],
+    ['DEPT-135: quantos H tem cada C',null,'CH e CH₃ saem para cima, CH₂ para baixo, e carbono sem H não aparece. Com isso você separa CH₃/CH de CH₂ e acha os quaternários pelo que falta.'],
+    ['Pico de solvente não é composto',null,'CDCl₃: ¹H em 7,26 e ¹³C em 77,2. DMSO-d₆: 2,50 e 39,5. D₂O: 4,79. Tire esses picos antes de contar sinais.'],
+    ['GDH ≥ 4 e sinais entre 6,5 e 8,5',null,'Quase sempre é um anel benzênico (3 ligações π + 1 anel = 4). Confira o padrão de substituição pelo número de H aromáticos.']
+  ];
+  function macDraw(){const o=$('#rmMac');if(!o||o.dataset.ok)return;o.dataset.ok='1';
+    o.innerHTML=MAC.map(m=>'<div class="rule rmtip"><div class="rmtipt"><h3>'+m[0]+'</h3>'+(m[1]?'<div class="rmmini">'+mini(m[1])+'</div>':'')+'</div><p>'+m[2]+'</p></div>').join('')
+      +'<p class="srcl">Regras de bolso de livro-texto, sem fonte conferida. Os δ citados de compostos (2-butanona, acetato de etila, anisol, salicilato de metila) vêm dos prints do SDBS enviados. Regras não substituem os quatro passos.</p>';}
+  /* ---- troca de painel ---- */
+  function rp(k){
+    document.querySelectorAll('[data-rpane]').forEach(d=>d.hidden=d.dataset.rpane!==k);
+    document.querySelectorAll('.rseg [data-rp]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.rp===k?'true':'false'));
+    if(k==='mac')macDraw();
+    try{sessionStorage.setItem('massas-rp',k);}catch(e){}
+  }
+  window.rmPane=rp;
+  function init(){
+    if(!document.getElementById('rmFig1'))return;
+    $('#rmFig1').innerHTML=fig1();$('#rmRuler').innerHTML=ruler();
+    const o1=[0,1,2,3,4,5,6].map(n=>'<option value="'+n+'">'+n+'</option>').join('');$('#lbN1').innerHTML=o1;    $('#lbN2').innerHTML=[0,1,2,3,4].map(n=>'<option value="'+n+'">'+n+'</option>').join('');
+    $('#lbN1').value=3;$('#lbN2').value=0;
+    const PRE=[['CH₂ de etila (3 H vizinhos)',3,7,0,2],['CH de isopropila (6 H)',6,7,0,2],['CH₂ do meio de propila (3 + 2 H)',3,7,2,7],['H de vinil (trans 17 + cis 10 Hz)',1,17,1,10],['H aromático (orto 8 + meta 2 Hz)',1,8,1,2]];
+    $('#lbPre').innerHTML=PRE.map((p,i)=>'<button class="chip" type="button" data-pre="'+i+'">'+p[0]+'</button>').join('');
+    $('#lbPre').onclick=e=>{const b=e.target.closest('[data-pre]');if(!b)return;const p=PRE[+b.dataset.pre];$('#lbN1').value=p[1];$('#lbJ1').value=p[2];$('#lbN2').value=p[3];$('#lbJ2').value=p[4];lab();};
+    ['lbN1','lbN2','lbJ1','lbJ2'].forEach(i=>$('#'+i).addEventListener('input',lab));lab();
+    ['cxF','cxD','cxJ'].forEach(i=>$('#'+i).addEventListener('input',calcF));calcF();
+    ['cgI','cgT'].forEach(i=>$('#'+i).addEventListener('input',calcI));calcI();
+    ['gdC','gdH','gdN','gdX'].forEach(i=>$('#'+i).addEventListener('input',calcG));calcG();
+    tabSinais();
+    document.querySelectorAll('.rseg [data-rp]').forEach(b=>b.onclick=()=>rp(b.dataset.rp));
+    rp('ler');
+  }
+  init();
+})();

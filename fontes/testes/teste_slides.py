@@ -6,7 +6,7 @@ with sync_playwright() as p:
     b=abrir(p);pg=b.new_page(viewport={'width':390,'height':800})
     er=[];pg.on('pageerror',lambda e:er.append(str(e)))
     pg.goto('file:///home/claude/massas/index.html')
-    pg.evaluate("go('p-sp')");pg.click('[data-go="p-sl"]')
+    pg.evaluate("go('p-ms')");pg.click('[data-go="p-sl"]')
     n=pg.locator('#slBody figure').count();print('figs',n)
     pg.wait_for_timeout(300)
     ok=pg.evaluate("[...document.querySelectorAll('#slBody img')].every(i=>i.complete&&i.naturalWidth>100)")

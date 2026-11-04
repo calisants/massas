@@ -426,34 +426,58 @@ def _mult(n):
 def classify_h(x, nH):
     sym = x.GetSymbol()
     heavy = [n for n in x.GetNeighbors() if n.GetAtomicNum() > 1]
+    if sym == 'S': return ("S–H de tiol", 1.0, 4.0, 1)
     if sym == 'O':
         if any(_is_carbonyl_C(n) for n in heavy): return ("O–H de ácido carboxílico", 10.0, 13.0, 1)
-        if any(n.GetIsAromatic() for n in heavy): return ("O–H de fenol", 4.0, 8.0, 1)
+        if any(n.GetIsAromatic() for n in heavy):
+            ar = [n for n in heavy if n.GetIsAromatic()][0]
+            if any(_is_carbonyl_C(k) for a in ar.GetNeighbors() if a.GetIsAromatic() for k in a.GetNeighbors() if not k.GetIsAromatic()):
+                return ("O–H de fenol com ligação de H para a carbonila vizinha", 10.0, 12.0, 1)
+            return ("O–H de fenol", 4.0, 8.0, 1)
         return ("O–H de álcool", 1.0, 5.5, 1)
     if sym == 'N':
         if any(_is_carbonyl_C(n) for n in heavy): return ("N–H de amida", 5.0, 8.5, 1)
+        if sum(1 for n in heavy if n.GetIsAromatic()) >= 2: return ("N–H de diarilamina", 5.0, 6.0, 1)
         if any(n.GetIsAromatic() for n in heavy): return ("N–H de anilina", 3.0, 4.5, 1)
         return ("N–H de amina", 0.5, 3.0, 1)
     if x.GetIsAromatic():
         ring_het = any(n.GetSymbol() != 'C' and n.GetIsAromatic() for n in x.GetNeighbors())
-        if ring_het: return ("H de anel heteroaromático", 6.3, 8.8, 0)
+        if ring_het: return ("H de anel heteroaromático", 6.2, 8.8, 0)
         return ("H aromático", 6.5, 8.4, 0)
     hyb = x.GetHybridization()
-    if _is_carbonyl_C(x): return ("H de aldeído", 9.3, 10.1, 0)
+    if _is_carbonyl_C(x):
+        bd = x.GetOwningMol().GetBondBetweenAtoms
+        if any(n.GetSymbol() in ('O', 'N') and bd(x.GetIdx(), n.GetIdx()).GetBondTypeAsDouble() == 1.0 for n in x.GetNeighbors()):
+            return ("H de formiato, ácido fórmico ou formamida", 7.8, 8.3, 0)
+        return ("H de aldeído", 9.3, 10.1, 0)
     if hyb == Chem.HybridizationType.SP: return ("≡C–H", 2.0, 3.1, 0)
-    if hyb == Chem.HybridizationType.SP2: return ("H de alceno", 4.5, 6.5, 0)
+    if hyb == Chem.HybridizationType.SP2:
+        if any(_is_carbonyl_C(n) for n in x.GetNeighbors()): return ("H de alceno ligado a C=O", 5.8, 7.5, 0)
+        if any(n.GetIsAromatic() for n in x.GetNeighbors()): return ("H de alceno ligado a anel", 6.2, 7.9, 0)
+        return ("H de alceno", 4.5, 6.5, 0)
     nb = list(x.GetNeighbors())
     for n in nb:
         if n.GetSymbol() == 'O':
+            if sum(1 for k in nb if k.GetSymbol() == 'O') >= 2: return ("H anomérico ou de acetal", 4.5, 5.8, 0)
             ester = any(_is_carbonyl_C(k) for k in n.GetNeighbors() if k.GetIdx() != x.GetIdx())
-            return (("O–CH de éster", 3.6, 4.3, 0) if ester else ("C–H ligado a O (álcool ou éter)", 3.2, 4.1, 0))
+            if ester: return ("O–CH de éster", 3.6, 4.3, 0)
+            if any(_is_carbonyl_C(k) for k in nb): return ("C–H ligado a O e a C=O", 3.9, 4.9, 0)
+            if any(k.GetSymbol() == 'C' and k.GetIsAromatic() for k in nb): return ("C–H benzílico ligado a O", 4.2, 5.0, 0)
+            return ("C–H ligado a O (álcool ou éter)", 3.2, 4.1, 0)
     for n in nb:
         if n.GetSymbol() == 'N':
             amide = any(_is_carbonyl_C(k) for k in n.GetNeighbors() if k.GetIdx() != x.GetIdx())
-            return (("C–H ligado a N de amida", 2.9, 3.6, 0) if amide else ("C–H ligado a N (amina)", 2.2, 3.2, 0))
+            if not amide and any(k.GetSymbol() == 'C' and k.GetIsAromatic() for k in nb): return ("C–H benzílico ligado a N", 3.6, 4.2, 0)
+            return (("C–H ligado a N de amida", 2.7, 3.6, 0) if amide else ("C–H ligado a N (amina)", 2.2, 3.2, 0))
     for n in nb:
-        if n.GetSymbol() in ("Cl", "Br", "I", "F"):
-            return ("C–H ligado a halogênio", 3.0, 4.4, 0)
+        if n.GetSymbol() == 'S': return ("C–H ligado a S", 2.0, 3.0, 0)
+    hal = [n.GetSymbol() for n in nb if n.GetSymbol() in ("Cl", "Br", "I", "F")]
+    if len(hal) >= 3:
+        if hal.count("I") >= 3: return ("H de iodofórmio", 4.5, 5.3, 0)
+        if hal.count("Br") >= 3: return ("H de bromofórmio", 6.5, 7.0, 0)
+        return ("H de haloforme (CHCl₃)", 7.0, 7.6, 0)
+    if len(hal) == 2: return ("C–H com dois halogênios", 3.8, 5.6, 0)
+    if hal: return ("C–H ligado a halogênio", 3.0, 4.4, 0)
     for n in nb:
         if _is_carbonyl_C(n): return ("C–H α à carbonila", 2.0, 2.8, 0)
     for n in nb:
@@ -464,8 +488,8 @@ def classify_h(x, nH):
         if n.GetSymbol() == 'C' and n.GetHybridization() == Chem.HybridizationType.SP: return ("C–H propargílico", 1.7, 2.6, 0)
     for n in nb:
         if n.GetSymbol() == 'C' and any(k.GetSymbol() in ("O", "N", "Cl", "Br", "I") for k in n.GetNeighbors() if k.GetIdx() != x.GetIdx()):
-            return (("CH₃ β a heteroátomo", 1.0, 1.5, 0) if nH == 3 else ("C–H β a heteroátomo", 1.3, 2.0, 0))
-    return {3:("CH₃ alifático", 0.8, 1.2, 0), 2:("CH₂ alifático", 1.2, 2.0, 0)}.get(nH, ("CH alifático", 1.4, 2.0, 0))
+            return (("CH₃ β a heteroátomo", 0.9, 1.5, 0) if nH == 3 else ("C–H β a heteroátomo", 1.3, 2.0, 0))
+    return {3:("CH₃ alifático", 0.8, 1.3, 0), 2:("CH₂ alifático", 1.2, 2.0, 0)}.get(nH, ("CH alifático", 1.4, 2.0, 0))
 
 def nmr_h(m):
     mh = Chem.AddHs(m)
@@ -627,7 +651,7 @@ def liga_h_c(m, h1, c13):
         parts += het
         sg["c"] = " e ".join(parts)
 
-from compostos_sdbs import SDBSMS, IRMEIO, C13OBS
+from compostos_sdbs import SDBSMS, IRMEIO, C13OBS, H1OBS
 from compostos_pub import PUB, DIV, DATA as PUB_DATA
 
 def build_comp(svgfn, EXD):
@@ -660,6 +684,7 @@ def build_comp(svgfn, EXD):
         if d.get("ms"):
             d["msat"] = {str(k): [v[0], v[1]] for k, v in ms_atoms(m, d["M"], set(d["ms"])).items()}
         if nome in C13OBS: d["c13m"] = C13OBS[nome]
+        if nome in H1OBS: d["h1m"] = list(H1OBS[nome])
         pb = PUB.get(nome, {})
         d["cid"] = pb.get("cid")
         d["pfs"] = "c" if "pf" in pb else ("d" if "pf" in DIV.get(nome, []) else "")

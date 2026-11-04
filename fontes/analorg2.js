@@ -37,10 +37,12 @@ const HLRO='<div class="hlro" data-dica="Toque num número do espectro ou numa l
 function nmrBlock(c){
   const c13=c.c13.slice().sort((a,b)=>(b.lo+b.hi)-(a.lo+a.hi)),cc=Object.assign({},c,{c13:c13});
   const fr=x=>String(x).replace('.',',');
-  let h='<p class="srcl" style="margin:0 0 6px"><span class="tag sm">Escrito por Claude, sem fonte conferida</span> <b>Espectro simulado, não é o medido.</b> Número de sinais, integração e multiplicidade (regra n+1) saem da estrutura. A posição de cada sinal é o meio da faixa de tabela, então não bate com o espectro real. Os desdobramentos foram aumentados e sinais com a mesma faixa foram afastados um pouco, para dar para ver. O espectro medido está no SDBS.</p>';
+  let h='<p class="hint" style="margin:0 0 6px"><b>Espectro simulado, não é o medido.</b> Número de sinais, integração e multiplicidade (regra n+1) saem da estrutura. A posição de cada sinal é o meio da faixa de tabela, então não bate com o espectro real. Os desdobramentos foram aumentados e sinais com a mesma faixa foram afastados um pouco, para dar para ver. O espectro medido está no SDBS.</p><p class="srcl">Simulação por regras de tabela, sem fonte conferida.</p>';
   h+='<h4 style="margin:10px 0 4px">¹H: '+c.h1.length+(c.h1.length>1?' sinais':' sinal')+' ('+c.h1.reduce((a,x)=>a+x.h,0)+' H no total)</h4>';
   h+='<div class="nmrwrap">'+nmrSpec(c,'h')+'<button class="zbtn" type="button" data-zoom>Ampliar</button><button class="chip" type="button" data-nmrint aria-pressed="false">Mostrar a integração</button></div>';
   h+='<div class="tbl"><table class="obt nostk cmp cmp-nmr"><thead><tr><th>#</th><th>Sinal</th><th>Faixa (ppm)</th></tr></thead><tbody>'+c.h1.map((x,i)=>'<tr class="hlr" data-at="'+x.on.join(',')+'" data-hk="h'+(i+1)+'" data-tx="'+ea('¹H, sinal '+(i+1)+': '+x.t+' · '+x.h+' H'+(x.c?' em '+x.c:'')+' · δ '+x.lo+'–'+x.hi+' ppm')+'"><td><b>'+(i+1)+'</b></td><td>'+esc(x.t)+'<div class="mut sm">'+x.h+' H'+(x.c?' em '+esc(x.c):'')+' · '+esc(x.m)+'</div></td><td class="n">'+fr(x.lo)+'–'+fr(x.hi)+'</td></tr>').join('')+'</tbody></table></div>';
+  if(c.h1m)h+='<div class="meas"><span class="tag sv">Conferido: SDBS</span> <b>¹H medido'+(c.h1m[0]?' (SDBS No. '+c.h1m[0]+')':'')+':</b> '+c.h1m[1].map(v=>String(v).replace('.',',')).join(' · ')+' ppm<div class="mut sm">Lido do print do SDBS, valores de δ do pico (o print não traz integração nem J). '+(c.h1m[2]?'O print traz só parte dos sinais. ':'')+'A faixa da tabela acima é só referência; o medido é o que vale.</div></div>';
+  else h+='<p class="srcl">Sem print de ¹H conferido para este composto: use só a faixa de tabela.</p>';
   h+='<h4 style="margin:12px 0 4px">¹³C: '+c.c13.length+(c.c13.length>1?' sinais':' sinal')+' (de '+c.c13.reduce((a,x)=>a+x.n,0)+' C)</h4>';
   h+='<div class="nmrwrap">'+nmrSpec(cc,'c')+'<button class="zbtn" type="button" data-zoom>Ampliar</button><p class="mut" style="margin:2px 0 6px">Cada linha é um tipo de C. A altura é só ilustrativa (mais C equivalentes, linha um pouco maior).</p></div>';
   h+='<div class="tbl"><table class="obt nostk cmp cmp-nmr"><thead><tr><th>C</th><th>Sinal</th><th>Faixa (ppm)</th></tr></thead><tbody>'+c13.map((x,i)=>'<tr class="hlr" data-at="'+x.at.join(',')+'" data-hk="c'+(i+1)+'" data-tx="'+ea('¹³C, sinal '+(i+1)+': '+x.t+' · '+x.n+' C · δ '+x.lo+'–'+x.hi+' ppm')+'"><td><b>'+(i+1)+'</b></td><td>'+esc(x.t)+'<div class="mut sm">'+x.n+' C equivalente'+(x.n>1?'s':'')+(x.pos?' · posição '+x.pos+' ao substituinte':'')+'</div></td><td class="n">'+x.lo+'–'+x.hi+'</td></tr>').join('')+'</tbody></table></div>';
@@ -70,7 +72,7 @@ function cfDraw(i){
   const sd=c.sdbs||(c.ex&&typeof INTS!=='undefined'&&INTS[c.ex]?INTS[c.ex].sdbs:null);
   let h='<h2 class="scr">'+esc(c.n)+'</h2>'+(c.a.length?'<p class="scrsub">Também: '+c.a.map(esc).join(', ')+'</p>':'');
   const rowd=(k,v)=>'<div class="cfr"><dt>'+k+'</dt><dd>'+v+'</dd></div>';
-  h+='<figure class="cfs hlfig"><div>'+(c.sn||c.s)+'</div><figcaption>'+fmt(c.f)+' · '+String(c.mw).replace('.',',')+' g/mol'+(c.sn?'<br><span class="mut sm">Os números nos carbonos são os sinais de ¹³C da seção de RMN (carbonos equivalentes têm o mesmo número).</span>':'')+'</figcaption>'+HLRO+'</figure>'
+  h+='<figure class="cfs hlfig"><div>'+(c.si||c.s)+'</div><figcaption>'+fmt(c.f)+' · '+String(c.mw).replace('.',',')+' g/mol'+''+'</figcaption>'+HLRO+'</figure>'
    +'<div class="cfq">'
    +'<div class="cfqi"><span>Estado a 25 °C</span><b>'+esc(c.est)+'</b></div>'
    +'<div class="cfqi"><span>Cor</span><b>'+esc(c.cor)+'</b></div>'
@@ -87,7 +89,7 @@ function cfDraw(i){
   {const pubs=c.pubsrc&&c.pubsrc.length;
    srcH='<p class="srcl"><b>Fonte:</b> '+(pubs?'PF e PE marcados "conferido" vêm do PubChem (mediana dos valores de '+c.pubsrc.map(esc).join(', ')+'), acessado em 04/11/2026'+(c.cid?' (CID '+c.cid+')':'')+'. ':'')
    +((c.pfs==='d'||c.pes==='d')?'Onde aparece "fontes divergem", o PubChem traz valores diferentes entre si e foi mantido o valor que já estava no app. ':'')
-   +'Estado, cor, grupo de solubilidade e CAS foram escritos por Claude, <b>sem fonte conferida</b>'+(pubs?'':', assim como PF e PE')+' (confirme no SDBS ou na Plataforma do professor antes de usar em relatório). Fórmula, massa, GDH e estrutura são calculados a partir da estrutura (RDKit).</p>';}
+   +'Estado, cor, grupo de solubilidade e CAS estão <b>sem fonte conferida</b>'+(pubs?'':', assim como PF e PE')+' (confirme no SDBS ou na Plataforma do professor antes de usar em relatório). Fórmula, massa, GDH e estrutura são calculados a partir da estrutura (RDKit).</p>';}
   // IV
   const iv=c.iv.map((b,k)=>b.concat([k])).sort((a,b)=>ivr(b)[1]-ivr(a)[1]);
   h+='<details class="sec" open><summary>Infravermelho: bandas esperadas</summary>'
@@ -100,7 +102,7 @@ function cfDraw(i){
   h+='<details class="sec"><summary>Espectrometria de massas</summary><p>M = <b>'+c.M+'</b> ('+(c.M%2?'ímpar: número ímpar de N':'par: zero ou número par de N')+').</p>';
   if(c.ms){const ma=c.msat||{},mat=k=>ma[k]?' data-at="'+ma[k][0].join(',')+'" data-hk="m'+k+'" data-tx="'+ea('m/z '+k+': '+ma[k][1])+'" tabindex="0"':'';
     const tp=c.msi?c.msi.map(p=>'<span class="pk'+(p[0]===c.M?' base':'')+'"'+mat(p[0])+'>'+p[0]+' <small>'+p[1]+'%</small></span>').join(''):c.ms.map(p=>'<span class="pk'+(p===c.M?' base':'')+'"'+mat(p)+'>'+p+'</span>').join('');
-    h+=(c.msi?'<div class="nmrwrap">'+msSpec(c)+'<button class="zbtn" type="button" data-zoom>Ampliar</button></div>':'')+'<p>'+tp+'</p>'+(Object.keys(ma).length?'<p class="srcl">Os picos sublinhados têm um trecho da molécula associado: toque para ver. Só marquei os fragmentos que a regra do livro atribui sem ambiguidade (M⁺·, CH₃⁺, C₆H₅⁺, C₇H₇⁺, C₆H₅CO⁺, CH₃CO⁺, CH₂=OH⁺, CH₂=NH₂⁺). Os demais picos ficam sem destaque porque eu não tenho fonte para dizer qual parte da molécula os origina.</p>':'')+'<p class="srcl">'+srcTag(c.msv>0,c.msv===2?'Conferido: SDBS':(c.msv?'Conferido: lousa e SDBS':'Escrito por Claude, sem fonte conferida'))+' '+(c.msv===2?'Picos do espectro SDBS No. '+c.sdbs+' ('+esc(c.msid)+'), lidos do gráfico em 04/11/2026; a intensidade relativa tem erro de uns 3 pontos.':c.msv?'Picos do exercício do app, com mecanismo.':'Picos típicos de EI 70 eV escritos por mim; confirme no SDBS.')+'</p>';}
+    h+=(c.msi?'<div class="nmrwrap">'+msSpec(c)+'<button class="zbtn" type="button" data-zoom>Ampliar</button></div>':'')+'<p>'+tp+'</p>'+(Object.keys(ma).length?'<p class="srcl">Os picos sublinhados têm um trecho da molécula associado: toque para ver. Só marquei os fragmentos que a regra do livro atribui sem ambiguidade (M⁺·, CH₃⁺, C₆H₅⁺, C₇H₇⁺, C₆H₅CO⁺, CH₃CO⁺, CH₂=OH⁺, CH₂=NH₂⁺). Os demais picos ficam sem destaque porque eu não tenho fonte para dizer qual parte da molécula os origina.</p>':'')+'<p class="srcl">'+srcTag(c.msv>0,c.msv===2?'Conferido: SDBS':(c.msv?'Conferido: lousa e SDBS':'Sem fonte conferida'))+' '+(c.msv===2?'Picos do espectro SDBS No. '+c.sdbs+' ('+esc(c.msid)+'), lidos do gráfico em 04/11/2026; a intensidade relativa tem erro de uns 3 pontos.':c.msv?'Picos do exercício do app, com mecanismo.':'Picos típicos de EI 70 eV escritos por mim; confirme no SDBS.')+'</p>';}
   else h+='<p class="empty">Sem picos cadastrados.</p>';
   if(nCl(c.f))h+='<p class="srcl">Contém Cl: aparece M+2 (isótopo ³⁷Cl). Com 1 Cl, M : M+2 é cerca de 3 : 1.</p>';
   if(c.ex)h+='<button class="btn" type="button" data-ms="'+c.ex+'">Ver os mecanismos de fragmentação</button>';
@@ -253,7 +255,7 @@ function icRun(){setTimeout(()=>{if(typeof icBadges==="function")icBadges();},0)
   else{
     h+=cl.ok.length?cl.ok.map(o=>'<div class="rescls"><h3>'+o.c.n+'</h3><p>Grupos possíveis: '+o.c.g.map(g=>SOLN[g]).join(', ')+'</p>'+(o.why.length?'<p>Combina: '+o.why.join('; ')+'.</p>':'')+(IDHINT[o.c.n]?'<p>'+IDHINT[o.c.n]+'</p>':'')+'</div>').join(''):'<p class="empty">Nenhuma classe da lista combina com tudo. Confira o que você marcou.</p>';
     if(cl.out.length)h+='<details style="margin-top:10px"><summary>Descartadas ('+cl.out.length+')</summary>'+cl.out.map(o=>'<div class="rescls out"><h3>'+o.c.n+'</h3><p>'+o.bad+'.</p></div>').join('')+'</details>';
-    h+='<p class="srcl">'+srcTag(false,'Escrito por Claude, sem fonte conferida')+' As regras das classes (quais bandas e elementos cada uma exige) foram montadas a partir da tabela de grupos do Analor e das bandas de IV do app. A lista não tem todas as classes.</p>';
+    h+='<p class="srcl">'+srcTag(false,'Sem fonte conferida')+' As regras das classes (quais bandas e elementos cada uma exige) foram montadas a partir da tabela de grupos do Analor e das bandas de IV do app. A lista não tem todas as classes.</p>';
   }
   h+='</details>';
   /* 2. compostos */
@@ -269,7 +271,7 @@ function icRun(){setTimeout(()=>{if(typeof icBadges==="function")icBadges();},0)
     h+=top.map(r=>'<div class="icr"><div class="top"><b><button class="back" style="margin:0;font-size:1rem" type="button" data-cf="'+r.c.i+'">'+esc(r.c.n)+'</button> <span class="mono" style="font-weight:400;color:var(--muted)">'+fmt(r.c.f)+'</span></b><span class="pct">'+(r.p>=10?r.p.toFixed(0):r.p.toFixed(1)).replace('.',',')+'%</span></div><div class="bar"><i style="width:'+Math.min(100,r.p).toFixed(1)+'%"></i></div>'
       +'<div class="cr">'+r.parts.map(p=>'<span class="'+(p.f>=0.7?'ok':p.f>=0.2?'md':'no')+'">'+(p.f>=0.7?'✓ ':p.f>=0.2?'~ ':'✗ ')+esc(p.lab)+'</span>').join('')+'</div>'
       +'<p class="det">'+r.parts.filter(p=>p.det&&p.f<0.7).map(p=>'<b>'+esc(p.lab)+':</b> '+esc(p.det)).join(' · ')+'</p></div>').join('');
-    h+='<p class="hint">Base: '+COMP.length+' compostos do app. ✓ combina, ~ combina em parte, ✗ não combina.</p><p class="srcl">'+srcTag(false,'Escrito por Claude, sem fonte conferida')+' Estado, cor e grupo de solubilidade do banco podem estar um pouco diferentes da sua tabela. PF e PE com a etiqueta Conferido vêm do PubChem.</p>';
+    h+='<p class="hint">Base: '+COMP.length+' compostos do app. ✓ combina, ~ combina em parte, ✗ não combina.</p><p class="srcl">'+srcTag(false,'Sem fonte conferida')+' Estado, cor e grupo de solubilidade do banco podem estar um pouco diferentes da sua tabela. PF e PE com a etiqueta Conferido vêm do PubChem.</p>';
     sum=' · melhor composto: '+esc(res[0].c.n)+' ('+(res[0].p>=10?res[0].p.toFixed(0):res[0].p.toFixed(1)).replace('.',',')+'%)';
   }
   h+='</details>';

@@ -184,8 +184,8 @@ h1{font-size:1.15rem}
 .pkh{margin:6px 0 4px;font-size:.9rem;color:var(--muted)}
 @media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}.card:hover{border-color:var(--keep)}}
 /* ---------- Analorg: estilos dos módulos novos ---------- */
-.tag.sv{background:var(--keep-soft);color:var(--keep)}
-.tag.sm{background:var(--note-soft);color:var(--note)}
+.tag.sv,.tag.sm{background:none;padding:0;margin-left:0;font-size:inherit;white-space:normal;color:var(--muted)}
+.tag.sm{color:var(--note)}
 .sgm{display:flex;margin:0 0 14px}
 .sgm button{flex:1;font:inherit;font-weight:500;background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:9px 6px;cursor:pointer;min-height:44px}
 .sgm button:first-child{border-radius:6px 0 0 6px}.sgm button:last-child{border-radius:0 6px 6px 0}.sgm button+button{border-left:0}
@@ -290,15 +290,26 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
       <button class="chip" type="button" data-go="p-so">2 Solubilidade</button>
       <button class="chip" type="button" data-go="p-el">3 Elementar</button>
       <button class="chip" type="button" data-go="p-iv">4 IV</button>
-      <button class="chip" type="button" data-go="p-an">5 Massas</button>
+      <button class="chip" type="button" data-go="p-ms">5 Massas</button>
       <button class="chip" type="button" data-go="p-rm">6 RMN</button>
     </div>
     <h2 class="mh">Estudar</h2>
     <div class="menu">
       <button class="mi" type="button" data-go="p-rv"><b>Revisar</b><span>Erros e perguntas que voltam em 1, 3 e 7 dias.</span></button>
       <button class="mi" type="button" data-go="p-ob"><b>Orgânica Básica</b><span>Grupos funcionais, hibridização, GDH, Lewis, acidez e forças intermoleculares.</span></button>
-      <button class="mi" type="button" data-go="p-en"><b>Ensaios</b><span>Preliminares, solubilidade, análise elementar e problemas resolvidos.</span></button>
-      <button class="mi" type="button" data-go="p-sp"><b>Espectros</b><span>IV, massas e RMN, com treino e ferramentas.</span></button>
+    </div>
+    <h2 class="mh">Descobrir um composto</h2>
+    <div class="menu">
+      <button class="mi" type="button" data-go="p-ic"><b>Identificar o composto</b><span>Junta o que você mediu e mostra as classes e os compostos mais compatíveis.</span></button>
+      <button class="mi" type="button" data-go="p-es"><b>Espectro novo (modo detetive)</b><span>Fórmula, picos e bandas de IV de um composto desconhecido: o app dá pistas.</span></button>
+    </div>
+    <h2 class="mh">O app</h2>
+    <div class="menu">
+      <button class="mi" type="button" data-go="p-st"><b>Ajustes</b><span>Cor do app, zoom e treinos sem pistas.</span></button>
+      <button class="mi" type="button" data-go="p-nv"><b>Novidades</b><span>O que mudou em cada atualização.</span></button>
+      <a class="mi" id="mSug" href="#" target="_blank" rel="noopener" hidden><b>Enviar sugestão ou erro</b><span>Abre o formulário. As respostas vão para uma planilha.</span></a>
+      <button class="mi" type="button" data-go="p-pg"><b>Salvar e levar o progresso</b><span>Gere um código para passar o que você estudou para outro aparelho.</span></button>
+      <button class="mi" type="button" data-go="p-fo"><b>Fontes e avisos</b><span>De onde vêm as tabelas e o que ainda precisa de conferência.</span></button>
     </div>
   </section>
 
@@ -323,7 +334,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   <section id="p-pf" role="region" aria-label="Preliminares e propriedades físicas" hidden>
     <button class="back" type="button" data-go="p-en">← Ensaios</button>
     <h2 class="scr">Preliminares e propriedades físicas</h2>
-    <p class="scrsub">Primeiros dados do composto desconhecido. Cada bloco diz de onde vem: <span class="tag sv">Conferido: Analor</span> ou <span class="tag sm">Escrito por Claude, sem fonte conferida</span>.</p>
+    <p class="scrsub">Primeiros dados do composto desconhecido.</p>
 
     <div class="el"><h3>Cor</h3>
       <p>Muitos compostos orgânicos são incolores. A cor aparece quando há <b>cromóforos</b>, que são ligações múltiplas (C=C, C≡C, C=O, C=N, N=N, N=O, C≡N) que absorvem luz no UV/visível.</p>
@@ -392,7 +403,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
 
     <div class="el"><h3>Para que servem o PF e o PEb na identificação</h3>
       <p>Depois da solubilidade e da análise elementar sobram algumas classes. O PF (sólido) ou o PEb (líquido) mede-se e compara-se com valores tabelados: na Ferramenta Analor dá para buscar por PF, PEb e elementos ao mesmo tempo. Uma faixa de fusão estreita (1 a 2 °C) sugere substância pura; faixa larga e mais baixa sugere impureza.</p>
-      <p class="src"><span class="tag sm">Escrito por Claude, sem fonte conferida</span> regra geral; em relatório ou prova, confirme o formato de resposta que o seu professor pede.</p></div>
+      <p class="src">Sem fonte conferida: regra geral; em relatório ou prova, confirme o formato de resposta que o seu professor pede.</p></div>
 
     <h2>Treinar</h2>
     <div id="pfQuiz"></div>
@@ -414,7 +425,8 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
       <div id="soFlow"></div>
     </div>
     <div id="so-teo" hidden>
-      <p class="hint">Por que cada solvente dissolve o quê. Isso ajuda a deduzir o grupo mesmo de um composto que você nunca viu. <span class="tag sm">Escrito por Claude, sem fonte conferida</span></p>
+      <p class="hint">Por que cada solvente dissolve o quê. Isso ajuda a deduzir o grupo mesmo de um composto que você nunca viu.</p>
+      <p class="src">Explicações sem fonte conferida.</p>
       <div class="el"><h3>Água</h3><p>Dissolve o que faz ligação de hidrogênio. Cada grupo polar (OH, NH₂, C=O, COOH) &ldquo;puxa&rdquo; cerca de 5 carbonos para dentro da água. Passou disso, a cadeia de carbono (apolar) vence e o composto não dissolve. Exemplo: etanol (2 C) mistura com água; 1-octanol (8 C) não.</p></div>
       <div class="el"><h3>Éter</h3><p>Só entra na marcha para quem já dissolveu em água. Sais e compostos muito polares (acetato de sódio, glicina, glicose) não dissolvem em éter: são S₂. Os polares orgânicos comuns (etanol, acetona, ácido acético) dissolvem: são S₁, S<sub>A</sub> ou S<sub>B</sub>.</p></div>
       <div class="el"><h3>Tornassol</h3><p>Diz se a solução aquosa é ácida (fica vermelho: S<sub>A</sub>), básica (fica azul: S<sub>B</sub>) ou neutra (não muda: S₁). Ácido acético acidifica a água; etilamina a torna básica; acetona não muda nada.</p></div>
@@ -441,7 +453,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   <section id="p-el" role="region" aria-label="Análise elementar" hidden>
     <button class="back" type="button" data-go="p-en">← Ensaios</button>
     <h2 class="scr">Análise elementar</h2>
-    <p class="scrsub">Como saber quais elementos o composto tem. Cada teste vira o elemento em um gás ou íon que mancha um papel com um reagente. <span class="tag sv">Conferido: Analor</span></p>
+    <p class="scrsub">Como saber quais elementos o composto tem. Cada teste vira o elemento em um gás ou íon que mancha um papel com um reagente.</p>
     <div class="sgm" role="group" aria-label="Partes da análise elementar">
       <button type="button" data-el="ele" aria-pressed="true">Elementos</button>
       <button type="button" data-el="hal" aria-pressed="false">Halogênios</button>
@@ -476,15 +488,15 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   <section id="p-pb" role="region" aria-label="Problemas resolvidos" hidden>
     <button class="back" type="button" data-go="p-en">← Ensaios</button>
     <h2 class="scr">Problemas resolvidos</h2>
-    <p class="scrsub">Cinco problemas do tipo &ldquo;descobrir o composto&rdquo;. Tente primeiro; depois abra a resolução e compare o raciocínio. <span class="tag sm">Escrito por Claude, sem fonte conferida</span></p>
-    <p class="hint">Os problemas e as resoluções são meus. Os pontos de fusão e de ebulição são valores que conheço de memória: confirme na <a href="https://analor.com.br/" target="_blank" rel="noopener">Ferramenta Analor</a> antes de confiar. A ordem da resolução segue a do laboratório: solubilidade, elementos, IV, constantes físicas.</p>
+    <p class="scrsub">Cinco problemas do tipo &ldquo;descobrir o composto&rdquo;. Tente primeiro; depois abra a resolução e compare o raciocínio.</p>
+    <p class="hint">Problemas e resoluções sem fonte conferida. Os pontos de fusão e de ebulição são valores de memória: confirme na <a href="https://analor.com.br/" target="_blank" rel="noopener">Ferramenta Analor</a> antes de confiar. A ordem da resolução segue a do laboratório: solubilidade, elementos, IV, constantes físicas.</p>
     <div id="pbList"></div>
   </section>
 
   <section id="p-cs" role="region" aria-label="Consulta rápida" hidden>
     <button class="back" type="button" data-go="p-en">← Ensaios</button>
     <h2 class="scr">Consulta rápida</h2>
-    <p class="scrsub">Tudo de ensaios em uma folha, para consultar com rapidez. Os dados vêm das outras telas; a organização é minha.</p>
+    <p class="scrsub">Tudo de ensaios em uma folha, para consultar com rapidez. Os dados vêm das outras telas.</p>
     <div id="csBody"></div>
   </section>
 
@@ -492,7 +504,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <button class="back" type="button" data-go="p-en">← Ensaios</button>
     <h2 class="scr">Notação ECGF</h2>
     <p class="scrsub">ECGF significa Esqueletos de Carbono e Grupos Funcionais. É uma notação linear que escreve a molécula com números, sinais e caracteres, deixando explícitos o esqueleto e os grupos funcionais. É ela que a Ferramenta Analor usa para buscar compostos no banco de dados. <span class="tag sv">Conferido: Analor</span></p>
-    <div class="why">O site diz que a notação tem <b>18 regras</b>, descritas em Costa Neto (2004, p. 1336). Eu <b>não consegui ler essas regras</b>. Abaixo estão só os códigos de cada grupo funcional, que o site lista página por página. O <b>método dos cortes</b>, citado no cronograma, também não achei no site.</div>
+    <div class="why">O site diz que a notação tem <b>18 regras</b>, descritas em Costa Neto (2004, p. 1336). As regras em si <b>não estão no site</b>. Abaixo estão só os códigos de cada grupo funcional, que o site lista página por página. O <b>método dos cortes</b>, citado no cronograma, também não consta no site.</div>
     <label for="ecq" style="margin-top:12px">Filtrar por grupo ou código<input class="f-p" type="text" id="ecq" placeholder="ex.: cetona, Est, Aro"></label>
     <div id="ecTbl"></div>
     <p class="src"><span class="tag sv">Conferido: Analor</span> descrição de cada página de &ldquo;Grupos funcionais&rdquo; (grupo, estrutura e notação ECGF). O site representa hidrocarboneto saturado por um número inteiro. A regra de como combinar os códigos numa molécula inteira não está nessas páginas.</p>
@@ -501,7 +513,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-an" role="tabpanel" aria-labelledby="t-an" hidden>
-    <button class="back" type="button" data-go="p-sp">← Espectros</button>
+    <button class="back" type="button" data-go="p-ms">← Massas</button>
     <div class="sgm msub" role="group" aria-label="Massas"><button type="button" data-go="p-an" aria-pressed="false">Analisar</button><button type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button type="button" data-go="p-tb" aria-pressed="false">Livro</button></div>
     <div id="an-in">
     <h2 class="scr">Espectrometria de massas</h2>
@@ -515,7 +527,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <div id="nrule" class="mhint"></div>
     </div>
     <div id="an-res" hidden>
-    <button class="back" type="button" id="an-back">← Mudar exercício ou picos</button>
+    <button class="back" type="button" id="an-back">← Escolher outro composto ou outros picos</button>
     <div id="exinfo"></div>
     <div id="spec"></div>
     <div id="mech"></div>
@@ -527,7 +539,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-tr" role="tabpanel" aria-labelledby="t-tr" hidden>
-    <button class="back" type="button" data-go="p-sp">← Espectros</button>
+    <button class="back" type="button" data-go="p-ms">← Massas</button>
     <div class="sgm msub" role="group" aria-label="Massas"><button type="button" data-go="p-an" aria-pressed="false">Analisar</button><button type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button type="button" data-go="p-tb" aria-pressed="false">Livro</button></div>
     <h2 class="scr">Treinar massas</h2>
     <p class="scrsub">Cada rodada tem 5 cartões e depois você pode parar. Escolha um modo. &ldquo;Qual saiu?&rdquo; mostra a perda entre dois picos e opções. &ldquo;Tente antes de ver&rdquo; pergunta também o tipo de cisão e a regra. O que você errar fica guardado em &ldquo;Revisar erros&rdquo;.</p>
@@ -536,7 +548,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-tb" role="tabpanel" aria-labelledby="t-tb" hidden>
-    <button class="back" type="button" data-go="p-sp">← Espectros</button>
+    <button class="back" type="button" data-go="p-ms">← Massas</button>
     <div class="sgm msub" role="group" aria-label="Massas"><button type="button" data-go="p-an" aria-pressed="false">Analisar</button><button type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button type="button" data-go="p-tb" aria-pressed="false">Livro</button></div>
     <h2 class="scr">Livro</h2>
     <p class="scrsub">Tabelas do Silverstein: o que saiu (Apêndice C) e o que ficou (Apêndice B).</p>
@@ -551,7 +563,6 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-iv" role="tabpanel" aria-labelledby="t-iv" hidden>
-    <button class="back" type="button" data-go="p-sp">← Espectros</button>
     <h2 class="scr">Infravermelho (IV)</h2>
     <div class="seg" role="group" aria-label="Partes do IV">
       <button type="button" data-v="v-comp" aria-pressed="true">Composto</button>
@@ -605,10 +616,10 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
         <div><dt>No plano × fora do plano</dt><dd>&ldquo;Plano&rdquo; é o plano que contém o átomo central e as duas ligações. Tesoura e balanço ficam nele. Sacudida e torção saem dele.</dd></div>
       </dl>
       <h2 style="margin-top:18px">Tabela completa de bandas</h2>
-      <p class="hint">Filtre pela faixa (cm⁻¹) ou digite um grupo (ex.: &ldquo;C=O&rdquo;, &ldquo;simétrico&rdquo;, &ldquo;tesoura&rdquo;). A linha &ldquo;Fonte&rdquo; diz de onde vem o valor: <b>apostila</b> e <b>tabela</b> são suas; <b>LibreTexts</b> foi conferida por Claude em fonte nomeada; &ldquo;referência geral&rdquo; foi escrita por Claude sem conferir em fonte nomeada, então confirme com o professor.</p>
+      <p class="hint">Filtre pela faixa (cm⁻¹) ou digite um grupo (ex.: &ldquo;C=O&rdquo;, &ldquo;simétrico&rdquo;, &ldquo;tesoura&rdquo;). A linha &ldquo;Fonte&rdquo; diz de onde vem o valor: <b>apostila</b> e <b>tabela</b> são da disciplina; <b>LibreTexts</b> é a tabela de IV do LibreTexts; &ldquo;referência geral&rdquo; não foi conferida em fonte nomeada, então confirme com o professor.</p>
       <label for="irtq">Filtrar<input class="f-m" type="text" id="irtq" placeholder="ex.: 1700, éster, guarda-chuva"></label>
       <div id="irtbl"></div>
-    <p class="hint">Fontes: sua <i>Apostila de Interpretação de Espectros de IV</i>, a <i>tabela análise org II</i>, a tabela de números de onda do Drive e, nas linhas marcadas, a tabela de IV do LibreTexts. Os números do arquivo de dados são os do JSON que você enviou, e as atribuições dele são minhas; confira com a tabela do professor.</p>
+    <p class="hint">Fontes: <i>Apostila de Interpretação de Espectros de IV</i>, a <i>tabela análise org II</i>, a tabela de números de onda do Drive e, nas linhas marcadas, a tabela de IV do LibreTexts. Os números vêm do arquivo de dados da disciplina; as atribuições a cada modo de vibração não foram conferidas, então confira com a tabela do professor.</p>
 
     </div>
     <div id="v-tr" hidden>
@@ -617,20 +628,8 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     </div>
   </section>
 
-  <section id="p-ma" role="tabpanel" aria-labelledby="t-ma" hidden>
-    <h2 class="scr">Mais</h2>
-    <div class="menu">
-      <button class="mi" type="button" data-go="p-rv"><b>Revisar</b><span>Perguntas que você errou voltam em 1, 3 e 7 dias.</span></button>
-      <button class="mi" type="button" data-go="p-st"><b>Ajustes</b><span>Cor do app, zoom e treinos sem pistas.</span></button>
-      <button class="mi" type="button" data-go="p-nv"><b>Novidades</b><span>O que mudou em cada atualização.</span></button>
-      <a class="mi" id="mSug" href="#" target="_blank" rel="noopener" hidden><b>Enviar sugestão ou erro</b><span>Abre o formulário. As respostas vão para uma planilha.</span></a>
-      <button class="mi" type="button" data-go="p-pg"><b>Salvar e levar o progresso</b><span>Gere um código para passar o que você estudou para outro aparelho.</span></button>
-      <button class="mi" type="button" data-go="p-fo"><b>Fontes e avisos</b><span>De onde vêm as tabelas e o que ainda precisa de conferência.</span></button>
-    </div>
-  </section>
-
   <section id="p-st" role="region" aria-label="Ajustes" hidden>
-    <button class="back" type="button" data-go="p-ma">← Mais</button>
+    <button class="back" type="button" data-go="p-in">← Início</button>
     <h2 class="scr">Ajustes</h2>
     <div class="menu">
       <button class="mi" type="button" data-go="p-co"><b>Cor do app</b><span>Escolha o tom que for mais confortável para você.</span></button>
@@ -640,14 +639,14 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-nv" role="region" aria-label="Novidades" hidden>
-    <button class="back" type="button" data-go="p-ma">← Mais</button>
+    <button class="back" type="button" data-go="p-in">← Início</button>
     <h2 class="scr">Novidades</h2>
     <p class="scrsub">O que mudou em cada atualização, em poucas linhas.</p>
     <div id="nvList"></div>
   </section>
 
   <section id="p-rv" role="region" aria-label="Revisar" hidden>
-    <button class="back" type="button" data-go="p-ma">← Mais</button>
+    <button class="back" type="button" data-go="p-in">← Início</button>
     <h2 class="scr">Revisar</h2>
     <p class="scrsub">As perguntas dos quizzes que você errou voltam aqui depois de 1, 3 e 7 dias. Acertou três vezes seguidas, sai da lista. No máximo 10 por dia.</p>
     <div id="rvBox"></div>
@@ -655,7 +654,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-ca" role="region" aria-label="Calculadora" hidden>
-    <button class="back" data-go="p-sp">← Espectros</button>
+    <button class="back" data-go="p-ms">← Massas</button>
     <h2 class="scr">Calculadora de massa</h2>
     <p class="hint">Digite a fórmula de um pedaço (por exemplo C3H7O ou CH3). O app soma as massas e mostra o que o livro lista para esse número.</p>
     <div class="row">
@@ -666,7 +665,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
 
 
   <section id="p-aj" role="region" aria-label="Como ler um pico" hidden>
-    <button class="back" data-go="p-sp">← Espectros</button>
+    <button class="back" data-go="p-ms">← Massas</button>
     <h2 class="scr">Como ler um pico</h2>
     <div class="how">
       <b>Como ler um pico</b>
@@ -682,9 +681,9 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
 
 
   <section id="p-pq" role="region" aria-label="Por que a ligação quebra ali" hidden>
-    <button class="back" data-go="p-sp">← Espectros</button>
+    <button class="back" data-go="p-ms">← Massas</button>
     <h2 class="scr">Por que a ligação quebra ali?</h2>
-    <p class="hint">Cada quebra tem um motivo. Estas regras explicam quase todos os exercícios. Cada exercício, no cartão do pico, tem o &ldquo;Por que quebra aqui?&rdquo; com a regra aplicada.</p>
+    <p class="hint">Cada quebra tem um motivo. Estas regras explicam quase todas as quebras do app. O cartão de cada pico traz o &ldquo;Por que quebra aqui?&rdquo; com a regra aplicada.</p>
 
     <div class="rule"><h3>Contagem de elétrons: quanto vale cada coisa</h3>
       <p>Para não se perder nos mecanismos, conte sempre estes valores. O traço (ligação) é um par de elétrons.</p>
@@ -701,7 +700,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
       <ol><li><b>Par livre (n)</b> de O ou N: não está em nenhuma ligação, só um núcleo o segura.</li><li><b>Elétron π</b> (C=C, C=O, anel): fica dividido entre dois núcleos e fora do eixo da ligação. Com conjugação, espalha-se ainda mais e fica mais fácil.</li><li><b>Elétron σ</b> (C–C, C–H): fica no eixo, entre dois núcleos, bem preso.</li></ol>
       <p><b>Desempates:</b></p>
       <ul><li><b>N contra O:</b> o N é menos eletronegativo e segura o par livre mais frouxo. Amina perde elétron mais fácil que álcool ou éter.</li><li><b>Par livre em ressonância fica mais preso:</b> o O do OH do ácido e o O do OCH3 do éster &ldquo;emprestam&rdquo; o par ao C=O. Por isso sai o par do O do C=O.</li><li><b>Conjugação facilita:</b> o estireno perde elétron mais fácil que o benzeno.</li><li><b>Sem par livre e sem π</b> (alcanos), só resta σ, e o M+· costuma ser fraco.</li></ul>
-      <p>Cada exercício tem a caixa &ldquo;Por que o elétron saiu daí?&rdquo;. No Treinar, o modo <b>Elétron</b> pergunta isso.</p></div>
+      <p>Cada composto tem a caixa &ldquo;Por que o elétron saiu daí?&rdquo;. No Treinar, o modo <b>Elétron</b> pergunta isso.</p></div>
 
     <div class="rule"><h3>Antes de tudo: o que é o &ldquo;radical que some&rdquo;?</h3>
       <p>No espectrômetro, a molécula perde 1 elétron e vira <b>M<sup>+·</sup></b>: tem <b>carga</b> (+) e um <b>elétron sozinho</b> (·). Quando ela quebra em 2 pedaços, só <b>um</b> fica com a carga e é visto no espectro. O outro pedaço é <b>neutro</b> e some, porque o aparelho só enxerga o que tem carga.</p>
@@ -711,7 +710,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     </div>
 
     <div class="rule"><h3>Anel com ramificação: a carga fica no anel</h3>
-      <p>Da sua aula (cíclicas saturadas ramificadas): a tendência é a <b>carga ficar no anel</b>, e a ramificação sai como <b>radical neutro</b>. Como fica: <b>[anel–R]<sup>+·</sup> → anel<sup>+</sup> + R·</b>.</p>
+      <p>Da aula (cíclicas saturadas ramificadas): a tendência é a <b>carga ficar no anel</b>, e a ramificação sai como <b>radical neutro</b>. Como fica: <b>[anel–R]<sup>+·</sup> → anel<sup>+</sup> + R·</b>.</p>
       <p><b>Conta de conferência:</b> o que sai é R·. Ex.: metilciclo-hexano (M = 98) perdendo CH<sub>3</sub>· (15) deixaria o cátion ciclo-hexila em m/z 83. É o que a regra prevê, e não um espectro que eu tenha conferido.</p></div>
 
     <div class="rule"><h3>Cisão homolítica × heterolítica</h3>
@@ -758,7 +757,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
       <p>• <b>Cátion primário → secundário → terciário:</b> um H (ou um CH3) passa para o carbono com carga, porque mais carbonos ligados estabilizam melhor. Ex.: n-butila → terc-butila (57).<br>• <b>Enol ⇄ ceto:</b> o H passa do O para o carbono. Ex.: CH2=CH–OH⁺· ⇄ CH3CHO⁺· (44).<br>• <b>Benzila → tropílio:</b> o CH2 entra no anel de 6 e forma um anel aromático de 7 (91).<br>• <b>H que passa para o heteroátomo:</b> deixa o N ou o O com octeto completo.</p>
       <p class="hint">Os rearranjos desenhados aqui vêm das aulas de referência. Rearranjo que não aparece nelas é possibilidade, não obrigação. Nos cartões, a caixa &ldquo;Possível rearranjo&rdquo; mostra as formas com a mesma massa.</p></div>
 
-    <p class="hint">Fonte dos princípios: Silverstein et al., cap. 1 (fragmentação de EI) e as lousas do professor. As regras são tendências, não leis: quando o exercício e a regra discordarem, vale a lousa.</p>
+    <p class="hint">Fonte dos princípios: Silverstein et al., cap. 1 (fragmentação de EI) e as lousas do professor. As regras são tendências, não leis: quando a regra e a lousa discordarem, vale a lousa.</p>
   <div id="se-anchor">    <h2 class="scr" style="margin-top:28px">Modelos com setas</h2>
     <p class="hint"><b>Treino de papel:</b> olhe um modelo por 20 segundos, cubra, e redesenhe as setas de memória. Depois descubra e compare. O app treina a escolha; só o papel treina a mão.</p>
     <p class="hint"><b>Seta de anzol</b> (meia ponta) = 1 elétron andando. <b>Seta inteira</b> (ponta cheia) = um par de elétrons andando. Os números mostram a ordem. Os modelos usam letras genéricas (Y = N ou O, R = grupo alquila). Para ver onde cada um aparece, abra o &ldquo;Por que quebra aqui?&rdquo; do pico.</p>
@@ -772,17 +771,17 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-sl" role="region" aria-label="Slides de mecanismos" hidden>
-    <button class="back" data-go="p-sp">← Espectros</button>
+    <button class="back" data-go="p-ms">← Massas</button>
     <h2 class="scr">Slides de mecanismos</h2>
     <p class="hint">Resumo do deck &ldquo;Análise Orgânica II, Espectroscopia de Massas&rdquo; (Prof. Jeronimo). Texto e figuras vêm dos slides dele. Toque na figura para ampliar.</p>
     <div class="rule"><h3>Regras do slide (resumo)</h3>
       <ul><li><b>Regra do nitrogênio:</b> massa par = nenhum N ou N par. Massa ímpar = N ímpar. Íon molecular par: quebra de ligação simples dá fragmento ímpar. Íon molecular ímpar: dá fragmento par. O fragmento deve conter todos os N.</li><li><b>M+• mais intenso:</b> aromáticos &gt; alquenos conjugados &gt; cíclicos &gt; sulfetos &gt; alcanos normais curtos &gt; mercaptanas.</li><li><b>Por grupo:</b> cetonas &gt; aminas &gt; ésteres &gt; éteres &gt; ácidos = aldeídos = amidas = halogenetos.</li><li><b>Em geral não aparece M+•:</b> álcoois alifáticos, nitritos, nitratos, nitro, nitrilas e compostos muito ramificados.</li><li><b>Elétron mais fácil de tirar:</b> não ligante &gt; π &gt; σ.</li></ul></div>
     <div id="slBody"></div>
-    <p class="hint">Fonte: slides de aula de Análise Orgânica (IFRJ). Os resumos em texto são meus, as figuras são dos slides.</p>
+    <p class="hint">Fonte: slides de aula de Análise Orgânica (IFRJ). Os resumos em texto foram escritos para o app; as figuras são dos slides.</p>
   </section>
 
   <section id="p-pg" role="region" aria-label="Salvar e levar o progresso" hidden>
-    <button class="back" data-go="p-ma">← Mais</button>
+    <button class="back" data-go="p-in">← Início</button>
     <h2 class="scr">Salvar e levar o progresso</h2>
     <p class="hint">O que você marca aqui (estudados, notas, revisões, cor) fica só neste aparelho e neste navegador. O app do GitHub e a versão aberta no Claude são cópias separadas e não conversam. Para levar de um para o outro: gere o código, copie, e cole no outro.</p>
     <div class="row"><button class="btn" id="pgGen" type="button">1. Gerar código</button><button class="btn ghost" id="pgCopy" type="button">Copiar</button></div>
@@ -793,13 +792,13 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-co" role="region" aria-label="Cor do app" hidden>
-    <button class="back" data-go="p-ma">← Mais</button>
+    <button class="back" data-go="p-in">← Início</button>
     <h2 class="scr">Cor do app</h2>
     <div class="pal" id="pals"></div>
   </section>
 
   <section id="p-es" role="region" aria-label="Espectro novo" hidden>
-    <button class="back" data-go="p-sp">← Espectros</button>
+    <button class="back" data-go="p-cp">← Compostos</button>
     <h2 class="scr">Espectro novo (modo detetive)</h2>
     <p class="hint">Para um composto que você ainda não resolveu. Preencha o que tiver. O app dá pistas, não a resposta: quem decide é você.</p>
     <div class="row">
@@ -812,13 +811,13 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-fo" role="region" aria-label="Fontes e avisos" hidden>
-    <button class="back" data-go="p-ma">← Mais</button>
+    <button class="back" data-go="p-in">← Início</button>
     <h2 class="scr">Fontes e avisos</h2>
     <p class="hint">Versão do app: <b class="mono" id="vers"></b>. Se a data não for a mais recente, feche e abra o app duas vezes.</p>
-      <p>Fonte das tabelas: Silverstein, Webster, Kiemle, Bryce. Spectrometric Identification of Organic Compounds, 8ª ed. (2014), Apêndice B (p. 67–68) e Apêndice C (p. 69–70). O livro avisa que as listas são sugestivas e não completas. Nas entradas com anel, o nome e a estrutura são a leitura que Claude fez do desenho do livro; confira na página indicada. "+ H" ou "+ 2H" indica rearranjo com transferência de hidrogênio. Exercícios 1 a 12 vêm da lousa do professor (os 1 a 5 pelas suas anotações do tablet, que são iguais às fotos do quadro; os 6 a 12 pelas fotos). O texto do porquê é explicação escrita por Claude. Nas estruturas, o desenho mostra o esqueleto; a carga + e o elétron desemparelhado (·) aparecem na legenda e, quando possível, no desenho.</p>
+      <p>Fonte das tabelas: Silverstein, Webster, Kiemle, Bryce. Spectrometric Identification of Organic Compounds, 8ª ed. (2014), Apêndice B (p. 67–68) e Apêndice C (p. 69–70). O livro avisa que as listas são sugestivas e não completas. Nas entradas com anel, o nome e a estrutura são a leitura que Claude fez do desenho do livro; confira na página indicada. "+ H" ou "+ 2H" indica rearranjo com transferência de hidrogênio. Nas estruturas, o desenho mostra o esqueleto; a carga + e o elétron desemparelhado (·) aparecem na legenda e, quando possível, no desenho.</p>
     <h2>Sobre o conteúdo de ensaios (Analorg)</h2>
       <p>Solubilidade, análise elementar, ignição, cor, ponto de fusão e ponto de ebulição seguem a <i>Plataforma QO é Vida</i> do Prof. Marcelo Sierpe Pedrosa (analor.com.br e as páginas dele no Google Sites). O texto foi parafraseado por Claude, não copiado. Os procedimentos de análise elementar citam Costa Neto (2004) e Feigl (1966), como o site. O cronograma vem da imagem postada no Classroom.</p>
-      <p>As etiquetas <span class="tag sv">Conferido: [fonte]</span> e <span class="tag sm">Escrito por Claude, sem fonte conferida</span> dizem de onde vem cada bloco. Foram escritos por Claude, sem fonte conferida: os exemplos de compostos, as perguntas de treino, a lista de classes e as regras da tela &ldquo;Identificar&rdquo;, o uso do PF como indício de pureza e a leitura da linha tracejada do fluxograma (N ou S leva a MN).</p>
+      <p>Cada bloco tem um item &ldquo;Fonte&rdquo; recolhido: toque para ver de onde vem. Quando diz &ldquo;não conferida&rdquo;, o texto não tem fonte verificada. Estão nesse caso: os exemplos de compostos, as perguntas de treino, a lista de classes e as regras da tela &ldquo;Identificar&rdquo;, o uso do PF como indício de pureza e a leitura da linha tracejada do fluxograma (N ou S leva a MN).</p>
   </section>
 
   <!--@@ANALORG2_HTML@@-->
@@ -827,10 +826,10 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
 <nav class="bnav" role="tablist" aria-label="Seções">
   <button class="tab" role="tab" id="t-in" aria-selected="true" aria-controls="p-in"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg>Início</button>
   <button class="tab" role="tab" id="t-cp" aria-selected="false" aria-controls="p-cp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 4v8l-7 4-7-4V7z"/><path d="M12 11v8M5 7l7 4 7-4"/></svg>Compostos</button>
-  <button class="tab" role="tab" id="t-ic" aria-selected="false" aria-controls="p-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.4-4.4"/></svg>Identificar</button>
   <button class="tab" role="tab" id="t-en" aria-selected="false" aria-controls="p-en"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/></svg>Ensaios</button>
-  <button class="tab" role="tab" id="t-sp" aria-selected="false" aria-controls="p-sp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h3.5l2-6 4 12 2.5-6H21"/></svg>Espectros</button>
-  <button class="tab" role="tab" id="t-ma" aria-selected="false" aria-controls="p-ma"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="5.5" cy="12" r="1.6"/><circle class="dot" cx="12" cy="12" r="1.6"/><circle class="dot" cx="18.5" cy="12" r="1.6"/></svg>Mais</button>
+  <button class="tab" role="tab" id="t-iv" aria-selected="false" aria-controls="p-iv"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h3l2-5 3 10 3-8 2 3h5"/></svg>IV</button>
+  <button class="tab" role="tab" id="t-ms" aria-selected="false" aria-controls="p-ms"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M10 20V4M15 20v-7M20 20V8"/></svg>Massas</button>
+  <button class="tab" role="tab" id="t-rm" aria-selected="false" aria-controls="p-rm"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17h4l1.5-9 2 12 2.5-9 1.5 6H21"/><path d="M3 21h18"/></svg>RMN</button>
 </nav>
 
 <script>
@@ -981,7 +980,7 @@ function cisTxt(ex,r){
 const DUV=['12:58','8:50'];
 function duvTxt(ex,row){return '';}
 const POSS=['3:78','8:52','10:44','2:39','11:87'];
-function origemTxt(ex){return ex.ok?(ex.n<=5?'Massa, estrutura e mecanismo: da lousa do professor, pelas suas anotações do tablet (iguais às fotos do quadro). O porquê é explicação minha, baseada no Silverstein.':'Massa, estrutura e mecanismo: da lousa do professor. O porquê é explicação minha, baseada no Silverstein.'):'Ainda não conferido com o professor: tudo aqui é minha leitura do livro.';}
+function origemTxt(ex){return ex.ok?'Mecanismo conforme a lousa do professor; o porquê segue o Silverstein.':'Mecanismo e porquê a partir do Silverstein.';}
 function rearrBox(ex,row){
   const r=(typeof REARR!=='undefined')&&REARR[ex.n+':'+row[0]];if(!r)return '';
   const poss=POSS.indexOf(ex.n+':'+row[0])>=0;
@@ -1000,7 +999,7 @@ function arrowBox(ex,row){
   let h='<div class="arw"><b>Setas do mecanismo</b> <small>(anzol = 1 elétron; seta cheia = 1 par)</small><p class="src" style="margin-top:2px">Estrutura de partida: '+esc(a.p)+'.</p>';
   (a.v||[]).forEach(v=>{h+=(v[0]?'<p class="arwl"><b>'+esc(v[0])+'</b></p>':'')+'<figure class="st arws">'+v[1].replace('aria-label="Estrutura com setas do mecanismo"','aria-label="'+esc(v[2].join(' ')).replace(/"/g,'&quot;')+'"')+'</figure><ul class="arwt">'+v[2].map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>'+(v[3]&&v[3].length?'<details class="why ec" open><summary>Contagem de elétrons (antes, movimento, depois)</summary><ul class="arwt">'+v[3].map(x=>'<li>'+fmt(esc(x))+'</li>').join('')+'</ul></details>':'');});
   if(a.n)h+='<p class="src">'+esc(a.n)+'</p>';
-  return h+'<p class="src">Setas desenhadas por mim a partir das regras do livro. Se o desenho da lousa for diferente, vale a lousa.</p></div>';
+  return h+'<p class="src">Setas desenhadas a partir das regras do livro. Se o desenho da lousa for diferente, vale a lousa.</p></div>';
 }
 function stepCard(ex,row){
   const t=GLOS[tipoQ(row)],d=row[1]-row[0];
@@ -1038,7 +1037,7 @@ function mechBox(ex){
   const box=$('#mech');if(!box)return;
   if(!ex){box.innerHTML='';return;}
   const L=(typeof MECH!=='undefined'&&MECH[ex.n])||null;
-  if(!L){box.innerHTML='<details class="why" open><summary>Mecanismo do professor</summary><p class="src">Este exercício ainda não tem mecanismo seu nem do quadro aqui. As cartas abaixo são a minha leitura do livro.</p></details>';return;}
+  if(!L){box.innerHTML='';return;}
   box.innerHTML='<details class="why" open><summary>'+(ex.n===5?'Mecanismo do professor (e seu rascunho)':'Mecanismo do professor')+'</summary>'+L.map((x,i)=>'<figure class="mech"><button type="button" class="mechb" data-mech="'+i+'" aria-label="Ampliar o mecanismo do exercício '+ex.n+(L.length>1?', imagem '+(i+1):'')+'"><img src="'+x[0]+'" alt="Mecanismo do exercício '+ex.n+' ('+esc(ex.nome)+'): setas, cargas e pares de elétrons, como o professor desenhou"></button><figcaption class="src">'+esc(x[1])+' Toque para ampliar.</figcaption></figure>').join('')+'</details>';
   box.querySelectorAll('[data-mech]').forEach(b=>b.onclick=()=>mechZoom(L[+b.dataset.mech][0],b));
 }
@@ -1072,7 +1071,7 @@ function drawSpec(ex,peaks){
   const mI=d.p[ex.M],mTxt=mI===undefined?'':'M+· (m/z '+ex.M+'): '+fmtInt(mI)+(mI<5?', fraco.':'.');
   const outros=mz.filter(m=>todos.indexOf(m)<0&&d.p[m]>=20).sort((a,b)=>d.p[b]-d.p[a]).map(m=>m+' ('+fmtInt(d.p[m])+')');
   const si=typeof pkSel==='number'?intOf(ex,pkSel):null;
-  box.innerHTML='<figure class="spec"><svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Espectro de massas de '+esc(ex.nome)+': m/z no eixo horizontal, intensidade relativa em porcentagem no vertical" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:520px">'+g+'</svg><figcaption class="src">Espectro de massas do SDBS (nº '+d.sdbs+', '+d.id+'), intensidade relativa em %. Barras em destaque: picos do exercício. Toque em um deles para abrir o cartão.'+'</figcaption><p class="src" style="margin:4px 0">'+mTxt+(outros.length?(mTxt?' ':'')+'Picos grandes (20% ou mais) que o exercício não pede, em cinza: '+outros.join(', ')+'.':'')+'</p><figcaption class="src">'+(si!==null?' <b>m/z '+pkSel+': '+intTxt(ex,pkSel)+'.</b>':'')+'</figcaption></figure>';
+  box.innerHTML='<figure class="spec"><svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Espectro de massas de '+esc(ex.nome)+': m/z no eixo horizontal, intensidade relativa em porcentagem no vertical" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:520px">'+g+'</svg><figcaption class="src">Espectro de massas do SDBS (nº '+d.sdbs+', '+d.id+'), intensidade relativa em %. Barras em destaque: os picos analisados. Toque em um deles para abrir o cartão.'+'</figcaption><p class="src" style="margin:4px 0">'+mTxt+(outros.length?(mTxt?' ':'')+'Picos grandes (20% ou mais) que não estão nos picos analisados, em cinza: '+outros.join(', ')+'.':'')+'</p><figcaption class="src">'+(si!==null?' <b>m/z '+pkSel+': '+intTxt(ex,pkSel)+'.</b>':'')+'</figcaption></figure>';
 }
 document.addEventListener('click',ev=>{const r=ev.target.closest&&ev.target.closest('[data-spk]');if(r){pkSel=+r.dataset.spk;analyze();}});
 function analyze(){
@@ -1080,7 +1079,7 @@ function analyze(){
   const peaks=[...new Set(($('#inP').value.match(/\d+/g)||[]).map(Number))].filter(p=>p>0).sort((a,b)=>b-a);
   const ex=EX.find(e=>e.n===curEx&&e.M===M);
   if(!ex)curEx=null;
-  $('#exinfo').innerHTML=ex?'<div class="ex-head"><b>'+esc(ex.nome)+'</b><span class="mono">'+fmt(ex.f)+'</span><span>'+esc(ex.g)+'</span><span class="badge '+(ex.ok?'ok':'chk')+'">'+(ex.ok?'conferido com a lousa':'sem conferência com a lousa')+'</span><span class="mol">'+fig(ex.smi,ex.f,'keep','molécula')+'</span></div>'+(ex.sug?'<p class="note-sug">Este exercício não tem resolução do professor nos seus arquivos. As quebras abaixo são sugestão minha a partir do livro, então confira.</p>':''):'';
+  $('#exinfo').innerHTML=ex?'<div class="ex-head"><b>'+esc(ex.nome)+'</b><span class="mono">'+fmt(ex.f)+'</span><span>'+esc(ex.g)+'</span><span class="mol">'+fig(ex.smi,ex.f,'keep','molécula')+'</span></div>':'';
   decorateEx(ex);$('#nrule').innerHTML=M?'Regra do nitrogênio: M = '+M+' é <b>'+(M%2?'ímpar → número ímpar de N (1, 3...)':'par → zero ou número par de N')+'</b>.':'';
   if(!M||!peaks.length){$('#out').innerHTML='<p class="empty">Digite M e pelo menos um pico.</p>';$('#pairs').innerHTML='';$('#pkbar').innerHTML='';$('#pkh').textContent='';return;}
   const cards={};
@@ -1097,7 +1096,7 @@ function analyze(){
     let ans='';
     if(row){
       const d2=row[1]-row[0];
-      ans='<div class="ans"><span class="t">Resposta do exercício</span>'+stepCard(ex,row)+'</div>';
+      ans='<div class="ans"><span class="t">Resposta</span>'+stepCard(ex,row)+'</div>';
     }
     cards[p]='<div class="card">'+head+'<div class="cols">'+body+'</div>'+ans+(ex?notaBox(ex,p):'')+'</div>';
   });
@@ -1160,12 +1159,12 @@ function drawQ(){
 function drawTable(){
   const t=$('#tbsel').value,qs=$('#tbq').value.trim().toLowerCase();
   if(t==='C'){
-    $('#tbnote').textContent='Apêndice C, p. 69–70. Todos os fragmentos saem neutros. A coluna da direita mostra onde essa perda aparece nos seus exercícios.';
-    $('#tbhead').innerHTML='<tr><th>M − pico</th><th>Fragmento perdido (estrutura sugerida)</th><th>Nos seus exercícios</th></tr>';
+    $('#tbnote').textContent='Apêndice C, p. 69–70. Todos os fragmentos saem neutros. A coluna da direita mostra onde essa perda aparece nos compostos do app.';
+    $('#tbhead').innerHTML='<tr><th>M − pico</th><th>Fragmento perdido (estrutura sugerida)</th><th>Nos compostos do app</th></tr>';
     $('#tbbody').innerHTML=C.filter(([d,it])=>!qs||String(d)===qs||it.some(x=>(nm(x[0])+' '+(x[1]||'')).toLowerCase().includes(qs))).map(([d,it])=>'<tr><td class="n">'+d+'</td><td>'+it.map(x=>'<div class="te">'+ent(x[0])+(x[1]?' <span style="color:var(--muted)">('+fmt(x[1])+')</span>':'')+'</div>').join('')+'</td><td>'+exRefs(d).map(r=>'<span class="xr">'+r+'</span>').join('')+'</td></tr>').join('');
   }else{
-    $('#tbnote').textContent='Apêndice B, p. 67–68. Todos os íons têm carga +1. Os exercícios aparecem à direita quando o pico está na sua lista.';
-    $('#tbhead').innerHTML='<tr><th>m/z</th><th>Íons (livro)</th><th>Nos seus exercícios</th></tr>';
+    $('#tbnote').textContent='Apêndice B, p. 67–68. Todos os íons têm carga +1. Os compostos do app aparecem à direita quando o pico está na lista deles.';
+    $('#tbhead').innerHTML='<tr><th>m/z</th><th>Íons (livro)</th><th>Nos compostos do app</th></tr>';
     $('#tbbody').innerHTML=B.filter(([mz,it])=>!qs||String(mz)===qs||it.some(x=>nm(x).toLowerCase().includes(qs))).map(([mz,it])=>{
       const refs=[];EX.forEach(e=>e.rows.forEach(r=>{if(r[0]===mz)refs.push(e.nome);}));
       return '<tr><td class="n">'+mz+'</td><td>'+it.map(x=>'<div class="te">'+ent(x)+'</div>').join('')+'</td><td>'+[...new Set(refs)].map(r=>'<span class="xr">'+r+'</span>').join('')+'</td></tr>';}).join('');
@@ -1208,12 +1207,12 @@ function irHits(v){return IRT.filter(r=>{const w=r[0]-r[1],tol=w<20?10:0;return 
 function irReg(v){const d=r=>{const p=r[0].split('–').map(Number);return v>p[0]?v-p[0]:v<p[1]?p[1]-v:0;};return IRREG.slice().sort((a,b)=>d(a)-d(b))[0];}
 function irNone(v){const g=irReg(v);return 'nenhuma banda típica de grupo funcional nas tabelas para esse valor. '+(g?'Perto dele fica a região '+g[0]+' cm⁻¹ ('+g[1]+'): '+g[2]+' ':'')+'A banda pode existir e ser fraca, ou estar deslocada por conjugação, tensão de anel, ligação de H ou pelo meio da medida.';}
 const IRFAT=[
- ['Conjugação',[1850,1650],'C=O ligado a anel aromático ou C=C: a banda desce 20 a 30 cm⁻¹ (cetona alifática 1715, conjugada 1685–1690; aldeído alifático ~1730, conjugado ~1705). Nos seus prints do SDBS: acetofenona 1686, benzaldeído 1703, ácido benzoico 1696.','NC State (pressbooks), Oregon State (carbonils) e prints do SDBS'],
+ ['Conjugação',[1850,1650],'C=O ligado a anel aromático ou C=C: a banda desce 20 a 30 cm⁻¹ (cetona alifática 1715, conjugada 1685–1690; aldeído alifático ~1730, conjugado ~1705). No SDBS: acetofenona 1686, benzaldeído 1703, ácido benzoico 1696.','NC State (pressbooks), Oregon State (carbonils) e prints do SDBS'],
  ['Tamanho do anel',[1850,1650],'Anel pequeno tensiona o C=O e sobe a banda. Ciclo-hexanona ~1715 (SDBS: 1716). Ciclopentanona e ciclobutanona: as fontes divergem (1750 e 1785 no NC State; 1774 e 1810 no Oregon State). Lactonas: 6 → 1740, 5 → 1765, 4 → 1840. Lactamas: 6 → 1670, 5 → 1700, 4 → 1745.','NC State, Oregon State e curso lcwu.edu.pk (IRSpectroscopy.pdf)'],
  ['Átomo ligado ao C=O (ressonância e eletronegatividade)',[1850,1650],'O átomo ao lado do C=O doa par de elétrons (baixa a banda) e puxa elétrons (sobe). Por isso a ordem: cloreto de ácido ~1800, anidrido 1830 e 1770, éster ~1735–1743 (SDBS acetato de etila 1743), cetona ~1715, ácido ~1700–1710, amida ~1650–1685 (N doa muito).','Oregon State, curso lcwu.edu.pk e print do SDBS'],
  ['Substituinte eletronegativo em α',[1850,1650],'Halogênio ou outro grupo retirador no carbono vizinho tende a subir o C=O. É o que os livros-texto dizem; não achei o número nas fontes desta sessão, então o app só usa uma margem de +30 cm⁻¹.','sem fonte conferida para o valor'],
  ['Ligação de H intermolecular',[3700,3000],'O–H livre (gás ou solução muito diluída) é fino e fica em 3620–3670. Em líquido puro ou sólido, com ligação de H, é largo e desce para 3500–3200. N–H de amina secundária (~3420) desce uns 100 cm⁻¹ no líquido concentrado.','curso lcwu.edu.pk; LibreTexts (tabela de IV)'],
- ['Ligação de H intramolecular',[3700,3000],'O–H que prende o C=O vizinho na mesma molécula abaixa o C=O (e deixa o O–H mais fino e mais baixo). Seus prints do SDBS: ácido salicílico C=O em 1662, ácido benzoico em 1696.','prints do SDBS'],
+ ['Ligação de H intramolecular',[3700,3000],'O–H que prende o C=O vizinho na mesma molécula abaixa o C=O (e deixa o O–H mais fino e mais baixo). No SDBS: ácido salicílico C=O em 1662, ácido benzoico em 1696.','prints do SDBS'],
  ['Dímero do ácido carboxílico',[3300,1700],'Ácido forma dímero por ligação de H: C=O ~1710 e O–H muito largo (3300–2500). O monômero (gás ou solução diluída) fica 25 cm⁻¹ ou mais acima. No SDBS (ácido acético em CCl₄): banda forte em 1715 e uma fraca em 1768.','curso lcwu.edu.pk e print do SDBS'],
  ['Hibridização do carbono',[3400,2800],'Mais caráter s, ligação mais forte, banda mais alta: C–H sp ~3300, sp² 3100–3000, sp³ 3000–2850.','curso lcwu.edu.pk e LibreTexts'],
  ['Massa dos átomos',[900,400],'Átomo pesado vibra mais baixo: C–Cl, C–Br e C–I ficam abaixo de ~800 cm⁻¹.','curso lcwu.edu.pk'],
@@ -1328,7 +1327,7 @@ function lossQ(e,r){
   const wrong=shuf(keys).slice(0,3).map(k=>fmt(CM.get(k)[0][0]));
   const opts=shuf([{l:okL,ok:true}].concat(wrong.map(l=>({l,ok:false}))));
   return {p:'Saiu <b class="mono">'+d+'</b> ('+r[1]+' → '+r[0]+'). Qual fragmento poderia ter saído?',opts,
-    fb:'Para '+d+' o livro lista: '+(valid.length?valid.map(x=>fmt(x[0])).join(' · '):'(nada)')+'. Neste exercício foi <b>'+fmt(r[3])+'</b>. Qual combina é decidido pelo grupo funcional.'};
+    fb:'Para '+d+' o livro lista: '+(valid.length?valid.map(x=>fmt(x[0])).join(' · '):'(nada)')+'. Aqui foi <b>'+fmt(r[3])+'</b>. Qual combina é decidido pelo grupo funcional.'};
 }
 function cisQ(e,r){
   const k=tipoE(e,r);if(k==='anel')return null;
@@ -1386,7 +1385,7 @@ function trDraw(){
       h+='<button type="button" class="'+cls+'" data-k="'+k+'"'+(c.pick!==null?' disabled':'')+'>'+o.l+'</button>';});
     if(c.pick!==null){
       h+='<div class="fb '+(q.opts[c.pick].ok?'good':'bad')+'">'+(q.opts[c.pick].ok?'Certo. ':'Ainda não. ')+q.fb+'</div>';
-      h+='<div class="row" style="margin-top:10px"><button class="btn" id="trn" type="button">'+(c.i<c.qs.length-1?'Próxima pergunta':'Ver a resposta do exercício')+'</button></div>';
+      h+='<div class="row" style="margin-top:10px"><button class="btn" id="trn" type="button">'+(c.i<c.qs.length-1?'Próxima pergunta':'Ver a resposta')+'</button></div>';
     }else{
       h+='<div class="row">'+(semDica()?'':'<button class="btn ghost" id="trh" type="button">Dica: nome da molécula</button>')+'<button class="btn ghost" id="tro" type="button">Outra</button></div>';
     }
@@ -1477,7 +1476,7 @@ function smItems(e,comp){
 }
 function smInit(){
   const box=$('#quiz');
-  box.innerHTML='<p class="ctx"><b>Simulado.</b> Você escolhe um exercício e vê só a fórmula, a massa e os picos, sem o nome. No fim aparecem a nota, o tempo e o que errou. Os erros vão para &ldquo;Revisar&rdquo;.</p><div class="row"><select id="smsel" aria-label="Exercício do simulado"><option value="0">Qualquer exercício</option>'+EX.map(e=>'<option value="'+e.n+'">Ex. '+e.n+' ('+e.rows.length+' picos)</option>').join('')+'</select><select id="smmod" aria-label="Tipo de simulado"><option value="0">Só o que saiu</option><option value="1">Completo: o que ficou, o que saiu, tipo e regra</option></select><button class="btn" id="smgo" type="button">Começar</button></div>';
+  box.innerHTML='<p class="ctx"><b>Simulado.</b> Você escolhe um composto e vê só a fórmula, a massa e os picos, sem o nome. No fim aparecem a nota, o tempo e o que errou. Os erros vão para &ldquo;Revisar&rdquo;.</p><div class="row"><select id="smsel" aria-label="Exercício do simulado"><option value="0">Qualquer exercício</option>'+EX.map(e=>'<option value="'+e.n+'">Ex. '+e.n+' ('+e.rows.length+' picos)</option>').join('')+'</select><select id="smmod" aria-label="Tipo de simulado"><option value="0">Só o que saiu</option><option value="1">Completo: o que ficou, o que saiu, tipo e regra</option></select><button class="btn" id="smgo" type="button">Começar</button></div>';
   $('#smgo').onclick=()=>{
     const v=+$('#smsel').value,e=v?EX.find(x=>x.n===v):EX[Math.floor(Math.random()*EX.length)];
     SM.e=e;SM.qs=smItems(e,$('#smmod').value==='1');SM.i=0;SM.ok=0;SM.bad=[];SM.t0=Date.now();SM.pick=null;smDraw();};
@@ -1489,7 +1488,7 @@ function smDraw(){
     SM.bad.forEach(r=>repAdd(e.n+':'+r[0]));e.rows.forEach(r=>{if(SM.bad.indexOf(r)<0)repOk(e.n+':'+r[0]);});trLabel();
     let h='<div class="ans" style="border-radius:6px"><span class="t">Nota: '+SM.ok+' de '+SM.qs.length+' · tempo '+mm+':'+ss+'</span><b>'+esc(e.nome)+'</b> <span class="mono">'+fmt(e.f)+'</span>.</div>';
     if(SM.bad.length){h+='<h3>Para revisar</h3><ul>'+SM.bad.map(r=>{const d=r[1]-r[0];return '<li>Pico <b class="mono">'+r[0]+'</b> (de '+r[1]+'): saiu <b>'+d+'</b>, que foi <b>'+fmt(r[3])+'</b> ('+esc(r[4])+').</li>';}).join('')+'</ul>';}
-    else h+='<p>Sem erros neste exercício.</p>';
+    else h+='<p>Sem erros neste composto.</p>';
     h+='<div class="row" style="margin-top:10px"><button class="btn" id="smagain" type="button">Outro simulado</button></div>';
     box.innerHTML=h;$('#smagain').onclick=smInit;return;
   }
@@ -1746,9 +1745,9 @@ function soFlowDraw(){
 function soCard(g){
   const G=SOLG.filter(x=>x.k===g)[0];
   return '<p class="gres">'+G.t+'</p><p class="hint" style="margin:0 0 4px">Entram aqui:</p><ul>'+G.c.map(x=>'<li>'+x+'</li>').join('')+'</ul>'
-   +'<p class="hint" style="margin:0">Exemplos: '+G.ex+' <span class="tag sm">Escrito por Claude, sem fonte conferida</span></p>'
+   +'<p class="hint" style="margin:0">Exemplos: '+G.ex+'</p>'
    +(G.av?'<div class="why">'+G.av+'</div>':'')
-   +'<p class="src"><span class="tag sv">Conferido: Analor (classes)</span> tabela e fluxograma de solubilidade.</p>';
+   +'<p class="src"><span class="tag sv">Conferido: Analor (classes)</span> tabela e fluxograma de solubilidade. Exemplos de compostos sem fonte conferida.</p>';
 }
 function soGrpDraw(){
   const b=$('#soGrp');if(!b)return;
@@ -1761,7 +1760,7 @@ function soTrain(){
   const b=$('#soQuiz');if(!b)return;
   const bank=[];
   if(soMode==='res'){SOLG.forEach(G=>bank.push({q:'Resultados: '+SOLR[G.k].map(r=>r[0]+' '+r[1]).join('; ')+'. Qual é o grupo?',o:SOLG.map(x=>SOLN[x.k]),ok:SOLG.indexOf(G),w:'É o grupo <b>'+SOLN[G.k]+'</b>: '+G.t.charAt(0).toLowerCase()+G.t.slice(1)+'.'}));}
-  else{SOLC.forEach(c=>{const i=SOLG.map(x=>x.k).indexOf(c[1]);bank.push({q:'Em que grupo de solubilidade cai <b>'+c[0]+'</b>?',o:SOLG.map(x=>SOLN[x.k]),ok:i,w:c[0]+' é '+c[2]+', então cai em <b>'+SOLN[c[1]]+'</b>. <span class="tag sm">Escrito por Claude, sem fonte conferida</span>'});});}
+  else{SOLC.forEach(c=>{const i=SOLG.map(x=>x.k).indexOf(c[1]);bank.push({q:'Em que grupo de solubilidade cai <b>'+c[0]+'</b>?',o:SOLG.map(x=>SOLN[x.k]),ok:i,w:c[0]+' é '+c[2]+', então cai em <b>'+SOLN[c[1]]+'</b>.'});});}
   miniQuiz('#soQuiz',bank,'Pergunta');
 }
 function soInit(){
@@ -1925,9 +1924,9 @@ function ecInit(){
   miniQuiz('#ecQuiz',bank,'Pergunta');
 }
 
-const SCR=['p-ec','p-pb','p-cs','p-in','p-en','p-pf','p-so','p-el','p-an','p-tr','p-tb','p-iv','p-ma','p-ca','p-aj','p-fo','p-pq','p-sl','p-co','p-es','p-pg','p-cp','p-cf','p-ic','p-sp','p-rm','p-ob','p-st','p-nv','p-rv'];
-const OWN={'p-ec':'t-en','p-pb':'t-en','p-cs':'t-en','p-pf':'t-en','p-so':'t-en','p-el':'t-en','p-tr':'t-sp','p-tb':'t-sp','p-an':'t-sp','p-iv':'t-sp','p-rm':'t-sp','p-cf':'t-cp','p-ob':'t-in','p-ca':'t-sp','p-aj':'t-sp','p-fo':'t-ma','p-pq':'t-sp','p-sl':'t-sp','p-co':'t-ma','p-es':'t-sp','p-pg':'t-ma','p-st':'t-ma','p-nv':'t-ma','p-rv':'t-ma'};
-const NAV=['t-in','t-cp','t-ic','t-en','t-sp','t-ma'];
+const SCR=['p-ec','p-pb','p-cs','p-in','p-en','p-pf','p-so','p-el','p-an','p-tr','p-tb','p-iv','p-ms','p-ca','p-aj','p-fo','p-pq','p-sl','p-co','p-es','p-pg','p-cp','p-cf','p-ic','p-rm','p-ob','p-st','p-nv','p-rv'];
+const OWN={'p-ec':'t-en','p-pb':'t-en','p-cs':'t-en','p-pf':'t-en','p-so':'t-en','p-el':'t-en','p-tr':'t-ms','p-tb':'t-ms','p-an':'t-ms','p-ca':'t-ms','p-aj':'t-ms','p-pq':'t-ms','p-sl':'t-ms','p-cf':'t-cp','p-ic':'t-cp','p-es':'t-cp','p-ob':'t-in','p-fo':'t-in','p-co':'t-in','p-pg':'t-in','p-st':'t-in','p-nv':'t-in','p-rv':'t-in'};
+const NAV=['t-in','t-cp','t-en','t-iv','t-ms','t-rm'];
 function drawSl(){const b=$('#slBody');if(!b||b.dataset.ok||typeof SLD==='undefined')return;b.dataset.ok='1';
   b.innerHTML=SLD.map((s,i)=>'<div class="rule"><h3>'+esc(s[0])+'</h3><p>'+esc(s[1])+'</p><figure class="mech"><button type="button" class="mechb" data-sl="'+i+'"><img src="'+s[2]+'" alt="Slide do professor: '+esc(s[0])+'"></button></figure></div>').join('');
   b.querySelectorAll('[data-sl]').forEach(x=>x.onclick=()=>mechZoom(SLD[+x.dataset.sl][2],x));}
@@ -1953,7 +1952,7 @@ NAV.forEach((t,i)=>{const el=$('#'+t);
   el.onclick=()=>go('p-'+t.slice(2));
   el.addEventListener('keydown',ev=>{const d=ev.key==='ArrowRight'?1:ev.key==='ArrowLeft'?-1:0;if(!d)return;ev.preventDefault();const n=NAV[(i+d+NAV.length)%NAV.length];$('#'+n).focus();$('#'+n).click();});});
 document.addEventListener('click',ev=>{const b=ev.target.closest('[data-go]');if(b)go(b.dataset.go);});
-document.querySelectorAll('.seg').forEach(g=>g.querySelectorAll('button').forEach(b=>{b.onclick=()=>{if(b.dataset.go)return;
+document.querySelectorAll('.seg').forEach(g=>g.querySelectorAll('button').forEach(b=>{b.onclick=()=>{if(b.dataset.go||!b.dataset.v)return;
   g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
   ['v-comp','v-num','v-guia','v-tr'].forEach(id=>{$('#'+id).hidden=id!==b.dataset.v;});};}));
 

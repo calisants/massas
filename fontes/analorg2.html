@@ -7,6 +7,10 @@
       <label>Estado<select id="cpE"><option value="">Todos</option><option value="líquido">Líquido</option><option value="sólido">Sólido</option></select></label>
       <label>Grupo de solubilidade<select id="cpG"><option value="">Todos</option></select></label>
     </div>
+    <div class="menu" style="margin-bottom:10px">
+      <button class="mi" type="button" data-go="p-ic"><b>Identificar um composto desconhecido</b><span>Junta o que você mediu e mostra os compostos mais compatíveis.</span></button>
+      <button class="mi" type="button" data-go="p-es"><b>Espectro novo (modo detetive)</b><span>Fórmula, picos e bandas de IV: o app dá pistas.</span></button>
+    </div>
     <p class="hint" id="cpN"></p>
     <div class="cpgrid" id="cpL"></div>
   </section>
@@ -16,7 +20,29 @@
     <div data-hlscope id="cfB"></div>
   </section>
 
-  <section id="p-ic" role="tabpanel" aria-labelledby="t-ic" hidden>
+  <section id="p-ms" role="tabpanel" aria-labelledby="t-ms" hidden>
+    <h2 class="scr">Massas</h2>
+    <p class="scrsub">Espectrometria de massas: teoria, prática e consulta no mesmo lugar.</p>
+    <h2 class="mh">Teoria</h2>
+    <div class="menu">
+      <button class="mi" type="button" data-go="p-aj"><b>Como ler um pico e glossário</b><span>Os 4 passos, o que são +, +· e ·, clivagem α e McLafferty.</span></button>
+      <button class="mi" type="button" data-go="p-pq"><b>Entender as quebras</b><span>Por que a ligação quebra ali, cisão homolítica e heterolítica, rearranjos.</span></button>
+      <button class="mi" type="button" data-go="p-sl"><b>Slides de mecanismos</b><span>Regras e mecanismos de aula: benzamida, álcoois, cetonas, ácidos.</span></button>
+    </div>
+    <h2 class="mh">Prática</h2>
+    <div class="menu">
+      <button class="mi" type="button" data-go="p-an"><b>Analisar um espectro</b><span>Escolha um composto ou digite M e os picos; toque num pico para ver o que ficou e o que saiu.</span></button>
+      <button class="mi" type="button" data-go="p-tr"><b>Treinar</b><span>Cartões de 5 em 5: qual fragmento saiu, qual pico vem de qual perda.</span></button>
+    </div>
+    <h2 class="mh">Consulta</h2>
+    <div class="menu">
+      <button class="mi" type="button" data-go="p-tb"><b>Livro (tabelas do Silverstein)</b><span>O que saiu (Apêndice C) e o que ficou (Apêndice B).</span></button>
+      <button class="mi" type="button" data-go="p-ca"><b>Calculadora de massa</b><span>Some a fórmula de um pedaço e veja o que o livro lista.</span></button>
+    </div>
+    <p class="hint" style="margin-top:14px">Espectros reais: <a href="https://sdbs.db.aist.go.jp/" target="_blank" rel="noopener">SDBS (AIST)</a>. Cada ficha de composto tem o botão para abrir lá. Ao usar dados do SDBS, cite a fonte (o app mostra o texto pronto).</p>
+  </section>
+
+  <section id="p-ic" role="tabpanel" aria-labelledby="t-cp" hidden>
     <h2 class="scr">Identificar o Composto</h2>
     <p class="scrsub">Marque o que você mediu. O que ficar em &ldquo;Não sei&rdquo; não entra na conta. O app mostra as classes que sobram e os compostos do banco mais compatíveis.</p>
     <button class="icsum" type="button" id="icSum" aria-live="polite">Marque pelo menos um dado.</button>
@@ -74,40 +100,143 @@
     <div id="icOut" class="icres" aria-live="polite"></div>
   </section>
 
-  <section id="p-sp" role="tabpanel" aria-labelledby="t-sp" hidden>
-    <h2 class="scr">Espectros</h2>
-    <p class="scrsub">Os três métodos para descobrir a estrutura de um composto.</p>
-    <div class="menu">
-      <button class="mi" type="button" data-go="p-iv"><b>Infravermelho (IV)</b><span>Bandas por composto e por número de onda, guia por região e treino.</span></button>
-      <button class="mi" type="button" data-go="p-an"><b>Espectrometria de massas (MS)</b><span>Picos, perdas, mecanismos de fragmentação, treino e livro.</span></button>
-      <button class="mi" type="button" data-go="p-rm"><b>RMN de ¹H e ¹³C</b><span>Deslocamento, integração, multiplicidade e quantos sinais esperar.</span></button>
-    </div>
-    <h2 class="mh">Ferramentas de massas</h2>
-    <div class="menu">
-      <button class="mi" type="button" data-go="p-aj"><b>Como ler um pico e glossário</b><span>Os 4 passos, o que são +, +· e ·, clivagem α e McLafferty.</span></button>
-      <button class="mi" type="button" data-go="p-pq"><b>Entender as quebras</b><span>Por que a ligação quebra ali, cisão homolítica e heterolítica, rearranjos.</span></button>
-      <button class="mi" type="button" data-go="p-sl"><b>Slides de mecanismos</b><span>Regras e mecanismos de aula: benzamida, álcoois, cetonas, ácidos.</span></button>
-      <button class="mi" type="button" data-go="p-ca"><b>Calculadora de massa</b><span>Some a fórmula de um pedaço e veja o que o livro lista.</span></button>
-      <button class="mi" type="button" data-go="p-es"><b>Espectro novo (modo detetive)</b><span>Fórmula, picos e bandas de IV de um composto desconhecido: o app dá pistas.</span></button>
-    </div>
-    <p class="hint" style="margin-top:14px">Espectros reais: <a href="https://sdbs.db.aist.go.jp/" target="_blank" rel="noopener">SDBS (AIST)</a>. Cada ficha de composto tem o botão para abrir lá. Ao usar dados do SDBS, cite a fonte (o app mostra o texto pronto).</p>
-  </section>
-
-  <section id="p-rm" role="region" aria-label="RMN" hidden>
-    <button class="back" type="button" data-go="p-sp">← Espectros</button>
+  <section id="p-rm" role="tabpanel" aria-labelledby="t-rm" hidden>
     <h2 class="scr">RMN de ¹H e ¹³C</h2>
     <p class="scrsub">Cada sinal é um grupo de núcleos equivalentes. Quatro perguntas: quantos sinais, onde, quanto vale cada um e como se divide.</p>
-    <details class="sec" open><summary>Como ler um espectro de ¹H</summary>
-      <p><b>1. Quantos sinais?</b> Um sinal por tipo de H. H que a simetria troca de lugar são equivalentes e dão o mesmo sinal. Etanol (CH₃CH₂OH): 3 sinais. Éter dietílico: 2.</p>
-      <p><b>2. Onde? (deslocamento, δ em ppm)</b> Quanto mais eletronegativo o vizinho, mais à esquerda (δ maior). O TMS é o zero.</p>
-      <p><b>3. Quanto vale? (integração)</b> A área do sinal é proporcional ao número de H. CH₃ vale 3, CH₂ vale 2.</p>
-      <p><b>4. Como se divide? (multiplicidade)</b> Regra n+1: n H vizinhos (no carbono ao lado) dividem o sinal em n+1 linhas. Um CH₃ ao lado de um CH₂ vira tripleto.</p>
-      <div class="tbl"><table class="obt nostk"><thead><tr><th>n (H vizinhos)</th><th>Sinal</th><th>Linhas</th></tr></thead><tbody>
-        <tr><td>0</td><td>singleto (s)</td><td>1</td></tr><tr><td>1</td><td>dubleto (d)</td><td>1 : 1</td></tr><tr><td>2</td><td>tripleto (t)</td><td>1 : 2 : 1</td></tr>
-        <tr><td>3</td><td>quarteto (q)</td><td>1 : 3 : 3 : 1</td></tr><tr><td>4</td><td>quinteto</td><td>1 : 4 : 6 : 4 : 1</td></tr><tr><td>5</td><td>sexteto</td><td>1 : 5 : 10 : 10 : 5 : 1</td></tr></tbody></table></div>
-      <p class="srcl" style="margin-top:6px">Os H ligados a O ou N (O–H, N–H) costumam não acoplar (troca rápida) e saem como singleto largo. Agitar com D₂O faz esse sinal sumir.</p>
-    </details>
-    <details class="sec"><summary>Tabela de deslocamentos de ¹H (ppm)</summary>
+    <div class="chipbar rseg" role="group" aria-label="Partes do RMN">
+      <button class="chip" type="button" data-rp="ler" aria-pressed="true">Ler um espectro</button>
+      <button class="chip" type="button" data-rp="acop" aria-pressed="false">Acoplamento</button>
+      <button class="chip" type="button" data-rp="calc" aria-pressed="false">Cálculos</button>
+      <button class="chip" type="button" data-rp="mac" aria-pressed="false">Macetes</button>
+      <button class="chip" type="button" data-rp="tab" aria-pressed="false">Tabelas</button>
+      <button class="chip" type="button" data-rp="teo" aria-pressed="false">Teoria</button>
+      <button class="chip" type="button" data-rp="comp" aria-pressed="false">Compostos</button>
+    </div>
+
+    <div data-rpane="ler">
+      <h3 class="rmh">Os quatro passos num espectro real</h3>
+      <p class="hint">Acetato de etila, CH₃COOCH₂CH₃, C₄H₈O₂. <span class="tag sv">Conferido: SDBS No. 889</span> 89,56 MHz, CDCl₃: os três δ vêm do print do SDBS. O desenho é simulado, com as linhas de cada sinal afastadas para dar para ver.</p>
+      <div class="rmfig" id="rmFig1"></div>
+      <ol class="rmsteps">
+        <li><b class="rmn">1</b><div><b>Quantos sinais?</b> Três: o CH₃ do acetil, o CH₂ e o CH₃ da etila são três tipos de H. A fórmula tem 8 H, divididos em 3 sinais.</div></li>
+        <li><b class="rmn">2</b><div><b>Onde?</b> O CH₂ está em 4,12 (colado no oxigênio, que puxa elétrons e desblinda). O CH₃ do acetil, em 2,04 (ao lado do C=O). O CH₃ da etila, em 1,26 (alcano, o mais blindado).</div></li>
+        <li><b class="rmn">3</b><div><b>Quanto vale?</b> A integral dá 2 : 3 : 3. A soma, 8, tem de bater com o total de H da fórmula.</div></li>
+        <li><b class="rmn">4</b><div><b>Como se divide?</b> O CH₂ tem 3 H vizinhos (o CH₃), então 3 + 1 = 4 linhas: quarteto. O CH₃ da etila tem 2 H vizinhos: tripleto. O CH₃ do acetil tem de um lado o C=O e do outro o O, nenhum com H: singleto.</div></li>
+      </ol>
+      <div class="tbl"><table class="obt nostk"><thead><tr><th style="text-transform:none">δ</th><th>Sinal</th><th>O que diz</th></tr></thead><tbody>
+        <tr><td class="n">4,12</td><td>2 H<div class="mut sm">quarteto</div></td><td>–O–CH₂–CH₃: perto de O e com 3 H vizinhos</td></tr>
+        <tr><td class="n">2,04</td><td>3 H<div class="mut sm">singleto</div></td><td>CH₃–C=O: sem H vizinho, perto da carbonila</td></tr>
+        <tr><td class="n">1,26</td><td>3 H<div class="mut sm">tripleto</div></td><td>CH₃–CH₂–: 2 H vizinhos, longe de heteroátomo</td></tr></tbody></table></div>
+      <p class="srcl" style="margin-top:6px">Juntando os pedaços: CH₃C(=O)– e –O–CH₂CH₃ somam C₄H₈O₂. É o acetato de etila.</p>
+      <h3 class="rmh">A régua do deslocamento</h3>
+      <p class="hint">Cada tipo de H cai numa região. Decorar a régua de relance já elimina metade das hipóteses. Faixas de tabela de livro-texto, sem fonte conferida.</p>
+      <div class="rmfig" id="rmRuler"></div>
+      <p>Por que a ordem é essa: átomos eletronegativos (O, N, halogênios), carbonilas e anéis aromáticos tiram elétrons de perto do H. Com menos elétrons em volta, o H sente mais o campo do aparelho (<b>desblindado</b>) e o sinal vai para a esquerda, em δ maior. Alcanos têm muito elétron em volta e ficam à direita (<b>blindados</b>), perto do TMS, que é o zero.</p>
+    </div>
+
+    <div data-rpane="acop" hidden>
+      <h3 class="rmh">Laboratório de acoplamento</h3>
+      <p>Monte um sinal: diga quantos H vizinhos ele tem e o app desenha o desdobramento, linha por linha. Cada H vizinho corta cada linha em duas, separadas pela constante J.</p>
+      <div class="chipbar" id="lbPre" role="group" aria-label="Exemplos prontos"></div>
+      <div class="row">
+        <label>H vizinhos (grupo 1)<select id="lbN1"></select></label>
+        <label>J do grupo 1 (Hz)<input type="number" id="lbJ1" value="7" min="0.5" max="20" step="0.5" inputmode="decimal"></label>
+      </div>
+      <div class="row">
+        <label>H vizinhos (grupo 2, opcional)<select id="lbN2"></select></label>
+        <label>J do grupo 2 (Hz)<input type="number" id="lbJ2" value="2" min="0.5" max="20" step="0.5" inputmode="decimal"></label>
+      </div>
+      <div class="rmfig" id="lbOut"></div>
+      <h3 class="rmh">Triângulo de Pascal: a altura das linhas</h3>
+      <div class="tbl"><table class="obt nostk"><thead><tr><th>n (H vizinhos)</th><th>Sinal</th><th>Linhas e alturas</th></tr></thead><tbody>
+        <tr><td>0</td><td>singleto (s)</td><td class="mono">1</td></tr><tr><td>1</td><td>dubleto (d)</td><td class="mono">1 : 1</td></tr><tr><td>2</td><td>tripleto (t)</td><td class="mono">1 : 2 : 1</td></tr>
+        <tr><td>3</td><td>quarteto (q)</td><td class="mono">1 : 3 : 3 : 1</td></tr><tr><td>4</td><td>quinteto</td><td class="mono">1 : 4 : 6 : 4 : 1</td></tr><tr><td>5</td><td>sexteto</td><td class="mono">1 : 5 : 10 : 10 : 5 : 1</td></tr><tr><td>6</td><td>septeto</td><td class="mono">1 : 6 : 15 : 20 : 15 : 6 : 1</td></tr></tbody></table></div>
+      <p class="srcl" style="margin-top:6px">Cada linha de baixo é a soma das duas de cima (1+1 = 2, 1+2 = 3, 3+3 = 6). Por isso as linhas de fora são sempre as mais baixas e, em sinais grandes, quase somem no ruído.</p>
+      <h3 class="rmh">Dois vizinhos diferentes</h3>
+      <p>Se o H tem dois grupos vizinhos e as J são <b>diferentes</b>, o sinal vira "dubleto de tripletos" e parecidos: (n₁+1) × (n₂+1) linhas. Se as J forem <b>iguais</b>, as linhas se sobrepõem e vale a regra n+1 com n = n₁ + n₂. É o caso do CH₂ do meio de um propil: 3 + 2 = 5 vizinhos, então sexteto.</p>
+      <h3 class="rmh">Valores típicos de J</h3>
+      <div class="tbl"><table class="obt nostk"><thead><tr><th>Situação</th><th>J (Hz)</th></tr></thead><tbody>
+        <tr><td>H–C–C–H em cadeia livre (vicinal)</td><td>6 a 8 (use 7)</td></tr>
+        <tr><td>Alceno trans (H em lados opostos)</td><td>11 a 18</td></tr>
+        <tr><td>Alceno cis (H do mesmo lado)</td><td>6 a 15</td></tr>
+        <tr><td>Alceno geminal (=CH₂)</td><td>0 a 3</td></tr>
+        <tr><td>Anel aromático, orto</td><td>6 a 10</td></tr>
+        <tr><td>Anel aromático, meta</td><td>1 a 3</td></tr>
+        <tr><td>Anel aromático, para</td><td>0 a 1</td></tr>
+        <tr><td>CHO com CH vizinho</td><td>1 a 3</td></tr></tbody></table></div>
+      <p class="srcl" style="margin-top:6px"><b>Fonte:</b> faixas de livro-texto, sem fonte conferida. Os slides de aula (estireno) dão trans ≈ 18 Hz e cis ≈ 11 Hz, dentro dessas faixas. <b>Regra para ligar pedaços:</b> dois sinais que se acoplam mostram a <b>mesma J</b>. Um tripleto de 7 Hz só combina com um quarteto de 7 Hz, não com um de 2 Hz.</p>
+      <h3 class="rmh">Efeito de telhado</h3>
+      <p>Quando dois H acoplados têm δ muito próximos, os picos de dentro crescem e os de fora diminuem, e o conjunto parece um telhado apontando para o parceiro. Serve de pista: o lado alto do telhado aponta para quem está acoplado com ele. Regra de bolso: se a diferença entre os dois sinais, em Hz, for menos que cerca de 10 vezes a J, o telhado aparece.</p>
+      <h3 class="rmh">Anel aromático: padrões que se reconhecem</h3>
+      <div class="tbl"><table class="obt nostk"><thead><tr><th>Padrão</th><th>O que se vê</th></tr></thead><tbody>
+        <tr><td>Monossubstituído</td><td>5 H juntos, em um multipleto perto de 7,1 a 7,4 (mais à esquerda se o grupo puxa elétrons)</td></tr>
+        <tr><td>Para, com dois grupos diferentes</td><td>Dois "dubletos" de 2 H cada, com J ≈ 8 Hz (sistema AA′BB′)</td></tr>
+        <tr><td>Para, com dois grupos iguais</td><td>Um único singleto (todos os H são equivalentes)</td></tr>
+        <tr><td>Orto-dissubstituído</td><td>4 H em multipletos que se sobrepõem</td></tr></tbody></table></div>
+    </div>
+
+    <div data-rpane="calc" hidden>
+      <h3 class="rmh">Hz, ppm e campo</h3>
+      <p>O ppm existe para o sinal valer o mesmo em qualquer aparelho. A conta é só esta: <b>Hz = ppm × MHz</b>.</p>
+      <div class="row">
+        <label>Aparelho (¹H, MHz)<input type="number" id="cxF" value="400" min="20" max="1200" step="1" inputmode="decimal"></label>
+        <label>δ do sinal (ppm)<input type="number" id="cxD" value="4.12" step="0.01" inputmode="decimal"></label>
+        <label>J medida (Hz)<input type="number" id="cxJ" value="7" step="0.1" inputmode="decimal"></label>
+      </div>
+      <div class="rmout" id="cxOut"></div>
+      <div id="cxTab"></div>
+      <p class="srcl">Exemplo do SDBS No. 889 (89,56 MHz): o quarteto em 4,119 ppm fica a 4,119 × 89,56 ≈ 369 Hz do TMS. O mesmo sinal em 400 MHz fica a ≈ 1648 Hz, mas continua em 4,12 ppm. A J (em Hz) não muda de um aparelho para outro; em ppm, ela encolhe quando o campo sobe. Por isso, em campo alto, os multipletos ficam mais separados e mais fáceis de ler.</p>
+
+      <h3 class="rmh">Integração: da área ao número de H</h3>
+      <p>Meça (ou leia) a altura da "escada" de cada sinal. Divida pelo menor para achar a proporção. Se não der número inteiro, multiplique por 2 ou 3. Depois ajuste ao total de H da fórmula.</p>
+      <div class="row">
+        <label style="flex:1 1 200px">Valores (separe por espaço)<input type="text" id="cgI" value="20,3 30,4 30,0" inputmode="decimal" autocomplete="off"></label>
+        <label>Total de H da fórmula<input type="number" id="cgT" value="8" min="1" max="200" inputmode="numeric"></label>
+      </div>
+      <div class="rmout" id="cgOut"></div>
+
+      <h3 class="rmh">GDH: o que a fórmula já adianta</h3>
+      <p>GDH = (2C + 2 + N − H − X) ÷ 2, com X = halogênios. O oxigênio e o enxofre não entram na conta.</p>
+      <div class="row">
+        <label>C<input type="number" id="gdC" value="4" min="0" max="99" inputmode="numeric"></label>
+        <label>H<input type="number" id="gdH" value="8" min="0" max="199" inputmode="numeric"></label>
+        <label>N<input type="number" id="gdN" value="0" min="0" max="20" inputmode="numeric"></label>
+        <label>X (F, Cl, Br, I)<input type="number" id="gdX" value="0" min="0" max="20" inputmode="numeric"></label>
+      </div>
+      <div class="rmout" id="gdOut"></div>
+
+      <h3 class="rmh">Quantos sinais? Conte os tipos de átomo</h3>
+      <p>Átomos que a simetria troca de lugar dão um só sinal. A tabela abaixo é calculada a partir da estrutura de cada composto do app.</p>
+      <div id="cqTab"></div>
+
+      <h3 class="rmh">Dois problemas resolvidos</h3>
+      <details class="sec"><summary>C₄H₈O₂: 4,12 (q, 2H), 2,04 (s, 3H), 1,26 (t, 3H)</summary>
+        <p><b>Dados:</b> <span class="tag sv">Conferido: SDBS No. 889</span> (89,56 MHz, CDCl₃). A forma (q, s, t) vem da aparência do espectro no print.</p>
+        <p><b>1. GDH.</b> (2·4 + 2 − 8) ÷ 2 = 1. Uma ligação π (C=O) ou um anel.</p>
+        <p><b>2. Integração.</b> 2 + 3 + 3 = 8 H, igual à fórmula. Nenhum H ficou de fora.</p>
+        <p><b>3. Quarteto de 2 H + tripleto de 3 H, com a mesma J.</b> É uma etila, –CH₂CH₃.</p>
+        <p><b>4. Onde está o CH₂?</b> Em 4,12. Um CH₂ ao lado de C=O ficaria perto de 2,4. Em 4,1 ele está ligado ao oxigênio: –O–CH₂–.</p>
+        <p><b>5. Singleto de 3 H em 2,04.</b> CH₃ sem H vizinho, perto de C=O: CH₃–C=O.</p>
+        <p><b>6. Montagem.</b> CH₃C(=O)– + –O–CH₂CH₃ = C₄H₈O₂, GDH 1. <b>Acetato de etila.</b></p>
+      </details>
+      <details class="sec"><summary>C₄H₈O: 2,449 (q, 2H), 2,139 (s, 3H), 1,058 (t, 3H)</summary>
+        <p><b>Dados:</b> <span class="tag sv">Conferido: SDBS No. 888</span> (89,56 MHz, CDCl₃).</p>
+        <p><b>1. GDH.</b> (2·4 + 2 − 8) ÷ 2 = 1. Uma C=O ou um anel.</p>
+        <p><b>2. Integração.</b> 2 + 3 + 3 = 8 H. Fecha.</p>
+        <p><b>3.</b> De novo quarteto + tripleto: uma etila. E um singleto de 3 H em 2,14: CH₃–C=O.</p>
+        <p><b>4. A diferença para o problema anterior.</b> Aqui o CH₂ está em 2,45, não em 4,12. Não há oxigênio colado nele. Ele está ao lado da carbonila.</p>
+        <p><b>5. Montagem.</b> CH₃CH₂–C(=O)–CH₃ = C₄H₈O. <b>2-butanona.</b></p>
+        <p class="srcl">As duas moléculas têm os mesmos pedaços de ¹H (uma etila e um CH₃ em ≈ 2). O δ do CH₂ é o que separa éster de cetona. O IV confirma: C=O de cetona perto de 1715 cm⁻¹ e de éster perto de 1735 a 1750 cm⁻¹ (faixas de livro).</p>
+      </details>
+    </div>
+
+    <div data-rpane="mac" hidden>
+      <p class="scrsub">Atalhos que quem lê espectro usa o tempo todo. Cada um é uma regra de bolso: confirme com os quatro passos.</p>
+      <div id="rmMac"></div>
+    </div>
+
+    <div data-rpane="tab" hidden>
+    <details class="sec" open><summary>Tabela de deslocamentos de ¹H (ppm)</summary>
       <div class="tbl"><table class="obt"><thead><tr><th>Tipo de H</th><th>δ (ppm)</th></tr></thead><tbody>
         <tr><td>CH₃ alifático</td><td>0,8–1,2</td></tr><tr><td>CH₂ alifático</td><td>1,2–1,7</td></tr><tr><td>CH alifático</td><td>1,4–2,0</td></tr>
         <tr><td>C–H alílico</td><td>1,6–2,3</td></tr><tr><td>C–H α à carbonila</td><td>2,0–2,8</td></tr><tr><td>C–H benzílico</td><td>2,2–3,0</td></tr>
@@ -115,7 +244,7 @@
         <tr><td>C–H ligado a O</td><td>3,2–4,3</td></tr><tr><td>H de alceno</td><td>4,5–6,5</td></tr><tr><td>H aromático</td><td>6,5–8,4</td></tr>
         <tr><td>H de aldeído</td><td>9,3–10,1</td></tr><tr><td>O–H de ácido carboxílico</td><td>10–13</td></tr>
         <tr><td>O–H de álcool</td><td>1–5,5 (varia)</td></tr><tr><td>O–H de fenol</td><td>4–8 (varia)</td></tr><tr><td>N–H de amina</td><td>0,5–3 (varia)</td></tr><tr><td>N–H de amida</td><td>5–8,5</td></tr></tbody></table></div>
-      <p class="srcl" style="margin-top:6px"><b>Fonte:</b> faixas típicas de tabelas de livro-texto, escritas por Claude, sem fonte conferida. Valores reais mudam com solvente, concentração e vizinhança.</p>
+      <p class="srcl" style="margin-top:6px"><b>Fonte:</b> faixas típicas de tabelas de livro-texto, sem fonte conferida. Valores reais mudam com solvente, concentração e vizinhança.</p>
     </details>
     <details class="sec"><summary>¹³C: o que muda</summary>
       <p>O espectro costuma ser desacoplado de ¹H: cada sinal é um singleto e a <b>integração não vale</b>. Conta-se um sinal por tipo de carbono (equivalentes pela simetria dão um só).</p>
@@ -123,14 +252,26 @@
         <tr><td>CH₃ e C sp³ alifático</td><td>8–55</td></tr><tr><td>C sp³ ligado a N</td><td>30–65</td></tr><tr><td>C sp³ ligado a O</td><td>50–90</td></tr><tr><td>C≡C</td><td>65–90</td></tr>
         <tr><td>C≡N</td><td>115–125</td></tr><tr><td>C de alceno</td><td>100–150</td></tr><tr><td>C aromático</td><td>110–165</td></tr>
         <tr><td>C=O de éster, ácido e amida</td><td>160–185</td></tr><tr><td>C=O de aldeído</td><td>190–205</td></tr><tr><td>C=O de cetona</td><td>195–220</td></tr></tbody></table></div>
-      <p class="srcl" style="margin-top:6px"><b>Fonte:</b> faixas típicas de tabelas de livro-texto, escritas por Claude, sem fonte conferida. Solvente CDCl₃: ¹H em 7,26 ppm (resíduo) e ¹³C em 77,2 ppm (tripleto).</p>
+      <p class="srcl" style="margin-top:6px"><b>Fonte:</b> faixas típicas de tabelas de livro-texto, sem fonte conferida. Solvente CDCl₃: ¹H em 7,26 ppm (resíduo) e ¹³C em 77,2 ppm (tripleto).</p>
     </details>
+      <details class="sec"><summary>Picos do solvente (não são do composto)</summary>
+        <div class="tbl"><table class="obt"><thead><tr><th>Solvente</th><th>¹H (resíduo)</th><th>¹³C</th></tr></thead><tbody>
+          <tr><td>CDCl₃</td><td>7,26 (singleto)</td><td>77,2 (tripleto)</td></tr>
+          <tr><td>DMSO-d₆</td><td>2,50 (quinteto)</td><td>39,5 (septeto)</td></tr>
+          <tr><td>Acetona-d₆</td><td>2,05 (quinteto)</td><td>29,8 e 206,3</td></tr>
+          <tr><td>CD₃OD</td><td>3,31 (quinteto)</td><td>49,0 (septeto)</td></tr>
+          <tr><td>D₂O</td><td>4,79 (HDO)</td><td>sem sinal</td></tr></tbody></table></div>
+        <p class="srcl" style="margin-top:6px"><b>Fonte:</b> valores de referência usados em laboratório, sem fonte conferida. Variam um pouco com temperatura e concentração.</p>
+      </details>
+    </div>
+
+    <div data-rpane="teo" hidden>
     <details class="sec"><summary>Teoria: por que o núcleo "aparece" no RMN</summary>
       <p><b>Spin.</b> Núcleos com spin I = 1/2 (¹H, ¹³C, ¹⁹F, ³¹P, ¹⁵N) dão sinal fácil. Núcleos com I = 0 (como ¹²C) não dão sinal. Núcleos com I ≥ 1 têm um momento de quadrupolo que atrapalha o sinal.</p>
       <p><b>Dois níveis.</b> Número de orientações = 2I + 1. Para I = 1/2 são duas: a favor do campo B₀ (α, energia menor) e contra (β, energia maior). Há um pequeno excesso de núcleos em α (distribuição de Boltzmann). Quanto maior o B₀, maior a diferença de energia ΔE.</p>
       <p><b>Ressonância.</b> A radiofrequência aplicada só é absorvida quando é igual à frequência de precessão do núcleo (frequência de Larmor). Exemplo do material de aula: para ¹H, 100 MHz corresponde a um campo de 2,35 T. Outros pares frequência/campo na mesma razão valem igual (por isso se fala em aparelho de 300, 400, 600 MHz).</p>
       <p><b>Do sinal ao espectro.</b> Depois do pulso, a magnetização volta ao equilíbrio (relaxação) e a bobina capta um sinal que decai com o tempo, o FID. A transformada de Fourier converte o FID no espectro de RMN.</p>
-      <p class="srcl"><b>Fonte:</b> resumo feito por Claude dos slides "Análise Orgânica II, RMN, 1ª parte" (Prof. Jeronimo, IFRJ Nilópolis). As figuras dos slides não foram copiadas.</p>
+      <p class="srcl"><b>Fonte:</b> resumo dos slides "Análise Orgânica II, RMN, 1ª parte" (Prof. Jeronimo, IFRJ Nilópolis). As figuras dos slides não foram copiadas.</p>
     </details>
     <details class="sec"><summary>Acoplamento, J, integração e equivalência</summary>
       <p><b>Grupo de H</b> = os H presos ao mesmo carbono. O acoplamento acontece entre grupos separados por três ligações (H–C–C–H) e é o que divide o sinal em dubleto, tripleto etc.</p>
@@ -145,19 +286,23 @@
         <tr><td>Diastereotópicos</td><td>Trocar por D dá diastereoisômeros (por exemplo, há um centro quiral na molécula)</td><td>δ diferentes, mesmo em solvente aquiral</td></tr></tbody></table></div>
       <p style="margin-top:8px">Os três H de um CH₃ são sempre homotópicos, porque o grupo gira rápido em torno da ligação C–C. H geminais diastereotópicos acoplam entre si e podem ter multiplicidades diferentes.</p>
       <p><b>Exemplo: estireno.</b> Os três H do vinil formam um sistema de três spins (AMX), cada um um dubleto de dubletos, porque cada um acopla com os outros dois com J diferentes. Acoplamento trans (através da dupla) é o maior, cerca de 18 Hz; cis cerca de 11 Hz; geminal cerca de 1 Hz. Os H aromáticos (δ 7,2 a 7,5) saem como multipletos mal definidos e em geral não são interpretados em detalhe.</p>
-      <p class="srcl"><b>Fonte:</b> resumo feito por Claude dos slides de RMN, 2ª a 4ª partes (Prof. Jeronimo, IFRJ). Nos slides, o δ do H<sub>X</sub> do estireno aparece como 6,73 no texto e como 6,37 na lista final; confira antes de citar. Os espectros de exemplo dos slides (etilbenzeno, cumeno, acetato de benzila, 1-nitropropano, N-metilcarbamato de etila) são imagens e não estão no app: o app mostra a estimativa de cada composto na ficha.</p>
+      <p class="srcl"><b>Fonte:</b> resumo dos slides de RMN, 2ª a 4ª partes (Prof. Jeronimo, IFRJ). Nos slides, o δ do H<sub>X</sub> do estireno aparece como 6,73 no texto e como 6,37 na lista final; confira antes de citar. Os espectros de exemplo dos slides (etilbenzeno, cumeno, acetato de benzila, 1-nitropropano, N-metilcarbamato de etila) são imagens e não estão no app: o app mostra a estimativa de cada composto na ficha.</p>
     </details>
-    <details class="sec" open><summary>Ver o que esperar de um composto</summary>
+    </div>
+
+    <div data-rpane="comp" hidden>
+    <div class="sec" style="padding-top:12px"><h3 style="margin:0 0 8px">Ver o que esperar de um composto</h3>
       <label style="max-width:360px">Composto<select id="rmSel"></select></label>
       <div data-hlscope id="rmOut"></div>
-    </details>
+    </div>
+    </div>
   </section>
 
   <section id="p-ob" role="region" aria-label="Orgânica Básica" hidden>
     <button class="back" type="button" data-go="p-in">← Início</button>
     <h2 class="scr">Orgânica Básica</h2>
     <p class="scrsub">O que você precisa saber antes de interpretar ensaios e espectros.</p>
-    <p class="srcl" style="margin:0 0 12px"><b>Fonte:</b> escrito por Claude a partir de conteúdo de livro-texto, sem fonte conferida.</p>
+    <p class="srcl" style="margin:0 0 12px"><b>Fonte:</b> conteúdo de livro-texto, sem fonte conferida.</p>
     <details class="sec" open><summary>Grupos funcionais e nomes</summary>
       <div class="tbl"><table class="obt"><thead><tr><th>Grupo</th><th>Estrutura</th><th>Exemplo</th><th>Nome</th></tr></thead><tbody>
         <tr><td>Alcano</td><td>C–C</td><td>CH₃CH₂CH₃</td><td>-ano</td></tr><tr><td>Alceno</td><td>C=C</td><td>CH₂=CH₂</td><td>-eno</td></tr><tr><td>Alcino</td><td>C≡C</td><td>HC≡CH</td><td>-ino</td></tr>

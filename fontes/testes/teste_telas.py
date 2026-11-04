@@ -34,7 +34,7 @@ with sync_playwright() as p:
     pg.evaluate("go('p-an')")
     # overflow sweep
     pg.evaluate("TR.mode='qual'")
-    for sc in ['p-in','p-en','p-pf','p-so','p-el','p-ic','p-an','p-tr','p-tb','p-iv','p-ma','p-pq','p-st','p-nv','p-rv','p-sp','p-pg','p-es','p-co','p-fo','p-aj']:
+    for sc in ['p-in','p-en','p-pf','p-so','p-el','p-ic','p-an','p-tr','p-tb','p-iv','p-ms','p-pq','p-st','p-nv','p-rv','p-rm','p-pg','p-es','p-co','p-fo','p-aj']:
         pg.evaluate(f"go('{sc}')");w=pg.evaluate("document.documentElement.scrollWidth")
         if w>360:print('OVERFLOW',sc,w);errs.append('overflow '+sc)
 print('ERROS:',errs)

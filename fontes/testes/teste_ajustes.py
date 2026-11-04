@@ -49,9 +49,9 @@ with sync_playwright() as p:
     txt=pg.evaluate("document.documentElement.innerText+document.documentElement.innerHTML")
     chk('sem "escrito por mim"','escrito por mim' not in txt.lower())
     # menus
-    chk('Mais sem ferramentas de massas',pg.evaluate("go('p-ma'),document.getElementById('p-ma').innerText.indexOf('Calculadora')<0"))
-    chk('Espectros com ferramentas de massas',pg.evaluate("go('p-sp'),document.getElementById('p-sp').innerText.indexOf('Calculadora')>=0"))
-    for sc in ['p-in','p-en','p-sp','p-ma','p-ic','p-st','p-nv','p-rv','p-co','p-fo','p-cf','p-cp','p-ob','p-rm','p-iv']:
+    chk('Início sem ferramentas de massas',pg.evaluate("go('p-in'),document.getElementById('p-in').innerText.indexOf('Calculadora')<0"))
+    chk('Massas com ferramentas de massas',pg.evaluate("go('p-ms'),document.getElementById('p-ms').innerText.indexOf('Calculadora')>=0"))
+    for sc in ['p-in','p-en','p-ms','p-ic','p-st','p-nv','p-rv','p-co','p-fo','p-cf','p-cp','p-ob','p-rm','p-iv']:
         pg.evaluate(f"go('{sc}')");w=pg.evaluate("document.documentElement.scrollWidth")
         if w>360:chk('sem estouro em '+sc+' ('+str(w)+')',False)
 print('erros de página:',errs)
