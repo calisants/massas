@@ -96,4 +96,10 @@ IRMEIO = {
  "sacarose": ("pastilha de KBr", 1), "glicose": ("pasta em Nujol", 1), "etilenoglicol": ("filme líquido", 1), "ureia": ("pastilha de KBr", 1),
  "glicerol": ("filme líquido", 1), "azobenzeno": ("solução em CCl₄", 1), "antraquinona": ("pasta em Nujol", 1), "1,4-benzoquinona": ("pastilha de KBr", 1),
  "anisol": ("filme líquido", 1), "anidrido acético": ("filme líquido", 1), "benzoato de metila": ("filme líquido", 1),
+ "valerato de metila": ("filme líquido", 1), "3-pentanona": ("solução em CCl₄", 1), "dimetilamina": ("filme líquido", 1), "estireno": ("filme líquido", 1),
+ "furano": ("filme líquido", 1), "etilbenzeno": ("filme líquido", 1), "o-xileno": ("filme líquido", 1), "bromobenzeno": ("solução em CCl₄", 1),
+ "clorobenzeno": ("filme líquido", 1), "iodofórmio": ("pastilha de KBr", 1), "benzeno": ("filme líquido", 1), "ciclo-hexano": ("filme líquido", 1),
+ "hexano": ("solução em CCl₄", 1), "diclorometano": ("filme líquido", 1), "clorofórmio": ("filme líquido", 1), "butilamina": ("filme líquido", 1),
+ "benzilamina": ("filme líquido", 1), "dietilamina": ("filme líquido", 1), "trietilamina": ("filme líquido", 1), "p-fenilenodiamina": ("pastilha de KBr", 1),
+ "p-toluidina": ("solução em CCl₄", 1),
 }

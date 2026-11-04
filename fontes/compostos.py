@@ -150,9 +150,9 @@ IVG = [
  ("[#6][CX3](=O)[#6]", "cetona", [(1725,1705,"C=O (estiramento)","F",1,"a")]),
  ("[#6;a][CX3](=O)[#6]", "cetona aromática", [(1300,1230,"C–CO–C de cetona aromática (estiramento)","F",0,"s")]),
  ("[CX3](=O)[NX3]", "amida", [(1700,1630,"C=O (estiramento)","F",1,"a")]),
- ("[NX3;!$(NC=O)][CH3]", "N–CH₃ de amina", [(2830,2760,"C–H de N–CH₃ (estiramento)","f–M",0,"s")]),
- ("[NX3;H2;!$(NC=O)][#6]", "amina primária", [(3500,3300,"N–H (2 bandas, sim. e ass.)","M",1,"a"),(1340,1020,"C–N (estiramento)","M",0,"a")]),
- ("[NX3;H1;!$(NC=O)]([#6])[#6]", "amina secundária", [(3450,3300,"N–H (1 banda)","f–M",1,"a"),(1340,1020,"C–N (estiramento)","M",0,"a")]),
+ ("[NX3;!$(NC=O)][CH2,CH3]", "N–CH₂ ou N–CH₃ de amina", [(2850,2760,"C–H de N–CH₂ e N–CH₃ (estiramento)","f–M",0,"s")]),
+ ("[NX3;H2;!$(NC=O)][#6]", "amina primária", [(3500,3270,"N–H (2 bandas, sim. e ass.)","M",1,"a"),(1650,1580,"N–H tesoura (amina primária)","M",0,"s"),(910,740,"N–H balanço (amina primária)","F, larga",0,"s"),(1340,1020,"C–N (estiramento)","M",0,"a")]),
+ ("[NX3;H1;!$(NC=O)]([#6])[#6]", "amina secundária", [(3450,3270,"N–H (1 banda)","f–M",1,"a"),(910,665,"N–H balanço (amina secundária)","F, larga",0,"s"),(1340,1020,"C–N (estiramento)","M",0,"a")]),
  ("[NX3;H0;!$(NC=O)]([#6])([#6])[#6]", "amina terciária", [(1340,1020,"C–N (estiramento)","M",0,"a")]),
  ("[NX3;H2]C=O", "amida primária", [(3500,3100,"N–H (2 bandas)","M, larga",1,"a"),(1650,1590,"N–H deformação (amida II)","M",0,"s")]),
  ("[NX3;H1](C=O)", "amida secundária", [(3500,3100,"N–H (1 banda)","M, larga",1,"a"),(1570,1510,"N–H deformação (amida II)","M–F",0,"s")]),
@@ -160,18 +160,22 @@ IVG = [
  ("[CX2]#[CX2;H1]", "alcino terminal", [(3310,3300,"≡C–H (estiramento)","f, estreita",1,"a"),(2150,2100,"C≡C (estiramento)","f–M",1,"a")]),
  ("[N+](=O)[O-]", "nitro", [(1550,1500,"N=O assimétrico","F",1,"a"),(1370,1300,"N=O simétrico","F",1,"a")]),
  ("[CX4][Cl]", "cloreto de alquila", [(800,600,"C–Cl (estiramento)","F",0,"a")]),
- ("c[Cl]", "cloreto de arila", [(800,600,"C–Cl (estiramento)","F",0,"a")]),
+ ("c[Cl]", "cloreto de arila", [(800,600,"C–Cl (estiramento)","F",0,"a"),(1100,1020,"C–H no plano, sensível ao halogênio (anel)","M–F",0,"s")]),
  ("c[OX2][CX4]", "éter de aril e alquila", [(1275,1200,"C–O–C assimétrico (aril alquil éter)","F",0,"s"),(1075,1020,"C–O–C simétrico (aril alquil éter)","F",0,"s")]),
  ("[OX2][CH3]", "O–CH₃", [(2850,2815,"C–H de O–CH₃ (estiramento)","f–M",0,"s")]),
  ("[CX4]O[CX4]", "éter", [(1150,1050,"C–O (estiramento)","F",0,"a")]),
+ ("[CH2;!a]=[CH;!a]", "vinila", [(1000,985,"=C–H fora do plano (vinil)","F",0,"s"),(920,905,"=CH₂ fora do plano (vinil)","F",0,"s")]),
+ ("c1ccoc1", "furano", [(3170,3100,"C–H de furano (estiramento)","f–M",0,"s"),(1070,1010,"C–O–C do anel de furano","F",0,"s"),(760,730,"C–H fora do plano (furano)","F",0,"s")]),
+ ("[CX4;H1]([Cl,Br,I])([Cl,Br,I])[Cl,Br,I]", "haloforme (CHX₃)", [(3100,3000,"C–H de CHX₃ (estiramento)","f–M",0,"s"),(1230,1060,"C–H deformação de CHX₃ (cai quando X é mais pesado)","F",0,"s")]),
+ ("[CH2X4]([Cl,Br,I])[Cl,Br,I]", "dialeto geminal (CH₂X₂)", [(1290,1240,"CH₂ balanço de CH₂X₂","F",0,"s")]),
  ("[CX3]=[CX3;!a]", "alceno", [(3100,3000,"=C–H (estiramento)","f–M",1,"a"),(1680,1620,"C=C (estiramento)","f–M",1,"a")]),
  # grupos acrescentados em 04/11/2026. Faixas da tabela de IV do LibreTexts ("Infrared Spectroscopy Absorption Table") onde ela traz o número; o resto é referência geral (marcada "g")
  ("[CX3](=O)[Cl,Br]", "haleto de ácido", [(1815,1785,"C=O de haleto de ácido (estiramento)","F",1,"a")]),
  ("[CX3](=O)O[CX3](=O)", "anidrido", [(1850,1800,"C=O de anidrido (assimétrico)","F",1,"s"),(1790,1740,"C=O de anidrido (simétrico)","F",1,"s"),(1050,1040,"C–O–C de anidrido","F, larga",0,"s")]),
  ("[SX2H]", "tiol", [(2600,2550,"S–H (estiramento)","f",1,"a")]),
  ("[CX4][Br]", "brometo de alquila", [(690,515,"C–Br (estiramento)","F",0,"s")]),
- ("c[Br]", "brometo de arila", [(690,515,"C–Br (estiramento)","F",0,"s")]),
- ("[CX4][I]", "iodeto de alquila", [(600,500,"C–I (estiramento)","F",0,"s")]),
+ ("c[Br]", "brometo de arila", [(690,515,"C–Br (estiramento)","F",0,"s"),(1100,1020,"C–H no plano, sensível ao halogênio (anel)","M–F",0,"s")]),
+ ("[CX4][I]", "iodeto de alquila", [(680,500,"C–I (estiramento)","F",0,"s")]),
  ("c[I]", "iodeto de arila", [(600,500,"C–I (estiramento)","F",0,"s")]),
  ("[#6][F]", "fluoreto orgânico", [(1400,1000,"C–F (estiramento)","F",0,"a")]),
  ("[SX4](=O)(=O)([#6])[#6]", "sulfona", [(1350,1320,"S=O assimétrico","F",1,"s"),(1160,1120,"S=O simétrico","F",1,"s")]),
@@ -234,6 +238,8 @@ def ring_pattern(m):
             return {1:("anel orto-dissubstituído", [(770,735,"C–H fora do plano (orto)","F",0,"a")]),
                     2:("anel meta-dissubstituído", [(900,880,"C–H fora do plano (meta)","M",0,"a"),(810,750,"C–H fora do plano (meta)","F",0,"a"),(725,680,"deformação do anel (meta)","M",0,"a")]),
                     3:("anel para-dissubstituído", [(860,800,"C–H fora do plano (para)","F",0,"g")])}[d]
+        if len(subs) == 0:
+            return ("benzeno sem substituinte", [(690,660,"C–H fora do plano (benzeno)","F",0,"s")])
         return None
     return None
 

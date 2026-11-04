@@ -14,7 +14,7 @@ App de uma página (`index.html`, instalável no celular) de consulta e estudo d
 
 ## Avisos sobre os dados
 - PF e PE de 185 valores foram conferidos no PubChem (mediana de HSDB, ICSC, HMDB e outras; 7 divergiram e ficam marcados); estado, cor, CAS (só o dígito verificador) e grupo de solubilidade foram escritos sem fonte conferida; fórmula, massa, GDH, estrutura, número de sinais de RMN e multiplicidade são calculados pelo RDKit; os δ de RMN são faixas típicas de tabela.
-- O banco de MS tem picos conferidos (lousa e SDBS) só para os 12 compostos dos exemplos com mecanismo; nos demais são picos típicos escritos sem fonte conferida.
+- Os picos de MS de 74 compostos foram conferidos nos prints do SDBS (e os 12 dos exemplos com mecanismo na lousa); nos demais são picos típicos escritos sem fonte conferida. O IV de 72 compostos foi conferido contra a tabela de picos do SDBS (bandas-chave); o ¹H e o ¹³C ainda são faixas típicas de tabela.
 - SDBS (AIST): o app só liga para o site e mostra o texto de citação. O SDBS proíbe coleta automática e download em massa.
 - A teoria de RMN resume os slides de RMN do Prof. Jeronimo (IFRJ). Os slides trazem δ de H do estireno em dois valores diferentes (6,73 e 6,37).
 - B 51 (`CH2F2`), B 58 (`C2H5S`) e C 102 estão como impressos no livro, mas a massa não bate (provável erro de impressão).
