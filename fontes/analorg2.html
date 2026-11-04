@@ -25,16 +25,18 @@
       <label for="icEx">Ver como funciona, com os dados de<select id="icEx"><option value="">escolha um composto</option></select></label>
     </div>
 
-    <h2>1. Aspecto</h2>
+    <details class="sec icsec" open><summary>1. Aspecto <span class="bdg" data-b="1"></span></summary>
     <p class="hint">Estado a 25 °C e cor.</p>
     <div class="chips" id="icEstC" role="group" aria-label="Estado"></div>
     <div class="chips" id="icCorC" role="group" aria-label="Cor"></div>
 
-    <h2>2. Solubilidade</h2>
+    </details>
+    <details class="sec icsec"><summary>2. Solubilidade <span class="bdg" data-b="2"></span></summary>
     <p class="hint">Em que grupo caiu? (Use o fluxograma em Ensaios se não souber.)</p>
     <div class="chips" id="icGrpC" role="group" aria-label="Grupo de solubilidade"></div>
 
-    <h2>3. Constantes físicas</h2>
+    </details>
+    <details class="sec icsec"><summary>3. Constantes físicas <span class="bdg" data-b="3"></span></summary>
     <div class="row">
       <label for="icPF">Ponto de fusão (°C)<input class="f-m" type="text" id="icPF" inputmode="decimal" placeholder="ex.: 121–122" autocomplete="off"></label>
       <label for="icPE">Ponto de ebulição (°C)<input class="f-m" type="text" id="icPE" inputmode="decimal" placeholder="ex.: 178" autocomplete="off"></label>
@@ -42,15 +44,18 @@
     </div>
     <p class="hint">Faixa (121–122) vale como medida única. Para comparar com mais compostos, use a <a href="https://analor.com.br/" target="_blank" rel="noopener">Ferramenta Analor</a>.</p>
 
-    <h2>4. Análise elementar (além de C)</h2>
+    </details>
+    <details class="sec icsec"><summary>4. Análise elementar (além de C) <span class="bdg" data-b="4"></span></summary>
     <div id="icElR"></div>
 
-    <h2>5. Infravermelho</h2>
+    </details>
+    <details class="sec icsec"><summary>5. Infravermelho <span class="bdg" data-b="5"></span></summary>
     <div id="icIrR"></div>
     <label for="icIV">Outras bandas que você viu (cm⁻¹, separadas por vírgula ou espaço)<input class="f-p" type="text" id="icIV" placeholder="ex.: 3350, 2960, 1715" autocomplete="off"></label>
     <div id="icBandOut"></div>
 
-    <details class="sec" id="icMais"><summary>6. Fórmula, massas e RMN (opcional)</summary>
+    </details>
+    <details class="sec icsec" id="icMais"><summary>6. Fórmula, massas e RMN (opcional) <span class="bdg" data-b="6"></span></summary>
       <div class="icg">
         <label for="icF">Fórmula molecular<input type="text" id="icF" placeholder="ex.: C4H8O" autocomplete="off" style="font-family:var(--mono)"></label>
         <label for="icGDH">GDH<input type="number" id="icGDH" inputmode="numeric" min="0" max="30"></label>

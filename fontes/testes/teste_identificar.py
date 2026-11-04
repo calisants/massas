@@ -11,7 +11,7 @@ with sync_playwright() as p:
     pg.on('pageerror',lambda e:errs.append(str(e)))
     pg.goto('file:///home/claude/massas/index.html');pg.wait_for_timeout(500)
     chk('só existe uma tela de identificar',pg.evaluate("!document.getElementById('p-id')&&!!document.getElementById('p-ic')"))
-    pg.evaluate("go('p-ic')")
+    pg.evaluate("go('p-ic')");pg.evaluate("document.querySelectorAll('#p-ic .icsec').forEach(d=>d.open=true)")
     pg.click('#p-ic [data-ck=est][data-cv="líquido"]');pg.click('#p-ic [data-tk=el][data-ti=O][data-tv=sim]')
     pg.click('#p-ic [data-tk=ir][data-ti=co][data-tv=sim]');pg.click('#p-ic [data-tk=ir][data-ti=oh][data-tv=nao]')
     pg.fill('#icPE','56');pg.wait_for_timeout(400)

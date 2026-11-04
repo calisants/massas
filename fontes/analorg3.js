@@ -21,6 +21,15 @@ function stInit(){
 
 /* ---------- Novidades e aviso de atualização ---------- */
 const NOVID=[
+ {v:85,d:'04/11/2026',t:[
+  'IV: dá para escolher qualquer um dos 106 compostos (com busca). Cada um mostra um espectro simulado, parecido com o do SDBS, e a tabela de bandas numerada. Os 15 compostos que você enviou do SDBS vêm primeiro e têm as bandas-chave conferidas.',
+  'Guia do IV: mais de 55 linhas novas (isocianatos, tiocianatos, amidas, alcenos por substituição, epóxidos, grupos com P, Si, S e outros). Cada linha diz a fonte.',
+  'Cada composto ganhou mais bandas no IV: C–O por tipo de álcool, deformações de CH₃ e CH₂, haletos, sulfonas, anidridos e outros grupos.',
+  'Massas: o exercício 1 a 12 deixou de ficar em destaque. Escolha qualquer composto numa lista só.',
+  'Ensaios: as tabelas ficaram legíveis no celular (palavras não são mais cortadas).',
+  'Identificar: seções que abrem e fecham, com a contagem do que você marcou, e linhas mais baixas.',
+  'Cor: Astronomia voltou. Início: a caixa Hoje saiu (Revisar tem atalho no Início). Avisos para o professor saíram.'
+ ]},
  {v:83,d:'04/11/2026',t:[
   'Identificar: as duas telas viraram uma só, com o layout de Ensaios e todos os campos. Mostra as classes que sobram e os compostos mais compatíveis.',
   'Início, Ensaios, Espectros e Mais foram reorganizados, sem cartões repetidos. As ferramentas de massas foram para Espectros.',
@@ -168,3 +177,150 @@ function nmrSpec(c,kind){
 document.addEventListener('click',ev=>{const b=ev.target.closest('[data-nmrint]');if(!b)return;
   const w=b.closest('.nmrwrap'),s=w&&w.querySelector('svg'),on=s&&s.classList.toggle('showint');
   b.setAttribute('aria-pressed',on?'true':'false');b.textContent=on?'Esconder a integração':'Mostrar a integração';});
+
+/* ---------- IV: linhas novas na tabela do Guia ---------- */
+(function(){
+  const LT='LibreTexts (tabela de IV)',GER='referência geral, não conferida em fonte nomeada',E='estiramento',D='deformação';
+  [
+   [2349,2349,'CO₂ do ar (artefato de fundo)','forte, estreita','Aparece quando o fundo não foi bem subtraído. Não é do composto.',LT,'estiramento assimétrico'],
+   [2275,2250,'N=C=O de isocianato','forte, larga','',LT,E],
+   [2175,2140,'S–C≡N de tiocianato','forte','',LT,E],
+   [2145,2120,'N=C=N de carbodiimida','forte','',LT,E],
+   [1800,1770,'C=O de haleto de ácido conjugado','forte','',LT,E],
+   [1690,1650,'C=O de amida primária','forte; livre ~1690, associada ~1650','',LT,E],
+   [1680,1640,'C=O de amida secundária','forte; livre ~1680, associada ~1640','',LT,E],
+   [1680,1630,'C=O de amida terciária','forte; livre ~1680, associada ~1630','',LT,E],
+   [1678,1668,'C=C de alceno trans-dissubstituído','fraca','',LT,E],
+   [1675,1665,'C=C de alceno tri ou tetrassubstituído','fraca','',LT,E],
+   [1662,1626,'C=C de alceno cis-dissubstituído','média','',LT,E],
+   [1658,1648,'C=C de alceno vinilideno (R₂C=CH₂)','média','',LT,E],
+   [1648,1638,'C=C de alceno monossubstituído','forte','',LT,E],
+   [1650,1566,'C=C de alceno cíclico','média','',LT,E],
+   [1650,1580,'N–H de amina','média','',LT,D],
+   [1210,1163,'C–O de éster','forte','',LT,E],
+   [1205,1124,'C–O de álcool terciário','forte','',LT,E],
+   [1124,1087,'C–O de álcool secundário','forte','',LT,E],
+   [1085,1050,'C–O de álcool primário','forte','',LT,E],
+   [1050,1040,'C–O–C de anidrido','forte, larga','',LT,E],
+   [850,550,'C–Cl','forte','A faixa da apostila é 800–600.',LT,E],
+   [690,515,'C–Br','forte','',LT,E],
+   [600,500,'C–I','forte segundo esta tabela','A apostila dá fraca.',LT,E],
+   [2260,2222,'C≡N de nitrila','fraca segundo esta tabela','A apostila dá média a forte.',LT,E],
+   [3333,3267,'≡C–H de alcino terminal','forte, estreita segundo esta tabela','A apostila dá fraca.',LT,E],
+   [1280,1230,'anel do epóxido (simétrico)','média','',GER,E],
+   [950,815,'anel do epóxido (assimétrico)','forte','',GER,E],
+   [890,820,'O–O de peróxido','fraca','',GER,E],
+   [1250,1020,'C=S de tiocarbonila','média a forte','',GER,E],
+   [540,480,'S–S de dissulfeto','fraca','',GER,E],
+   [700,600,'C–S','fraca','',GER,E],
+   [1300,1250,'P=O','forte','',GER,E],
+   [1050,970,'P–O–C','forte','',GER,E],
+   [2440,2275,'P–H','média','',GER,E],
+   [2250,2100,'Si–H','média a forte','',GER,E],
+   [1100,1000,'Si–O–Si','forte, larga','',GER,E],
+   [1260,1250,'Si–CH₃','média a forte','Confirme com 840–800 (Si–C).',GER,D],
+   [1380,1310,'B–O','forte','',GER,E],
+   [3100,3070,'C–H de ciclopropano','fraca a média','',GER,E],
+   [1395,1385,'CH₃ do terc-butila (par de bandas com ~1365)','média','',GER,D],
+   [1600,1430,'anel heteroaromático (piridina e similares)','média, várias bandas','',GER,E],
+   [3500,3200,'N–H de anel (pirrol, indol)','média','',GER,E],
+   [1740,1680,'C=O de carbamato (uretano)','forte','',GER,E],
+   [1690,1630,'C=O de ureia','forte','',GER,E],
+   [1780,1740,'C=O de carbonato','forte','C–O em 1280–1240.',GER,E],
+   [1790,1700,'C=O de imida','forte, 2 bandas','',GER,E],
+   [1650,1620,'N–O de nitrato de alquila (assimétrico)','forte','Simétrico em 1285–1270.',GER,E],
+   [1600,1500,'N=O de nitroso (C–N=O)','forte','',GER,E],
+   [1630,1575,'N=N de azocomposto','fraca (some se for simétrico)','',GER,E],
+   [2165,2110,'N≡C de isocianeto','forte','',GER,E],
+   [3650,3500,'O–H de oxima','média, larga','C=N em 1690–1640 e N–O em 960–930.',GER,E],
+   [1420,1330,'S=O de sulfonato (assimétrico)','forte','Simétrico em 1200–1145.',GER,E],
+   [1350,1342,'S=O de ácido sulfônico (assimétrico)','forte','Simétrico em 1165–1150.',GER,E],
+   [865,810,'anel 1,3,5-trissubstituído, C–H fora do plano','forte','Confirme com 730–675.',GER,D],
+   [870,800,'anel tetrassubstituído (1 H isolado)','forte','',GER,D]
+  ].forEach(r=>IRT.push(r));
+})();
+
+/* ---------- IV: escolha do composto, espectro simulado e tabela ---------- */
+let ivC=null;
+const IVSRC={a:'apostila',g:'referência geral, não conferida em fonte nomeada',s:'tabela de IV citada (LibreTexts, disciplina)'};
+function ivIw(code){const p=String(code).split(',').map(x=>x.trim()),b=p[0],m={'F':'forte','M–F':'média a forte','M':'média','f–M':'fraca a média','f':'fraca'};
+  return (m[b]||b)+(p.length>1?', '+p.slice(1).join(', '):'');}
+function ivDepth(code){const b=String(code).split(',')[0].trim();return {'F':1,'M–F':.62,'M':.4,'f–M':.22,'f':.12}[b]||.4;}
+function ivBands(c){
+  const out=c.iv.map(b=>({hi:b[0],lo:b[1],t:b[2],i:b[3],s:b[5]}));
+  const e=c.ex?IR.find(x=>x.n===c.ex):null;
+  if(e)e.p.forEach(r=>{const nums=String(r[0]).match(/\d+/g).map(Number),hi=Math.max(...nums),lo=Math.min(...nums);
+    if(out.some(b=>(hi+lo)/2<=b.hi+5&&(hi+lo)/2>=b.lo-5))return;
+    const t=IRT.find(x=>(hi+lo)/2<=x[0]+10&&(hi+lo)/2>=x[1]-10);
+    out.push({hi:hi,lo:lo,t:r[1],i:t?(/forte|intensa/.test(t[3])?'F':/fraca/.test(t[3])?'f':'M'):'M',s:'g',extra:true});});
+  return out.sort((a,b)=>(b.hi+b.lo)-(a.hi+a.lo));
+}
+function ivPeaks(b){
+  const w=b.hi-b.lo,d=ivDepth(b.i),big=/larga/.test(b.i),mid=(b.hi+b.lo)/2;
+  if(/2 bandas/.test(b.i))return [[b.lo+w*.12,Math.max(7,w*.07),d],[b.hi-w*.12,Math.max(7,w*.07),d]];
+  if(big)return [[mid,w/(/muito/.test(b.i)?2:2.4),d]];
+  if(w>50&&/C–H/.test(b.t))return [[b.lo+w*.12,9,d*.8],[mid,9,d],[b.hi-w*.1,9,d*.8]];
+  return [[mid,Math.max(7,w/(w>50?3.2:2.6)),d]];
+}
+function ivSpec(c,bs){
+  const W=340,L=24,R=10,pw=W-L-R,top=14,base=132,hgt=base-top,x=v=>L+(4000-v)/3600*pw,N=Math.round(pw/0.5);
+  const pk=bs.map(b=>ivPeaks(b));
+  const T=new Array(N+1);
+  for(let k=0;k<=N;k++){const v=4000-k/N*3600;let a=0;for(const g of pk)for(const q of g){const t=(v-q[0])/q[1];if(t<5&&t>-5)a+=q[2]*1.05*Math.exp(-t*t/2);}
+    T[k]=Math.max(3,100*Math.pow(10,-a));}
+  const Y=t=>base-(t*0.96)/100*(hgt-18);let p='';
+  for(let k=0;k<=N;k++)p+=(k?'L':'M')+(L+k/N*pw).toFixed(1)+','+Y(T[k]).toFixed(1);
+  let g='<rect class="fp" x="'+x(1500).toFixed(1)+'" y="'+top+'" width="'+(x(400)-x(1500)).toFixed(1)+'" height="'+hgt+'"/>';
+  g+='<text class="tl" x="'+((x(1500)+x(400))/2).toFixed(1)+'" y="'+(top+9)+'" text-anchor="middle">impressão digital</text>';
+  g+='<text class="tl" x="'+((x(4000)+x(1500))/2).toFixed(1)+'" y="'+(top+9)+'" text-anchor="middle">grupos funcionais</text>';
+  for(const t of [0,50,100])g+='<text class="tl" x="'+(L-4)+'" y="'+(Y(t)+3).toFixed(1)+'" text-anchor="end">'+t+'</text>';
+  for(let v=4000;v>=500;v-=500)g+='<line class="tk" x1="'+x(v).toFixed(1)+'" y1="'+base+'" x2="'+x(v).toFixed(1)+'" y2="'+(base+4)+'"/><text class="tl" x="'+x(v).toFixed(1)+'" y="'+(base+15)+'" text-anchor="middle">'+v+'</text>';
+  const placed=[];let lb='';
+  bs.forEach((b,i)=>{const q=pk[i].slice().sort((a,b2)=>b2[2]-a[2])[0],cx=x(q[0]);
+    const k=Math.max(0,Math.min(N,Math.round((4000-q[0])/3600*N)));let y=Math.max(Y(T[k])-11,top+14);
+    while(placed.some(o=>Math.abs(o[0]-cx)<15&&Math.abs(o[1]-y)<14))y-=14;
+    if(y<top+4)y=top+4;placed.push([cx,y]);
+    lb+='<circle class="lc" cx="'+cx.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="7"/><text class="ln" x="'+cx.toFixed(1)+'" y="'+(y+3.5).toFixed(1)+'" text-anchor="middle">'+(i+1)+'</text>';});
+  return '<svg class="nmrspec irspec" viewBox="0 0 '+W+' '+(base+34)+'" role="img" aria-label="Espectro de IV simulado de '+esc(c.n)+'">'
+    +g+'<path class="sp" d="'+p+'"/><line class="ax" x1="'+L+'" y1="'+base+'" x2="'+(W-R)+'" y2="'+base+'"/>'+lb
+    +'<text class="tl" x="'+(W/2)+'" y="'+(base+30)+'" text-anchor="middle">número de onda (cm⁻¹) · eixo vertical: transmitância (%)</text></svg>';
+}
+function drawIVChips(){
+  const sel=$('#ivSel');if(!sel)return;
+  const q=($('#ivQ').value||'').trim().toLowerCase();
+  const ok=COMP.filter(c=>!q||(c.n+' '+c.a.join(' ')+' '+c.f+' '+c.cas).toLowerCase().includes(q));
+  const opt=c=>'<option value="'+c.i+'"'+(ivC===c.i?' selected':'')+'>'+esc(c.n)+' ('+c.f+')</option>';
+  const by=(a,b)=>a.n.localeCompare(b.n,'pt-BR');
+  const sd=ok.filter(c=>c.irc).sort(by),rest=ok.filter(c=>!c.irc).sort(by);
+  sel.innerHTML=(sd.length?'<optgroup label="Com espectro do SDBS conferido">'+sd.map(opt).join('')+'</optgroup>':'')+(rest.length?'<optgroup label="Demais compostos">'+rest.map(opt).join('')+'</optgroup>':'')||'<option value="">Nenhum composto encontrado</option>';
+  if(ok.length&&!ok.some(c=>c.i===ivC)){ivC=ok[0].i;sel.value=String(ivC);drawIV();}
+}
+function drawIV(){
+  const box=$('#ivout');if(ivC===null){const a=COMP.find(x=>x.n==='acetona');ivC=a?a.i:COMP[0].i;}
+  const c=COMP.find(x=>x.i===ivC);if(!c){box.innerHTML='<p class="empty">Escolha um composto acima.</p>';return;}
+  const e=c.ex?IR.find(x=>x.n===c.ex):null,bs=ivBands(c);
+  let h='<div class="cfh ivh" style="margin-top:10px"><figure class="st"><div>'+c.s+'</div><figcaption>'+fmt(c.f)+'</figcaption></figure><div><b>'+esc(c.n)+'</b><div class="mut">'+(c.gf.length?esc(c.gf.join(', ')):'sem grupo funcional')+'</div><div class="mut">IDH = '+c.gdh+'</div></div></div>';
+  if(e)h+='<div class="ans" style="border-radius:6px;margin:10px 0"><span class="t">Pista do IV para o espectro de massas</span>'+esc(e.pista)+'</div>';
+  const sd=c.sdbs||(c.ex&&typeof INTS!=='undefined'&&INTS[c.ex]?INTS[c.ex].sdbs:null);
+  h+='<h3 style="margin:12px 0 4px">Espectro simulado</h3><div class="nmrwrap">'+ivSpec(c,bs)+'</div>';
+  h+='<p class="srcl" style="margin:0 0 8px">'+(c.irc?srcTag(true,c.irc===1?'Conferido: SDBS':'Conferido em parte: SDBS')+' As bandas-chave foram conferidas no espectro do SDBS que você enviou (medido em '+esc(c.irm)+'). ':srcTag(false,'Escrito por Claude, sem fonte conferida')+' ')
+    +'<b>O desenho é simulado, não é o medido.</b> Cada banda é posta no meio da faixa da tabela, com a intensidade típica. Os números dos círculos são os da tabela abaixo. No espectro real, conjugação, ligação de H e o meio da medida deslocam as bandas.'+(sd?' Nº SDBS: <b>'+sd+'</b>.':'')+'</p>';
+  h+='<div class="tbl"><table class="obt nostk cmp cmp-iv"><thead><tr><th>#</th><th>cm⁻¹</th><th>O que é</th></tr></thead><tbody>'+bs.map((b,i)=>'<tr><td><b>'+(i+1)+'</b></td><td class="n">'+(b.hi===b.lo?'~'+b.hi:b.lo+'–'+b.hi)+'</td><td>'+esc(b.t)+'<div class="mut sm">'+esc(ivIw(b.i))+' · '+esc(IVSRC[b.s]||b.s)+'</div></td></tr>').join('')+'</tbody></table></div>';
+  if(c.ivf&&c.ivf.length)h+='<h3 style="margin:14px 0 4px">O que desloca as bandas deste composto</h3><dl class="gl">'+c.ivf.map(f=>'<div><dt>'+esc(f[0])+'</dt><dd>'+esc(f[1])+'</dd></div>').join('')+'</dl>';
+  if(e&&e.disc.length)h+='<details class="sec"><summary>Como a disciplina atribui</summary><div class="tbl"><table class="obt"><thead><tr><th>Banda (cm⁻¹)</th><th>O que é</th></tr></thead><tbody>'+e.disc.map(r=>'<tr><td class="n">'+r[0]+'</td><td>'+esc(r[1])+'</td></tr>').join('')+'</tbody></table></div></details>';
+  h+='<p class="hint" style="margin-top:12px"><button class="btn ghost" type="button" data-cf="'+c.i+'">Abrir a ficha de '+esc(c.n)+'</button></p>';
+  box.innerHTML=h;
+}
+document.addEventListener('change',ev=>{if(ev.target.id==='ivSel'){ivC=+ev.target.value;drawIV();}});
+document.addEventListener('input',ev=>{if(ev.target.id==='ivQ')drawIVChips();});
+
+/* ---------- Identificar: contagem por seção ---------- */
+function icBadges(){
+  const v=id=>{const e=$('#'+id);return e&&String(e.value).trim()!==''?1:0;};
+  const n=Object.values(icSt.el||{}).filter(Boolean).length,ir=Object.values(icSt.ir||{}).filter(Boolean).length+v('icIV');
+  const c={1:(icSt.est?1:0)+(icSt.cor?1:0),2:icSt.g?1:0,3:v('icPF')+v('icPE'),4:n,5:ir,6:['icF','icGDH','icGF','icM','icP','icH','icC','icHd'].reduce((a,k)=>a+v(k),0)};
+  document.querySelectorAll('#p-ic .bdg').forEach(b=>{const k=+b.dataset.b;b.textContent=c[k]?c[k]+(c[k]>1?' marcados':' marcado'):'';});
+}
+document.addEventListener('click',ev=>{if(typeof CUR!=='undefined'&&CUR==='p-ic')setTimeout(icBadges,120);});
+document.addEventListener('input',ev=>{if(typeof CUR!=='undefined'&&CUR==='p-ic')setTimeout(icBadges,120);});
+document.addEventListener('change',ev=>{if(typeof CUR!=='undefined'&&CUR==='p-ic')setTimeout(icBadges,120);});

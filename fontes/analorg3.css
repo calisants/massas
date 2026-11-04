@@ -36,3 +36,23 @@ html.semzoom,html.semzoom body{touch-action:pan-x pan-y}
 .nmrspec .lc{fill:var(--keep)}
 .nmrspec .ln{fill:var(--surface);font:700 10px var(--mono)}
 .nmrwrap .chip{margin:4px 0 6px}
+
+.nmrspec .fp{fill:var(--keep-soft);opacity:.55}
+.cmp.obt.nostk{table-layout:fixed;width:100%}
+.cmp th:first-child,.cmp td:first-child{width:2rem;text-align:center}
+.cmp-iv th:nth-child(2),.cmp-iv td:nth-child(2){width:5.6rem}
+.cmp-nmr th:nth-child(3),.cmp-nmr td:nth-child(3){width:5.4rem}
+.cmp td .sm{font-size:.78rem;margin-top:2px}
+.ivh figure{max-width:130px;margin:0}
+.ivh figure svg{max-width:130px;height:auto}
+
+/* Identificar: seções recolhíveis e linhas compactas */
+#p-ic .icsec{margin:8px 0}
+#p-ic .icsec>summary{display:flex;align-items:center;gap:8px}
+.bdg{margin-left:auto;font-size:.75rem;font-weight:600;color:var(--keep);background:var(--keep-soft);border-radius:99px;padding:1px 8px}
+.bdg:empty{display:none}
+#p-ic .tri{flex-wrap:nowrap;justify-content:space-between;gap:8px;margin:0;padding:3px 0;border-bottom:1px solid var(--line)}
+#p-ic .tri .tl{flex:1 1 auto;min-width:0;font-size:.88rem}
+#p-ic .tri .tb{flex:none}
+#p-ic .tri .tb button{padding:3px 9px;min-height:34px;font-size:.8rem}
+#p-ic .chips{margin:4px 0 6px}

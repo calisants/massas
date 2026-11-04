@@ -112,7 +112,7 @@ input[type=text],input[type=number],select{font:inherit;font-family:var(--mono);
 @media (max-width:520px){.col+.col{border-left:0;border-top:1px solid var(--line)}}
 .k{font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
 .keep .k{color:var(--keep)}.lost .k{color:var(--lost)}
-.li{margin:0 0 6px;overflow-wrap:anywhere}
+.li{margin:0 0 6px;overflow-wrap:break-word}
 .li .h{display:block;color:var(--muted);font-size:.84rem}
 .li .f{font-family:var(--mono);font-size:.92rem}
 .empty{color:var(--muted);font-size:.88rem}
@@ -126,7 +126,7 @@ h2{font-size:1.1rem;margin:22px 0 4px;font-weight:600}
 .hint{color:var(--muted);font-size:.9rem;margin:0 0 10px;max-width:70ch}
 .tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:6px}
 table{border-collapse:collapse;width:100%;min-width:560px}
-@media (max-width:640px){table{min-width:0}th,td{padding:7px 8px;overflow-wrap:anywhere}th{font-size:.7rem;letter-spacing:.03em}.tbl{overflow-x:visible}td .thumb svg{width:96px}}
+@media (max-width:640px){table{min-width:0}th,td{padding:7px 8px;overflow-wrap:break-word;word-break:normal;hyphens:manual}th{font-size:.7rem;letter-spacing:.03em}.tbl{overflow-x:visible}td .thumb svg{width:96px}tbody th,td:first-child{min-width:5.4rem}tbody th{font-size:.68rem;letter-spacing:.02em}}
 th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
 th{font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;position:sticky;top:0;background:var(--surface)}
 td.n{font-family:var(--mono);font-weight:500;white-space:nowrap;width:1%}
@@ -228,7 +228,7 @@ h1{font-size:1.15rem}
 table.stk,table.stk tbody{display:block;min-width:0}
 table.stk thead{display:none}
 table.stk tr{display:block;background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:0 0 10px;padding:4px 12px 8px}
-table.stk td{display:block;border:0;padding:6px 0 2px;width:auto;white-space:normal;font-size:.92rem;overflow-wrap:anywhere}
+table.stk td{display:block;border:0;padding:6px 0 2px;width:auto;white-space:normal;font-size:.92rem;overflow-wrap:break-word}
 table.stk td:first-child{font-size:1rem;padding:6px 0 4px;border-bottom:1px solid var(--line);margin-bottom:2px}
 table.stk td:not(:first-child)::before{content:attr(data-l);display:block;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:1px}
 table.stk td:empty{display:none}
@@ -257,6 +257,7 @@ button.back{border-radius:10px}
 .mi span{font-size:.86rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .mh{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:20px 0 8px}
 .tools{margin:6px 0 4px}
+#msSel,#ivSel{max-width:100%}
 #exchips,#ivchips{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding:2px 16px 8px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
 #exchips .chip,#ivchips .chip{flex:none;white-space:nowrap}
 #p-in .scrsub{margin-bottom:12px}
@@ -269,6 +270,9 @@ button.back{border-radius:10px}
 :root[data-pal="organica"]{--bg:#F4F8F2;--surface:#FFFFFF;--ink:#1B2914;--muted:#5C6E53;--line:#D6E2D0;--keep:#4A7020;--focus:#4A7020;--keep-soft:#E4F3DD;--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%234A7020' stroke-opacity='.16' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate%2822 24%29 rotate%286%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Ccircle r='5'/%3E%3C/g%3E%3Cg transform='translate%2882 18%29 rotate%288%29'%3E%3Cpath d='M-16 6l8-5 8 5 8-5 8 5M-8 1v-9M8 1v-9'/%3E%3Ccircle cx='-8' cy='-11' r='2.5'/%3E%3Ccircle cx='8' cy='-11' r='2.5'/%3E%3C/g%3E%3Cg transform='translate%2852 52%29 rotate%28-20%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Cpath d='M0-7l6 3.5v7L0 7l-6-3.5v-7z'/%3E%3C/g%3E%3Cg transform='translate%28104 62%29 rotate%2814%29'%3E%3Cpath d='M-16 6l8-5 8 5 8-5 8 5M-8 1v-9M8 1v-9'/%3E%3Ccircle cx='-8' cy='-11' r='2.5'/%3E%3Ccircle cx='8' cy='-11' r='2.5'/%3E%3C/g%3E%3Cg transform='translate%2820 86%29 rotate%2818%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Ccircle r='5'/%3E%3C/g%3E%3Cg transform='translate%2874 100%29 rotate%28-2%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Cpath d='M0-7l6 3.5v7L0 7l-6-3.5v-7z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"])[data-pal="organica"]{--bg:#10170D;--surface:#1A2315;--ink:#E6EFE1;--muted:#A6B89D;--line:#32402B;--keep:#9DE07B;--focus:#9DE07B;--keep-soft:#2A451C;--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%239DE07B' stroke-opacity='.2' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate%2822 24%29 rotate%286%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Ccircle r='5'/%3E%3C/g%3E%3Cg transform='translate%2882 18%29 rotate%288%29'%3E%3Cpath d='M-16 6l8-5 8 5 8-5 8 5M-8 1v-9M8 1v-9'/%3E%3Ccircle cx='-8' cy='-11' r='2.5'/%3E%3Ccircle cx='8' cy='-11' r='2.5'/%3E%3C/g%3E%3Cg transform='translate%2852 52%29 rotate%28-20%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Cpath d='M0-7l6 3.5v7L0 7l-6-3.5v-7z'/%3E%3C/g%3E%3Cg transform='translate%28104 62%29 rotate%2814%29'%3E%3Cpath d='M-16 6l8-5 8 5 8-5 8 5M-8 1v-9M8 1v-9'/%3E%3Ccircle cx='-8' cy='-11' r='2.5'/%3E%3Ccircle cx='8' cy='-11' r='2.5'/%3E%3C/g%3E%3Cg transform='translate%2820 86%29 rotate%2818%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Ccircle r='5'/%3E%3C/g%3E%3Cg transform='translate%2874 100%29 rotate%28-2%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Cpath d='M0-7l6 3.5v7L0 7l-6-3.5v-7z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}}
 :root[data-theme="dark"][data-pal="organica"]{--bg:#10170D;--surface:#1A2315;--ink:#E6EFE1;--muted:#A6B89D;--line:#32402B;--keep:#9DE07B;--focus:#9DE07B;--keep-soft:#2A451C;--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%239DE07B' stroke-opacity='.2' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate%2822 24%29 rotate%286%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Ccircle r='5'/%3E%3C/g%3E%3Cg transform='translate%2882 18%29 rotate%288%29'%3E%3Cpath d='M-16 6l8-5 8 5 8-5 8 5M-8 1v-9M8 1v-9'/%3E%3Ccircle cx='-8' cy='-11' r='2.5'/%3E%3Ccircle cx='8' cy='-11' r='2.5'/%3E%3C/g%3E%3Cg transform='translate%2852 52%29 rotate%28-20%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Cpath d='M0-7l6 3.5v7L0 7l-6-3.5v-7z'/%3E%3C/g%3E%3Cg transform='translate%28104 62%29 rotate%2814%29'%3E%3Cpath d='M-16 6l8-5 8 5 8-5 8 5M-8 1v-9M8 1v-9'/%3E%3Ccircle cx='-8' cy='-11' r='2.5'/%3E%3Ccircle cx='8' cy='-11' r='2.5'/%3E%3C/g%3E%3Cg transform='translate%2820 86%29 rotate%2818%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Ccircle r='5'/%3E%3C/g%3E%3Cg transform='translate%2874 100%29 rotate%28-2%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Cpath d='M0-7l6 3.5v7L0 7l-6-3.5v-7z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+:root[data-pal="astro"]{--bg:#F4F2F8;--surface:#FFFFFF;--ink:#1C1429;--muted:#5D536E;--line:#D6D0E2;--keep:#5B3FB0;--focus:#5B3FB0;--keep-soft:#E5DDF3;--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%235B3FB0' stroke-opacity='.16' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate%2822 24%29 rotate%286%29'%3E%3Ccircle r='7'/%3E%3Cellipse rx='15' ry='4' transform='rotate%28-20%29'/%3E%3C/g%3E%3Cg transform='translate%2882 18%29 rotate%288%29'%3E%3Cpath d='M0-9q1 8 9 9-8 1-9 9-1-8-9-9 8-1 9-9z'/%3E%3C/g%3E%3Cg transform='translate%2852 52%29 rotate%28-20%29'%3E%3Ccircle cx='-6' cy='-4' r='1'/%3E%3Ccircle cx='5' cy='3' r='1'/%3E%3Ccircle cx='-2' cy='8' r='1'/%3E%3C/g%3E%3Cg transform='translate%28104 62%29 rotate%2814%29'%3E%3Cpath d='M0-9q1 8 9 9-8 1-9 9-1-8-9-9 8-1 9-9z'/%3E%3C/g%3E%3Cg transform='translate%2820 86%29 rotate%2818%29'%3E%3Ccircle r='7'/%3E%3Cellipse rx='15' ry='4' transform='rotate%28-20%29'/%3E%3C/g%3E%3Cg transform='translate%2874 100%29 rotate%28-2%29'%3E%3Cpath d='M0-9q1 8 9 9-8 1-9 9-1-8-9-9 8-1 9-9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"])[data-pal="astro"]{--bg:#110D17;--surface:#1A1523;--ink:#E6E1EF;--muted:#A79DB8;--line:#332B40;--keep:#A07BE0;--focus:#A07BE0;--keep-soft:#2B1C45;--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23A07BE0' stroke-opacity='.2' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate%2822 24%29 rotate%286%29'%3E%3Ccircle r='7'/%3E%3Cellipse rx='15' ry='4' transform='rotate%28-20%29'/%3E%3C/g%3E%3Cg transform='translate%2882 18%29 rotate%288%29'%3E%3Cpath d='M0-9q1 8 9 9-8 1-9 9-1-8-9-9 8-1 9-9z'/%3E%3C/g%3E%3Cg transform='translate%2852 52%29 rotate%28-20%29'%3E%3Ccircle cx='-6' cy='-4' r='1'/%3E%3Ccircle cx='5' cy='3' r='1'/%3E%3Ccircle cx='-2' cy='8' r='1'/%3E%3C/g%3E%3Cg transform='translate%28104 62%29 rotate%2814%29'%3E%3Cpath d='M0-9q1 8 9 9-8 1-9 9-1-8-9-9 8-1 9-9z'/%3E%3C/g%3E%3Cg transform='translate%2820 86%29 rotate%2818%29'%3E%3Ccircle r='7'/%3E%3Cellipse rx='15' ry='4' transform='rotate%28-20%29'/%3E%3C/g%3E%3Cg transform='translate%2874 100%29 rotate%28-2%29'%3E%3Cpath d='M0-9q1 8 9 9-8 1-9 9-1-8-9-9 8-1 9-9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}}
+:root[data-theme="dark"][data-pal="astro"]{--bg:#110D17;--surface:#1A1523;--ink:#E6E1EF;--muted:#A79DB8;--line:#332B40;--keep:#A07BE0;--focus:#A07BE0;--keep-soft:#2B1C45;--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23A07BE0' stroke-opacity='.2' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate%2822 24%29 rotate%286%29'%3E%3Ccircle r='7'/%3E%3Cellipse rx='15' ry='4' transform='rotate%28-20%29'/%3E%3C/g%3E%3Cg transform='translate%2882 18%29 rotate%288%29'%3E%3Cpath d='M0-9q1 8 9 9-8 1-9 9-1-8-9-9 8-1 9-9z'/%3E%3C/g%3E%3Cg transform='translate%2852 52%29 rotate%28-20%29'%3E%3Ccircle cx='-6' cy='-4' r='1'/%3E%3Ccircle cx='5' cy='3' r='1'/%3E%3Ccircle cx='-2' cy='8' r='1'/%3E%3C/g%3E%3Cg transform='translate%28104 62%29 rotate%2814%29'%3E%3Cpath d='M0-9q1 8 9 9-8 1-9 9-1-8-9-9 8-1 9-9z'/%3E%3C/g%3E%3Cg transform='translate%2820 86%29 rotate%2818%29'%3E%3Ccircle r='7'/%3E%3Cellipse rx='15' ry='4' transform='rotate%28-20%29'/%3E%3C/g%3E%3Cg transform='translate%2874 100%29 rotate%28-2%29'%3E%3Cpath d='M0-9q1 8 9 9-8 1-9 9-1-8-9-9 8-1 9-9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
 body{background-image:var(--pat,none);background-size:120px 120px;background-attachment:fixed}
 /* END temas */
 </style>
@@ -280,7 +284,6 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   <section id="p-in" role="tabpanel" aria-labelledby="t-in">
     <h2 class="scr">Início</h2>
     <p class="scrsub">Consulta e estudo de Análise Orgânica, do básico aos espectros.</p>
-    <div id="hoje" class="hojebox"></div>
     <h2 class="mh">Ordem da análise</h2>
     <div class="passos" role="group" aria-label="Passos da análise">
       <button class="chip" type="button" data-go="p-pf">1 Preliminares</button>
@@ -292,6 +295,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     </div>
     <h2 class="mh">Estudar</h2>
     <div class="menu">
+      <button class="mi" type="button" data-go="p-rv"><b>Revisar</b><span>Erros e perguntas que voltam em 1, 3 e 7 dias.</span></button>
       <button class="mi" type="button" data-go="p-ob"><b>Orgânica Básica</b><span>Grupos funcionais, hibridização, GDH, Lewis, acidez e forças intermoleculares.</span></button>
       <button class="mi" type="button" data-go="p-en"><b>Ensaios</b><span>Preliminares, solubilidade, análise elementar e problemas resolvidos.</span></button>
       <button class="mi" type="button" data-go="p-sp"><b>Espectros</b><span>IV, massas e RMN, com treino e ferramentas.</span></button>
@@ -502,9 +506,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <div id="an-in">
     <h2 class="scr">Espectrometria de massas</h2>
     <p class="scrsub">Escolha um composto ou digite M e os picos. Depois toque num pico para ver o que ficou e o que saiu. <button class="back" style="display:inline;margin:0" data-go="p-aj">Como ler um pico?</button></p>
-    <div class="hint" style="margin:0 0 6px">Compostos com mecanismo de fragmentação:</div>
-    <details class="how" style="margin-bottom:10px"><summary style="cursor:pointer;font-weight:600">Em que ordem estudar?</summary><p class="hint" style="margin-top:8px">Do mais simples ao mais complexo: <b>1-propanol</b> (álcool, clivagem α) → <b>ácido butanoico</b> (McLafferty) → <b>3-pentanona</b> (cetona) → <b>N,N-dimetiletilamina</b> (amina) → <b>pentanal</b> (aldeído) → <b>pentanoato de metila</b> (éster) → <b>benzofenona</b> → <b>etilbenzeno</b> → <b>estireno</b> → <b>piridina</b> → <b>1,4-dioxano</b> → <b>furano</b>. Os anéis ficam para o fim porque abrem e se rearranjam. Marque cada um como estudado depois de resolver.</p></details>
-    <div class="chips" id="exchips"></div>
+    <label for="msSel">Composto<select id="msSel" class="f-m"></select></label>
     <div class="row">
       <label for="inM">M (íon molecular)<input class="f-m" type="number" id="inM" inputmode="numeric" min="1" max="999" value="60"></label>
       <label for="inP">Picos (separe por vírgula ou espaço)<input class="f-p" type="text" id="inP" value="59, 42, 31"></label>
@@ -558,8 +560,9 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
       <button type="button" data-v="v-tr" aria-pressed="false">Treinar</button>
     </div>
     <div id="v-comp">
-      <p class="scrsub">Escolha um composto para ver as bandas dele e a pista para o espectro de massas.</p>
-      <div class="chips" id="ivchips"></div>
+      <p class="scrsub">Escolha um composto para ver o espectro de IV simulado e a tabela de bandas.</p>
+      <label for="ivQ">Buscar<input class="f-m" type="search" id="ivQ" placeholder="nome, fórmula ou CAS"></label>
+      <label for="ivSel">Composto<select id="ivSel" class="f-m"></select></label>
       <div id="ivout"></div>
     </div>
     <div id="v-num" hidden>
@@ -792,7 +795,6 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   <section id="p-co" role="region" aria-label="Cor do app" hidden>
     <button class="back" data-go="p-ma">← Mais</button>
     <h2 class="scr">Cor do app</h2>
-    <p class="hint">Toque numa cor ou num tema de ciência (Química, Orgânica, Biologia, Física, Exatas, Terra, Astronomia): os temas põem um desenho discreto no fundo. Fica salvo neste aparelho. O vermelho e o âmbar dos cartões (o que saiu e o aviso) não mudam, para o significado continuar o mesmo.</p>
     <div class="pal" id="pals"></div>
   </section>
 
@@ -817,7 +819,6 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <h2>Sobre o conteúdo de ensaios (Analorg)</h2>
       <p>Solubilidade, análise elementar, ignição, cor, ponto de fusão e ponto de ebulição seguem a <i>Plataforma QO é Vida</i> do Prof. Marcelo Sierpe Pedrosa (analor.com.br e as páginas dele no Google Sites). O texto foi parafraseado por Claude, não copiado. Os procedimentos de análise elementar citam Costa Neto (2004) e Feigl (1966), como o site. O cronograma vem da imagem postada no Classroom.</p>
       <p>As etiquetas <span class="tag sv">Conferido: [fonte]</span> e <span class="tag sm">Escrito por Claude, sem fonte conferida</span> dizem de onde vem cada bloco. Foram escritos por Claude, sem fonte conferida: os exemplos de compostos, as perguntas de treino, a lista de classes e as regras da tela &ldquo;Identificar&rdquo;, o uso do PF como indício de pureza e a leitura da linha tracejada do fluxograma (N ou S leva a MN).</p>
-      <p>Pontos em aberto: β-dicetonas aparecem em A₁ e em A₂ na tabela do professor; há um bloco sem rótulo sob N; a ligação até MN. Pergunte a ele se cair.</p>
   </section>
 
   <!--@@ANALORG2_HTML@@-->
@@ -978,7 +979,7 @@ function cisTxt(ex,r){
   return '<b>homolítica</b> (seta de anzol): cada lado fica com 1 elétron, e o pedaço que sai é um radical.';
 }
 const DUV=['12:58','8:50'];
-function duvTxt(ex,row){return DUV.indexOf(ex.n+':'+row[0])>=0?'<p class="src"><b>⚠ Mecanismo em dúvida.</b> Está na lista de perguntas para o professor.</p>':'';}
+function duvTxt(ex,row){return '';}
 const POSS=['3:78','8:52','10:44','2:39','11:87'];
 function origemTxt(ex){return ex.ok?(ex.n<=5?'Massa, estrutura e mecanismo: da lousa do professor, pelas suas anotações do tablet (iguais às fotos do quadro). O porquê é explicação minha, baseada no Silverstein.':'Massa, estrutura e mecanismo: da lousa do professor. O porquê é explicação minha, baseada no Silverstein.'):'Ainda não conferido com o professor: tudo aqui é minha leitura do livro.';}
 function rearrBox(ex,row){
@@ -1014,16 +1015,21 @@ function fig(k,cap,cls,w){return '<figure class="st '+cls+'"><span class="w">'+w
 function strucPair(r){return '<div class="sp">'+fig(r[5],r[7],'keep','ficou')+'<span class="op">+</span>'+fig(r[6],r[8],'lost','saiu')+'</div>';}
 /* ---------- aba Analisar ---------- */
 let curEx=null,pkSel=null;
+let msC=null;
 function buildChips(){
-  const box=$('#exchips');
-  box.innerHTML='';
-  EX.forEach(e=>{
-    const b=document.createElement('button');
-    b.className='chip';b.type='button';b.setAttribute('aria-pressed',curEx===e.n?'true':'false');
-    b.textContent=(isStud(e.n)?'✓ ':'')+e.nome;
-    b.onclick=()=>{curEx=e.n;pkSel=null;$('#inM').value=e.M;$('#inP').value=e.peaks.filter(p=>p!==e.M).join(', ');buildChips();analyze();anStage(true);};
-    box.appendChild(b);
-  });
+  const sel=$('#msSel');if(!sel)return;
+  if(!sel.options.length){
+    sel.innerHTML='<option value="">Digitar M e picos</option>'+COMP.slice().sort((a,b)=>a.n.localeCompare(b.n,'pt-BR')).map(c=>'<option value="'+c.i+'">'+esc(c.n)+' ('+c.f+')</option>').join('');
+    sel.onchange=()=>{
+      if(sel.value===''){curEx=null;msC=null;return;}
+      const c=COMP.find(x=>String(x.i)===sel.value);if(!c)return;
+      const e=c.ex?EX.find(x=>x.n===c.ex):null;pkSel=null;msC=c.i;
+      if(e){curEx=e.n;$('#inM').value=e.M;$('#inP').value=e.peaks.filter(p=>p!==e.M).join(', ');}
+      else{curEx=null;$('#inM').value=c.M;$('#inP').value=(c.ms||[]).filter(p=>p!==c.M).join(', ');}
+      analyze();anStage(true);};
+  }
+  const cur=curEx!==null?COMP.find(c=>c.ex===curEx):(msC!==null?COMP.find(c=>c.i===msC):null);
+  sel.value=cur?String(cur.i):'';
 }
 function intOf(ex,p){const d=ex&&typeof INTS!=='undefined'&&INTS[ex.n];if(!d)return null;return d.p[p]!==undefined?d.p[p]:-1;}
 function intTxt(ex,p){const v=intOf(ex,p);if(v===null)return '';return 'SDBS '+fmtInt(v);}
@@ -1074,7 +1080,7 @@ function analyze(){
   const peaks=[...new Set(($('#inP').value.match(/\d+/g)||[]).map(Number))].filter(p=>p>0).sort((a,b)=>b-a);
   const ex=EX.find(e=>e.n===curEx&&e.M===M);
   if(!ex)curEx=null;
-  $('#exinfo').innerHTML=ex?'<div class="ex-head"><b>'+esc(ex.nome)+'</b><span class="mono">'+fmt(ex.f)+'</span><span>'+esc(ex.g)+'</span><span class="badge '+(ex.ok?'ok':'chk')+'">'+(ex.ok?'conferido com a lousa':'conferir com o professor')+'</span><span class="mol">'+fig(ex.smi,ex.f,'keep','molécula')+'</span></div>'+(ex.sug?'<p class="note-sug">Este exercício não tem resolução do professor nos seus arquivos. As quebras abaixo são sugestão minha a partir do livro, então confira.</p>':''):'';
+  $('#exinfo').innerHTML=ex?'<div class="ex-head"><b>'+esc(ex.nome)+'</b><span class="mono">'+fmt(ex.f)+'</span><span>'+esc(ex.g)+'</span><span class="badge '+(ex.ok?'ok':'chk')+'">'+(ex.ok?'conferido com a lousa':'sem conferência com a lousa')+'</span><span class="mol">'+fig(ex.smi,ex.f,'keep','molécula')+'</span></div>'+(ex.sug?'<p class="note-sug">Este exercício não tem resolução do professor nos seus arquivos. As quebras abaixo são sugestão minha a partir do livro, então confira.</p>':''):'';
   decorateEx(ex);$('#nrule').innerHTML=M?'Regra do nitrogênio: M = '+M+' é <b>'+(M%2?'ímpar → número ímpar de N (1, 3...)':'par → zero ou número par de N')+'</b>.':'';
   if(!M||!peaks.length){$('#out').innerHTML='<p class="empty">Digite M e pelo menos um pico.</p>';$('#pairs').innerHTML='';$('#pkbar').innerHTML='';$('#pkh').textContent='';return;}
   const cards={};
@@ -1112,7 +1118,7 @@ function analyze(){
   }
   $('#pairs').innerHTML=prs.length?'<details><summary>Perdas entre dois picos ('+prs.length+')</summary><p class="hint" style="margin-top:8px">Quando um fragmento perde mais um pedaço, a diferença entre os dois picos também aparece no Apêndice C.</p><div class="pairs">'+prs.map(([a,b,d])=>'<div class="pair"><span class="mono">'+a+' → '+b+'</span><span class="mono">perdeu '+d+'</span><span>'+CM.get(d).map(x=>fmt(x[0])).join(', ')+'</span></div>').join('')+'</div></details>':'';
 }
-$('#go').onclick=()=>{curEx=null;pkSel=null;buildChips();analyze();anStage(true);};
+$('#go').onclick=()=>{curEx=null;msC=null;pkSel=null;buildChips();analyze();anStage(true);};
 $('#an-back').onclick=()=>anStage(false);
 function anStage(r){$('#an-in').hidden=r;$('#an-res').hidden=!r;window.scrollTo(0,0);if(!r)drawHoje();}
 ['#inM','#inP'].forEach(s=>$(s).addEventListener('input',()=>{analyze();}));
@@ -1140,7 +1146,7 @@ function drawQ(){
     h+='<button class="btn ghost" id="qs" type="button">Mostrar resposta</button>';
   }
   if(q.step>=2){
-    h+='<div class="ans" style="margin-top:12px;border-radius:6px"><span class="t">'+esc(e.nome)+'</span>'+stepCard(e,r)+(e.ok?'':'<br><i>Conferir com o professor.</i>')+'</div>';
+    h+='<div class="ans" style="margin-top:12px;border-radius:6px"><span class="t">'+esc(e.nome)+'</span>'+stepCard(e,r)+'</div>';
   }
   $('#quiz').innerHTML=h;
   $('#qc').onclick=()=>{const v=parseInt($('#qa').value,10);if(isNaN(v))return;score.n++;if(v===d){score.ok++;q.fb='good';q.step=Math.max(q.step,1);}else q.fb='bad';drawQ();};
@@ -1196,32 +1202,7 @@ const IRT=[[3650, 3580, "O–H livre de álcool ou fenol", "média, estreita (so
 const IRREG=[["3700–3100", "O–H e N–H", "Banda larga é O–H (álcool, fenol, ácido). Uma ou duas bandas mais finas são N–H. Sem banda: não há O–H nem N–H (amina terciária)."], ["3300–2700", "C–H", "Acima de 3000: C–H de anel ou de C=C (e ≡C–H em ~3300). Abaixo de 3000: C–H de cadeia. Duas bandas fracas em 2820 e 2720: aldeído."], ["2700–2260", "região silenciosa", "Quase nada aparece. Se aparecer: S–H (2600–2550) ou sais de amina e de ácido (larga, 3000–2200)."], ["2300–2100", "triplas e acumuladas", "C≡N (2260–2210), C≡C (2260–2100), N=C=O e N=C=N (2270–2130)."], ["2000–1660", "overtones do anel", "Bandas fracas que desenham o padrão de substituição do anel aromático (mono, orto, meta, para)."], ["1850–1630", "C=O", "Banda forte. A posição diz o tipo: cloreto 1815–1790, anidrido 1830–1760, éster 1750–1735, aldeído 1740–1720, ácido 1725–1700, cetona 1725–1705, amida 1700–1630."], ["1680–1450", "C=C e anel", "Alceno 1680–1620 (fraca a média). Anel aromático em ~1600, 1580, 1500, 1450. Nitro 1550–1500 e 1370–1300."], ["1470–1350", "deformação de C–H", "CH2 e CH3 em 1470–1450; CH3 simétrico em 1385–1370."], ["1300–1000", "C–O e C–N", "C–O é forte: álcool 1º ~1050, 2º ~1100, 3º ~1150, éter 1150–1050, fenol 1250–1200, éster 1300–1000. C–N de amina em 1250–1020 (média)."], ["650–400", "fora da região usual", "Quase nunca se atribui banda a banda aqui (C–Br, C–I e deformações de anel). Compare com um espectro de referência."], ["1000–650", "impressão digital e substituição", "C–H fora do plano: define o padrão de substituição de alcenos e de anel aromático. Abaixo de 800 também ficam C–Cl, C–Br e C–I."]];
 
 /* ---------- aba IV ---------- */
-let ivEx=6;
-const ivKey=c=>c.n!==null?c.n:c.id;
 const ivNums=t=>(String(t).match(/\d+/g)||[]).map(Number);
-function drawIVChips(){const box=$('#ivchips');box.innerHTML='';
-  IR.forEach(c=>{const b=document.createElement('button');b.type='button';b.className='chip';b.setAttribute('aria-pressed',ivEx===ivKey(c)?'true':'false');
-    const e=c.n!==null?EX.find(x=>x.n===c.n):null;b.textContent=c.n!==null?e.nome:'Etanol (exemplo)';
-    b.onclick=()=>{ivEx=ivKey(c);drawIVChips();drawIV();};box.appendChild(b);});}
-function drawIV(){
-  const c=IR.find(x=>ivKey(x)===ivEx),box=$('#ivout');
-  if(!c){box.innerHTML='<p class="empty">Escolha um composto acima.</p>';return;}
-  const e=c.n!==null?EX.find(x=>x.n===c.n):null;
-  const nome=e?e.nome:c.nome,f=e?e.f:c.f;
-  let h='<div class="ex-head"><b>'+esc(nome)+'</b><span class="mono">'+fmt(f)+'</span>'+(e?'<span>'+esc(e.g)+'</span>':'')+'<span class="badge ok" title="Índice de deficiência de hidrogênio: anéis + ligações π">IDH = '+c.idh+'</span></div>';
-  h+='<div class="ans" style="border-radius:6px;margin-bottom:12px"><span class="t">Pista do IV'+(e?' para o espectro de massas':'')+'</span>'+esc(c.pista)+'</div>';
-  if(c.disc.length){
-    h+='<h2>Como a disciplina atribui</h2><p class="hint">Da sua <i>tabela análise org II</i>. "Estiramento" é o que a tabela chama de deformação axial.</p><div class="tbl"><table><thead><tr><th>Banda (cm⁻¹)</th><th>O que é</th></tr></thead><tbody>'+
-      c.disc.map(r=>'<tr><td class="n">'+r[0]+'</td><td>'+esc(r[1])+'</td></tr>').join('')+'</tbody></table></div>';
-  }else if(e){
-    h+='<p class="hint">Este composto não está na tabela da disciplina. As atribuições abaixo usam as regras da apostila.</p>';
-  }
-  if(c.p.length){
-    h+='<h2 style="margin-top:18px">Bandas do arquivo de dados (atribuição minha, fora da tabela de referência)</h2><p class="hint">Estas atribuições foram feitas por Claude, a partir do espectro do SDBS. Se o seu curso só aceita a tabela de referência, use a tabela de cima. Cada selo mostra a confiança: <b>alta</b> é região de tabela, <b>média</b> é atribuição típica, <b>baixa</b> é palpite ou sem atribuição segura.</p><div class="tbl"><table><thead><tr><th>Banda (cm⁻¹)</th><th>O que é</th><th>Confiança</th></tr></thead><tbody>'+
-      c.p.map(r=>'<tr><td class="n">'+r[0]+'</td><td>'+esc(r[1])+'</td><td><span class="badge '+(r[2]==='alta'?'ok':'chk')+'">'+r[2]+'</span></td></tr>').join('')+'</tbody></table></div>';
-  }
-  box.innerHTML=h;
-}
 function irCard(r,src){return '<div class="irc"><div class="irn">'+(r[0]===r[1]?'~'+r[0]:r[1]+'–'+r[0])+' <small>cm⁻¹</small></div><div class="irb"><b>'+esc(r[2])+'</b>'+(r[6]?'<p><span class="irl">Modo:</span> '+esc(r[6])+'</p>':'')+(r[3]?'<p><span class="irl">Aspecto:</span> '+esc(r[3])+'</p>':'')+(r[4]?'<p><span class="irl">Confirme com:</span> '+esc(r[4])+'</p>':'')+(src?'<p class="irs">Fonte: '+esc(r[5])+'</p>':'')+'</div></div>';}
 function irHits(v){return IRT.filter(r=>{const w=r[0]-r[1],tol=w<20?10:0;return v<=r[0]+tol&&v>=r[1]-tol;}).sort((a,b)=>(a[0]-a[1])-(b[0]-b[1]));}
 function irReg(v){const d=r=>{const p=r[0].split('–').map(Number);return v>p[0]?v-p[0]:v<p[1]?p[1]-v:0;};return IRREG.slice().sort((a,b)=>d(a)-d(b))[0];}
@@ -1268,7 +1249,7 @@ $('#irtq').addEventListener('input',drawIRT);
 /* ---------- abas ---------- */
 
 /* ---------- cor do app ---------- */
-const PALS=[['azul','Azul','#1F5FA8','#DDE9F6','#F3F6FA'],['grafite','Grafite','#3F5A66','#E1E9EC','#F4F4F3'],['roxo','Roxo','#6B3FA0','#E9E0F5','#F6F4FA'],['quimica','Química','#0A6F7A','#DDF0F3','#F2F7F8'],['organica','Orgânica','#4A7020','#E4F3DD','#F4F8F2']];
+const PALS=[['azul','Azul','#1F5FA8','#DDE9F6','#F3F6FA'],['grafite','Grafite','#3F5A66','#E1E9EC','#F4F4F3'],['roxo','Roxo','#6B3FA0','#E9E0F5','#F6F4FA'],['quimica','Química','#0A6F7A','#DDF0F3','#F2F7F8'],['organica','Orgânica','#4A7020','#E4F3DD','#F4F8F2'],['astro','Astronomia','#5B3FB0','#E5DDF3','#F4F2F8']];
 function setPal(n){
   const r=document.documentElement;
   if(n==='verde')r.removeAttribute('data-pal');else r.setAttribute('data-pal',n);
@@ -1410,7 +1391,7 @@ function trDraw(){
       h+='<div class="row">'+(semDica()?'':'<button class="btn ghost" id="trh" type="button">Dica: nome da molécula</button>')+'<button class="btn ghost" id="tro" type="button">Outra</button></div>';
     }
   }else{
-    h+='<div class="ans" style="border-radius:6px"><span class="t">'+esc(e.nome)+'</span>'+stepCard(e,r)+(e.ok?'':'<br><i>Conferir com o professor.</i>')+'</div>';
+    h+='<div class="ans" style="border-radius:6px"><span class="t">'+esc(e.nome)+'</span>'+stepCard(e,r)+'</div>';
     h+='<div class="row" style="margin-top:10px"><button class="btn" id="tro" type="button">Outra</button></div>';
   }
   box.innerHTML=h;
@@ -1733,7 +1714,7 @@ const SOLG=[
   c:['Álcoois, aldeídos, cetonas, ésteres, nitrilas e amidas de até 5 C'],ex:'etanol, acetona, acetamida, acetato de etila'},
  {k:'A1',t:'Insolúvel em água; dissolve em NaOH 5% e em NaHCO₃ 5% (ácido forte)',
   c:['Ácidos carboxílicos com mais de 6 C','Fenóis com grupos eletrofílicos em orto/para','β-dicetonas'],
-  ex:'ácido benzoico, 2,4-dinitrofenol',av:'A tabela do professor lista as β-dicetonas tanto em A₁ quanto em A₂. Não consegui descobrir qual é a regra; pergunte a ele se cair.'},
+  ex:'ácido benzoico, 2,4-dinitrofenol',av:'A tabela do professor lista as β-dicetonas tanto em A₁ quanto em A₂, sem dizer qual é a regra.'},
  {k:'A2',t:'Insolúvel em água; dissolve em NaOH 5%, mas não em NaHCO₃ 5% (ácido fraco)',
   c:['Fenóis','Enóis','Oximas','Imidas','Sulfonamidas','Tiofenóis (mais de 5 C)','β-dicetonas','Nitrocompostos com H em α'],
   ex:'2-naftol'},

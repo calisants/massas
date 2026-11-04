@@ -138,7 +138,9 @@ MSK = {
 # Grupos funcionais -> bandas de IV esperadas. (SMARTS, rótulo do grupo, [(cm-1 baixo, cm-1 alto, atribuição, intensidade, chave?)])
 # Faixas da "Apostila de Interpretação de Espectros de IV" (a que está na pasta Analorg do Drive); onde a apostila não traz, usei tabela geral (Pavia) e marquei fonte "g".
 IVG = [
- ("[CX4][OX2H]", "álcool", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1150,1050,"C–O (estiramento)","F",0,"a")]),
+ ("[CH2X4][OX2H]", "álcool", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1085,1050,"C–O de álcool primário","F",0,"s")]),
+ ("[CH1X4]([#6])([#6])[OX2H]", "álcool", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1124,1087,"C–O de álcool secundário","F",0,"s")]),
+ ("[CX4;H0]([#6])([#6])([#6])[OX2H]", "álcool", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1205,1124,"C–O de álcool terciário","F",0,"s")]),
  ("c[OX2H]", "fenol", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1260,1200,"C–O (estiramento)","F",0,"a")]),
  ("[CX3](=O)[OX2H]", "ácido carboxílico", [(3300,2500,"O–H (estiramento)","F, muito larga",1,"a"),(1725,1700,"C=O (estiramento)","F",1,"a")]),
  ("[CX3](=O)[OX2][#6]", "éster", [(1750,1735,"C=O (estiramento)","F",1,"a"),(1300,1000,"C–O (estiramento)","F, 2 bandas",0,"a")]),
@@ -156,7 +158,47 @@ IVG = [
  ("c[Cl]", "cloreto de arila", [(800,600,"C–Cl (estiramento)","F",0,"a")]),
  ("[CX4]O[CX4]", "éter", [(1150,1050,"C–O (estiramento)","F",0,"a")]),
  ("[CX3]=[CX3;!a]", "alceno", [(3100,3000,"=C–H (estiramento)","f–M",1,"a"),(1680,1620,"C=C (estiramento)","f–M",1,"a")]),
+ # grupos acrescentados em 04/11/2026. Faixas da tabela de IV do LibreTexts ("Infrared Spectroscopy Absorption Table") onde ela traz o número; o resto é referência geral (marcada "g")
+ ("[CX3](=O)[Cl,Br]", "haleto de ácido", [(1815,1785,"C=O de haleto de ácido (estiramento)","F",1,"a")]),
+ ("[CX3](=O)O[CX3](=O)", "anidrido", [(1830,1760,"C=O de anidrido (2 bandas)","F, 2 bandas",1,"a"),(1050,1040,"C–O–C de anidrido","F, larga",0,"s")]),
+ ("[SX2H]", "tiol", [(2600,2550,"S–H (estiramento)","f",1,"a")]),
+ ("[CX4][Br]", "brometo de alquila", [(690,515,"C–Br (estiramento)","F",0,"s")]),
+ ("c[Br]", "brometo de arila", [(690,515,"C–Br (estiramento)","F",0,"s")]),
+ ("[CX4][I]", "iodeto de alquila", [(600,500,"C–I (estiramento)","F",0,"s")]),
+ ("c[I]", "iodeto de arila", [(600,500,"C–I (estiramento)","F",0,"s")]),
+ ("[#6][F]", "fluoreto orgânico", [(1400,1000,"C–F (estiramento)","F",0,"a")]),
+ ("[SX4](=O)(=O)([#6])[#6]", "sulfona", [(1350,1320,"S=O assimétrico","F",1,"s"),(1160,1120,"S=O simétrico","F",1,"s")]),
+ ("[SX3](=O)([#6])[#6]", "sulfóxido", [(1070,1030,"S=O (estiramento)","F",1,"s")]),
+ ("[SX4](=O)(=O)[NX3]", "sulfonamida", [(1370,1335,"S=O assimétrico","F",1,"s"),(1170,1155,"S=O simétrico","F",1,"s")]),
+ ("[CX3]=[NX2][#6]", "imina", [(1690,1640,"C=N (estiramento)","M–F",1,"a")]),
+ ("[CX3]=[NX2][OX2H]", "oxima", [(3650,3500,"O–H de oxima (estiramento)","M, larga",0,"g"),(1690,1640,"C=N (estiramento)","M",1,"s"),(960,930,"N–O (estiramento)","M",0,"g")]),
+ ("N=[N+]=[N-]", "azida", [(2160,2120,"N=N=N (estiramento)","F",1,"s")]),
+ ("N=C=O", "isocianato", [(2275,2250,"N=C=O (estiramento)","F, larga",1,"s")]),
+ ("N=C=S", "isotiocianato", [(2140,1990,"N=C=S (estiramento)","F, larga",1,"s")]),
+ ("[SX2]C#N", "tiocianato", [(2175,2140,"S–C≡N (estiramento)","F",1,"s")]),
+ ("[CX3](=O)[NX3][CX3](=O)", "imida", [(1790,1700,"C=O de imida (2 bandas)","F, 2 bandas",1,"g")]),
+ ("[NX3][CX3](=O)[OX2]", "carbamato", [(1740,1680,"C=O de carbamato (estiramento)","F",1,"g"),(3500,3100,"N–H (estiramento)","M",0,"g")]),
+ ("[NX3][CX3](=O)[NX3]", "ureia", [(1690,1630,"C=O de ureia (estiramento)","F",1,"g"),(3500,3100,"N–H (estiramento)","M, larga",0,"g")]),
+ ("[OX2][CX3](=O)[OX2]", "carbonato", [(1780,1740,"C=O de carbonato (estiramento)","F",1,"g"),(1280,1240,"C–O de carbonato","F",0,"g")]),
+ ("C1OC1", "epóxido", [(1280,1230,"anel do epóxido (estiramento simétrico)","M",0,"g"),(950,815,"anel do epóxido (assimétrico)","F",0,"g")]),
+ ("[OX2][OX2]", "peróxido", [(890,820,"O–O (estiramento)","f",0,"g")]),
+ ("[#6]=S", "tiocarbonila", [(1250,1020,"C=S (estiramento)","M–F",0,"g")]),
+ ("[SX2][SX2]", "dissulfeto", [(540,480,"S–S (estiramento)","f",0,"g")]),
+ ("[PX4]=O", "fosfato ou fosfina-óxido", [(1300,1250,"P=O (estiramento)","F",1,"g")]),
+ ("P[OX2][#6]", "éster de fósforo", [(1050,970,"P–O–C (estiramento)","F",0,"g")]),
+ ("[Si][OX2][Si]", "siloxano", [(1100,1000,"Si–O–Si (estiramento)","F, larga",1,"g")]),
+ ("[SiH]", "silano", [(2250,2100,"Si–H (estiramento)","M–F",1,"g")]),
+ ("[Si][CH3]", "silício-metila", [(1260,1250,"Si–CH₃ (deformação)","M–F",0,"g"),(840,800,"Si–C","F",0,"g")]),
+ ("[N;R]=,:[c,C]", "heterociclo com N", [(1600,1430,"anel heteroaromático (estiramento)","M",0,"g")]),
+ ("[nX3;H1]", "N–H de anel (pirrol, indol)", [(3500,3200,"N–H de anel (estiramento)","M",1,"g")]),
+ ("C1CC1", "ciclopropano", [(3100,3070,"C–H de ciclopropano (estiramento)","f–M",0,"g")]),
+ ("[CX3](=O)[CX3]=[CX3]", "cetona ou aldeído α,β-insaturado", [(1620,1610,"C=C conjugado com C=O (estiramento)","F",0,"a")]),
+ ("[CX4]([CH3])([CH3])([CH3])", "terc-butila", [(1395,1385,"CH₃ deformação do t-butila (2 bandas)","M, 2 bandas",0,"g")]),
+ ("[CX4;H1]([CH3])[CH3]", "isopropila ou gem-dimetila", [(1385,1365,"CH₃ deformação (dubleto)","M, 2 bandas",0,"a")]),
 ]
+IV_CHAIN = [(725,720,"–(CH₂)ₙ– balanço (n ≥ 4)","f–M",0,"a")]
+IV_BEND = [(1470,1450,"CH₂ tesoura e CH₃ deformação assimétrica","M",0,"a")]
+IV_UMB = [(1385,1370,"CH₃ deformação simétrica (guarda-chuva)","M",0,"a")]
 IV_AROM = [(3100,3000,"C–H aromático (estiramento)","f–M",1,"a"),(1620,1450,"C=C do anel (estiramento)","M",1,"a")]
 IV_ALK = (3000,2850,"C–H sp³ (estiramento)","M–F",1,"a")
 
@@ -204,6 +246,9 @@ def iv_bands(m):
             for b in rp[1]: out.append(b)
     if m.HasSubstructMatch(P_CSP3H):
         out.append(IV_ALK)
+        if m.HasSubstructMatch(_p("[CH2,CH3]")): out.extend(IV_BEND)
+        if m.HasSubstructMatch(P_CH3) and not any(g in grupos for g in ("terc-butila","isopropila ou gem-dimetila")): out.extend(IV_UMB)
+        if m.HasSubstructMatch(_p("[CH2][CH2][CH2][CH2]")): out.extend(IV_CHAIN)
     # conjugação desloca C=O para baixo (tabela geral, Pavia)
     conj = m.HasSubstructMatch(_p("[#6;a][CX3]=O"))
     if conj:

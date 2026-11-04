@@ -39,10 +39,10 @@ function nmrBlock(c){
   let h='<p class="srcl" style="margin:0 0 6px"><span class="tag sm">Escrito por Claude, sem fonte conferida</span> <b>Espectro simulado, não é o medido.</b> Número de sinais, integração e multiplicidade (regra n+1) saem da estrutura. A posição de cada sinal é o meio da faixa de tabela, então não bate com o espectro real. Os desdobramentos foram aumentados e sinais com a mesma faixa foram afastados um pouco, para dar para ver. O espectro medido está no SDBS.</p>';
   h+='<h4 style="margin:10px 0 4px">¹H: '+c.h1.length+(c.h1.length>1?' sinais':' sinal')+' ('+c.h1.reduce((a,x)=>a+x.h,0)+' H no total)</h4>';
   h+='<div class="nmrwrap">'+nmrSpec(c,'h')+'<button class="chip" type="button" data-nmrint aria-pressed="false">Mostrar a integração</button></div>';
-  h+='<div class="tbl"><table class="obt"><thead><tr><th>#</th><th>Tipo de H</th><th>Nº de H</th><th>Multiplicidade</th><th>δ típico (ppm)</th></tr></thead><tbody>'+c.h1.map((x,i)=>'<tr><td><b>'+(i+1)+'</b></td><td>'+esc(x.t)+'</td><td>'+x.h+'</td><td>'+esc(x.m)+'</td><td>'+fr(x.lo)+'–'+fr(x.hi)+'</td></tr>').join('')+'</tbody></table></div>';
+  h+='<div class="tbl"><table class="obt nostk cmp cmp-nmr"><thead><tr><th>#</th><th>Sinal</th><th>δ típico (ppm)</th></tr></thead><tbody>'+c.h1.map((x,i)=>'<tr><td><b>'+(i+1)+'</b></td><td>'+esc(x.t)+'<div class="mut sm">'+x.h+' H · '+esc(x.m)+'</div></td><td class="n">'+fr(x.lo)+'–'+fr(x.hi)+'</td></tr>').join('')+'</tbody></table></div>';
   h+='<h4 style="margin:12px 0 4px">¹³C: '+c.c13.length+(c.c13.length>1?' sinais':' sinal')+' (de '+c.c13.reduce((a,x)=>a+x.n,0)+' C)</h4>';
   h+='<div class="nmrwrap">'+nmrSpec(cc,'c')+'<p class="mut" style="margin:2px 0 6px">Cada linha é um tipo de C. A altura é só ilustrativa (mais C equivalentes, linha um pouco maior).</p></div>';
-  h+='<div class="tbl"><table class="obt"><thead><tr><th>#</th><th>Tipo de C</th><th>C equivalentes</th><th>δ típico (ppm)</th></tr></thead><tbody>'+c13.map((x,i)=>'<tr><td><b>'+(i+1)+'</b></td><td>'+esc(x.t)+'</td><td>'+x.n+'</td><td>'+x.lo+'–'+x.hi+'</td></tr>').join('')+'</tbody></table></div>';
+  h+='<div class="tbl"><table class="obt nostk cmp cmp-nmr"><thead><tr><th>#</th><th>Sinal</th><th>δ típico (ppm)</th></tr></thead><tbody>'+c13.map((x,i)=>'<tr><td><b>'+(i+1)+'</b></td><td>'+esc(x.t)+'<div class="mut sm">'+x.n+' C equivalente'+(x.n>1?'s':'')+'</div></td><td class="n">'+x.lo+'–'+x.hi+'</td></tr>').join('')+'</tbody></table></div>';
   return h;
 }
 function rmDraw(){const c=COMP[+$('#rmSel').value||COMP.findIndex(x=>x.n===$('#rmSel').options[0].textContent)];if(!c)return;
@@ -225,7 +225,7 @@ function icBands(){
     return '<p class="hint" style="margin:6px 0"><b>'+x+' cm⁻¹</b>: '+(nm.length?esc(nm.slice(0,5).join('; '))+(nm.length>5?'; ...':''):'nada na tabela do app')+'</p>';}).join('')
    +'<p class="hint">As faixas se sobrepõem. Use isso como pista e confirme com a outra banda indicada na aba IV.</p>';
 }
-function icRun(){
+function icRun(){setTimeout(()=>{if(typeof icBadges==="function")icBadges();},0);
   icBands();
   const x=icInputs(),cl=icClasses();
   const res=COMP.map(c=>({c,...icScore(c,x)}));

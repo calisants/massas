@@ -26,7 +26,7 @@ def SIMP(a,b):     return dict(a=[('h',('B',a,b),('A',b))],t=T_SIMP,e=E_SIMP)
 
 NOTA_ANEL="Sem setas: a perda envolve abertura ou rearranjo do anel em várias etapas, e eu não consigo desenhar isso com certeza."
 NOTA_H="Sem setas: não sei de qual C–H sai o hidrogênio, e não vou chutar."
-NOTA_DUV="Sem setas: este mecanismo está na lista de perguntas para o professor."
+NOTA_DUV="Sem setas: este mecanismo não foi conferido com a lousa."
 
 ARW = {
  (1,91): dict(v=[('',2,ALFA(2,1,0))]),

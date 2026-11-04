@@ -5,12 +5,12 @@
 App de uma página (`index.html`, instalável no celular) de consulta e estudo de Análise Orgânica, para graduação e ensino médio. Endereço: https://calisants.github.io/massas/
 
 ## Telas (menu fixo embaixo)
-- **Início:** caixa Hoje (revisão, próximo exercício, simulado), a ordem da análise em 6 passos e atalhos para Orgânica Básica, Ensaios e Espectros.
+- **Início:** a ordem da análise em 6 passos e atalhos para Revisar, Orgânica Básica, Ensaios e Espectros.
 - **Compostos:** 105 fichas (busca por nome, fórmula ou CAS; filtro por estado e grupo de solubilidade) com estrutura, fórmula, massa, GDH, cor, estado, PF, PE, solubilidade, CAS, bandas de IV esperadas, picos de MS, RMN estimado de ¹H e ¹³C e link para o SDBS.
 - **Identificar:** uma tela só. Seções numeradas (aspecto, solubilidade, constantes físicas, análise elementar, IV, e fórmula/massas/RMN como opcional). Mostra as classes de compostos que sobram e o ranking de compostos do banco. O botão "Ver como funciona" preenche com um composto de exemplo. O que você digita fica salvo.
 - **Ensaios:** preliminares, solubilidade, análise elementar, problemas resolvidos, consulta rápida e notação ECGF.
-- **Espectros:** IV, espectrometria de massas (mecanismos, treino, livro, ferramentas de massas) e RMN (teoria, tabelas, espectros ¹H e ¹³C simulados por composto, com integração opcional).
-- **Mais:** Ajustes (zoom com os dedos, treinos sem pistas), Revisar (erros de massa e perguntas de quiz voltam em 1, 3 e 7 dias, no máximo 10 por dia), Novidades, cor do app (5 opções), salvar o progresso, fontes.
+- **Espectros:** IV (qualquer um dos 106 compostos, espectro simulado e tabela de bandas numerada; Guia com a tabela completa), espectrometria de massas (escolha de composto, mecanismos, treino, livro, ferramentas de massas) e RMN (teoria, tabelas, espectros ¹H e ¹³C simulados por composto, com integração opcional).
+- **Mais:** Ajustes (zoom com os dedos, treinos sem pistas), Revisar (erros de massa e perguntas de quiz voltam em 1, 3 e 7 dias, no máximo 10 por dia), Novidades, cor do app (6 opções, com Astronomia), salvar o progresso, fontes.
 
 ## Avisos sobre os dados
 - PF e PE de 185 valores foram conferidos no PubChem (mediana de HSDB, ICSC, HMDB e outras; 7 divergiram e ficam marcados); estado, cor, CAS (só o dígito verificador) e grupo de solubilidade foram escritos sem fonte conferida; fórmula, massa, GDH, estrutura, número de sinais de RMN e multiplicidade são calculados pelo RDKit; os δ de RMN são faixas típicas de tabela.
