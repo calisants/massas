@@ -3,6 +3,7 @@
 # Cada entrada: nome -> (numero SDBS, codigo do espectro de MS, [(m/z, intensidade)])
 DATA = "04/11/2026"
 SDBSMS = {
+ "ácido 5-formilsalicílico": (23378, "MS-IW-0084", [(148,100),(166,67),(147,39),(120,23),(149,12),(121,12),(92,8),(64,6),(39,4)]),
  "acetona": (319, "MS-IW-7880", [(43,100),(58,64),(15,23),(42,9),(27,6)]),
  "etanol": (1300, "MS-NW-0073", [(31,100),(45,57),(46,25),(27,18),(29,12),(43,10)]),
  "ácido acético": (306, "MS-NW-0080", [(43,100),(45,90),(60,75),(15,17),(42,13),(29,8)]),
@@ -82,6 +83,7 @@ SDBSMS = {
 # Meio em que o IV do SDBS foi medido (lido no cabeçalho do print) e se conferi as bandas-chave contra o print.
 # irc: 1 = bandas-chave conferidas nas tabelas do print; 2 = conferência parcial (etanol: só vi O–H largo e C–O no gráfico).
 IRMEIO = {
+ "ácido 5-formilsalicílico": ("pasta em Nujol", 2, "Do IV do SDBS No. 23378 (NIDA 42434) conferi o C=O (1704, 1680 e 1657), os C–O (1299, 1275 e 1189) e o anel (1607, 1578 e 1494). O O–H largo e o C–H de aldeído (2830 a 2700) não aparecem na tabela de picos, então ficaram sem conferência. As bandas em 2945, 2924, 2855, 1465 e 1378 são do Nujol."),
  "acetona": ("filme líquido", 1), "etanol": ("filme líquido", 2), "ácido acético": ("solução em CCl₄", 1), "acetato de etila": ("filme líquido", 1),
  "benzaldeído": ("filme líquido", 1), "acetofenona": ("filme líquido", 1), "butanona": ("solução em CCl₄", 1), "éter dietílico": ("filme líquido", 1),
  "ciclo-hexanona": ("filme líquido", 1), "tolueno": ("filme líquido", 1), "anilina": ("solução em CCl₄", 1), "ácido benzoico": ("solução em CCl₄", 1),

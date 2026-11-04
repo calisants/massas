@@ -261,6 +261,23 @@ def coerente(m, x):
     perm = {a.GetSymbol() for a in m.GetAtoms()} | {"H"}
     return _els(x["f"]) <= perm and _els(x["n"]) <= perm
 
+def contagem(m):
+    c = {}
+    for a in m.GetAtoms():
+        c[a.GetSymbol()] = c.get(a.GetSymbol(), 0) + 1; c["H"] = c.get("H", 0) + a.GetTotalNumHs()
+    return c
+
+def fstr(c):
+    ordem = [k for k in ("C", "H") if c.get(k)] + sorted(k for k in c if k not in ("C", "H") and c[k])
+    return "".join(k + (str(c[k]).translate(SUB) if c[k] > 1 else "") for k in ordem)
+
+def menos(c, d):
+    r = dict(c)
+    for k, v in d.items():
+        if r.get(k, 0) < v: return None
+        r[k] -= v
+    return r
+
 def propor(m, M, pk):
     itens, svgs, sem = _propor(m, M, pk)
     ok = [x for x in itens if coerente(m, x)]
@@ -286,6 +303,23 @@ def _propor(m, M, pk):
                             if all(x["item"]["r"] != y["item"]["r"] or x["item"]["de"] != y["item"]["de"] for y in todas.get(k, [])): todas.setdefault(k, []).append(x)
     itens = []; svgs = {}; sem = []
     aro = {"C₆H₅⁺": 26, "C₇H₇⁺": 26}
+    # cadeia só pela massa: M−18 (água, se há O–H), depois perda de CO ou de H· a partir dela
+    textf = {}
+    cM = contagem(m)
+    if (M - 18) in picos and (M - 18) not in todas and m.HasSubstructMatch(Chem.MolFromSmarts("[OX2H]")):
+        f0 = menos(cM, {"H": 2, "O": 1})
+        if f0: textf[M - 18] = (f0, M, "H₂O", "perda de água (M−18), comum em álcoois e ácidos; estrutura não desenhada", True)
+    for mz in sorted(picos, reverse=True):
+        if mz in todas or mz in textf or mz == M or mz == M + 2: continue
+        for pm in sorted(textf, reverse=True):
+            if pm <= mz: continue
+            fp, _, _, _, rad = textf[pm]
+            if pm - mz == 28 and rad:
+                f1 = menos(fp, {"C": 1, "O": 1})
+                if f1: textf[mz] = (f1, pm, "CO", "perda de CO do íon de m/z %d (comum em fenóis e carbonilas aromáticas); estrutura não desenhada" % pm, True); break
+            if pm - mz == 1:
+                f1 = menos(fp, {"H": 1})
+                if f1: textf[mz] = (f1, pm, "H·", "perda de H· do íon de m/z %d; estrutura não desenhada" % pm, False); break
     for mz in sorted(picos, key=lambda x: -inten[x]):
         if mz == M or mz == M + 2: continue
         if mz in todas:
@@ -303,6 +337,9 @@ def _propor(m, M, pk):
             keep = set(e["ion"]) if e.get("atomo") is None else set(range(m.GetNumAtoms()))
             itens[-1]["mp"] = svg_mapa(m, keep, e.get("atomo"))
             continue
+        if mz in textf:
+            f1, pm, nn, rr, rad = textf[mz]
+            itens.append(dict(mz=mz, p=inten[mz], f=fstr(f1) + ("⁺·" if rad else "⁺"), n=nn, de=pm, r=rr, nv=0, k="", alt=False)); continue
         # sem estrutura: só dois casos de texto seguros
         ach = None
         for pai_mz, txt in ((M, None),):

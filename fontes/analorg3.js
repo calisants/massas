@@ -22,7 +22,7 @@ function stInit(){
 /* ---------- Novidades e aviso de atualização ---------- */
 const NOVID=[
  {v:0,d:'04/11/2026',t:[
-  'Novo composto: ácido 5-formilsalicílico (SDBS 23378), com ¹³C medido (8 sinais) e ¹H medido (4 de 5 sinais, o do ácido saiu cortado no print). Do MS e do IV desse composto só o cabeçalho do PDF pôde ser lido, então eles aparecem sem picos conferidos.',
+  'Novo composto: ácido 5-formilsalicílico (SDBS 23378), com MS, IV (pasta em Nujol, conferido em parte), ¹³C (8 sinais) e ¹H (4 de 5 sinais, o do ácido saiu cortado no print) medidos. O IV agora também mostra a banda do C=O de aldeído aromático em compostos com mais de uma carbonila. Nos fragmentos de MS, a perda de água seguida de CO (como no ácido salicílico) aparece em texto, sem estrutura desenhada.',
   'MS: a ficha de 70 compostos agora traz "Fragmentos propostos": a estrutura do íon de cada pico, o que ele perdeu e a regra (clivagem α, benzílica, McLafferty, perda de CO). É proposta por regras, com a massa conferida contra o pico do SDBS; não é o mecanismo medido. Os picos que nenhuma regra simples explica ficam listados como sem proposta.',
   'Abas: Início, Compostos, Ensaios e Espectros. Em Espectros ficam IV, Massas e RMN, e o antigo "Mais" foi para o Início. As páginas de cada assunto têm o mesmo layout: título, resumo e uma faixa de seções, como na aba RMN.',
   'RMN: nova aba com os quatro passos num espectro real (acetato de etila, SDBS), régua do deslocamento, laboratório de acoplamento, calculadoras de Hz e ppm, integração e GDH, macetes e dois problemas resolvidos.',
@@ -34,8 +34,8 @@ const NOVID=[
   'Aviso de atualização: passou a mostrar a nota da versão em uso.'
  ]},
  {v:97,r:'86 a 97',d:'04/11/2026',t:[
-  'IV: as bandas de 72 compostos foram conferidas na tabela de picos dos prints do SDBS. Corrigi as faixas de álcool, fenol, ácido, amina, amida, anidrido, éster aromático, vinila, furano e haletos.',
-  'Massas: os picos de 74 compostos foram conferidos nos prints do SDBS (a leitura é visual, erro de cerca de 3 pontos de intensidade).',
+  'IV: as bandas de 73 compostos foram conferidas na tabela de picos dos prints do SDBS. Corrigi as faixas de álcool, fenol, ácido, amina, amida, anidrido, éster aromático, vinila, furano e haletos.',
+  'Massas: os picos de 75 compostos foram conferidos nos prints do SDBS (a leitura é visual, erro de cerca de 3 pontos de intensidade).',
   'RMN de 13C: 31 compostos conferidos na tabela de ppm do SDBS. Corrigi o CH₃ ligado a S (DMSO) e o CH₃ ao lado de nitrila.',
   'Compostos: a estrutura da ficha mostra os carbonos numerados. Cada sinal de 1H diz a qual carbono pertence, e os carbonos do anel dizem orto, meta ou para.',
   'Orgânica Básica: a tabela de grupos funcionais mostra a estrutura de cada grupo, com o grupo em destaque.',

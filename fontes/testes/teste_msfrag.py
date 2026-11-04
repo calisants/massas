@@ -16,7 +16,7 @@ for nome,(no,msid,pk) in SDBSMS.items():
     for x in it:
         n+=1
         if not (msfrag._els(x['f'])|msfrag._els(x['n']))<=perm: ok=False;print('FALHA elemento fora do composto',nome,x['mz'],x['f'],x['n'])
-        if x['k']=='' and x['n'] not in ('HC≡CH','H₂O','H₂'): ok=False;print('FALHA sem estrutura e sem regra segura',nome,x['mz'])
+        if x['k']=='' and x['n'] not in ('HC≡CH','H₂O','H₂','CO','H·'): ok=False;print('FALHA sem estrutura e sem regra segura',nome,x['mz'])
         if x['n']=='H₂O' and not m.HasSubstructMatch(Chem.MolFromSmarts('[OX2H]')): ok=False;print('FALHA perda de água sem OH',nome)
 print(n,'fragmentos verificados')
 sys.exit(0 if ok else 1)

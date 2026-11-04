@@ -283,6 +283,9 @@ def iv_bands(m):
         out = [((1710,1660,"C=O conjugado com anel (estiramento)","F",1,"s") if b[2].startswith("C=O") and b[5] == "a" else b) for b in out]
         if "ácido carboxílico" in grupos:
             out = [((1710,1660,"C=O conjugado com anel (estiramento)","F",1,"s") if b[2].startswith("C=O") and b[5] != "s" or b[2] == "C=O (estiramento)" else b) for b in out]
+    # aldeído aromático + outra carbonila (ex.: ácido formilsalicílico): o C=O do aldeído é uma banda à parte
+    if m.HasSubstructMatch(_p("[CX3H1](=O)[#6;a]")) and len(m.GetSubstructMatches(_p("[CX3]=O"))) >= 2:
+        out.append((1715,1685,"C=O de aldeído aromático (estiramento)","F",1,"s"))
     # tira duplicatas exatas
     seen = set(); res = []
     for b in out:
@@ -679,7 +682,8 @@ def build_comp(svgfn, EXD):
         else:
             d["ms"] = None; d["msv"] = 0
         if nome in IRMEIO:
-            d["irm"], d["irc"] = IRMEIO[nome]
+            d["irm"], d["irc"] = IRMEIO[nome][:2]
+            if len(IRMEIO[nome]) > 2: d["irn"] = IRMEIO[nome][2]
         if nome in SDBSMS:
             no, msid, pk = SDBSMS[nome]
             d["sdbs"] = no; d["msid"] = msid
