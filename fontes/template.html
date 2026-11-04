@@ -931,16 +931,47 @@ function ent(x){
   return '<span class="f">'+fmt(t)+'</span>'+(SVG[k]?'<span class="thumb">'+SVG[k]+'</span>':'');
 }
 const nm=x=>String(x).split(' @')[0];
+let FILT=null,ANALL=false,FHID=0;
+function pf(s){const st=[{}];let i=0;s=String(s);
+  while(i<s.length){const ch=s[i];
+    if(ch==='('){st.push({});i++;}
+    else if(ch===')'){i++;let n='';while(/\d/.test(s[i]||''))n+=s[i++];const top=st.pop(),k=n?+n:1;for(const e in top)st[st.length-1][e]=(st[st.length-1][e]||0)+top[e]*k;}
+    else if(/[A-Z]/.test(ch)){let e=ch;i++;if(/[a-z]/.test(s[i]||''))e+=s[i++];let n='';while(/\d/.test(s[i]||''))n+=s[i++];const o=st[st.length-1];o[e]=(o[e]||0)+(n?+n:1);}
+    else if(/[=≡\-–·.\s]/.test(ch))i++;
+    else return null;}
+  return st.length===1?st[0]:null;}
+function fcount(raw){
+  const parts=String(raw).split(' @'),smi=parts[1];
+  if(smi){const o={};(smi.match(/Cl|Br|[A-Z]|[cnops]/g)||[]).forEach(x=>{x=x.length===1?x.toUpperCase():x;o[x]=(o[x]||0)+1;});return o;}
+  let s=parts[0].replace(/\^\d+\^/g,'').replace(/ \+ \d?H$/,'').replace(/ \(.*\)$/,'').replace(/ e isômeros$/,'');
+  const tot={};
+  for(const seg of s.split(/ e /)){const c=pf(seg.trim());if(!c)return null;for(const e in c)tot[e]=(tot[e]||0)+c[e];}
+  return tot;}
+function compat(raw){
+  if(!FILT)return true;
+  const c=fcount(raw);if(!c)return false;
+  for(const e in c){if(e==='H'){if(c.H>(FILT.H||0)+2)return false;}else if(c[e]>(FILT[e]||0))return false;}
+  return true;}
 function lossHTML(d){
   const e=CM.get(d);
   if(!e) return '<div class="empty">O Apêndice C não lista a perda de '+d+'. A lista do livro é sugestiva, não completa.</div>';
-  return e.map(([f,h])=>'<p class="li">'+ent(f)+(h?'<span class="h">'+fmt(h)+'</span>':'')+'</p>').join('');
+  const k=e.filter(([f])=>compat(f));FHID+=e.length-k.length;
+  if(!k.length)return '<div class="empty">Nenhuma perda do livro cabe nos átomos deste composto.</div>';
+  return k.map(([f,h])=>'<p class="li">'+ent(f)+(h&&!FILT?'<span class="h">'+fmt(h)+'</span>':'')+'</p>').join('');
 }
 function ionHTML(mz){
   const e=BM.get(mz);
   if(!e) return '<div class="empty">O Apêndice B não lista o m/z '+mz+'.</div>';
-  return e.map(f=>'<p class="li">'+ent(f)+'</p>').join('');
+  const k=e.filter(f=>compat(f));FHID+=e.length-k.length;
+  if(!k.length)return '<div class="empty">Nenhum íon do livro para o m/z '+mz+' cabe nos átomos deste composto.</div>';
+  return k.map(f=>'<p class="li">'+ent(f)+'</p>').join('');
 }
+function propBox(cc,p){
+  const it=(cc.msf||[]).find(x=>x.mz===p);
+  const h='<div class="prop" style="grid-column:1/-1"><div class="k">Proposta para '+esc(cc.n)+' (por regras)</div>';
+  if(!it)return h+'<p class="li">Nenhuma regra simples explica o m/z '+p+' só com os átomos deste composto. A tabela abaixo serve de consulta.</p></div>';
+  return h+(it.k?'<figure class="st keep">'+MSFS[it.k]+'</figure>':'')+'<p class="li">'+(it.f?'Íon <b>'+it.f+'</b>, vem':'Vem')+' de m/z '+it.de+', perdendo <b>'+esc(it.n)+'</b></p><p class="hint">'+esc(it.r)+'.'+(cc.msv===2?'':' Pico típico, sem fonte conferida.')+'</p></div>';}
+function ccHead(cc){return '<div class="ex-head"><b>'+esc(cc.n)+'</b><span class="mono">'+fmt(cc.f)+'</span><span>'+esc(cc.g||'')+'</span><span class="mol"><figure class="st keep"><span class="w">molécula</span>'+cc.s+'</figure></span></div>';}
 function exRefs(d){
   const refs=[];
   EX.forEach(e=>e.rows.forEach(r=>{if(r[1]-r[0]===d)refs.push(e.nome+' ('+r[1]+' → '+r[0]+')');}));
@@ -1063,7 +1094,7 @@ function mechZoom(src,opener){
 function drawSpec(ex,peaks){
   const box=$('#spec');if(!box)return;
   const d=ex&&typeof INTS!=='undefined'&&INTS[ex.n];
-  if(!d){box.innerHTML=ex?'<p class="src">Gráfico do espectro: ainda sem as intensidades deste exercício.</p>':'';return;}
+  if(!d){box.innerHTML=ex?'<p class="src">Gráfico do espectro: ainda sem as intensidades deste composto.</p>':'';return;}
   const W=340,H=170,L=34,R=8,T=18,B=26,mz=Object.keys(d.p).map(Number);
   const x0=Math.floor((Math.min.apply(null,mz)-4)/10)*10,x1=Math.ceil((ex.M+6)/10)*10;
   const X=v=>L+(v-x0)/(x1-x0)*(W-L-R),Y=v=>T+(100-v)/100*(H-T-B);
@@ -1083,25 +1114,30 @@ function drawSpec(ex,peaks){
   const si=typeof pkSel==='number'?intOf(ex,pkSel):null;
   box.innerHTML='<figure class="spec"><svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Espectro de massas de '+esc(ex.nome)+': m/z no eixo horizontal, intensidade relativa em porcentagem no vertical" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:520px">'+g+'</svg><figcaption class="src">Espectro de massas do SDBS (nº '+d.sdbs+', '+d.id+'), intensidade relativa em %. Barras em destaque: os picos analisados. Toque em um deles para abrir o cartão.'+'</figcaption><p class="src" style="margin:4px 0">'+mTxt+(outros.length?(mTxt?' ':'')+'Picos grandes (20% ou mais) que não estão nos picos analisados, em cinza: '+outros.join(', ')+'.':'')+'</p><figcaption class="src">'+(si!==null?' <b>m/z '+pkSel+': '+intTxt(ex,pkSel)+'.</b>':'')+'</figcaption></figure>';
 }
+document.addEventListener('click',ev=>{if(ev.target.closest&&ev.target.closest('[data-anall]')){ANALL=!ANALL;analyze();return;}});
 document.addEventListener('click',ev=>{const r=ev.target.closest&&ev.target.closest('[data-spk]');if(r){pkSel=+r.dataset.spk;analyze();}});
 function analyze(){
   const M=parseInt($('#inM').value,10);
   const peaks=[...new Set(($('#inP').value.match(/\d+/g)||[]).map(Number))].filter(p=>p>0).sort((a,b)=>b-a);
   const ex=EX.find(e=>e.n===curEx&&e.M===M);
   if(!ex)curEx=null;
-  $('#exinfo').innerHTML=ex?'<div class="ex-head"><b>'+esc(ex.nome)+'</b><span class="mono">'+fmt(ex.f)+'</span><span>'+esc(ex.g)+'</span><span class="mol">'+fig(ex.smi,ex.f,'keep','molécula')+'</span></div>':'';
+  const cc=(!ex&&msC!==null)?(COMP.find(c=>c.i===msC&&c.M===M)||null):null;
+  const pex=cc?{n:'c'+cc.i,nome:cc.n,f:cc.f,M:cc.M}:null;
+  if(cc&&cc.msi&&cc.msv===2&&typeof INTS!=='undefined'&&!INTS[pex.n]){const pp={};cc.msi.forEach(x=>{pp[x[0]]=x[1];});INTS[pex.n]={p:pp,sdbs:cc.sdbs,id:cc.msid};}
+  FILT=(cc&&!ANALL)?pf(cc.f):null;FHID=0;
+  $('#exinfo').innerHTML=ex?'<div class="ex-head"><b>'+esc(ex.nome)+'</b><span class="mono">'+fmt(ex.f)+'</span><span>'+esc(ex.g)+'</span><span class="mol">'+fig(ex.smi,ex.f,'keep','molécula')+'</span></div>':(cc?ccHead(cc):'');
   decorateEx(ex);$('#nrule').innerHTML=M?'Regra do nitrogênio: M = '+M+' é <b>'+(M%2?'ímpar → número ímpar de N (1, 3...)':'par → zero ou número par de N')+'</b>.':'';
   if(!M||!peaks.length){$('#out').innerHTML='<p class="empty">Digite M e pelo menos um pico.</p>';$('#pairs').innerHTML='';$('#pkbar').innerHTML='';$('#pkh').textContent='';return;}
   const cards={};
   peaks.forEach(p=>{
     const row=ex?ex.rows.find(r=>r[0]===p):null;
     const d=M-p;
-    const head='<h3><span class="mono">m/z '+p+'</span>'+(d>0?'<span class="d mono">M − '+p+' = '+d+'</span>':'<span class="d mono">íon molecular</span>')+(intOf(ex,p)!==null?'<span class="d mono">'+intTxt(ex,p)+'</span>':'')+((row&&/pico base/.test(row[2]))||intOf(ex,p)===100?'<span class="badge ok">pico base</span>':'')+'</h3>';
+    const head='<h3><span class="mono">m/z '+p+'</span>'+(d>0?'<span class="d mono">M − '+p+' = '+d+'</span>':'<span class="d mono">íon molecular</span>')+(intOf(ex||pex,p)!==null?'<span class="d mono">'+intTxt(ex||pex,p)+'</span>':'')+((row&&/pico base/.test(row[2]))||intOf(ex||pex,p)===100?'<span class="badge ok">pico base</span>':'')+'</h3>';
     let body;
     if(d<=0){
       body='<div class="col keep" style="grid-column:1/-1"><div class="k">Íon molecular</div><p class="li">É a molécula inteira que perdeu 1 elétron. Não saiu nada.</p>'+(ex&&p===ex.M?'<div class="sp">'+fig(ex.smi,ex.f+'+·','keep','M')+'</div>':'')+(BM.get(p)?'<div class="k" style="margin-top:8px">Se fosse um fragmento (livro)</div>'+ionHTML(p):'')+'</div>';
     }else{
-      body='<div class="col keep"><div class="k">Ficou (Apêndice B)</div>'+ionHTML(p)+'</div><div class="col lost"><div class="k">Saiu (Apêndice C)</div>'+lossHTML(d)+'</div>';
+      body=(cc?propBox(cc,p):'')+'<div class="col keep"><div class="k">Ficou (Apêndice B)</div>'+ionHTML(p)+'</div><div class="col lost"><div class="k">Saiu (Apêndice C)</div>'+lossHTML(d)+'</div>';
     }
     let ans='';
     if(row){
@@ -1112,11 +1148,12 @@ function analyze(){
   });
   if(pkSel!=='all'&&!peaks.includes(pkSel))pkSel=peaks[0];
   $('#pkh').textContent='Toque num pico:';
-  $('#pkbar').innerHTML='';drawSpec(ex,peaks);mechBox(ex);
+  $('#pkbar').innerHTML='';drawSpec(ex||pex,peaks);mechBox(ex);
   peaks.forEach(p=>{const b=document.createElement('button');b.type='button';b.className='chip mono';b.setAttribute('aria-pressed',pkSel===p?'true':'false');b.textContent='m/z '+p+(p===M?' (M)':'');b.onclick=()=>{pkSel=p;analyze();};$('#pkbar').appendChild(b);});
   if(peaks.length>1){const b=document.createElement('button');b.type='button';b.className='chip';b.setAttribute('aria-pressed',pkSel==='all'?'true':'false');b.textContent='Todos';b.onclick=()=>{pkSel='all';analyze();};$('#pkbar').appendChild(b);}
   $('#out').className=pkSel==='all'?'grid':'grid single';
   $('#out').innerHTML=pkSel==='all'?peaks.map(p=>cards[p]).join(''):cards[pkSel];
+  if(cc)$('#exinfo').insertAdjacentHTML('beforeend','<p class="hint">Tabelas do livro '+(FILT?'filtradas para '+fmt(cc.f)+': <b>'+FHID+'</b> entradas que usam átomos que o composto não tem estão ocultas. ':'sem filtro. ')+'<button type="button" class="lnk" data-anall="1">'+(FILT?'Mostrar tudo':'Filtrar pelo composto')+'</button></p>');
   // perdas entre picos
   const all=[M,...peaks.filter(p=>p<M)];
   const prs=[];

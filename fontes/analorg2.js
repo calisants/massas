@@ -59,8 +59,8 @@ let CFI=null;
 function msFrag(c){
   if(!c.msf||!c.msf.length)return '';
   const nv=x=>x>=5?'Provável':x>=3?'Possível':x>0?'Pouco estável, mas possível':'Só pela massa';
-  let h='<h3 style="margin:14px 0 4px">Fragmentos propostos</h3><p class="hint">Proposta por regras de fragmentação (clivagem α, benzílica, McLafferty, perda de CO). A massa de cada íon confere com o pico do SDBS, mas <b>não é o mecanismo medido</b>: dois caminhos diferentes podem dar o mesmo m/z.</p><div class="msfl">';
-  h+=c.msf.map(x=>'<div class="msfc"><div class="msfh"><b class="mono">m/z '+x.mz+'</b> <small>'+x.p+'%</small>'+(x.f?'<span class="msff">'+x.f+'</span>':'')+'</div><div class="msfb">'+(x.k?'<figure class="st">'+MSFS[x.k]+'</figure>':'')
+  let h='<h3 style="margin:14px 0 4px">Fragmentos propostos</h3><p class="hint">Proposta por regras de fragmentação (clivagem α, benzílica, McLafferty, perda de CO). A massa de cada íon confere com o pico '+(c.msv===2?'do SDBS':'cadastrado (típico, sem fonte conferida)')+', mas <b>não é o mecanismo medido</b>: dois caminhos diferentes podem dar o mesmo m/z.</p><div class="msfl">';
+  h+=c.msf.map(x=>'<div class="msfc"><div class="msfh"><b class="mono">m/z '+x.mz+'</b> '+(c.msv===2?'<small>'+x.p+'%</small>':'')+(x.f?'<span class="msff">'+x.f+'</span>':'')+'</div><div class="msfb">'+(x.k?'<figure class="st">'+MSFS[x.k]+'</figure>':'')
     +'<div><span>Vem de m/z '+x.de+', perdendo <b>'+esc(x.n)+'</b></span><br><small>'+esc(x.r)+'</small><br><small class="msfn">'+nv(x.nv)+(x.alt?'. Outro caminho dá o mesmo m/z.':'')+'</small></div></div></div>').join('')+'</div>';
   if(c.msfs&&c.msfs.length)h+='<p class="hint">Sem proposta para m/z '+c.msfs.join(', ')+': nenhuma regra simples fecha a massa (rearranjos mais complexos ou abertura de anel).</p>';
   return h;}

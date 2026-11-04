@@ -273,6 +273,17 @@ def _propor(m, M, pk):
         for pm in sorted(picos, reverse=True):
             if pm in todas and todas[pm] and melhor(pm)["item"]["f"] in aro and pm - mz == 26:
                 ach = (pm, "HC≡CH", "o anel perde acetileno (regra geral dos aromáticos; estrutura não desenhada)"); break
+        if ach is None:
+            for pm in sorted(picos, reverse=True):
+                if pm - mz == 2 and pm in todas:
+                    mt = re.fullmatch(r"C([₀-₉]*)H([₀-₉]+)⁺", melhor(pm)["item"]["f"])
+                    if mt:
+                        un = str.maketrans("₀₁₂₃₄₅₆₇₈₉", "0123456789")
+                        nc = int(mt.group(1).translate(un) or 1); nh = int(mt.group(2).translate(un)) - 2
+                        itens.append(dict(mz=mz, p=inten[mz], f="C" + (str(nc).translate(SUB) if nc > 1 else "") + "H" + (str(nh).translate(SUB) if nh > 1 else "") + "⁺", n="H₂", de=pm,
+                                          r="carbocátion alquílico que perde H₂ (comum em hidrocarbonetos); estrutura não desenhada", nv=0, k="", alt=False))
+                        ach = "feito"; break
+            if ach == "feito": continue
         if ach is None and mz == M - 18 and m.HasSubstructMatch(Chem.MolFromSmarts("[OX2H]")):
             ach = (M, "H₂O", "perda de água (M−18), comum em álcoois e ácidos; estrutura não desenhada")
         if ach: itens.append(dict(mz=mz, p=inten[mz], f="", n=ach[1], de=ach[0], r=ach[2], nv=0, k="", alt=False))

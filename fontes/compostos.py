@@ -685,9 +685,10 @@ def build_comp(svgfn, EXD):
             d["ms"] = [p[0] for p in sorted(pk, key=lambda p: -p[0])]; d["msv"] = 2
         if d.get("ms"):
             d["msat"] = {str(k): [v[0], v[1]] for k, v in ms_atoms(m, d["M"], set(d["ms"])).items()}
-        if nome in SDBSMS and not exn:
+        if d.get("ms") and not exn:
             import msfrag
-            its, sv, sem = msfrag.propor(m, d["M"], SDBSMS[nome][2])
+            pkm = SDBSMS[nome][2] if nome in SDBSMS else [(p, 0) for p in d["ms"]]
+            its, sv, sem = msfrag.propor(m, d["M"], pkm)
             ids = {}
             for k, v in sv.items():
                 if k not in MSFS_ID: MSFS_ID[k] = str(len(MSFS_ID)); MSFS[MSFS_ID[k]] = v
