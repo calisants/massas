@@ -139,14 +139,14 @@ MSK = {
 # Faixas da "Apostila de Interpretação de Espectros de IV" (a que está na pasta Analorg do Drive); onde a apostila não traz, usei tabela geral (Pavia) e marquei fonte "g".
 IVG = [
  ("[CX4][OX2H]", "álcool", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1150,1050,"C–O (estiramento)","F",0,"a")]),
- ("c[OX2H]", "fenol", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1250,1200,"C–O (estiramento)","F",0,"a")]),
+ ("c[OX2H]", "fenol", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1260,1200,"C–O (estiramento)","F",0,"a")]),
  ("[CX3](=O)[OX2H]", "ácido carboxílico", [(3300,2500,"O–H (estiramento)","F, muito larga",1,"a"),(1725,1700,"C=O (estiramento)","F",1,"a")]),
  ("[CX3](=O)[OX2][#6]", "éster", [(1750,1735,"C=O (estiramento)","F",1,"a"),(1300,1000,"C–O (estiramento)","F, 2 bandas",0,"a")]),
  ("[CX3H1](=O)[#6]", "aldeído", [(1740,1720,"C=O (estiramento)","F",1,"a"),(2820,2720,"C–H de aldeído","f, 2 bandas",1,"a")]),
  ("[#6][CX3](=O)[#6]", "cetona", [(1725,1705,"C=O (estiramento)","F",1,"a")]),
  ("[CX3](=O)[NX3]", "amida", [(1700,1630,"C=O (estiramento)","F",1,"a")]),
- ("[NX3;H2;!$(NC=O)][#6]", "amina primária", [(3500,3300,"N–H (2 bandas, sim. e ass.)","M",1,"a"),(1250,1020,"C–N (estiramento)","M",0,"a")]),
- ("[NX3;H1;!$(NC=O)]([#6])[#6]", "amina secundária", [(3400,3300,"N–H (1 banda)","f–M",1,"a"),(1250,1020,"C–N (estiramento)","M",0,"a")]),
+ ("[NX3;H2;!$(NC=O)][#6]", "amina primária", [(3500,3300,"N–H (2 bandas, sim. e ass.)","M",1,"a"),(1340,1020,"C–N (estiramento)","M",0,"a")]),
+ ("[NX3;H1;!$(NC=O)]([#6])[#6]", "amina secundária", [(3400,3300,"N–H (1 banda)","f–M",1,"a"),(1340,1020,"C–N (estiramento)","M",0,"a")]),
  ("[NX3;H2]C=O", "amida primária", [(3500,3100,"N–H (2 bandas)","M, larga",1,"a")]),
  ("[NX3;H1](C=O)", "amida secundária", [(3500,3100,"N–H (1 banda)","M, larga",1,"a")]),
  ("[CX2]#[NX1]", "nitrila", [(2260,2210,"C≡N (estiramento)","M–F, estreita",1,"a")]),
@@ -179,7 +179,7 @@ def ring_pattern(m):
             return None  # anel fundido (naftaleno etc.)
         subs = [k for k, a in enumerate(at) if a.GetTotalNumHs() == 0]
         if len(subs) == 1:
-            return ("anel monossubstituído", [(770,730,"C–H fora do plano (anel mono)","F",0,"a"),(710,690,"deformação do anel (mono)","F",0,"a")])
+            return ("anel monossubstituído", [(780,725,"C–H fora do plano (anel mono)","F",0,"a"),(710,680,"deformação do anel (mono)","F",0,"a")])
         if len(subs) == 2:
             d = min((subs[0]-subs[1]) % 6, (subs[1]-subs[0]) % 6)
             return {1:("anel orto-dissubstituído", [(770,735,"C–H fora do plano (orto)","F",0,"a")]),
@@ -207,9 +207,9 @@ def iv_bands(m):
     # conjugação desloca C=O para baixo (tabela geral, Pavia)
     conj = m.HasSubstructMatch(_p("[#6;a][CX3]=O"))
     if conj:
-        out = [((1700,1660,"C=O conjugado com anel (estiramento)","F",1,"g") if b[2].startswith("C=O") and b[5] == "a" else b) for b in out]
+        out = [((1710,1660,"C=O conjugado com anel (estiramento)","F",1,"g") if b[2].startswith("C=O") and b[5] == "a" else b) for b in out]
         if "ácido carboxílico" in grupos:
-            out = [((1700,1680,"C=O conjugado com anel (estiramento)","F",1,"g") if b[2].startswith("C=O") else b) for b in out]
+            out = [((1710,1660,"C=O conjugado com anel (estiramento)","F",1,"g") if b[2].startswith("C=O") else b) for b in out]
     # tira duplicatas exatas
     seen = set(); res = []
     for b in out:
@@ -265,7 +265,7 @@ def classify_h(x, nH):
     for n in nb:
         if n.GetSymbol() == 'C' and any(k.GetSymbol() in ("O", "N", "Cl", "Br", "I") for k in n.GetNeighbors() if k.GetIdx() != x.GetIdx()):
             return (("CH₃ β a heteroátomo", 1.0, 1.5, 0) if nH == 3 else ("C–H β a heteroátomo", 1.3, 2.0, 0))
-    return {3:("CH₃ alifático", 0.8, 1.2, 0), 2:("CH₂ alifático", 1.2, 1.7, 0)}.get(nH, ("CH alifático", 1.4, 2.0, 0))
+    return {3:("CH₃ alifático", 0.8, 1.2, 0), 2:("CH₂ alifático", 1.2, 2.0, 0)}.get(nH, ("CH alifático", 1.4, 2.0, 0))
 
 def nmr_h(m):
     mh = Chem.AddHs(m)
