@@ -1,15 +1,17 @@
+import sys,os;sys.path.insert(0,os.path.dirname(__file__))
 from playwright.sync_api import sync_playwright
+from _nav import abrir
 errs=[]
 with sync_playwright() as p:
-    b=p.chromium.launch();pg=b.new_page(viewport={'width':360,'height':780})
+    b=abrir(p);pg=b.new_page(viewport={'width':360,'height':780})
     pg.on('pageerror',lambda e:errs.append(str(e)))
-    pg.goto('file:///home/claude/massas/index.html');pg.wait_for_timeout(400);pg.evaluate("go('p-an')")
+    pg.goto('file:///home/claude/massas/index.html');pg.wait_for_timeout(400);pg.evaluate("go('p-in')")
     print('hoje inicial:',pg.inner_text('#hoje').replace('\n',' | ')[:230])
     pg.click('[data-hj=ex]');print('abriu ex:',pg.evaluate("curEx"),'| res visível:',not pg.evaluate("$('#an-res').hidden"))
-    pg.click('.stud');pg.click('#an-back');print('depois:',pg.inner_text('#hoje').replace('\n',' | ')[:260])
+    pg.click('.stud');pg.click('#an-back');pg.evaluate("go('p-in')");print('depois:',pg.inner_text('#hoje').replace('\n',' | ')[:260])
     pg.click('[data-hj=sim]');print('sim completo:',pg.evaluate("SM.e.n"),pg.evaluate("SM.qs.length"))
     # 12 erros vencidos -> limite 10
-    pg.evaluate("const rp={};EX.flatMap(e=>e.rows.map(r=>e.n+':'+r[0])).slice(0,14).forEach(k=>rp[k]={b:0,d:1});LS.set('massas-rep',rp);go('p-an')")
+    pg.evaluate("const rp={};EX.flatMap(e=>e.rows.map(r=>e.n+':'+r[0])).slice(0,14).forEach(k=>rp[k]={b:0,d:1});LS.set('massas-rep',rp);go('p-in')")
     print('hoje com 14 vencidos:',pg.inner_text('#hoje').split('\n')[1][:60])
     pg.evaluate("go('p-tr')");pg.click('#trmode [data-m=rev]')
     for rodada in range(2):
@@ -25,3 +27,4 @@ with sync_playwright() as p:
     print('feitas hoje:',pg.evaluate("revFeitas()"),'| rótulo:',pg.inner_text('#trmode [data-m=rev]'))
     print(pg.inner_text('#quiz')[:140].replace('\n',' '))
 print('ERROS:',errs)
+sys.exit(1 if errs else 0)

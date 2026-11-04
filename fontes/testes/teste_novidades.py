@@ -1,7 +1,10 @@
+import os
+import sys;sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 from playwright.sync_api import sync_playwright
+from _nav import abrir
 errs=[]
 with sync_playwright() as p:
-    b=p.chromium.launch();pg=b.new_page(viewport={'width':360,'height':740})
+    b=abrir(p);pg=b.new_page(viewport={'width':360,'height':740})
     pg.on('pageerror',lambda e:errs.append(str(e)))
     pg.goto('file:///home/claude/massas/index.html');pg.wait_for_timeout(400);pg.evaluate("go('p-an')")
     print('ok 1-12:',pg.evaluate("EX.every(e=>e.ok)"),'| resumo cobre:',pg.evaluate("EX.every(e=>e.rows.every(r=>RESUMO[e.n+':'+r[0]]))"),'| IONI cobre:',pg.evaluate("EX.every(e=>IONI[e.n]&&IONI[e.n][1].filter(c=>c[1]===1).length===1&&IONI[e.n][1].filter(c=>c[1]===0).length>=2)"))

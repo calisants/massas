@@ -140,7 +140,7 @@ MECH={
 js="const SVG="+json.dumps(store,ensure_ascii=False)+";\nconst MAPS="+json.dumps(MAPS,ensure_ascii=False)+";\nconst EX="+json.dumps(out,ensure_ascii=False)+";\n"+"const REARR="+json.dumps({f"{k[0]}:{k[1]}":[v[0],[list(x) for x in v[1]]] for k,v in REARR.items()},ensure_ascii=False)+";\n"+"const WHY="+json.dumps({f"{k[0]}:{k[1]}":list(v) for k,v in WHY.items()},ensure_ascii=False)+";\n"+"const INTS="+json.dumps({str(k):dict(sdbs=v["sdbs"],id=v["id"],p={str(m):i for m,i in v["p"].items()}) for k,v in INTS.items()},ensure_ascii=False)+";\n"+"const ARWD="+json.dumps(ARWD,ensure_ascii=False)+";\n"+"const RESUMO="+json.dumps(RESUMO,ensure_ascii=False)+";\nconst IONI="+json.dumps({str(k):[v[0],[list(x) for x in v[1]]] for k,v in IONI.items()},ensure_ascii=False)+";\n"+"const MECH="+json.dumps(MECH,ensure_ascii=False)+";\n"+"const SLD="+json.dumps([[t,x,SLIMG[n]] for t,x,n in SL],ensure_ascii=False)+";\n"
 import compostos
 js+="const COMP="+json.dumps(compostos.build_comp(svg,EXD),ensure_ascii=False)+";\n"
-for _ph,_f in (("<!--@@ANALORG2_HTML@@-->","analorg2.html"),("/*@@ANALORG2_CSS@@*/","analorg2.css"),("/*@@ANALORG2_JS@@*/","analorg2.js")):
+for _ph,_f in (("<!--@@ANALORG2_HTML@@-->","analorg2.html"),("/*@@ANALORG2_CSS@@*/","analorg2.css"),("/*@@ANALORG3_CSS@@*/","analorg3.css"),("/*@@ANALORG2_JS@@*/","analorg2.js"),("/*@@ANALORG3_JS@@*/","analorg3.js")):
     html=html.replace(_ph,open(_f,encoding="utf-8").read())
 a=html.index("/* ---------- dados: exercícios"); b=html.index("/* ---------- utilidades")
 html=html[:a]+"/* ---------- dados ---------- */\n"+js+"\n"+html[b:]

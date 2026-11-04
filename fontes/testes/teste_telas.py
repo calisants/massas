@@ -1,8 +1,10 @@
+import sys,os;sys.path.insert(0,os.path.dirname(__file__))
 from playwright.sync_api import sync_playwright
+from _nav import abrir
 import json
 errs=[]
 with sync_playwright() as p:
-    b=p.chromium.launch();pg=b.new_page(viewport={'width':360,'height':740})
+    b=abrir(p);pg=b.new_page(viewport={'width':360,'height':740})
     pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:m.type=='error' and 'fonts' not in m.text and errs.append(m.text))
     pg.goto('file:///home/claude/massas/index.html')
     print('tipo cobre todas:',pg.evaluate("EX.every(e=>e.rows.every(r=>TIPO[e.n+':'+r[0]]))"))
@@ -25,17 +27,15 @@ with sync_playwright() as p:
     pg.click('#revall') if pg.query_selector('#revall') else None
     print('rev q:',pg.inner_text('#quiz')[:120])
     # perguntas/progresso
-    pg.evaluate("go('p-pr')");pg.click('#pergL input >> nth=0');print('perg',pg.evaluate("localStorage.getItem('massas-perg')"))
     pg.evaluate("go('p-pg')");pg.click('#pgGen');code=pg.input_value('#pgTxt');print('code len',len(code))
     pg.evaluate("localStorage.clear()");pg.click('#pgImp');print(pg.inner_text('#pgMsg'));print(pg.evaluate("Object.keys(localStorage)"))
     pg.fill('#pgTxt','lixo');pg.click('#pgImp');print(pg.inner_text('#pgMsg'))
-    pg.evaluate("go('p-se')");print('alias:',pg.evaluate("!document.getElementById('p-pq').hidden"))
     # todos os porquês e cisões
     pg.evaluate("go('p-an')")
-    print('menu:',pg.evaluate("[...document.querySelectorAll('#p-ma .mi b')].map(b=>b.textContent)"))
     # overflow sweep
     pg.evaluate("TR.mode='qual'")
-    for sc in ['p-in','p-en','p-pf','p-so','p-el','p-id','p-an','p-tr','p-tb','p-iv','p-ma','p-pq','p-pr','p-pg','p-es','p-co','p-fo','p-aj']:
+    for sc in ['p-in','p-en','p-pf','p-so','p-el','p-ic','p-an','p-tr','p-tb','p-iv','p-ma','p-pq','p-st','p-nv','p-rv','p-sp','p-pg','p-es','p-co','p-fo','p-aj']:
         pg.evaluate(f"go('{sc}')");w=pg.evaluate("document.documentElement.scrollWidth")
-        if w>360:print('OVERFLOW',sc,w)
+        if w>360:print('OVERFLOW',sc,w);errs.append('overflow '+sc)
 print('ERROS:',errs)
+sys.exit(1 if errs else 0)

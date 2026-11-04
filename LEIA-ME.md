@@ -5,12 +5,12 @@
 App de uma página (`index.html`, instalável no celular) de consulta e estudo de Análise Orgânica, para graduação e ensino médio. Endereço: https://calisants.github.io/massas/
 
 ## Telas (menu fixo embaixo)
-- **Início:** atalhos para Orgânica Básica, Compostos, Identificação do Composto, Análise de Ensaios e Espectros, mais os passos da análise e o cartão do SDBS.
+- **Início:** caixa Hoje (revisão, próximo exercício, simulado), a ordem da análise em 6 passos e atalhos para Orgânica Básica, Ensaios e Espectros.
 - **Compostos:** 105 fichas (busca por nome, fórmula ou CAS; filtro por estado e grupo de solubilidade) com estrutura, fórmula, massa, GDH, cor, estado, PF, PE, solubilidade, CAS, bandas de IV esperadas, picos de MS, RMN estimado de ¹H e ¹³C e link para o SDBS.
-- **Identificar:** Identificação do Composto. Aceita estado, cor (8 opções), solubilidade, PF, PE, elementos (O, H, N, S, Cl, Br, I), fórmula molecular, GDH, grupo funcional, bandas de IV, M e picos de MS, nº de sinais e δ de RMN; devolve os compostos mais compatíveis com uma porcentagem (compatibilidade dentro do banco do app, não probabilidade real).
+- **Identificar:** uma tela só. Seções numeradas (aspecto, solubilidade, constantes físicas, análise elementar, IV, e fórmula/massas/RMN como opcional). Mostra as classes de compostos que sobram e o ranking de compostos do banco. O botão "Ver como funciona" preenche com um composto de exemplo. O que você digita fica salvo.
 - **Ensaios:** preliminares, solubilidade, análise elementar, problemas resolvidos, consulta rápida e notação ECGF.
-- **Espectros:** IV, espectrometria de massas (mecanismos, treino, livro) e RMN (teoria, tabelas, estimativa por composto).
-- **Mais:** calculadora de massa, modo detetive, regras de quebra, slides de mecanismos, cor do app, fontes.
+- **Espectros:** IV, espectrometria de massas (mecanismos, treino, livro, ferramentas de massas) e RMN (teoria, tabelas, espectros ¹H e ¹³C simulados por composto, com integração opcional).
+- **Mais:** Ajustes (zoom com os dedos, treinos sem pistas), Revisar (erros de massa e perguntas de quiz voltam em 1, 3 e 7 dias, no máximo 10 por dia), Novidades, cor do app (5 opções), salvar o progresso, fontes.
 
 ## Avisos sobre os dados
 - PF e PE de 185 valores foram conferidos no PubChem (mediana de HSDB, ICSC, HMDB e outras; 7 divergiram e ficam marcados); estado, cor, CAS (só o dígito verificador) e grupo de solubilidade foram escritos sem fonte conferida; fórmula, massa, GDH, estrutura, número de sinais de RMN e multiplicidade são calculados pelo RDKit; os δ de RMN são faixas típicas de tabela.
@@ -26,6 +26,17 @@ pip install rdkit
 python3 empacotar.py
 ```
 Isso gera `index.html`, sobe a versão em `sw.js` e mostra a versão em Mais > Fontes e avisos. Depois é só enviar para o GitHub.
+
+## Testes (antes de cada envio ao GitHub)
+```
+cd fontes
+python3 empacotar.py
+python3 testes/rodar.py
+```
+`rodar.py` roda um teste de cada vez e para no primeiro que falhar. Se o Chromium do Playwright não estiver instalado, usa o Chrome do sistema. Só envie para o GitHub com "Tudo passou."
+
+## Formulário de sugestões (ainda não ligado)
+O botão em Mais só aparece quando `FORM_URL` (em `fontes/analorg3.js`) tem o link de um Google Formulário. Sugestão: formulário com tipo (sugestão ou erro), tela, texto e e-mail opcional; as respostas vão para uma planilha, e uma segunda planilha controla o que já foi resolvido.
 
 ## Instalar no celular
 Abra o endereço acima. Android: menu do Chrome, "Instalar app". iPhone: Safari, Compartilhar, "Adicionar à Tela de Início". Depois da primeira abertura com internet, o app funciona sem internet (as fontes do Google também ficam guardadas).

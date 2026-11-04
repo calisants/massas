@@ -1,10 +1,13 @@
+import os;os.makedirs('/tmp/analorg_teste',exist_ok=True)
+import sys;sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 from playwright.sync_api import sync_playwright
-P='/tmp/claude-0/-home-claude/e180213d-6606-518c-9aac-0bf913a30c5f/scratchpad/'
+from _nav import abrir
+P='/tmp/analorg_teste/'
 with sync_playwright() as p:
-    b=p.chromium.launch();pg=b.new_page(viewport={'width':390,'height':900})
+    b=abrir(p);pg=b.new_page(viewport={'width':390,'height':900})
     er=[];pg.on('pageerror',lambda e:er.append(str(e)))
     pg.goto('file:///home/claude/massas/index.html')
-    pg.click('#t-iv');pg.click('[data-v="v-guia"]')
+    pg.evaluate("go('p-iv')");pg.click('[data-v="v-guia"]')
     print('linhas',pg.locator('#irtbl .irc').count())
     pg.fill('#irtq','guarda');print('guarda',pg.locator('#irtbl .irc').count())
     pg.fill('#irtq','1700');print('1700',pg.locator('#irtbl .irc').count())

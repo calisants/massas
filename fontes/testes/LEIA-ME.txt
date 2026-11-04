@@ -1,3 +1,4 @@
-Rode depois de python3 empacotar.py:
-  python3 testes/teste_telas.py   (modos do Treinar, progresso, menu, estouro de tela em 360 px)
-O teste usa o caminho /home/claude/massas/fontes/saida.html; ajuste se mudar de pasta.
+Rode depois de python3 empacotar.py, de dentro de fontes/:
+  python3 testes/rodar.py   (todos os testes, um de cada vez; para no primeiro que falhar)
+Cada teste também roda sozinho: python3 testes/teste_identificar.py, teste_ajustes.py, teste_telas.py etc.
+Os testes abrem /home/claude/massas/index.html; ajuste se mudar de pasta. Imagens de teste vão para /tmp/analorg_teste/.
