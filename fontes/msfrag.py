@@ -98,6 +98,34 @@ def svg_ion(mm, w=180, h=110, bond=32):
     t = re.sub(r"<svg[^>]*>", '<svg viewBox="0 0 %d %d" xmlns="http://www.w3.org/2000/svg" role="img">' % (w, h), t, count=1)
     return re.sub(r'\s+', ' ', re.sub(r'<!--.*?-->', '', t)).strip()
 
+AMB = (1, 165 / 255, 0); KEEPC = (0, 170 / 255, 1 / 255); LOSTC = (204 / 255, 0, 2 / 255)
+def _limpa(t, w, h):
+    t = re.sub(r'<\?xml.*?\?>', '', t)
+    t = re.sub(r"<rect[^>]*?style='opacity:1\.0;fill:#FFFFFF[^>]*?/>", '', t)
+    t = t.replace('#000000', 'currentColor').replace('#FF0000', 'var(--lost)').replace('#0000FF', 'var(--blue)')
+    t = t.replace('#00AA01', 'var(--keep-soft)').replace('#CC0002', 'var(--lost-soft)').replace('#FFA500', 'var(--amber)')
+    t = re.sub(r"<svg[^>]*>", '<svg viewBox="0 0 %d %d" xmlns="http://www.w3.org/2000/svg" role="img">' % (w, h), t, count=1)
+    return re.sub(r'\s+', ' ', re.sub(r'<!--.*?-->', '', t)).strip()
+
+def svg_mapa(m, keep, atomo=None, w=210, h=140):
+    d = rdMolDraw2D.MolDraw2DSVG(w, h); o = d.drawOptions()
+    o.clearBackground = False; o.fixedBondLength = 30; o.padding = 0.12; o.bondLineWidth = 2; o.useBWAtomPalette(); o.highlightRadius = 0.5
+    ats = {i: (KEEPC if i in keep else LOSTC) for i in range(m.GetNumAtoms())}
+    if atomo is not None: ats[atomo] = AMB
+    bds = {b.GetIdx(): AMB for b in m.GetBonds() if (b.GetBeginAtomIdx() in keep) != (b.GetEndAtomIdx() in keep)}
+    d.DrawMolecule(m, highlightAtoms=list(ats), highlightAtomColors=ats, highlightBonds=list(bds), highlightBondColors=bds)
+    d.FinishDrawing(); return _limpa(d.GetDrawingText(), w, h)
+
+def svg_neutro(m, e):
+    """estrutura do pedaço que saiu (radical ou molécula neutra), ou '' se for só H·"""
+    n = e.get("neu")
+    if n is None: return ""
+    if n == "CO": mm = Chem.MolFromSmiles("[C-]#[O+]")
+    else:
+        mm = monta(m, n[0], n[1])
+        if mm is None: return ""
+    return svg_ion(mm, 150, 100, 28)
+
 def _item(mz, par, ion_f, neutro, regra, nivel, mm, tipo="c", rad=False):
     return dict(mz=mz, de=par, f=ion_f + ("⁺·" if rad else "⁺"), n=neutro, r=regra, nv=nivel, mm=mm, t=tipo)
 
@@ -119,7 +147,7 @@ def candidatos(m, M, picos):
             mm = monta(m, ion, ed)
             if mm is None: continue
             nf = formula(m, neu)
-            out.setdefault(mz, []).append(dict(item=_item(mz, M, formula(m, ion), nf + "·", regra, nv, mm), ion=ion, o=o))
+            out.setdefault(mz, []).append(dict(item=_item(mz, M, formula(m, ion), nf + "·", regra, nv, mm), ion=ion, o=o, neu=(set(neu), None)))
     return out
 
 MCL = Chem.MolFromSmarts("O=[CX3]-[CX4]-[CX4]-[CX4;!H0]")
@@ -138,7 +166,7 @@ def mclafferty(m, M, picos):
             mm = monta(m, E, ed, {o: "+•"})
             if mm is not None:
                 nf = formula(m, G, -1)
-                out.setdefault(mzE, []).append(dict(item=_item(mzE, M, formula(m, E, 1), nf, "rearranjo de McLafferty: o H do carbono γ passa para o O da C=O e sai um alceno (neutro)", 6, mm, rad=True), ion=E, o=None))
+                out.setdefault(mzE, []).append(dict(item=_item(mzE, M, formula(m, E, 1), nf, "rearranjo de McLafferty: o H do carbono γ passa para o O da C=O e sai um alceno (neutro)", 6, mm, rad=True), ion=E, o=None, neu=(G, (lambda rw, mp, cb=cb, cg=cg: (rw.GetBondBetweenAtoms(mp[cb], mp[cg]).SetBondType(Chem.BondType.DOUBLE), rw.GetAtomWithIdx(mp[cg]).SetNumExplicitHs(max(0, rw.GetAtomWithIdx(mp[cg]).GetNumExplicitHs() - 1)))))))
     return out
 
 def filhos(m, pai, picos, M):
@@ -159,7 +187,7 @@ def filhos(m, pai, picos, M):
                     if t:
                         mm = monta(m, rest, t[0])
                         if mm is not None:
-                            out.setdefault(mz, []).append(dict(item=_item(mz, pai["item"]["mz"], formula(m, rest), "C≡O", "o íon acílio perde CO (C≡O)", 5, mm), ion=rest, o=viz[0]))
+                            out.setdefault(mz, []).append(dict(item=_item(mz, pai["item"]["mz"], formula(m, rest), "C≡O", "o íon acílio perde CO (C≡O)", 5, mm), ion=rest, o=viz[0], neu="CO"))
             break
     # carbocátion alquílico perde alceno
     if a.GetSymbol() == "C" and not a.GetIsAromatic() and pai["item"]["nv"] <= 4 and "acílio" not in pai["item"]["r"]:
@@ -178,7 +206,7 @@ def filhos(m, pai, picos, M):
                     if t:
                         mm = monta(m, far, t[0])
                         if mm is not None:
-                            out.setdefault(mz, []).append(dict(item=_item(mz, pai["item"]["mz"], formula(m, far), formula(m, near), "o carbocátion perde um alceno (" + formula(m, near) + ") e a carga fica no pedaço maior; " + t[1], min(t[2], 4), mm), ion=far, o=y.GetIdx()))
+                            out.setdefault(mz, []).append(dict(item=_item(mz, pai["item"]["mz"], formula(m, far), formula(m, near), "o carbocátion perde um alceno (" + formula(m, near) + ") e a carga fica no pedaço maior; " + t[1], min(t[2], 4), mm), ion=far, o=y.GetIdx(), neu=(set(near), (lambda rw, mp, c0=o, x0=x.GetIdx(): rw.GetBondBetweenAtoms(mp[c0], mp[x0]).SetBondType(Chem.BondType.DOUBLE)))))
     return out
 
 def perda_h(m, M, picos):
@@ -196,7 +224,7 @@ def perda_h(m, M, picos):
         if mm is None: continue
         reg = t[1].replace("clivagem α ao C=O, ", "").replace("clivagem α", "perda de H· α")
         if not reg.startswith("perda"): reg = "perda de H·: " + reg
-        out.setdefault(M - 1, []).append(dict(item=_item(M - 1, M, formula(m, todos, -1), "H·", reg, t[2], mm), ion=todos, o=None, atomo=a.GetIdx()))
+        out.setdefault(M - 1, []).append(dict(item=_item(M - 1, M, formula(m, todos, -1), "H·", reg, t[2], mm), ion=todos, o=None, atomo=a.GetIdx(), neu=None))
     return out
 
 def hetero_alqueno(m, pai, picos):
@@ -210,7 +238,8 @@ def hetero_alqueno(m, pai, picos):
         for r in x.GetNeighbors():
             if r.GetIdx() == o or r.GetIdx() not in P or r.GetSymbol() != "C" or r.GetIsAromatic(): continue
             if r.GetHybridization() != Chem.HybridizationType.SP3: continue
-            if not any(k.GetTotalNumHs() > 0 and k.GetIdx() != x.GetIdx() for k in r.GetNeighbors()): continue
+            kk = next((k.GetIdx() for k in r.GetNeighbors() if k.GetTotalNumHs() > 0 and k.GetIdx() != x.GetIdx() and k.GetIdx() in P and k.GetHybridization() == Chem.HybridizationType.SP3), None)
+            if kk is None: continue
             alq = lado(m, r.GetIdx(), (x.GetIdx(), r.GetIdx())) & P
             if any(m.GetAtomWithIdx(i).GetSymbol() != "C" or m.GetAtomWithIdx(i).GetHybridization() != Chem.HybridizationType.SP3 for i in alq): continue
             keep = P - alq; mz = massa(m, keep, 1)
@@ -221,7 +250,7 @@ def hetero_alqueno(m, pai, picos):
             mm = monta(m, keep, ed)
             if mm is None: continue
             nf = formula(m, alq, -1)
-            out.setdefault(mz, []).append(dict(item=_item(mz, pai["item"]["mz"], formula(m, keep, 1), nf, "um H do grupo ligado ao %s passa para ele e sai um alceno (%s)" % (x.GetSymbol(), nf), 5, mm), ion=keep, o=None))
+            out.setdefault(mz, []).append(dict(item=_item(mz, pai["item"]["mz"], formula(m, keep, 1), nf, "um H do grupo ligado ao %s passa para ele e sai um alceno (%s)" % (x.GetSymbol(), nf), 5, mm), ion=keep, o=None, neu=(set(alq), (lambda rw, mp, r0=r.GetIdx(), k0=kk: (rw.GetBondBetweenAtoms(mp[r0], mp[k0]).SetBondType(Chem.BondType.DOUBLE), rw.GetAtomWithIdx(mp[k0]).SetNumExplicitHs(max(0, rw.GetAtomWithIdx(mp[k0]).GetNumExplicitHs() - 1)))))))
     return out
 
 def _els(f):
@@ -265,6 +294,14 @@ def _propor(m, M, pk):
             key = Chem.MolToSmiles(it["mm"]) + "|" + it["f"]
             if key not in svgs: svgs[key] = svg_ion(it["mm"])
             itens.append(dict(mz=mz, p=inten[mz], f=it["f"], n=it["n"], de=it["de"], r=it["r"], nv=it["nv"], k=key, alt=alt))
+            nk = ""
+            sn = svg_neutro(m, e)
+            if sn:
+                nk = "n|" + sn
+                svgs[nk] = sn
+            itens[-1]["nk"] = nk
+            keep = set(e["ion"]) if e.get("atomo") is None else set(range(m.GetNumAtoms()))
+            itens[-1]["mp"] = svg_mapa(m, keep, e.get("atomo"))
             continue
         # sem estrutura: só dois casos de texto seguros
         ach = None

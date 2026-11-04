@@ -693,7 +693,9 @@ def build_comp(svgfn, EXD):
             for k, v in sv.items():
                 if k not in MSFS_ID: MSFS_ID[k] = str(len(MSFS_ID)); MSFS[MSFS_ID[k]] = v
                 ids[k] = MSFS_ID[k]
-            d["msf"] = [dict(mz=x["mz"], p=x["p"], f=x["f"], n=x["n"], de=x["de"], r=x["r"], nv=x["nv"], k=ids.get(x["k"], ""), alt=x["alt"]) for x in its]
+            for k, v in sv.items():
+                if k not in ids: MSFS_ID[k] = str(len(MSFS_ID)); MSFS[MSFS_ID[k]] = v; ids[k] = MSFS_ID[k]
+            d["msf"] = [dict(mz=x["mz"], p=x["p"], f=x["f"], n=x["n"], de=x["de"], r=x["r"], nv=x["nv"], k=ids.get(x["k"], ""), nk=ids.get(x.get("nk", ""), ""), mp=x.get("mp", ""), alt=x["alt"]) for x in its]
             d["msfs"] = sem
         if nome in C13OBS: d["c13m"] = C13OBS[nome]
         if nome in H1OBS: d["h1m"] = list(H1OBS[nome])

@@ -1125,6 +1125,12 @@ function analyze(){
   const pex=cc?{n:'c'+cc.i,nome:cc.n,f:cc.f,M:cc.M}:null;
   if(cc&&cc.msi&&cc.msv===2&&typeof INTS!=='undefined'&&!INTS[pex.n]){const pp={};cc.msi.forEach(x=>{pp[x[0]]=x[1];});INTS[pex.n]={p:pp,sdbs:cc.sdbs,id:cc.msid};}
   FILT=(cc&&!ANALL)?pf(cc.f):null;FHID=0;
+  if(cc&&!cc._rw){cc._rw={};(cc.msf||[]).forEach(x=>{
+    if(!x.k)return;
+    SVG['m'+x.k]=MSFS[x.k];if(x.nk)SVG['m'+x.nk]=MSFS[x.nk];
+    MAPS[pex.n+':'+x.mz]={s:x.mp,a:0};
+    cc._rw[x.mz]=[x.mz,x.de,x.f,x.n,(x.de===cc.M&&/·$/.test(x.n)&&!/McLafferty/.test(x.r)?'ligação entre '+x.f.replace(/⁺·?/,'')+' e '+x.n.replace('·','')+'. ':'')+x.r,'m'+x.k,x.nk?'m'+x.nk:'',x.f,x.n];});}
+  if(cc)pex.rows=Object.values(cc._rw);
   $('#exinfo').innerHTML=ex?'<div class="ex-head"><b>'+esc(ex.nome)+'</b><span class="mono">'+fmt(ex.f)+'</span><span>'+esc(ex.g)+'</span><span class="mol">'+fig(ex.smi,ex.f,'keep','molécula')+'</span></div>':(cc?ccHead(cc):'');
   decorateEx(ex);$('#nrule').innerHTML=M?'Regra do nitrogênio: M = '+M+' é <b>'+(M%2?'ímpar → número ímpar de N (1, 3...)':'par → zero ou número par de N')+'</b>.':'';
   if(!M||!peaks.length){$('#out').innerHTML='<p class="empty">Digite M e pelo menos um pico.</p>';$('#pairs').innerHTML='';$('#pkbar').innerHTML='';$('#pkh').textContent='';return;}
@@ -1137,14 +1143,16 @@ function analyze(){
     if(d<=0){
       body='<div class="col keep" style="grid-column:1/-1"><div class="k">Íon molecular</div><p class="li">É a molécula inteira que perdeu 1 elétron. Não saiu nada.</p>'+(ex&&p===ex.M?'<div class="sp">'+fig(ex.smi,ex.f+'+·','keep','M')+'</div>':'')+(BM.get(p)?'<div class="k" style="margin-top:8px">Se fosse um fragmento (livro)</div>'+ionHTML(p):'')+'</div>';
     }else{
-      body=(cc?propBox(cc,p):'')+'<div class="col keep"><div class="k">Ficou (Apêndice B)</div>'+ionHTML(p)+'</div><div class="col lost"><div class="k">Saiu (Apêndice C)</div>'+lossHTML(d)+'</div>';
+      const cols='<div class="col keep"><div class="k">Ficou (Apêndice B)</div>'+ionHTML(p)+'</div><div class="col lost"><div class="k">Saiu (Apêndice C)</div>'+lossHTML(d)+'</div>';
+      body=cc?((cc._rw[p]?'':propBox(cc,p))+'<details class="why" style="grid-column:1/-1"><summary>Consultar a tabela do livro (Apêndices B e C)</summary><div class="cols">'+cols+'</div></details>'):cols;
     }
     let ans='';
     if(row){
       const d2=row[1]-row[0];
       ans='<div class="ans"><span class="t">Resposta</span>'+stepCard(ex,row)+'</div>';
     }
-    cards[p]='<div class="card">'+head+'<div class="cols">'+body+'</div>'+ans+(ex?notaBox(ex,p):'')+'</div>';
+    if(cc&&cc._rw[p])ans='<div class="ans"><span class="t">Proposta por regras</span>'+stepCard(pex,cc._rw[p])+'</div>';
+    cards[p]='<div class="card">'+head+(cc?ans:'')+'<div class="cols">'+body+'</div>'+(cc?'':ans)+(ex?notaBox(ex,p):'')+'</div>';
   });
   if(pkSel!=='all'&&!peaks.includes(pkSel))pkSel=peaks[0];
   $('#pkh').textContent='Toque num pico:';
