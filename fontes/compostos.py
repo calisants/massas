@@ -77,7 +77,7 @@ RAW = [
  ("anidrido acético", ["anidrido etanoico"], "CC(=O)OC(C)=O", "108-24-7", "líquido", "incolor", -73, 140, "N", None, "reage com água; cheiro pungente"),
  ("aspirina", ["ácido acetilsalicílico"], "CC(=O)Oc1ccccc1C(O)=O", "50-78-2", "sólido", "branco", 135, None, "A1", None, "decompõe ao aquecer"),
  ("ácido esteárico", ["ácido octadecanoico"], "CCCCCCCCCCCCCCCCCC(O)=O", "57-11-4", "sólido", "branco", 69, 361, "A1", None, "ácido graxo"),
- ("ácido cinâmico", ["ácido trans-cinâmico"], "OC(=O)C=Cc1ccccc1", "140-10-3", "sólido", "branco", 133, 300, "A1", None, "trans"),
+ ("ácido cinâmico", ["ácido trans-cinâmico"], "OC(=O)/C=C/c1ccccc1", "140-10-3", "sólido", "branco", 133, 300, "A1", None, "trans"),
  ("ácido 4-nitrobenzoico", ["ácido p-nitrobenzoico"], "OC(=O)c1ccc(cc1)[N+]([O-])=O", "62-23-7", "sólido", "amarelo-claro", 240, None, "A1", None, "sublima"),
  ("anisol", ["metoxibenzeno"], "COc1ccccc1", "100-66-3", "líquido", "incolor", -37, 154, "N", None, ""),
  ("tetra-hidrofurano", ["THF", "oxolano"], "C1CCOC1", "109-99-9", "líquido", "incolor", -108, 66, "S1", None, "miscível com água"),
@@ -140,29 +140,34 @@ MSK = {
 # Grupos funcionais -> bandas de IV esperadas. (SMARTS, rótulo do grupo, [(cm-1 baixo, cm-1 alto, atribuição, intensidade, chave?)])
 # Faixas da "Apostila de Interpretação de Espectros de IV" (a que está na pasta Analorg do Drive); onde a apostila não traz, usei tabela geral (Pavia) e marquei fonte "g".
 IVG = [
- ("[CH2X4][OX2H]", "álcool", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1085,1000,"C–O de álcool primário","F",0,"s")]),
- ("[CH1X4]([#6])([#6])[OX2H]", "álcool", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1125,1060,"C–O de álcool secundário","F",0,"s")]),
+ ("[CH2X4][OX2H]", "álcool", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1090,1000,"C–O de álcool primário","F",0,"s")]),
+ ("[CH1X4]([#6])([#6])[OX2H]", "álcool", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1150,1060,"C–O de álcool secundário","F",0,"s")]),
  ("[CX4;H0]([#6])([#6])([#6])[OX2H]", "álcool", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1205,1124,"C–O de álcool terciário","F",0,"s")]),
- ("c[OX2H]", "fenol", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1260,1200,"C–O (estiramento)","F",0,"a")]),
- ("[CX3](=O)[OX2H]", "ácido carboxílico", [(3300,2500,"O–H (estiramento)","F, muito larga",1,"a"),(1725,1700,"C=O (estiramento)","F",1,"a"),(1320,1210,"C–O de ácido carboxílico (estiramento)","F",0,"s")]),
+ ("c[OX2H]", "fenol", [(3550,3150,"O–H (estiramento)","F, larga",1,"a"),(1275,1200,"C–O (estiramento)","F",0,"s")]),
+ ("[CX3](=O)[OX2H]", "ácido carboxílico", [(3300,2500,"O–H (estiramento)","F, muito larga",1,"a"),(1750,1700,"C=O (estiramento)","F",1,"s"),(1320,1170,"C–O de ácido carboxílico (estiramento)","F",0,"s")]),
  ("[CX3](=O)[OX2][#6]", "éster", [(1750,1735,"C=O (estiramento)","F",1,"a"),(1300,1000,"C–O (estiramento)","F, 2 bandas",0,"a")]),
  ("[CX3H1](=O)[#6]", "aldeído", [(1740,1720,"C=O (estiramento)","F",1,"a"),(2830,2700,"C–H de aldeído","f, 2 bandas",1,"a")]),
  ("[#6][CX3](=O)[#6]", "cetona", [(1725,1705,"C=O (estiramento)","F",1,"a")]),
+ ("[#6;a][CX3](=O)[#6]", "cetona aromática", [(1300,1230,"C–CO–C de cetona aromática (estiramento)","F",0,"s")]),
  ("[CX3](=O)[NX3]", "amida", [(1700,1630,"C=O (estiramento)","F",1,"a")]),
+ ("[NX3;!$(NC=O)][CH3]", "N–CH₃ de amina", [(2830,2760,"C–H de N–CH₃ (estiramento)","f–M",0,"s")]),
  ("[NX3;H2;!$(NC=O)][#6]", "amina primária", [(3500,3300,"N–H (2 bandas, sim. e ass.)","M",1,"a"),(1340,1020,"C–N (estiramento)","M",0,"a")]),
- ("[NX3;H1;!$(NC=O)]([#6])[#6]", "amina secundária", [(3400,3300,"N–H (1 banda)","f–M",1,"a"),(1340,1020,"C–N (estiramento)","M",0,"a")]),
- ("[NX3;H2]C=O", "amida primária", [(3500,3100,"N–H (2 bandas)","M, larga",1,"a")]),
- ("[NX3;H1](C=O)", "amida secundária", [(3500,3100,"N–H (1 banda)","M, larga",1,"a")]),
+ ("[NX3;H1;!$(NC=O)]([#6])[#6]", "amina secundária", [(3450,3300,"N–H (1 banda)","f–M",1,"a"),(1340,1020,"C–N (estiramento)","M",0,"a")]),
+ ("[NX3;H0;!$(NC=O)]([#6])([#6])[#6]", "amina terciária", [(1340,1020,"C–N (estiramento)","M",0,"a")]),
+ ("[NX3;H2]C=O", "amida primária", [(3500,3100,"N–H (2 bandas)","M, larga",1,"a"),(1650,1590,"N–H deformação (amida II)","M",0,"s")]),
+ ("[NX3;H1](C=O)", "amida secundária", [(3500,3100,"N–H (1 banda)","M, larga",1,"a"),(1570,1510,"N–H deformação (amida II)","M–F",0,"s")]),
  ("[CX2]#[NX1]", "nitrila", [(2260,2210,"C≡N (estiramento)","M–F, estreita",1,"a")]),
  ("[CX2]#[CX2;H1]", "alcino terminal", [(3310,3300,"≡C–H (estiramento)","f, estreita",1,"a"),(2150,2100,"C≡C (estiramento)","f–M",1,"a")]),
  ("[N+](=O)[O-]", "nitro", [(1550,1500,"N=O assimétrico","F",1,"a"),(1370,1300,"N=O simétrico","F",1,"a")]),
  ("[CX4][Cl]", "cloreto de alquila", [(800,600,"C–Cl (estiramento)","F",0,"a")]),
  ("c[Cl]", "cloreto de arila", [(800,600,"C–Cl (estiramento)","F",0,"a")]),
+ ("c[OX2][CX4]", "éter de aril e alquila", [(1275,1200,"C–O–C assimétrico (aril alquil éter)","F",0,"s"),(1075,1020,"C–O–C simétrico (aril alquil éter)","F",0,"s")]),
+ ("[OX2][CH3]", "O–CH₃", [(2850,2815,"C–H de O–CH₃ (estiramento)","f–M",0,"s")]),
  ("[CX4]O[CX4]", "éter", [(1150,1050,"C–O (estiramento)","F",0,"a")]),
  ("[CX3]=[CX3;!a]", "alceno", [(3100,3000,"=C–H (estiramento)","f–M",1,"a"),(1680,1620,"C=C (estiramento)","f–M",1,"a")]),
  # grupos acrescentados em 04/11/2026. Faixas da tabela de IV do LibreTexts ("Infrared Spectroscopy Absorption Table") onde ela traz o número; o resto é referência geral (marcada "g")
  ("[CX3](=O)[Cl,Br]", "haleto de ácido", [(1815,1785,"C=O de haleto de ácido (estiramento)","F",1,"a")]),
- ("[CX3](=O)O[CX3](=O)", "anidrido", [(1830,1760,"C=O de anidrido (2 bandas)","F, 2 bandas",1,"a"),(1050,1040,"C–O–C de anidrido","F, larga",0,"s")]),
+ ("[CX3](=O)O[CX3](=O)", "anidrido", [(1850,1800,"C=O de anidrido (assimétrico)","F",1,"s"),(1790,1740,"C=O de anidrido (simétrico)","F",1,"s"),(1050,1040,"C–O–C de anidrido","F, larga",0,"s")]),
  ("[SX2H]", "tiol", [(2600,2550,"S–H (estiramento)","f",1,"a")]),
  ("[CX4][Br]", "brometo de alquila", [(690,515,"C–Br (estiramento)","F",0,"s")]),
  ("c[Br]", "brometo de arila", [(690,515,"C–Br (estiramento)","F",0,"s")]),
@@ -201,7 +206,7 @@ IVG = [
 IV_CHAIN = [(725,720,"–(CH₂)ₙ– balanço (n ≥ 4)","f–M",0,"a")]
 IV_BEND = [(1470,1450,"CH₂ tesoura e CH₃ deformação assimétrica","M",0,"a")]
 IV_UMB = [(1390,1370,"CH₃ deformação simétrica (guarda-chuva)","M",0,"a")]
-IV_AROM = [(3100,3000,"C–H aromático (estiramento)","f–M",1,"a"),(1620,1450,"C=C do anel (estiramento)","M",1,"a")]
+IV_AROM = [(3100,3000,"C–H aromático (estiramento)","f–M",1,"a"),(1620,1440,"C=C do anel (estiramento)","M",1,"a")]
 IV_ALK = (3000,2850,"C–H sp³ (estiramento)","M–F",1,"a")
 
 SOLN = {"S2":"S₂","SA":"SA","SB":"SB","S1":"S₁","A1":"A₁","A2":"A₂","B":"B","MN":"MN","N":"N","I":"I"}
@@ -223,7 +228,7 @@ def ring_pattern(m):
             return None  # anel fundido (naftaleno etc.)
         subs = [k for k, a in enumerate(at) if a.GetTotalNumHs() == 0]
         if len(subs) == 1:
-            return ("anel monossubstituído", [(780,725,"C–H fora do plano (anel mono)","F",0,"a"),(710,680,"deformação do anel (mono)","F",0,"a")])
+            return ("anel monossubstituído", [(780,725,"C–H fora do plano (anel mono)","F",0,"a"),(720,680,"deformação do anel (mono)","F",0,"a")])
         if len(subs) == 2:
             d = min((subs[0]-subs[1]) % 6, (subs[1]-subs[0]) % 6)
             return {1:("anel orto-dissubstituído", [(770,735,"C–H fora do plano (orto)","F",0,"a")]),
@@ -251,12 +256,26 @@ def iv_bands(m):
         if m.HasSubstructMatch(_p("[CH2,CH3]")): out.extend(IV_BEND)
         if m.HasSubstructMatch(P_CH3) and not any(g in grupos for g in ("terc-butila","isopropila ou gem-dimetila")): out.extend(IV_UMB)
         if m.HasSubstructMatch(_p("[CH2][CH2][CH2][CH2]")): out.extend(IV_CHAIN)
+    if "anidrido" in grupos:
+        out = [b for b in out if b[2] != "C=O (estiramento)"]
+    # éster aromático (benzoato): C=O desce pouco, 1730–1715
+    if m.HasSubstructMatch(_p("[#6;a][CX3](=O)[OX2][#6]")) and "ácido carboxílico" not in grupos:
+        out = [((1730,1715,"C=O de éster conjugado com anel (estiramento)","F",1,"s") if (b[2] == "C=O (estiramento)" and b[5] == "a") else b) for b in out]
+    # éster de fenol (acetato de aril, aspirina): C=O sobe e não é o do ácido conjugado
+    if m.HasSubstructMatch(_p("[CX3;!$(C-a)](=O)[OX2]a")):
+        out = [b for b in out if not (b[2] == "C=O (estiramento)" and b[0] == 1750 and b[1] == 1735)]
+        out.append((1780,1750,"C=O de éster de fenol (estiramento)","F",1,"s"))
+    # trans-CH=CH: banda fora do plano
+    for bd in m.GetBonds():
+        if bd.GetBondType() == Chem.BondType.DOUBLE and not bd.IsInRing() and bd.GetStereo() == Chem.BondStereo.STEREOE \
+           and all(x.GetSymbol() == 'C' and x.GetTotalNumHs() == 1 for x in (bd.GetBeginAtom(), bd.GetEndAtom())):
+            out.append((995,960,"=C–H fora do plano (trans)","F",0,"s")); break
     # conjugação desloca C=O para baixo (tabela geral, Pavia)
-    conj = m.HasSubstructMatch(_p("[#6;a][CX3]=O"))
+    conj = m.HasSubstructMatch(_p("[#6;a][CX3]=O")) or m.HasSubstructMatch(_p("[CX3;!a]=[CX3;!a][CX3]=O"))
     if conj:
         out = [((1710,1660,"C=O conjugado com anel (estiramento)","F",1,"s") if b[2].startswith("C=O") and b[5] == "a" else b) for b in out]
         if "ácido carboxílico" in grupos:
-            out = [((1710,1660,"C=O conjugado com anel (estiramento)","F",1,"s") if b[2].startswith("C=O") else b) for b in out]
+            out = [((1710,1660,"C=O conjugado com anel (estiramento)","F",1,"s") if b[2].startswith("C=O") and b[5] != "s" or b[2] == "C=O (estiramento)" else b) for b in out]
     # tira duplicatas exatas
     seen = set(); res = []
     for b in out:
@@ -321,7 +340,7 @@ def iv_ajusta(m, res):
     for k, b in enumerate(res):
         if b[2].startswith("C–N"):
             if m.HasSubstructMatch(P("[NX3;!$(NC=O)]c")):
-                res[k] = (1340,1250,"C–N de amina aromática (estiramento)","M",0,"s")
+                res[k] = (1360,1250,"C–N de amina aromática (estiramento)","M",0,"s")
                 fat.append(("N ligado ao anel", "C–N de amina aromática fica acima da alifática (1340–1250 contra 1250–1020). No SDBS, anilina 1276."))
             else:
                 res[k] = (1250,1020,"C–N de amina alifática (estiramento)","M",0,"a")

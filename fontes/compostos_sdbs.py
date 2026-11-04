@@ -89,4 +89,11 @@ IRMEIO = {
  "2-butanol": ("filme líquido", 1), "ácido benzílico": ("pasta em Nujol", 1), "acetamida": ("pastilha de KBr", 1), "acetonitrila": ("filme líquido", 1),
  "álcool benzílico": ("filme líquido", 1), "ciclo-hexanol": ("solução em CCl₄", 1), "dimetilsulfóxido": ("filme líquido", 1), "acetato de metila": ("filme líquido", 1),
  "N,N-dimetilformamida": ("filme líquido", 1), "propanal": ("solução em CCl₄", 1), "tetra-hidrofurano": ("filme líquido", 1),
+ "N,N-dimetilanilina": ("filme líquido", 1), "difenilamina": ("solução em CCl₄", 1), "benzonitrila": ("filme líquido", 1), "acetanilida": ("solução em CCl₄", 1),
+ "benzamida": ("pastilha de KBr", 1), "ácido cinâmico": ("pastilha de KBr", 1), "ácido esteárico": ("solução em CCl₄", 1), "aspirina": ("pasta em Nujol", 1),
+ "ácido tartárico": ("pastilha de KBr", 1), "ácido cítrico": ("pastilha de KBr", 1), "ácido fórmico": ("filme líquido", 1), "vanilina": ("pastilha de KBr", 1),
+ "timol": ("pastilha de KBr", 1), "salicilato de metila": ("filme líquido", 1),
+ "sacarose": ("pastilha de KBr", 1), "glicose": ("pasta em Nujol", 1), "etilenoglicol": ("filme líquido", 1), "ureia": ("pastilha de KBr", 1),
+ "glicerol": ("filme líquido", 1), "azobenzeno": ("solução em CCl₄", 1), "antraquinona": ("pasta em Nujol", 1), "1,4-benzoquinona": ("pastilha de KBr", 1),
+ "anisol": ("filme líquido", 1), "anidrido acético": ("filme líquido", 1), "benzoato de metila": ("filme líquido", 1),
 }
