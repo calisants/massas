@@ -157,8 +157,8 @@ IVG = [
  ("[CX4]O[CX4]", "éter", [(1150,1050,"C–O (estiramento)","F",0,"a")]),
  ("[CX3]=[CX3;!a]", "alceno", [(3100,3000,"=C–H (estiramento)","f–M",1,"a"),(1680,1620,"C=C (estiramento)","f–M",1,"a")]),
 ]
-IV_AROM = [(3100,3000,"C–H aromático (estiramento)","f–M",1,"a"),(1600,1450,"C=C do anel (estiramento)","M",1,"a")]
-IV_ALK = (2960,2850,"C–H sp³ (estiramento)","M–F",1,"a")
+IV_AROM = [(3100,3000,"C–H aromático (estiramento)","f–M",1,"a"),(1620,1450,"C=C do anel (estiramento)","M",1,"a")]
+IV_ALK = (3000,2850,"C–H sp³ (estiramento)","M–F",1,"a")
 
 SOLN = {"S2":"S₂","SA":"SA","SB":"SB","S1":"S₁","A1":"A₁","A2":"A₂","B":"B","MN":"MN","N":"N","I":"I"}
 
@@ -207,14 +207,81 @@ def iv_bands(m):
     # conjugação desloca C=O para baixo (tabela geral, Pavia)
     conj = m.HasSubstructMatch(_p("[#6;a][CX3]=O"))
     if conj:
-        out = [((1710,1660,"C=O conjugado com anel (estiramento)","F",1,"g") if b[2].startswith("C=O") and b[5] == "a" else b) for b in out]
+        out = [((1710,1660,"C=O conjugado com anel (estiramento)","F",1,"s") if b[2].startswith("C=O") and b[5] == "a" else b) for b in out]
         if "ácido carboxílico" in grupos:
-            out = [((1710,1660,"C=O conjugado com anel (estiramento)","F",1,"g") if b[2].startswith("C=O") else b) for b in out]
+            out = [((1710,1660,"C=O conjugado com anel (estiramento)","F",1,"s") if b[2].startswith("C=O") else b) for b in out]
     # tira duplicatas exatas
     seen = set(); res = []
     for b in out:
         if b not in seen: seen.add(b); res.append(b)
-    return grupos, res
+    res, fat = iv_ajusta(m, res)
+    return grupos, res, fat
+
+# ---------------------------------------------------------------- fatores que deslocam as bandas de IV
+# Cada fator desloca a faixa base da molécula. Fontes (conferidas em 04/11/2026):
+#  LibreTexts (Morsch, 12.08), material de curso lcwu.edu.pk (IRSpectroscopy.pdf), NC State e Oregon State (valores de C=O),
+#  e os prints do SDBS que a Camila enviou (ácido salicílico 1662 x ácido benzoico 1696; anilina C-N 1276).
+# Onde marquei "sem fonte conferida", o efeito é o que os livros-texto dizem, mas não achei o número nas fontes desta sessão.
+def iv_ajusta(m, res):
+    fat = []
+    def troca(pred, novo):
+        for k, b in enumerate(res):
+            if b[2].startswith("C=O") and pred(b):
+                res[k] = novo; return True
+        return False
+    P = lambda s: Chem.MolFromSmarts(s)
+    # tamanho do anel: cetona cíclica
+    if m.HasSubstructMatch(P("[CX3;r4](=O)([#6])[#6]")):
+        troca(lambda b: True, (1820,1775,"C=O de cetona em anel de 4 (estiramento)","F",1,"s"))
+        fat.append(("Anel pequeno", "Cetona em anel de 4: a banda sobe bastante (as fontes dão 1785 ou 1810 para a ciclobutanona; a faixa aqui cobre as duas)."))
+    elif m.HasSubstructMatch(P("[CX3;r5](=O)([#6])[#6]")):
+        troca(lambda b: True, (1780,1740,"C=O de cetona em anel de 5 (estiramento)","F",1,"s"))
+        fat.append(("Anel pequeno", "Cetona em anel de 5: a banda sobe em relação à ciclo-hexanona (1715). As fontes dão 1750 ou 1774 para a ciclopentanona; a faixa aqui cobre as duas."))
+    elif m.HasSubstructMatch(P("[CX3;r6;!$(C(=O)[#6]=,:[#6])](=O)([#6])[#6]")):
+        fat.append(("Anel", "Cetona em anel de 6: sem tensão, fica como cetona de cadeia (ciclo-hexanona 1715; no seu print do SDBS, 1716)."))
+    # lactonas e lactamas
+    for r, hi, lo, nm in ((4,1850,1830,"β-lactona"),(5,1780,1750,"γ-lactona"),(6,1750,1730,"δ-lactona")):
+        if m.HasSubstructMatch(P("[CX3;r%d](=O)[OX2;r%d]" % (r, r))):
+            troca(lambda b: True, (hi, lo, "C=O de "+nm+" (estiramento)","F",1,"s"))
+            fat.append(("Éster cíclico", "Em anel de %d, o éster vira lactona e a banda sobe (4: 1840 ±5; 5: 1765 ±10; 6: 1740 ±10)." % r))
+    for r, hi, lo, nm in ((4,1760,1730,"β-lactama"),(5,1715,1685,"γ-lactama"),(6,1680,1660,"δ-lactama")):
+        if m.HasSubstructMatch(P("[CX3;r%d](=O)[NX3;r%d]" % (r, r))):
+            troca(lambda b: True, (hi, lo, "C=O de "+nm+" (estiramento)","F",1,"s"))
+            fat.append(("Amida cíclica", "Em anel de %d, a amida vira lactama (4: 1745 ±15; 5: 1700 ±15; 6: 1670 ±10)." % r))
+    # ligação de H intramolecular (o-hidroxi carbonila aromática)
+    if m.HasSubstructMatch(P("[OX2H]c:c[CX3]=O")):
+        troca(lambda b: True, (1700,1630,"C=O com ligação de H intramolecular (estiramento)","F",1,"s"))
+        fat.append(("Ligação de H intramolecular", "O OH do fenol faz ligação de H com o C=O vizinho e a banda desce. No SDBS: ácido salicílico 1662, ácido benzoico 1696."))
+    # alfa-halogenio sobe a banda
+    if m.HasSubstructMatch(P("[CX3](=O)[CX4][F,Cl,Br,I]")):
+        for k, b in enumerate(res):
+            if b[2].startswith("C=O"):
+                res[k] = (b[0]+30, b[1], b[2], b[3], b[4], "g")
+        fat.append(("Halogênio em α", "Halogênio no carbono vizinho puxa elétrons e sobe o C=O. Efeito conhecido de livro-texto, sem fonte conferida para o número (usei +30 cm⁻¹ como margem)."))
+    # conjugacao (ja aplicada antes): registra
+    if m.HasSubstructMatch(P("[#6;a][CX3]=O")):
+        fat.append(("Conjugação", "C=O ligado ao anel aromático: a banda desce 20 a 30 cm⁻¹. No SDBS: acetofenona 1686, benzaldeído 1703, ácido benzoico 1696."))
+    # substituinte forte no anel desloca a C–H fora do plano
+    if m.HasSubstructMatch(P("c[N+](=O)[O-]")):
+        for k, b in enumerate(res):
+            if b[2].startswith("C–H fora do plano (anel mono"):
+                res[k] = (810, b[1], b[2], b[3], b[4], "s")
+                fat.append(("Substituinte no anel", "Grupo retirador forte no anel (NO₂) mexe nas bandas de C–H fora do plano. No SDBS, o nitrobenzeno tem uma delas em 794, acima da faixa de anel monossubstituído (770–730)."))
+    # ácido: dímero x monômero
+    if m.HasSubstructMatch(P("[CX3](=O)[OX2H]")):
+        fat.append(("Dimerização", "Ácido carboxílico forma dímero por ligação de H (C=O perto de 1710, O–H muito largo). Em solução diluída o monômero aparece 25 cm⁻¹ ou mais acima. No SDBS, o ácido acético em CCl₄ mostra a banda forte em 1715 e uma fraca em 1768."))
+    # N aromático: C-N sobe
+    for k, b in enumerate(res):
+        if b[2].startswith("C–N"):
+            if m.HasSubstructMatch(P("[NX3;!$(NC=O)]c")):
+                res[k] = (1340,1250,"C–N de amina aromática (estiramento)","M",0,"s")
+                fat.append(("N ligado ao anel", "C–N de amina aromática fica acima da alifática (1340–1250 contra 1250–1020). No SDBS, anilina 1276."))
+            else:
+                res[k] = (1250,1020,"C–N de amina alifática (estiramento)","M",0,"a")
+    # OH de fenol: ligação H forte e meio
+    if m.HasSubstructMatch(P("[OX2H]")) or m.HasSubstructMatch(P("[NX3;H1,H2]")):
+        fat.append(("Ligação de H intermolecular", "O–H e N–H de líquido puro ou sólido saem largos e baixos (O–H 3500–3200). Em gás ou solução bem diluída o O–H livre é fino e fica em 3620–3670."))
+    return res, fat
 
 # ---------------------------------------------------------------- RMN (estimativa por faixas típicas)
 def _is_carbonyl_C(a):
@@ -362,7 +429,7 @@ def cas_ok(c):
     d = c.replace("-", ""); body, chk = d[:-1], int(d[-1])
     return sum((i+1)*int(ch) for i, ch in enumerate(reversed(body))) % 10 == chk
 
-from compostos_sdbs import SDBSMS
+from compostos_sdbs import SDBSMS, IRMEIO
 from compostos_pub import PUB, DIV, DATA as PUB_DATA
 
 def build_comp(svgfn, EXD):
@@ -373,10 +440,10 @@ def build_comp(svgfn, EXD):
         m = Chem.MolFromSmiles(smi); assert m is not None, nome
         f = rdMolDescriptors.CalcMolFormula(m)
         M = int(round(Descriptors.ExactMolWt(m)))
-        grupos, bands = iv_bands(m)
+        grupos, bands, ivf = iv_bands(m)
         d = dict(i=i, n=nome, a=alts, f=f, mw=round(Descriptors.MolWt(m), 2), M=M, smi=smi, s=svgfn(smi, 170, 120),
                  cas=cas, est=est, cor=cor, pf=pf, pe=pe, g=g, ex=exn, obs=obs, gdh=gdh(m),
-                 gf=grupos, iv=[list(b) for b in bands], h1=nmr_h(m), c13=nmr_c(m))
+                 gf=grupos, iv=[list(b) for b in bands], ivf=[list(x) for x in ivf], h1=nmr_h(m), c13=nmr_c(m))
         if exn:
             e = exm[exn]; assert e["M"] == M or True
             d["ms"] = [p for p in e["peaks"]]; d["msv"] = 1; d["M"] = e["M"]
@@ -384,6 +451,8 @@ def build_comp(svgfn, EXD):
             d["ms"] = MSK[nome]; d["msv"] = 0
         else:
             d["ms"] = None; d["msv"] = 0
+        if nome in IRMEIO:
+            d["irm"], d["irc"] = IRMEIO[nome]
         if nome in SDBSMS:
             no, msid, pk = SDBSMS[nome]
             d["sdbs"] = no; d["msid"] = msid

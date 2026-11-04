@@ -30,3 +30,12 @@ SDBSMS = {
  "2-butanol": (507, "MS2014-05098CW", [(45,100),(59,30),(41,20),(43,12),(31,12),(27,11),(57,8),(29,7),(39,7),(55,6)]),
  "acetamida": (1491, "MS-NW-0720", [(59,100),(44,90),(43,61),(18,55),(28,44),(42,29),(15,24),(17,13),(32,9),(41,8)]),
 }
+
+# Meio em que o IV do SDBS foi medido (lido no cabeçalho do print) e se conferi as bandas-chave contra o print.
+# irc: 1 = bandas-chave conferidas nas tabelas do print; 2 = conferência parcial (etanol: só vi O–H largo e C–O no gráfico).
+IRMEIO = {
+ "acetona": ("filme líquido", 1), "etanol": ("filme líquido", 2), "ácido acético": ("solução em CCl₄", 1), "acetato de etila": ("filme líquido", 1),
+ "benzaldeído": ("filme líquido", 1), "acetofenona": ("filme líquido", 1), "butanona": ("solução em CCl₄", 1), "éter dietílico": ("filme líquido", 1),
+ "ciclo-hexanona": ("filme líquido", 1), "tolueno": ("filme líquido", 1), "anilina": ("solução em CCl₄", 1), "ácido benzoico": ("solução em CCl₄", 1),
+ "ácido salicílico": ("pastilha de KBr", 1), "nitrobenzeno": ("filme líquido", 1), "fenol": ("pasta em Nujol", 1),
+}

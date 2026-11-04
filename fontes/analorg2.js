@@ -77,8 +77,11 @@ function cfDraw(i){
   // IV
   const iv=c.iv.slice().sort((a,b)=>ivr(b)[1]-ivr(a)[1]);
   h+='<details class="sec" open><summary>Infravermelho: bandas esperadas</summary>'
-   +(iv.length?'<div class="tbl"><table class="obt"><thead><tr><th>cm⁻¹</th><th>Atribuição</th><th>Intensidade</th><th>Fonte</th></tr></thead><tbody>'+iv.map(b=>'<tr><td class="mono">'+ivr(b)[0]+'–'+ivr(b)[1]+'</td><td>'+esc(b[2])+(b[4]?' <span class="tag sv">chave</span>':'')+'</td><td>'+esc(b[3])+'</td><td>'+(b[5]==='a'?'Apostila de IV':'tabela geral, sem fonte conferida')+'</td></tr>').join('')+'</tbody></table></div>':'<p class="empty">Sem bandas cadastradas.</p>')
-   +'<p class="srcl" style="margin-top:6px">As faixas vêm do grupo funcional (não é o espectro medido). Bandas de ordem "chave" são as que decidem a identificação.</p></details>';
+   +(iv.length?'<div class="tbl"><table class="obt"><thead><tr><th>cm⁻¹</th><th>Atribuição</th><th>Intensidade</th><th>Fonte</th></tr></thead><tbody>'+iv.map(b=>'<tr><td class="mono">'+ivr(b)[0]+'–'+ivr(b)[1]+'</td><td>'+esc(b[2])+(b[4]?' <span class="tag sv">chave</span>':'')+'</td><td>'+esc(b[3])+'</td><td>'+(b[5]==='a'?'Apostila de IV':b[5]==='s'?'fontes citadas em "O que pode deslocar" e prints do SDBS':'tabela geral, sem fonte conferida')+'</td></tr>').join('')+'</tbody></table></div>':'<p class="empty">Sem bandas cadastradas.</p>')
+   +'<p class="srcl" style="margin-top:6px">As faixas vêm do grupo funcional e dos fatores abaixo (não é o espectro medido). Bandas "chave" são as que decidem a identificação.</p>'
+   +(c.irc?'<p class="srcl">'+srcTag(true,c.irc===1?'conferido no SDBS':'conferido em parte no SDBS')+' '+(c.irc===1?'As bandas-chave do espectro de IV do SDBS No. '+c.sdbs+' ('+esc(c.irm)+') caem nas faixas acima.':'Do IV do SDBS No. '+c.sdbs+' ('+esc(c.irm)+') só conferi o O–H largo e o C–O.')+' Lido dos prints enviados, acessado em 04/11/2026. O meio importa: ligação de H e solvente mudam a posição das bandas.</p>':'')
+   +((c.ivf&&c.ivf.length)?'<h3 style="margin:12px 0 4px">O que pode deslocar as bandas deste composto</h3><ul class="fatl">'+c.ivf.map(f=>'<li><b>'+esc(f[0])+'.</b> '+esc(f[1])+'</li>').join('')+'</ul>':'')
+   +'</details>';
   // MS
   h+='<details class="sec"><summary>Espectrometria de massas</summary><p>M = <b>'+c.M+'</b> ('+(c.M%2?'ímpar: número ímpar de N':'par: zero ou número par de N')+').</p>';
   if(c.ms){const tp=c.msi?c.msi.map(p=>'<span class="pk'+(p[0]===c.M?' base':'')+'">'+p[0]+' <small>'+p[1]+'%</small></span>').join(''):c.ms.map(p=>'<span class="pk'+(p===c.M?' base':'')+'">'+p+'</span>').join('');
@@ -136,7 +139,7 @@ function icScore(c,x){
     const func=x.iv.filter(v=>v>1500),un=func.filter(v=>!all.some(b=>{const r=ivr(b);return v>=r[0]-20&&v<=r[1]+20;}));
     const prec=func.length?1-un.length/func.length:1;
     const miss=keys.filter(b=>!hit(b)).map(b=>b[2].split(' (')[0]+' ('+ivr(b)[0]+'–'+ivr(b)[1]+')');
-    add('iv','IV',(0.03+0.97*Math.pow(rec,1.5))*(0.25+0.75*prec),(un.length?'sem explicação: '+un.join(', ')+'. ':'')+(miss.length?'faltou: '+miss.join('; '):'bandas-chave presentes'));
+    add('iv','IV',(0.12+0.88*rec)*(0.03+0.97*prec*prec),(un.length?'sem explicação: '+un.join(', ')+'. ':'')+(miss.length?'faltou: '+miss.join('; '):'bandas-chave presentes'));
   }
   if(x.M!=null){const d=Math.abs(c.M-x.M);add('M','M',d===0?1:(d===1?0.1:0.02),'M = '+c.M);}
   if(x.pk.length){

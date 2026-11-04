@@ -1,6 +1,6 @@
 // Service worker do Analorg (antigo Quebra-cabeça de Massas; o nome do cache continua massas-v): guarda o app no aparelho para abrir sem internet.
 // Ao publicar uma versão nova do index.html, troque o número em CACHE (v1 -> v2).
-const CACHE = "massas-v75";
+const CACHE = "massas-v80";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png"];
 
 self.addEventListener("install", (e) => {
