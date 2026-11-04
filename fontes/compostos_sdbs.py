@@ -86,4 +86,7 @@ IRMEIO = {
  "benzaldeído": ("filme líquido", 1), "acetofenona": ("filme líquido", 1), "butanona": ("solução em CCl₄", 1), "éter dietílico": ("filme líquido", 1),
  "ciclo-hexanona": ("filme líquido", 1), "tolueno": ("filme líquido", 1), "anilina": ("solução em CCl₄", 1), "ácido benzoico": ("solução em CCl₄", 1),
  "ácido salicílico": ("pastilha de KBr", 1), "nitrobenzeno": ("filme líquido", 1), "fenol": ("pasta em Nujol", 1),
+ "2-butanol": ("filme líquido", 1), "ácido benzílico": ("pasta em Nujol", 1), "acetamida": ("pastilha de KBr", 1), "acetonitrila": ("filme líquido", 1),
+ "álcool benzílico": ("filme líquido", 1), "ciclo-hexanol": ("solução em CCl₄", 1), "dimetilsulfóxido": ("filme líquido", 1), "acetato de metila": ("filme líquido", 1),
+ "N,N-dimetilformamida": ("filme líquido", 1), "propanal": ("solução em CCl₄", 1), "tetra-hidrofurano": ("filme líquido", 1),
 }

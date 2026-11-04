@@ -140,13 +140,13 @@ MSK = {
 # Grupos funcionais -> bandas de IV esperadas. (SMARTS, rótulo do grupo, [(cm-1 baixo, cm-1 alto, atribuição, intensidade, chave?)])
 # Faixas da "Apostila de Interpretação de Espectros de IV" (a que está na pasta Analorg do Drive); onde a apostila não traz, usei tabela geral (Pavia) e marquei fonte "g".
 IVG = [
- ("[CH2X4][OX2H]", "álcool", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1085,1050,"C–O de álcool primário","F",0,"s")]),
- ("[CH1X4]([#6])([#6])[OX2H]", "álcool", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1124,1087,"C–O de álcool secundário","F",0,"s")]),
+ ("[CH2X4][OX2H]", "álcool", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1085,1000,"C–O de álcool primário","F",0,"s")]),
+ ("[CH1X4]([#6])([#6])[OX2H]", "álcool", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1125,1060,"C–O de álcool secundário","F",0,"s")]),
  ("[CX4;H0]([#6])([#6])([#6])[OX2H]", "álcool", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1205,1124,"C–O de álcool terciário","F",0,"s")]),
  ("c[OX2H]", "fenol", [(3550,3200,"O–H (estiramento)","F, larga",1,"a"),(1260,1200,"C–O (estiramento)","F",0,"a")]),
- ("[CX3](=O)[OX2H]", "ácido carboxílico", [(3300,2500,"O–H (estiramento)","F, muito larga",1,"a"),(1725,1700,"C=O (estiramento)","F",1,"a")]),
+ ("[CX3](=O)[OX2H]", "ácido carboxílico", [(3300,2500,"O–H (estiramento)","F, muito larga",1,"a"),(1725,1700,"C=O (estiramento)","F",1,"a"),(1320,1210,"C–O de ácido carboxílico (estiramento)","F",0,"s")]),
  ("[CX3](=O)[OX2][#6]", "éster", [(1750,1735,"C=O (estiramento)","F",1,"a"),(1300,1000,"C–O (estiramento)","F, 2 bandas",0,"a")]),
- ("[CX3H1](=O)[#6]", "aldeído", [(1740,1720,"C=O (estiramento)","F",1,"a"),(2820,2720,"C–H de aldeído","f, 2 bandas",1,"a")]),
+ ("[CX3H1](=O)[#6]", "aldeído", [(1740,1720,"C=O (estiramento)","F",1,"a"),(2830,2700,"C–H de aldeído","f, 2 bandas",1,"a")]),
  ("[#6][CX3](=O)[#6]", "cetona", [(1725,1705,"C=O (estiramento)","F",1,"a")]),
  ("[CX3](=O)[NX3]", "amida", [(1700,1630,"C=O (estiramento)","F",1,"a")]),
  ("[NX3;H2;!$(NC=O)][#6]", "amina primária", [(3500,3300,"N–H (2 bandas, sim. e ass.)","M",1,"a"),(1340,1020,"C–N (estiramento)","M",0,"a")]),
@@ -200,7 +200,7 @@ IVG = [
 ]
 IV_CHAIN = [(725,720,"–(CH₂)ₙ– balanço (n ≥ 4)","f–M",0,"a")]
 IV_BEND = [(1470,1450,"CH₂ tesoura e CH₃ deformação assimétrica","M",0,"a")]
-IV_UMB = [(1385,1370,"CH₃ deformação simétrica (guarda-chuva)","M",0,"a")]
+IV_UMB = [(1390,1370,"CH₃ deformação simétrica (guarda-chuva)","M",0,"a")]
 IV_AROM = [(3100,3000,"C–H aromático (estiramento)","f–M",1,"a"),(1620,1450,"C=C do anel (estiramento)","M",1,"a")]
 IV_ALK = (3000,2850,"C–H sp³ (estiramento)","M–F",1,"a")
 
