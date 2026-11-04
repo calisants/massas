@@ -106,6 +106,7 @@ IRMEIO = {
 
 # 13C medido, lido da tabela de ppm dos prints do SDBS (04/11/2026). Só os valores de ppm; a atribuição de cada sinal fica nos prints.
 C13OBS = {
+    'ácido 5-formilsalicílico': [190.72, 171.03, 165.69, 135.08, 133.70, 128.35, 118.18, 113.72],
     '1,4-benzoquinona': [187.21, 136.55],
     '2-butanol': [69.28, 32.07, 22.83, 10.01],
     '3-pentanona': [212.07, 35.5, 7.93],
@@ -180,6 +181,7 @@ C13OBS = {
 # 1H medido (ppm) lido visualmente dos prints do SDBS enviados (nome do app: (SDBS No. ou None, [ppm], parcial?)).
 # Excluídos: valores "*1" (trocáveis, sem número) e leituras duvidosas.
 H1OBS = {
+ 'ácido 5-formilsalicílico':(23378,[9.905,8.366,8.023,7.145],1),
  'butanona':(888,[2.449,2.139,1.058],0),'nitrobenzeno':(None,[8.193,7.650,7.519],0),'éter dietílico':(2150,[3.472,1.206],0),
  'ciclo-hexanona':(571,[2.35],1),'tolueno':(97,[7.38,2.34],0),'anilina':(905,[7.12,6.73,6.64,3.55],0),'ácido benzoico':(673,[12.09,8.12,7.62,7.45],0),
  'fenol':(554,[7.240,6.931,6.838,5.35],0),'acetofenona':(722,[7.94,7.68,2.585],0),'benzaldeído':(672,[10.02,7.87,7.64,7.56],0),

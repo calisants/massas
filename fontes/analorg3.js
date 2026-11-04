@@ -22,12 +22,13 @@ function stInit(){
 /* ---------- Novidades e aviso de atualização ---------- */
 const NOVID=[
  {v:0,d:'04/11/2026',t:[
+  'Novo composto: ácido 5-formilsalicílico (SDBS 23378), com ¹³C medido (8 sinais) e ¹H medido (4 de 5 sinais, o do ácido saiu cortado no print). Do MS e do IV desse composto só o cabeçalho do PDF pôde ser lido, então eles aparecem sem picos conferidos.',
   'MS: a ficha de 70 compostos agora traz "Fragmentos propostos": a estrutura do íon de cada pico, o que ele perdeu e a regra (clivagem α, benzílica, McLafferty, perda de CO). É proposta por regras, com a massa conferida contra o pico do SDBS; não é o mecanismo medido. Os picos que nenhuma regra simples explica ficam listados como sem proposta.',
   'Abas: Início, Compostos, Ensaios e Espectros. Em Espectros ficam IV, Massas e RMN, e o antigo "Mais" foi para o Início. As páginas de cada assunto têm o mesmo layout: título, resumo e uma faixa de seções, como na aba RMN.',
   'RMN: nova aba com os quatro passos num espectro real (acetato de etila, SDBS), régua do deslocamento, laboratório de acoplamento, calculadoras de Hz e ppm, integração e GDH, macetes e dois problemas resolvidos.',
   'Toque num pico, banda ou sinal (IV, massas e RMN) e o trecho da molécula fica colorido. Os espectros simulados ganharam o botão Ampliar, e a estrutura do IV ficou do mesmo tamanho da do RMN e centralizada.',
-  'RMN de 13C: 69 compostos conferidos na tabela de ppm do SDBS. O valor medido aparece na ficha. Corrigi faixas de tabela que não incluíam o valor real.',
-  'RMN de 1H: 65 compostos mostram o δ medido nos prints do SDBS. Corrigi faixas que não incluíam o valor real (clorofórmio, DMSO, DMF, formiatos, salicilatos, enonas e outras).',
+  'RMN de 13C: 70 compostos conferidos na tabela de ppm do SDBS. O valor medido aparece na ficha. Corrigi faixas de tabela que não incluíam o valor real.',
+  'RMN de 1H: 66 compostos mostram o δ medido nos prints do SDBS. Corrigi faixas que não incluíam o valor real (clorofórmio, DMSO, DMF, formiatos, salicilatos, enonas e outras).',
   'Compostos: a ficha não mostra mais os números dos carbonos. Os números ficam só na aba RMN.',
   'Fontes: ficaram discretas, num item "Fonte" recolhido. Saíram o aviso dos exercícios 1 a 12 e as etiquetas repetidas.',
   'Aviso de atualização: passou a mostrar a nota da versão em uso.'
@@ -41,7 +42,7 @@ const NOVID=[
   'Limpeza: apaguei arquivos soltos do app e do GitHub.'
  ]},
  {v:85,d:'04/11/2026',t:[
-  'IV: dá para escolher qualquer um dos 106 compostos (com busca). Cada um mostra um espectro simulado, parecido com o do SDBS, e a tabela de bandas numerada. Os 15 primeiros compostos e têm as bandas-chave conferidas.',
+  'IV: dá para escolher qualquer um dos 109 compostos (com busca). Cada um mostra um espectro simulado, parecido com o do SDBS, e a tabela de bandas numerada. Os 15 primeiros compostos e têm as bandas-chave conferidas.',
   'Guia do IV: mais de 55 linhas novas (isocianatos, tiocianatos, amidas, alcenos por substituição, epóxidos, grupos com P, Si, S e outros). Cada linha diz a fonte.',
   'Cada composto ganhou mais bandas no IV: C–O por tipo de álcool, deformações de CH₃ e CH₂, haletos, sulfonas, anidridos e outros grupos.',
     'Ensaios: as tabelas ficaram legíveis no celular (palavras não são mais cortadas).',

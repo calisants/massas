@@ -117,6 +117,7 @@ RAW = [
  ("bifenilo", ["difenila"], "c1ccc(cc1)-c1ccccc1", "92-52-4", "sólido", "branco", 69, 255, "I", None, ""),
  ("antraceno", [], "c1ccc2cc3ccccc3cc2c1", "120-12-7", "sólido", "incolor (fluoresce azul)", 216, 340, "I", None, ""),
  ("cânfora", [], "CC1(C)C2CCC1(C)C(=O)C2", "76-22-2", "sólido", "branco", 176, 204, "N", None, "sublima; cheiro característico"),
+ ("ácido 5-formilsalicílico", ["ácido formilsalicílico", "ácido 5-formil-2-hidroxibenzoico", "5-formilsalicylic acid"], "O=Cc1ccc(O)c(c1)C(=O)O", "616-76-2", "sólido", "branco a amarelo", 250, None, "A1", None, "decompõe na fusão (PF 250 °C com decomposição, TCI e Sigma-Aldrich); aldeído, fenol e ácido carboxílico na mesma molécula"),
 ]
 
 # Picos de MS (EI, 70 eV) escritos à mão a partir de espectros comuns. Os dos exercícios 1 a 12 vêm do EX (lousa/SDBS) e não passam por aqui.
@@ -566,15 +567,16 @@ def nmr_c(m):
         elif a.GetIsAromatic():
             if any(n.GetSymbol() == 'O' and n.GetIsAromatic() for n in nbs): t, lo, hi = "C α do furano (ao lado do O)", 140, 150
             elif a.GetSymbol() == 'C' and any(any(m.GetAtomWithIdx(j).GetSymbol() == 'O' and m.GetAtomWithIdx(j).GetIsAromatic() for j in r) and len(r) == 5 for r in m.GetRingInfo().AtomRings() if a.GetIdx() in r): t, lo, hi = "C β do furano", 105, 115
-            elif "O" in syms: t, lo, hi = "C aromático ligado a O", 145, 165
+            elif "O" in syms: t, lo, hi = "C aromático ligado a O", 145, 167
             elif "N" in syms:
                 nitro = any(n.GetSymbol() == 'N' and n.GetFormalCharge() == 1 for n in nbs)
                 t, lo, hi = ("C aromático ligado a NO₂", 145, 152) if nitro else ("C aromático ligado a N", 135, 155)
             elif "Cl" in syms: t, lo, hi = "C aromático ligado a Cl", 130, 138
             elif a.GetTotalNumHs() == 0:
                 fused = sum(1 for n in nbs if n.GetIsAromatic()) == 3
-                t, lo, hi = ("C aromático de fusão de anéis", 130, 136) if fused else ("C aromático sem H (ipso)", 125, 150)
-            else: t, lo, hi = "CH aromático", 105, 135
+                ao_lado_O = any(any(k.GetSymbol() == 'O' and not k.GetIsAromatic() for k in nn.GetNeighbors()) for nn in nbs if nn.GetIsAromatic())
+                t, lo, hi = ("C aromático de fusão de anéis", 130, 136) if fused else (("C aromático sem H (ipso), ao lado do C–O", 108, 135) if ao_lado_O else ("C aromático sem H (ipso)", 125, 150))
+            else: t, lo, hi = "CH aromático", 105, 137
         elif a.GetHybridization() == Chem.HybridizationType.SP:
             nit = "N" in syms
             t, lo, hi = ("C≡N (nitrila)", 115, 125) if nit else ("C≡C (alcino)", 65, 90)
