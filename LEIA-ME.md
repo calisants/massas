@@ -6,14 +6,14 @@ App de uma página (`index.html`, instalável no celular) de consulta e estudo d
 
 ## Telas (menu fixo embaixo)
 - **Início:** atalhos para Orgânica Básica, Compostos, Identificação do Composto, Análise de Ensaios e Espectros, mais os passos da análise e o cartão do SDBS.
-- **Compostos:** 48 fichas (busca por nome, fórmula ou CAS; filtro por estado e grupo de solubilidade) com estrutura, fórmula, massa, GDH, cor, estado, PF, PE, solubilidade, CAS, bandas de IV esperadas, picos de MS, RMN estimado de ¹H e ¹³C e link para o SDBS.
-- **Identificar:** Identificação do Composto. Aceita estado, cor, solubilidade, PF, PE, N/halogênio/S, bandas de IV, M e picos de MS, nº de sinais e δ de RMN; devolve os compostos mais compatíveis com uma porcentagem (compatibilidade dentro do banco do app, não probabilidade real).
+- **Compostos:** 105 fichas (busca por nome, fórmula ou CAS; filtro por estado e grupo de solubilidade) com estrutura, fórmula, massa, GDH, cor, estado, PF, PE, solubilidade, CAS, bandas de IV esperadas, picos de MS, RMN estimado de ¹H e ¹³C e link para o SDBS.
+- **Identificar:** Identificação do Composto. Aceita estado, cor (8 opções), solubilidade, PF, PE, elementos (O, H, N, S, Cl, Br, I), fórmula molecular, GDH, grupo funcional, bandas de IV, M e picos de MS, nº de sinais e δ de RMN; devolve os compostos mais compatíveis com uma porcentagem (compatibilidade dentro do banco do app, não probabilidade real).
 - **Ensaios:** preliminares, solubilidade, análise elementar, problemas resolvidos, consulta rápida e notação ECGF.
 - **Espectros:** IV, espectrometria de massas (mecanismos, treino, livro) e RMN (teoria, tabelas, estimativa por composto).
 - **Mais:** calculadora de massa, modo detetive, regras de quebra, slides de mecanismos, cor do app, fontes.
 
 ## Avisos sobre os dados
-- Estado, cor, PF, PE, CAS e grupo de solubilidade dos 48 compostos foram escritos sem fonte conferida; fórmula, massa, GDH, estrutura, número de sinais de RMN e multiplicidade são calculados pelo RDKit; os δ de RMN são faixas típicas de tabela.
+- Estado, cor, PF, PE, CAS e grupo de solubilidade dos 105 compostos foram escritos sem fonte conferida; fórmula, massa, GDH, estrutura, número de sinais de RMN e multiplicidade são calculados pelo RDKit; os δ de RMN são faixas típicas de tabela.
 - O banco de MS tem picos conferidos (lousa e SDBS) só para os 12 compostos dos exemplos com mecanismo; nos demais são picos típicos escritos sem fonte conferida.
 - SDBS (AIST): o app só liga para o site e mostra o texto de citação. O SDBS proíbe coleta automática e download em massa.
 - A teoria de RMN resume os slides de RMN do Prof. Jeronimo (IFRJ). Os slides trazem δ de H do estireno em dois valores diferentes (6,73 e 6,37).

@@ -99,11 +99,15 @@ document.addEventListener('click',ev=>{const b=ev.target.closest('[data-ms]');if
 /* ---------- Identificação do Composto ---------- */
 const nums=s=>(String(s||'').replace(/,(?=\d)(?![^,]*\d{3}\b)/g,'.').match(/\d+(?:[.,]\d+)?/g)||[]).map(x=>parseFloat(x.replace(',','.')));
 const numsInt=s=>(String(s||'').match(/\d+/g)||[]).map(Number);
-const corCls=c=>/amarel|marrom/.test(c)&&!/incolor/.test(c)?'col':'inc';
+const ELS=[['O','Oxigênio (O)'],['H','Hidrogênio (H)'],['N','Nitrogênio (N)'],['S','Enxofre (S)'],['Cl','Cloro (Cl)'],['Br','Bromo (Br)'],['I','Iodo (I)']];
+const elCount=f=>{const m={};String(f).replace(/([A-Z][a-z]?)(\d*)/g,(a,e,n)=>{m[e]=(m[e]||0)+(n?+n:1);return '';});return m;};
+const corFam=s=>{s=String(s||'').toLowerCase();const k=s.indexOf('('),main=k<0?s:s.slice(0,k),par=k<0?'':s.slice(k);
+  const f=t=>{const r=new Set();if(/incolor|branc/.test(t))r.add('inc');if(/amarel/.test(t))r.add('amarelo');if(/laranj/.test(t))r.add('laranja');if(/verm|ros/.test(t))r.add('vermelho');if(/marrom|castanh/.test(t))r.add('marrom');if(/verde/.test(t))r.add('verde');if(/azul/.test(t))r.add('azul');if(/viole|roxo|purpur/.test(t))r.add('violeta');return r;};
+  return [f(main),f(par)];};
 function icInputs(){
   const v=id=>$(id).value.trim();
   const num=id=>{const x=parseFloat(v(id));return isFinite(x)?x:null;};
-  return {est:v('#icEst'),cor:v('#icCor'),g:v('#icG'),pf:num('#icPF'),pe:num('#icPE'),tol:+v('#icTol')||5,N:v('#icN'),X:v('#icX'),S:v('#icS'),
+  return {est:v('#icEst'),cor:v('#icCor'),g:v('#icG'),F:v('#icF').replace(/\s+/g,''),gdh:num('#icGDH'),gf:v('#icGF'),els:ELS.map(e=>[e[0],v('#icE'+e[0])]).filter(e=>e[1]),pf:num('#icPF'),pe:num('#icPE'),tol:+v('#icTol')||5,
     iv:numsInt(v('#icIV')),M:num('#icM'),pk:numsInt(v('#icP')),h:num('#icH'),c:num('#icC'),hd:nums(v('#icHd'))};
 }
 const gauss=(d,t)=>Math.max(0.02,Math.exp(-0.5*Math.pow(d/t,2)));
@@ -111,12 +115,15 @@ function icScore(c,x){
   const parts=[];let w=1;
   const add=(k,lab,f,det)=>{parts.push({k,lab,f,det:det||''});w*=f;};
   if(x.est)add('est','estado',c.est.indexOf(x.est)===0?1:0.05,c.est);
-  if(x.cor)add('cor','cor',corCls(c.cor)===x.cor?1:0.4,c.cor);
+  if(x.cor){const [m,p]=corFam(c.cor);add('cor','cor',m.has(x.cor)?1:p.has(x.cor)?0.5:0.12,c.cor);}
   if(x.g)add('g','solubilidade',c.g===x.g?1:0.04,'grupo '+SOLNM[c.g]);
   if(x.pf!=null)add('pf','PF',c.pf==null?0.05:gauss(c.pf-x.pf,x.tol),'PF '+tC(c.pf));
   if(x.pe!=null)add('pe','PE',c.pe==null?0.08:gauss(c.pe-x.pe,x.tol),'PE '+tC(c.pe));
-  [['N','N',/N(?![a-z])/],['X','halogênio',/Cl|Br|F|I(?![a-z])/],['S','S',/S(?![a-z])/]].forEach(([k,l,re])=>{
-    if(!x[k])return;const has=re.test(c.f);add('el','elemento '+l,(x[k]==='s')===has?1:0.03,has?'tem '+l:'sem '+l);});
+  if(x.els.length){c._el=c._el||elCount(c.f);}
+  x.els.forEach(([e,v])=>{const has=!!(c._el&&c._el[e]);add('el','elemento '+e,(v==='s')===has?1:0.03,has?'tem '+e:'sem '+e);});
+  if(x.F){const a=elCount(x.F),b=c._el||(c._el=elCount(c.f));const ks=new Set([...Object.keys(a),...Object.keys(b)]);const ok=[...ks].every(k=>(a[k]||0)===(b[k]||0));add('F','fórmula',ok?1:0.02,c.f);}
+  if(x.gdh!=null)add('gdh','GDH',c.gdh===x.gdh?1:0.05,'GDH '+c.gdh);
+  if(x.gf)add('gf','grupo funcional',c.gf.indexOf(x.gf)>=0?1:0.04,c.gf.join(', ')||'sem grupo funcional');
   if(x.iv.length){
     const keys=c.iv.filter(b=>b[4]),all=c.iv;
     const hit=b=>{const r=ivr(b);return x.iv.some(v=>v>=r[0]-20&&v<=r[1]+20);};
@@ -156,10 +163,11 @@ function icRun(){
   h+='<p class="srcl">Base: '+COMP.length+' compostos do app. ✓ combina, ~ combina em parte, ✗ não combina. Valores do banco que estão sem fonte conferida podem estar um pouco diferentes da sua tabela.</p>';
   $('#icOut').innerHTML=h;
 }
-function icClear(){['#icEst','#icCor','#icG','#icN','#icX','#icS','#icEx'].forEach(i=>$(i).value='');['#icPF','#icPE','#icIV','#icM','#icP','#icH','#icC','#icHd'].forEach(i=>$(i).value='');$('#icTol').value='5';$('#icOut').innerHTML='';}
+function icClear(){['#icEst','#icCor','#icG','#icGF','#icEx'].forEach(i=>$(i).value='');ELS.forEach(e=>$('#icE'+e[0]).value='');['#icPF','#icPE','#icIV','#icM','#icP','#icH','#icC','#icHd','#icF','#icGDH'].forEach(i=>$(i).value='');$('#icTol').value='5';$('#icOut').innerHTML='';}
 function icFill(i){
   const c=COMP[i];icClear();
   $('#icEst').value=c.est.indexOf('líquido')===0?'líquido':'sólido';$('#icG').value=c.g;
+  {const fm=corFam(c.cor)[0];$('#icCor').value=[...fm][0]||'';const ce=elCount(c.f);['O','N','S','Cl','Br','I'].forEach(e=>$('#icE'+e).value=ce[e]?'s':'n');}
   if(c.pf!=null&&c.est.indexOf('sólido')===0)$('#icPF').value=c.pf;
   if(c.pe!=null&&c.est.indexOf('líquido')===0)$('#icPE').value=c.pe;
   $('#icIV').value=c.iv.filter(b=>b[4]).map(b=>Math.round((b[0]+b[1])/2)).join(', ');
@@ -169,6 +177,8 @@ function icFill(i){
   icRun();
 }
 function icInit(){
+  $('#icEl').innerHTML=ELS.map(e=>'<label>'+e[1]+'<select id="icE'+e[0]+'"><option value="">não sei</option><option value="s">tem</option><option value="n">não tem</option></select></label>').join('');
+  [...new Set(COMP.flatMap(c=>c.gf))].sort((a,b)=>a.localeCompare(b,'pt')).forEach(g=>{const o=document.createElement('option');o.value=g;o.textContent=g;$('#icGF').appendChild(o);});
   $('#icGo').onclick=icRun;$('#icClr').onclick=icClear;
   $('#icEx').onchange=()=>{if($('#icEx').value!=='')icFill(+$('#icEx').value);};
   document.querySelectorAll('#p-ic input').forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')icRun();}));

@@ -23,27 +23,34 @@
     <div class="icf"><h3>1. Aspecto e solubilidade</h3>
       <div class="icg">
         <label>Estado (25 °C)<select id="icEst"><option value="">não sei</option><option value="líquido">líquido</option><option value="sólido">sólido</option></select></label>
-        <label>Cor<select id="icCor"><option value="">não sei</option><option value="inc">incolor ou branco</option><option value="col">amarelo ou marrom</option></select></label>
+        <label>Cor<select id="icCor"><option value="">não sei</option><option value="inc">incolor ou branco</option><option value="amarelo">amarelo</option><option value="laranja">laranja</option><option value="vermelho">vermelho ou rosa</option><option value="marrom">marrom</option><option value="verde">verde</option><option value="azul">azul</option><option value="violeta">violeta ou roxo</option></select></label>
         <label>Grupo de solubilidade<select id="icG"><option value="">não testei</option></select></label>
       </div></div>
-    <div class="icf"><h3>2. PF, PE e elementos</h3>
+    <div class="icf"><h3>2. PF e PE</h3>
       <div class="icg">
         <label>PF (°C)<input type="number" id="icPF" inputmode="decimal" step="any"></label>
         <label>PE (°C)<input type="number" id="icPE" inputmode="decimal" step="any"></label>
         <label>Precisão da medida<select id="icTol"><option value="2">±2 °C</option><option value="5" selected>±5 °C</option><option value="10">±10 °C</option></select></label>
-        <label>Tem N?<select id="icN"><option value="">não testei</option><option value="s">sim</option><option value="n">não</option></select></label>
-        <label>Tem halogênio?<select id="icX"><option value="">não testei</option><option value="s">sim</option><option value="n">não</option></select></label>
-        <label>Tem S?<select id="icS"><option value="">não testei</option><option value="s">sim</option><option value="n">não</option></select></label>
       </div></div>
-    <div class="icf"><h3>3. Infravermelho</h3>
+    <div class="icf"><h3>3. Elementos presentes</h3>
+      <p class="hint" style="margin:0 0 8px">Marque só o que você sabe. "Não sei" não pesa na conta. Todo composto orgânico tem C.</p>
+      <div class="icg" id="icEl"></div></div>
+    <div class="icf"><h3>4. Fórmula e grupo funcional</h3>
+      <div class="icg">
+        <label>Fórmula molecular<input type="text" id="icF" placeholder="ex.: C4H8O" autocomplete="off" style="font-family:var(--mono)"></label>
+        <label>GDH<input type="number" id="icGDH" inputmode="numeric" min="0" max="30"></label>
+        <label>Grupo funcional<select id="icGF"><option value="">não sei</option></select></label>
+      </div>
+      <p class="hint" style="margin:6px 0 0">A fórmula só conta se bater exata. O GDH sai da fórmula: use a calculadora em Orgânica Básica.</p></div>
+    <div class="icf"><h3>5. Infravermelho</h3>
       <label>Números de onda das bandas que você viu (cm⁻¹), separados por vírgula<input type="text" id="icIV" placeholder="ex.: 3350, 2960, 1715" autocomplete="off"></label>
       <p class="hint" style="margin:6px 0 0">Bandas acima de 1500 cm⁻¹ pesam mais. Banco de bandas esperadas por grupo funcional: aba IV.</p></div>
-    <div class="icf"><h3>4. Espectrometria de massas</h3>
+    <div class="icf"><h3>6. Espectrometria de massas</h3>
       <div class="icg">
         <label>M (íon molecular)<input type="number" id="icM" inputmode="numeric" min="1" max="999"></label>
         <label style="grid-column:span 2">Outros picos (m/z)<input type="text" id="icP" placeholder="ex.: 43, 15" autocomplete="off"></label>
       </div></div>
-    <div class="icf"><h3>5. RMN</h3>
+    <div class="icf"><h3>7. RMN</h3>
       <div class="icg">
         <label>Nº de sinais de ¹H<input type="number" id="icH" inputmode="numeric" min="1" max="30"></label>
         <label>Nº de sinais de ¹³C<input type="number" id="icC" inputmode="numeric" min="1" max="30"></label>
