@@ -494,6 +494,8 @@ def nmr_c(m):
             elif any(s in ("Cl", "Br", "I") for s in syms): t, lo, hi = "C sp³ ligado a halogênio", 25, 80
             elif any(_is_carbonyl_C(n) for n in nbs): t, lo, hi = "C sp³ α à carbonila", 20, 50
             elif any(n.GetIsAromatic() for n in nbs): t, lo, hi = "C sp³ benzílico", 20, 45
+            elif "S" in syms: t, lo, hi = "C sp³ ligado a S", 15, 55
+            elif any(n.GetHybridization() == Chem.HybridizationType.SP and "N" in [x.GetSymbol() for x in n.GetNeighbors()] for n in nbs): t, lo, hi = "C sp³ ao lado de nitrila", 0, 30
             elif h == 3: t, lo, hi = "CH₃", 5, 30
             else: t, lo, hi = "C sp³ alifático", 15, 55
         out.append(dict(t=t, n=len(cs), lo=lo, hi=hi, at=sorted(cs), pos=_pos_anel(m, cs[0])))
