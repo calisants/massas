@@ -43,8 +43,6 @@ html.semzoom,html.semzoom body{touch-action:pan-x pan-y}
 .cmp-iv th:nth-child(2),.cmp-iv td:nth-child(2){width:5.6rem}
 .cmp-nmr th:nth-child(3),.cmp-nmr td:nth-child(3){width:5.4rem}
 .cmp td .sm{font-size:.78rem;margin-top:2px}
-.ivh figure{max-width:130px;margin:0}
-.ivh figure svg{max-width:130px;height:auto}
 
 /* Identificar: seções recolhíveis e linhas compactas */
 #p-ic .icsec{margin:8px 0}
@@ -56,3 +54,41 @@ html.semzoom,html.semzoom body{touch-action:pan-x pan-y}
 #p-ic .tri .tb{flex:none}
 #p-ic .tri .tb button{padding:3px 9px;min-height:34px;font-size:.8rem}
 #p-ic .chips{margin:4px 0 6px}
+
+/* Destaque do trecho da molécula */
+:root{--hlc:#F2B705}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--hlc:#D9A400}}
+:root[data-theme="dark"]{--hlc:#D9A400}
+.hl{fill:var(--hlc);opacity:0;pointer-events:none;transition:opacity .15s}
+.hl.on{opacity:.75}
+.hpk{cursor:pointer;outline:none}
+.hpk .hit{fill:transparent}
+.hpk:focus-visible .lc{stroke:var(--ink);stroke-width:2}
+.hpk.sel .lc{fill:var(--hlc);stroke:var(--ink);stroke-width:1.5}
+.hpk.sel .ln{fill:#111}
+.nmrspec .mb{stroke:var(--ink);stroke-width:2.4;stroke-linecap:round}
+.nmrspec .hpk.sel .mb{stroke:var(--hlc);stroke-width:4}
+.nmrspec .mt{fill:var(--ink);font:9px var(--mono)}
+.pk[data-at]{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+.pk.sel{background:var(--hlc);color:#111}
+tr.hlr{cursor:pointer}
+tr.hlr.sel td{background:var(--keep-soft)}
+.hlro{font-size:.84rem;color:var(--muted);margin-top:4px;text-align:center;line-height:1.35}
+.hlfig.stuck{position:sticky;top:0;z-index:6;background:var(--surface);padding:4px 0;border-bottom:1px solid var(--line)}
+.hlfig.stuck svg{width:170px;max-width:100%;height:auto;margin:0 auto}
+.hlfig.stuck figcaption{display:none}
+.ivfig{margin:8px auto 4px;max-width:360px;justify-items:center}
+.ivfig svg{width:100%;max-width:320px;height:auto}
+.ivfig.stuck{max-width:none}
+.nmrwrap::after{content:"";display:block;clear:both}
+.zbtn{float:right;margin:4px 0 6px 6px;font:inherit;font-size:.82rem;padding:3px 10px;min-height:32px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;cursor:pointer}
+/* Espectro ampliado */
+.zmov{position:fixed;inset:0;z-index:60;background:var(--bg);display:flex;flex-direction:column;overflow:hidden}
+.zmh{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line)}
+.zmfig{margin:6px auto 0;max-width:none}
+.zmfig svg{width:200px;max-width:100%;height:auto}
+.zmsc{flex:1;overflow:auto;padding:8px 0 24px}
+.zmsp{width:max(100%,680px);padding:0 16px;box-sizing:border-box}
+.zmsp .nmrspec{max-width:none;width:100%}
+body.zmopen{overflow:hidden}
+.meas{margin:10px 0;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:.9rem;line-height:1.5}

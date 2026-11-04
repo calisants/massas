@@ -294,6 +294,67 @@ def iv_bands(m):
 #  LibreTexts (Morsch, 12.08), material de curso lcwu.edu.pk (IRSpectroscopy.pdf), NC State e Oregon State (valores de C=O),
 #  e os prints do SDBS que a Camila enviou (ácido salicílico 1662 x ácido benzoico 1696; anilina C-N 1276).
 # Onde marquei "sem fonte conferida", o efeito é o que os livros-texto dizem, mas não achei o número nas fontes desta sessão.
+def iv_atoms(m, txt):
+    """átomos (índices) que dão a banda de IV, a partir do texto da atribuição. Serve só para colorir a estrutura."""
+    def q(sma, only=None):
+        r = set()
+        for mt in m.GetSubstructMatches(_p(sma)):
+            for k, i in enumerate(mt):
+                if only is None or k in only: r.add(i)
+        return r
+    T = txt
+    if "anidrido" in T: return sorted(q("[CX3](=O)[OX2][CX3]=O"))
+    if T.startswith("C–CO–C"): return sorted(q("[#6][CX3](=O)[#6]"))
+    if T.startswith("C=O"): return sorted(q("[CX3]=[OX1]"))
+    if "C–H de aldeído" in T: return sorted(q("[CX3H1]=[OX1]"))
+    if "C–O de ácido" in T: return sorted(q("[CX3](=O)[OX2H1]", {0, 2}))
+    if "C–O de álcool primário" in T: return sorted(q("[CX4;H2,H3][OX2H]"))
+    if "C–O de álcool secundário" in T: return sorted(q("[CX4;H1][OX2H]"))
+    if "C–O de álcool terciário" in T: return sorted(q("[CX4;H0][OX2H]"))
+    if "C–O–C do anel de furano" in T: return sorted(q("[o]"))
+    if "C–O–C" in T: return sorted(q("[#6][OX2][#6]"))
+    if T.startswith("C–O"): return sorted(q("[#6;!$(C=O)][OX2]") or q("[#6][OX2]"))
+    if T.startswith("O–H"): return sorted(q("[OX2H]"))
+    if T.startswith("N–H"):
+        return sorted(q("[NX3;$(NC=O)]")) if "amida" in T else sorted(q("[#7;!H0]"))
+    if T.startswith("N=O"): return sorted(q("[N+](=O)[O-]"))
+    if "C–N" in T: return sorted(q("[#6;a,CX4][NX3;!$(NC=O)]"))
+    if T.startswith("C≡N"): return sorted(q("C#N"))
+    if T.startswith("C≡C"): return sorted(q("C#C"))
+    if T.startswith("≡C–H"): return sorted(q("[CX2;H1]#C", {0}))
+    if "C=C do anel" in T or "(orto)" in T or "(meta)" in T or "(para)" in T or "anel" in T or "furano" in T or "benzeno" in T or "aromático" in T: return sorted(q("a"))
+    if T.startswith("C=C"): return sorted(q("[CX3;!a]=[CX3;!a]"))
+    if T.startswith("=C") or "vinil" in T: return sorted(q("[CX3;!a;!$(C=O)]=[CX3;!a]"))
+    if "CHX₃" in T: return sorted(q("[CX4;!H0]([F,Cl,Br,I])([F,Cl,Br,I])[F,Cl,Br,I]"))
+    if "CH₂X₂" in T: return sorted(q("[CX4;H2]([F,Cl,Br,I])[F,Cl,Br,I]"))
+    if T.startswith(("C–Cl", "C–Br", "C–I")): return sorted(q("[#6][Cl,Br,I]"))
+    if T.startswith("S"): return sorted(q("[#16]"))
+    if "O–CH₃" in T: return sorted(q("[CH3][OX2]"))
+    if "N–CH" in T: return sorted(q("[CX4;!H0][NX3]"))
+    if "balanço (n" in T: return sorted(q("[CH2]"))
+    if "CH₃" in T and "CH₂" not in T: return sorted(q("[CH3]"))
+    if "C–H" in T or "CH₂" in T: return sorted(q("[CX4;!H0]"))
+    return []
+
+MSFR = [  # m/z, SMARTS (átomos que formam o fragmento), nome do fragmento. Só os que a regra do livro atribui sem ambiguidade.
+    (15, "[CH3]", "CH₃⁺"),
+    (30, "[CH2][NH2]", "CH₂=NH₂⁺ (amina primária)"),
+    (31, "[CH2][OH]", "CH₂=OH⁺ (álcool primário)"),
+    (43, "[CH3]C=O", "CH₃C≡O⁺ (acetila)"),
+    (77, "c1ccccc1", "C₆H₅⁺ (fenila)"),
+    (91, "[CH2]c1ccccc1", "C₇H₇⁺ (benzila)"),
+    (105, "O=Cc1ccccc1", "C₆H₅C≡O⁺ (benzoíla)"),
+]
+def ms_atoms(m, M, picos):
+    """{m/z: (átomos, nome)} para os picos que têm atribuição segura. O pico M leva a molécula inteira."""
+    out = {}
+    if M in picos: out[M] = (list(range(m.GetNumAtoms())), "íon molecular (M⁺·): a molécula inteira, menos 1 elétron")
+    for mz, sma, nome in MSFR:
+        if mz in picos and mz != M:
+            mt = m.GetSubstructMatches(_p(sma))
+            if mt: out[mz] = (sorted({i for t in mt for i in t}), nome + ", fragmento provável")
+    return out
+
 def iv_ajusta(m, res):
     fat = []
     def troca(pred, novo):
@@ -454,6 +515,10 @@ def _pos_anel(m, ai):
         return {1: "orto", 2: "meta", 3: "para"}.get(d, "")
     return ""
 
+_QU = None
+def QUIN(m):
+    return {i for mt in m.GetSubstructMatches(_p("[#6]1(=O)[#6]=,:[#6][#6](=O)[#6]=,:[#6]1")) for i in (mt[0], mt[4])}
+
 def nmr_c(m):
     rk = list(Chem.CanonicalRankAtoms(m, breakTies=False))
     g = defaultdict(list)
@@ -464,16 +529,20 @@ def nmr_c(m):
         a = m.GetAtomWithIdx(cs[0]); nbs = list(a.GetNeighbors())
         syms = [n.GetSymbol() for n in nbs]
         if _is_carbonyl_C(a):
-            if "N" in syms: t, lo, hi = "C=O de amida", 160, 180
+            if syms.count("N") >= 2: t, lo, hi = "C=O de ureia", 155, 165
+            elif "N" in syms: t, lo, hi = "C=O de amida", 160, 180
             elif "O" in [n.GetSymbol() for n in nbs if m.GetBondBetweenAtoms(a.GetIdx(), n.GetIdx()).GetBondTypeAsDouble() == 1]:
                 acid = any(n.GetSymbol() == 'O' and n.GetTotalNumHs() == 1 for n in nbs)
-                t, lo, hi = ("C=O de ácido carboxílico", 170, 185) if acid else ("C=O de éster", 160, 175)
+                t, lo, hi = ("C=O de ácido carboxílico", 165, 185) if acid else ("C=O de éster", 160, 175)
             elif a.GetTotalNumHs() == 1: t, lo, hi = "C=O de aldeído", 190, 205
+            elif a.GetIdx() in QUIN(m): t, lo, hi = "C=O de quinona", 175, 190
             else:
                 arom = any(n.GetIsAromatic() for n in nbs)
                 t, lo, hi = ("C=O de cetona conjugada", 190, 205) if arom else ("C=O de cetona", 200, 220)
         elif a.GetIsAromatic():
-            if "O" in syms: t, lo, hi = "C aromático ligado a O", 145, 165
+            if any(n.GetSymbol() == 'O' and n.GetIsAromatic() for n in nbs): t, lo, hi = "C α do furano (ao lado do O)", 140, 150
+            elif a.GetSymbol() == 'C' and any(any(m.GetAtomWithIdx(j).GetSymbol() == 'O' and m.GetAtomWithIdx(j).GetIsAromatic() for j in r) and len(r) == 5 for r in m.GetRingInfo().AtomRings() if a.GetIdx() in r): t, lo, hi = "C β do furano", 105, 115
+            elif "O" in syms: t, lo, hi = "C aromático ligado a O", 145, 165
             elif "N" in syms:
                 nitro = any(n.GetSymbol() == 'N' and n.GetFormalCharge() == 1 for n in nbs)
                 t, lo, hi = ("C aromático ligado a NO₂", 145, 152) if nitro else ("C aromático ligado a N", 135, 155)
@@ -481,7 +550,7 @@ def nmr_c(m):
             elif a.GetTotalNumHs() == 0:
                 fused = sum(1 for n in nbs if n.GetIsAromatic()) == 3
                 t, lo, hi = ("C aromático de fusão de anéis", 130, 136) if fused else ("C aromático sem H (ipso)", 125, 150)
-            else: t, lo, hi = "CH aromático", 110, 135
+            else: t, lo, hi = "CH aromático", 105, 135
         elif a.GetHybridization() == Chem.HybridizationType.SP:
             nit = "N" in syms
             t, lo, hi = ("C≡N (nitrila)", 115, 125) if nit else ("C≡C (alcino)", 65, 90)
@@ -489,11 +558,12 @@ def nmr_c(m):
             t, lo, hi = "C de alceno", 100, 150
         else:
             h = a.GetTotalNumHs()
-            if "O" in syms: t, lo, hi = "C sp³ ligado a O", 50, 90
+            if syms.count("O") >= 2: t, lo, hi = "C sp³ com dois O (acetal)", 85, 110
+            elif "O" in syms: t, lo, hi = "C sp³ ligado a O", 50, 90
             elif "N" in syms: t, lo, hi = "C sp³ ligado a N", 30, 65
             elif any(s in ("Cl", "Br", "I") for s in syms): t, lo, hi = "C sp³ ligado a halogênio", 25, 80
             elif any(_is_carbonyl_C(n) for n in nbs): t, lo, hi = "C sp³ α à carbonila", 20, 50
-            elif any(n.GetIsAromatic() for n in nbs): t, lo, hi = "C sp³ benzílico", 20, 45
+            elif any(n.GetIsAromatic() for n in nbs): t, lo, hi = "C sp³ benzílico", 15, 45
             elif "S" in syms: t, lo, hi = "C sp³ ligado a S", 15, 55
             elif any(n.GetHybridization() == Chem.HybridizationType.SP and "N" in [x.GetSymbol() for x in n.GetNeighbors()] for n in nbs): t, lo, hi = "C sp³ ao lado de nitrila", 0, 30
             elif h == 3: t, lo, hi = "CH₃", 5, 30
@@ -517,25 +587,30 @@ def cas_ok(c):
     d = c.replace("-", ""); body, chk = d[:-1], int(d[-1])
     return sum((i+1)*int(ch) for i, ch in enumerate(reversed(body))) % 10 == chk
 
-def svg_numerado(m, c13, w=270, h=180):
-    """Estrutura com cada carbono marcado pelo número do sinal de 13C (carbonos equivalentes levam o mesmo número)."""
+def _hl_svg(m, w, h, bond, numerar=None):
+    """estrutura com um círculo invisível atrás de cada átomo (classe hl hN). O app liga o círculo quando o pico é escolhido."""
     import re
     from rdkit.Chem.Draw import rdMolDraw2D
     mm = Chem.Mol(m)
-    for k, sg in enumerate(c13, 1):
-        for ai in sg["at"]:
-            mm.GetAtomWithIdx(ai).SetProp("atomNote", str(k))
+    if numerar:
+        for k, sg in enumerate(numerar, 1):
+            for ai in sg["at"]: mm.GetAtomWithIdx(ai).SetProp("atomNote", str(k))
     d = rdMolDraw2D.MolDraw2DSVG(w, h); o = d.drawOptions()
-    o.clearBackground = False; o.fixedBondLength = 34; o.padding = 0.14; o.bondLineWidth = 2
+    o.clearBackground = False; o.fixedBondLength = bond; o.padding = 0.14; o.bondLineWidth = 2
     o.annotationFontScale = 0.85
     d.DrawMolecule(mm); d.FinishDrawing()
     t = d.GetDrawingText()
+    circ = ''.join('<circle class="hl h%d" cx="%.1f" cy="%.1f" r="%.1f"/>' % (a.GetIdx(), d.GetDrawCoords(a.GetIdx()).x, d.GetDrawCoords(a.GetIdx()).y, bond * 0.52) for a in mm.GetAtoms())
     t = re.sub(r'<\?xml.*?\?>', '', t)
     t = re.sub(r"<rect[^>]*?style='opacity:1\.0;fill:#FFFFFF[^>]*?/>", '', t)
     t = t.replace('#000000', 'currentColor').replace('#FF0000', 'var(--lost)').replace('#0000FF', 'var(--blue)')
-    t = re.sub(r"<svg[^>]*>", f'<svg viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg" role="img">', t, count=1)
+    t = re.sub(r"<svg[^>]*>", f'<svg viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg" role="img">' + circ, t, count=1)
     t = re.sub(r'<!--.*?-->', '', t); t = re.sub(r'\s+', ' ', t)
     return t.strip()
+
+def svg_numerado(m, c13, w=270, h=180):
+    """Estrutura com cada carbono marcado pelo número do sinal de 13C (carbonos equivalentes levam o mesmo número)."""
+    return _hl_svg(m, w, h, 34, c13)
 
 def liga_h_c(m, h1, c13):
     """texto 'H do C2' para cada sinal de 1H, usando a numeração dos sinais de 13C."""
@@ -552,7 +627,7 @@ def liga_h_c(m, h1, c13):
         parts += het
         sg["c"] = " e ".join(parts)
 
-from compostos_sdbs import SDBSMS, IRMEIO
+from compostos_sdbs import SDBSMS, IRMEIO, C13OBS
 from compostos_pub import PUB, DIV, DATA as PUB_DATA
 
 def build_comp(svgfn, EXD):
@@ -567,7 +642,7 @@ def build_comp(svgfn, EXD):
         d = dict(i=i, n=nome, a=alts, f=f, mw=round(Descriptors.MolWt(m), 2), M=M, smi=smi, s=svgfn(smi, 170, 120),
                  cas=cas, est=est, cor=cor, pf=pf, pe=pe, g=g, ex=exn, obs=obs, gdh=gdh(m),
                  gf=grupos, iv=[list(b) for b in bands], ivf=[list(x) for x in ivf], h1=nmr_h(m), c13=nmr_c(m))
-        d["sn"] = svg_numerado(m, d["c13"]); liga_h_c(m, d["h1"], d["c13"])
+        d["sn"] = svg_numerado(m, d["c13"]); d["si"] = _hl_svg(m, 300, 200, 40); d["ivat"] = [iv_atoms(m, b[2]) for b in bands]; liga_h_c(m, d["h1"], d["c13"])
         if exn:
             e = exm[exn]; assert e["M"] == M or True
             d["ms"] = [p for p in e["peaks"]]; d["msv"] = 1; d["M"] = e["M"]
@@ -582,6 +657,9 @@ def build_comp(svgfn, EXD):
             d["sdbs"] = no; d["msid"] = msid
             d["msi"] = [list(p) for p in sorted(pk, key=lambda p: -p[0])]
             d["ms"] = [p[0] for p in sorted(pk, key=lambda p: -p[0])]; d["msv"] = 2
+        if d.get("ms"):
+            d["msat"] = {str(k): [v[0], v[1]] for k, v in ms_atoms(m, d["M"], set(d["ms"])).items()}
+        if nome in C13OBS: d["c13m"] = C13OBS[nome]
         pb = PUB.get(nome, {})
         d["cid"] = pb.get("cid")
         d["pfs"] = "c" if "pf" in pb else ("d" if "pf" in DIV.get(nome, []) else "")

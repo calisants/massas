@@ -33,30 +33,44 @@ document.addEventListener('click',ev=>{const b=ev.target.closest('[data-cf]');if
   const cp=ev.target.closest('[data-copy]');if(cp)copyTxt(cp.dataset.copy,cp);});
 
 /* ---------- RMN estimado ---------- */
+const HLRO='<div class="hlro" data-dica="Toque num número do espectro ou numa linha da tabela: o trecho da molécula fica colorido.">Toque num número do espectro ou numa linha da tabela: o trecho da molécula fica colorido.</div>';
 function nmrBlock(c){
   const c13=c.c13.slice().sort((a,b)=>(b.lo+b.hi)-(a.lo+a.hi)),cc=Object.assign({},c,{c13:c13});
   const fr=x=>String(x).replace('.',',');
   let h='<p class="srcl" style="margin:0 0 6px"><span class="tag sm">Escrito por Claude, sem fonte conferida</span> <b>Espectro simulado, não é o medido.</b> Número de sinais, integração e multiplicidade (regra n+1) saem da estrutura. A posição de cada sinal é o meio da faixa de tabela, então não bate com o espectro real. Os desdobramentos foram aumentados e sinais com a mesma faixa foram afastados um pouco, para dar para ver. O espectro medido está no SDBS.</p>';
   h+='<h4 style="margin:10px 0 4px">¹H: '+c.h1.length+(c.h1.length>1?' sinais':' sinal')+' ('+c.h1.reduce((a,x)=>a+x.h,0)+' H no total)</h4>';
-  h+='<div class="nmrwrap">'+nmrSpec(c,'h')+'<button class="chip" type="button" data-nmrint aria-pressed="false">Mostrar a integração</button></div>';
-  h+='<div class="tbl"><table class="obt nostk cmp cmp-nmr"><thead><tr><th>#</th><th>Sinal</th><th>δ típico (ppm)</th></tr></thead><tbody>'+c.h1.map((x,i)=>'<tr><td><b>'+(i+1)+'</b></td><td>'+esc(x.t)+'<div class="mut sm">'+x.h+' H'+(x.c?' em '+esc(x.c):'')+' · '+esc(x.m)+'</div></td><td class="n">'+fr(x.lo)+'–'+fr(x.hi)+'</td></tr>').join('')+'</tbody></table></div>';
+  h+='<div class="nmrwrap">'+nmrSpec(c,'h')+'<button class="zbtn" type="button" data-zoom>Ampliar</button><button class="chip" type="button" data-nmrint aria-pressed="false">Mostrar a integração</button></div>';
+  h+='<div class="tbl"><table class="obt nostk cmp cmp-nmr"><thead><tr><th>#</th><th>Sinal</th><th>Faixa (ppm)</th></tr></thead><tbody>'+c.h1.map((x,i)=>'<tr class="hlr" data-at="'+x.on.join(',')+'" data-hk="h'+(i+1)+'" data-tx="'+ea('¹H, sinal '+(i+1)+': '+x.t+' · '+x.h+' H'+(x.c?' em '+x.c:'')+' · δ '+x.lo+'–'+x.hi+' ppm')+'"><td><b>'+(i+1)+'</b></td><td>'+esc(x.t)+'<div class="mut sm">'+x.h+' H'+(x.c?' em '+esc(x.c):'')+' · '+esc(x.m)+'</div></td><td class="n">'+fr(x.lo)+'–'+fr(x.hi)+'</td></tr>').join('')+'</tbody></table></div>';
   h+='<h4 style="margin:12px 0 4px">¹³C: '+c.c13.length+(c.c13.length>1?' sinais':' sinal')+' (de '+c.c13.reduce((a,x)=>a+x.n,0)+' C)</h4>';
-  h+='<div class="nmrwrap">'+nmrSpec(cc,'c')+'<p class="mut" style="margin:2px 0 6px">Cada linha é um tipo de C. A altura é só ilustrativa (mais C equivalentes, linha um pouco maior).</p></div>';
-  h+='<div class="tbl"><table class="obt nostk cmp cmp-nmr"><thead><tr><th>C</th><th>Sinal</th><th>δ típico (ppm)</th></tr></thead><tbody>'+c13.map((x,i)=>'<tr><td><b>'+(i+1)+'</b></td><td>'+esc(x.t)+'<div class="mut sm">'+x.n+' C equivalente'+(x.n>1?'s':'')+(x.pos?' · posição '+x.pos+' ao substituinte':'')+'</div></td><td class="n">'+x.lo+'–'+x.hi+'</td></tr>').join('')+'</tbody></table></div>';
+  h+='<div class="nmrwrap">'+nmrSpec(cc,'c')+'<button class="zbtn" type="button" data-zoom>Ampliar</button><p class="mut" style="margin:2px 0 6px">Cada linha é um tipo de C. A altura é só ilustrativa (mais C equivalentes, linha um pouco maior).</p></div>';
+  h+='<div class="tbl"><table class="obt nostk cmp cmp-nmr"><thead><tr><th>C</th><th>Sinal</th><th>Faixa (ppm)</th></tr></thead><tbody>'+c13.map((x,i)=>'<tr class="hlr" data-at="'+x.at.join(',')+'" data-hk="c'+(i+1)+'" data-tx="'+ea('¹³C, sinal '+(i+1)+': '+x.t+' · '+x.n+' C · δ '+x.lo+'–'+x.hi+' ppm')+'"><td><b>'+(i+1)+'</b></td><td>'+esc(x.t)+'<div class="mut sm">'+x.n+' C equivalente'+(x.n>1?'s':'')+(x.pos?' · posição '+x.pos+' ao substituinte':'')+'</div></td><td class="n">'+x.lo+'–'+x.hi+'</td></tr>').join('')+'</tbody></table></div>';
+    if(c.c13m)h+='<div class="meas"><span class="tag sv">Conferido: SDBS</span> <b>¹³C medido'+(c.sdbs?' (SDBS No. '+c.sdbs+')':'')+':</b> '+c.c13m.slice().sort((a,b)=>b-a).map(v=>String(v).replace('.',',')).join(' · ')+' ppm<div class="mut sm">Lido da tabela de ppm do print do SDBS. A faixa acima é a de tabela; o valor medido é o que importa para este composto.</div></div>';
+  else h+='<p class="srcl">Sem print de ¹³C conferido para este composto: use só a faixa de tabela.</p>';
   return h;
 }
 function rmDraw(){const c=COMP[+$('#rmSel').value||COMP.findIndex(x=>x.n===$('#rmSel').options[0].textContent)];if(!c)return;
-  $('#rmOut').innerHTML='<div class="cfh" style="margin-top:10px"><figure class="st"><div>'+(c.sn||c.s)+'</div><figcaption>'+fmt(c.f)+'</figcaption></figure><div>'+nmrBlock(c)+'</div></div>';}
+  $('#rmOut').innerHTML='<div class="cfh" style="margin-top:10px"><figure class="st hlfig"><div>'+(c.sn||c.s)+'</div><figcaption>'+fmt(c.f)+'</figcaption>'+HLRO+'</figure><div>'+nmrBlock(c)+'</div></div>';}
 
 /* ---------- ficha do composto ---------- */
 function openMS(n){const e=EX.find(x=>x.n===n);if(!e)return;curEx=n;pkSel=null;$('#inM').value=e.M;$('#inP').value=e.peaks.filter(p=>p!==e.M).join(', ');buildChips();analyze();anStage(true);go('p-an');$('#an-in').hidden=true;$('#an-res').hidden=false;}
 let CFI=null;
+function msSpec(c){
+  const W=340,H=165,L=30,R=8,T=16,B=40,pk=c.msi,x0=0,x1=Math.ceil((c.M+8)/10)*10,X=v=>L+(v-x0)/(x1-x0)*(W-L-R),Y=v=>T+(100-v)/100*(H-T-B);
+  let g='';
+  [0,50,100].forEach(t=>{g+='<text class="tl" x="'+(L-4)+'" y="'+(Y(t)+3)+'" text-anchor="end">'+t+'</text>';});
+  const st=x1>150?20:10;for(let t=0;t<=x1;t+=st)g+='<line class="tk" x1="'+X(t)+'" y1="'+Y(0)+'" x2="'+X(t)+'" y2="'+(Y(0)+4)+'"/><text class="tl" x="'+X(t)+'" y="'+(H-24)+'" text-anchor="middle">'+t+'</text>';
+  const ma=c.msat||{};let bars='';
+  pk.forEach(p=>{const x=X(p[0]).toFixed(1),y=Y(p[1]).toFixed(1),k=String(p[0]),a=ma[k];
+    const d=a?' data-at="'+a[0].join(',')+'" data-hk="m'+k+'" data-tx="'+ea('m/z '+k+': '+a[1])+'" tabindex="0" role="button" aria-label="m/z '+k+'"':'';
+    bars+='<g class="hpk"'+d+'><rect class="hit" x="'+(X(p[0])-6).toFixed(1)+'" y="'+T+'" width="12" height="'+(H-T-B)+'"/><line class="mb" x1="'+x+'" x2="'+x+'" y1="'+Y(0)+'" y2="'+y+'"/>'+(p[1]>=12||a?'<text class="mt" x="'+x+'" y="'+(y-3)+'" text-anchor="middle">'+p[0]+'</text>':'')+'</g>';});
+  return '<svg class="nmrspec" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Espectro de massas de '+esc(c.n)+'">'+g+'<line class="ax" x1="'+L+'" y1="'+Y(0)+'" x2="'+(W-R)+'" y2="'+Y(0)+'"/>'+bars+'<text class="tl" x="'+(W/2)+'" y="'+(H-0)+'" text-anchor="middle">m/z · eixo vertical: intensidade relativa (%)</text></svg>';
+}
 function cfDraw(i){
   CFI=i;const c=COMP[i],hoje=new Date().toLocaleDateString('pt-BR');
   const sd=c.sdbs||(c.ex&&typeof INTS!=='undefined'&&INTS[c.ex]?INTS[c.ex].sdbs:null);
   let h='<h2 class="scr">'+esc(c.n)+'</h2>'+(c.a.length?'<p class="scrsub">Também: '+c.a.map(esc).join(', ')+'</p>':'');
   const rowd=(k,v)=>'<div class="cfr"><dt>'+k+'</dt><dd>'+v+'</dd></div>';
-  h+='<figure class="cfs"><div>'+(c.sn||c.s)+'</div><figcaption>'+fmt(c.f)+' · '+String(c.mw).replace('.',',')+' g/mol'+(c.sn?'<br><span class="mut sm">Os números nos carbonos são os sinais de ¹³C da seção de RMN (carbonos equivalentes têm o mesmo número).</span>':'')+'</figcaption></figure>'
+  h+='<figure class="cfs hlfig"><div>'+(c.sn||c.s)+'</div><figcaption>'+fmt(c.f)+' · '+String(c.mw).replace('.',',')+' g/mol'+(c.sn?'<br><span class="mut sm">Os números nos carbonos são os sinais de ¹³C da seção de RMN (carbonos equivalentes têm o mesmo número).</span>':'')+'</figcaption>'+HLRO+'</figure>'
    +'<div class="cfq">'
    +'<div class="cfqi"><span>Estado a 25 °C</span><b>'+esc(c.est)+'</b></div>'
    +'<div class="cfqi"><span>Cor</span><b>'+esc(c.cor)+'</b></div>'
@@ -75,17 +89,18 @@ function cfDraw(i){
    +((c.pfs==='d'||c.pes==='d')?'Onde aparece "fontes divergem", o PubChem traz valores diferentes entre si e foi mantido o valor que já estava no app. ':'')
    +'Estado, cor, grupo de solubilidade e CAS foram escritos por Claude, <b>sem fonte conferida</b>'+(pubs?'':', assim como PF e PE')+' (confirme no SDBS ou na Plataforma do professor antes de usar em relatório). Fórmula, massa, GDH e estrutura são calculados a partir da estrutura (RDKit).</p>';}
   // IV
-  const iv=c.iv.slice().sort((a,b)=>ivr(b)[1]-ivr(a)[1]);
+  const iv=c.iv.map((b,k)=>b.concat([k])).sort((a,b)=>ivr(b)[1]-ivr(a)[1]);
   h+='<details class="sec" open><summary>Infravermelho: bandas esperadas</summary>'
-   +(iv.length?'<div class="tbl"><table class="obt nostk"><thead><tr><th>cm⁻¹</th><th>O que é</th></tr></thead><tbody>'+iv.map(b=>'<tr><td class="mono n">'+ivr(b)[0]+'–'+ivr(b)[1]+'</td><td><b>'+esc(b[2].replace(' (estiramento)',''))+'</b>'+(b[4]?' <span class="tag sv">chave</span>':'')+'<span class="mut sm">Intensidade '+esc(b[3])+' · '+(b[5]==='a'?'apostila':b[5]==='s'?'fontes citadas abaixo':'tabela geral, sem fonte conferida')+'</span></td></tr>').join('')+'</tbody></table></div>':'<p class="empty">Sem bandas cadastradas.</p>')
+   +(iv.length?'<div class="tbl"><table class="obt nostk"><thead><tr><th>cm⁻¹</th><th>O que é</th></tr></thead><tbody>'+iv.map(b=>{const at=(c.ivat||[])[b[6]]||[],tx=b[2]+' · '+ivr(b)[0]+'–'+ivr(b)[1]+' cm⁻¹';return '<tr'+(at.length?' class="hlr" data-at="'+at.join(',')+'" data-hk="f'+b[6]+'" data-tx="'+ea(tx)+'"':'')+'><td class="mono n">'+ivr(b)[0]+'–'+ivr(b)[1]+'</td><td><b>'+esc(b[2].replace(' (estiramento)',''))+'</b>'+(b[4]?' <span class="tag sv">chave</span>':'')+'<span class="mut sm">Intensidade '+esc(b[3])+' · '+(b[5]==='a'?'apostila':b[5]==='s'?'fontes citadas abaixo':'tabela geral, sem fonte conferida')+'</span></td></tr>';}).join('')+'</tbody></table></div>':'<p class="empty">Sem bandas cadastradas.</p>')
    +'<p class="srcl" style="margin-top:8px">Faixas esperadas pelo grupo funcional, não o espectro medido. "Chave" = banda que decide a identificação.</p>'
    +(c.irc?'<p class="srcl">'+srcTag(true,c.irc===1?'Conferido: SDBS':'Conferido em parte: SDBS')+' '+(c.irc===1?'As bandas-chave do espectro de IV do SDBS No. '+c.sdbs+' ('+esc(c.irm)+') caem nas faixas acima.':'Do IV do SDBS No. '+c.sdbs+' ('+esc(c.irm)+') só conferi o O–H largo e o C–O.')+' Lido dos prints enviados, acessado em 04/11/2026. O meio importa: ligação de H e solvente mudam a posição das bandas.</p>':'')
    +((c.ivf&&c.ivf.length)?'<h3 style="margin:12px 0 4px">O que pode deslocar as bandas deste composto</h3><ul class="fatl">'+c.ivf.map(f=>'<li><b>'+esc(f[0])+'.</b> '+esc(f[1])+'</li>').join('')+'</ul>':'')
    +'</details>';
   // MS
   h+='<details class="sec"><summary>Espectrometria de massas</summary><p>M = <b>'+c.M+'</b> ('+(c.M%2?'ímpar: número ímpar de N':'par: zero ou número par de N')+').</p>';
-  if(c.ms){const tp=c.msi?c.msi.map(p=>'<span class="pk'+(p[0]===c.M?' base':'')+'">'+p[0]+' <small>'+p[1]+'%</small></span>').join(''):c.ms.map(p=>'<span class="pk'+(p===c.M?' base':'')+'">'+p+'</span>').join('');
-    h+='<p>'+tp+'</p><p class="srcl">'+srcTag(c.msv>0,c.msv===2?'Conferido: SDBS':(c.msv?'Conferido: lousa e SDBS':'Escrito por Claude, sem fonte conferida'))+' '+(c.msv===2?'Picos do espectro SDBS No. '+c.sdbs+' ('+esc(c.msid)+'), lidos do gráfico em 04/11/2026; a intensidade relativa tem erro de uns 3 pontos.':c.msv?'Picos do exercício do app, com mecanismo.':'Picos típicos de EI 70 eV escritos por mim; confirme no SDBS.')+'</p>';}
+  if(c.ms){const ma=c.msat||{},mat=k=>ma[k]?' data-at="'+ma[k][0].join(',')+'" data-hk="m'+k+'" data-tx="'+ea('m/z '+k+': '+ma[k][1])+'" tabindex="0"':'';
+    const tp=c.msi?c.msi.map(p=>'<span class="pk'+(p[0]===c.M?' base':'')+'"'+mat(p[0])+'>'+p[0]+' <small>'+p[1]+'%</small></span>').join(''):c.ms.map(p=>'<span class="pk'+(p===c.M?' base':'')+'"'+mat(p)+'>'+p+'</span>').join('');
+    h+=(c.msi?'<div class="nmrwrap">'+msSpec(c)+'<button class="zbtn" type="button" data-zoom>Ampliar</button></div>':'')+'<p>'+tp+'</p>'+(Object.keys(ma).length?'<p class="srcl">Os picos sublinhados têm um trecho da molécula associado: toque para ver. Só marquei os fragmentos que a regra do livro atribui sem ambiguidade (M⁺·, CH₃⁺, C₆H₅⁺, C₇H₇⁺, C₆H₅CO⁺, CH₃CO⁺, CH₂=OH⁺, CH₂=NH₂⁺). Os demais picos ficam sem destaque porque eu não tenho fonte para dizer qual parte da molécula os origina.</p>':'')+'<p class="srcl">'+srcTag(c.msv>0,c.msv===2?'Conferido: SDBS':(c.msv?'Conferido: lousa e SDBS':'Escrito por Claude, sem fonte conferida'))+' '+(c.msv===2?'Picos do espectro SDBS No. '+c.sdbs+' ('+esc(c.msid)+'), lidos do gráfico em 04/11/2026; a intensidade relativa tem erro de uns 3 pontos.':c.msv?'Picos do exercício do app, com mecanismo.':'Picos típicos de EI 70 eV escritos por mim; confirme no SDBS.')+'</p>';}
   else h+='<p class="empty">Sem picos cadastrados.</p>';
   if(nCl(c.f))h+='<p class="srcl">Contém Cl: aparece M+2 (isótopo ³⁷Cl). Com 1 Cl, M : M+2 é cerca de 3 : 1.</p>';
   if(c.ex)h+='<button class="btn" type="button" data-ms="'+c.ex+'">Ver os mecanismos de fragmentação</button>';

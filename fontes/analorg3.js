@@ -21,6 +21,17 @@ function stInit(){
 
 /* ---------- Novidades e aviso de atualização ---------- */
 const NOVID=[
+ {v:0,d:'04/11/2026',t:[
+  '@@PENDENTE@@'
+ ]},
+ {v:97,r:'86 a 97',d:'04/11/2026',t:[
+  'IV: as bandas de 72 compostos foram conferidas na tabela de picos dos prints do SDBS. Corrigi as faixas de álcool, fenol, ácido, amina, amida, anidrido, éster aromático, vinila, furano e haletos.',
+  'Massas: os picos de 74 compostos foram conferidos nos prints do SDBS (a leitura é visual, erro de cerca de 3 pontos de intensidade).',
+  'RMN de 13C: 31 compostos conferidos na tabela de ppm do SDBS. Corrigi o CH₃ ligado a S (DMSO) e o CH₃ ao lado de nitrila.',
+  'Compostos: a estrutura da ficha mostra os carbonos numerados. Cada sinal de 1H diz a qual carbono pertence, e os carbonos do anel dizem orto, meta ou para.',
+  'Orgânica Básica: a tabela de grupos funcionais mostra a estrutura de cada grupo, com o grupo em destaque.',
+  'Limpeza: apaguei arquivos soltos do app e do GitHub.'
+ ]},
  {v:85,d:'04/11/2026',t:[
   'IV: dá para escolher qualquer um dos 106 compostos (com busca). Cada um mostra um espectro simulado, parecido com o do SDBS, e a tabela de bandas numerada. Os 15 compostos que você enviou do SDBS vêm primeiro e têm as bandas-chave conferidas.',
   'Guia do IV: mais de 55 linhas novas (isocianatos, tiocianatos, amidas, alcenos por substituição, epóxidos, grupos com P, Si, S e outros). Cada linha diz a fonte.',
@@ -46,7 +57,7 @@ const NOVID=[
 const VNUM=parseInt(String(VERSAO).replace(/^v/,''),10)||0;
 function nvDraw(){
   LS.set('massas-visto',VNUM);nvBanner();
-  $('#nvList').innerHTML=NOVID.map(n=>'<div class="rule"><h3>v'+n.v+' <span class="mut" style="font-weight:400">· '+esc(n.d)+'</span></h3><ul class="nvl">'+n.t.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>').join('');
+  $('#nvList').innerHTML=NOVID.map(n=>'<div class="rule"><h3>v'+(n.r||(n.v||VNUM))+' <span class="mut" style="font-weight:400">· '+esc(n.d)+'</span></h3><ul class="nvl">'+n.t.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>').join('');
 }
 function nvBanner(){
   let b=$('#nvBanner');
@@ -140,6 +151,11 @@ function sugInit(){const a=$('#mSug');if(a&&FORM_URL){a.href=FORM_URL;a.hidden=f
 
 /* ---------- Espectros de RMN simulados (didáticos) ---------- */
 const NMR_MULT={'s':[1],'s largo':[1],'d':[1,1],'t':[1,2,1],'q':[1,3,3,1],'quinteto':[1,4,6,4,1],'sexteto':[1,5,10,10,5,1],'septeto':[1,6,15,20,15,6,1],'m':[1,3,4,3,1]};
+const ea=s=>esc(s).replace(/"/g,'&quot;');
+function pkG(cx,cy,n,at,hk,tx){
+  const d=(at&&at.length)?' data-at="'+at.join(',')+'" data-hk="'+hk+'" data-tx="'+ea(tx)+'" tabindex="0" role="button" aria-label="'+ea(tx)+'"':'';
+  return '<g class="hpk"'+d+'><circle class="hit" cx="'+cx+'" cy="'+cy+'" r="12"/><circle class="lc" cx="'+cx+'" cy="'+cy+'" r="7"/><text class="ln" x="'+cx+'" y="'+(+cy+3.5).toFixed(1)+'" text-anchor="middle">'+n+'</text></g>';
+}
 function nmrSpec(c,kind){
   const isH=kind==='h',W=340,L=12,R=12,pw=W-L-R,top=14,base=122,maxH=base-top-26;
   const its=(isH?c.h1:c.c13).map(x=>({x:(x.lo+x.hi)/2,n:isH?x.h:x.n,m:isH?x.m:'s'}));
@@ -169,7 +185,8 @@ function nmrSpec(c,kind){
     let m=0;for(let k=k0;k<=k1;k++)if(ys[k]>m)m=ys[k];
     let y=Math.max(Y(m)-12,9);while(placed.some(q=>Math.abs(q[0]-x)<15&&Math.abs(q[1]-y)<14))y-=14;
     if(y<8)y=8;placed.push([x,y]);
-    lb+='<circle class="lc" cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="7"/><text class="ln" x="'+x.toFixed(1)+'" y="'+(y+3.5).toFixed(1)+'" text-anchor="middle">'+(o.idx+1)+'</text>';});
+    const src=(isH?c.h1:c.c13)[o.idx];
+    lb+=pkG(x.toFixed(1),y.toFixed(1),o.idx+1,isH?src.on:src.at,(isH?'h':'c')+(o.idx+1),(isH?'¹H, sinal ':'¹³C, sinal ')+(o.idx+1)+': '+src.t+' · '+(isH?src.h+' H':src.n+' C')+(isH&&src.c?' em '+src.c:'')+' · δ '+src.lo+'–'+src.hi+' ppm');});
   return '<svg class="nmrspec" viewBox="0 0 '+W+' '+(base+34)+'" role="img" aria-label="Espectro de '+(isH?'1H':'13C')+' simulado">'
     +(isH?'<path class="int" d="'+ip+'"/>':'')+'<path class="sp" d="'+p+'"/><line class="ax" x1="'+L+'" y1="'+base+'" x2="'+(W-R)+'" y2="'+base+'"/>'+tk+lb
     +'<text class="tl" x="'+(W/2)+'" y="'+(base+30)+'" text-anchor="middle">δ (ppm)'+(isH?'':' · ¹³C com desacoplamento de ¹H')+'</text></svg>';
@@ -247,7 +264,7 @@ function ivIw(code){const p=String(code).split(',').map(x=>x.trim()),b=p[0],m={'
   return (m[b]||b)+(p.length>1?', '+p.slice(1).join(', '):'');}
 function ivDepth(code){const b=String(code).split(',')[0].trim();return {'F':1,'M–F':.62,'M':.4,'f–M':.22,'f':.12}[b]||.4;}
 function ivBands(c){
-  const out=c.iv.map(b=>({hi:b[0],lo:b[1],t:b[2],i:b[3],s:b[5]}));
+  const out=c.iv.map((b,k)=>({hi:b[0],lo:b[1],t:b[2],i:b[3],s:b[5],at:(c.ivat||[])[k]||[]}));
   const e=c.ex?IR.find(x=>x.n===c.ex):null;
   if(e)e.p.forEach(r=>{const nums=String(r[0]).match(/\d+/g).map(Number),hi=Math.max(...nums),lo=Math.min(...nums);
     if(out.some(b=>(hi+lo)/2<=b.hi+5&&(hi+lo)/2>=b.lo-5))return;
@@ -280,7 +297,7 @@ function ivSpec(c,bs){
     const k=Math.max(0,Math.min(N,Math.round((4000-q[0])/3600*N)));let y=Math.max(Y(T[k])-11,top+14);
     while(placed.some(o=>Math.abs(o[0]-cx)<15&&Math.abs(o[1]-y)<14))y-=14;
     if(y<top+4)y=top+4;placed.push([cx,y]);
-    lb+='<circle class="lc" cx="'+cx.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="7"/><text class="ln" x="'+cx.toFixed(1)+'" y="'+(y+3.5).toFixed(1)+'" text-anchor="middle">'+(i+1)+'</text>';});
+    lb+=pkG(cx.toFixed(1),y.toFixed(1),i+1,b.at,'b'+(i+1),'Banda '+(i+1)+': '+b.t+' · '+(b.hi===b.lo?'~'+b.hi:b.lo+'–'+b.hi)+' cm⁻¹');});
   return '<svg class="nmrspec irspec" viewBox="0 0 '+W+' '+(base+34)+'" role="img" aria-label="Espectro de IV simulado de '+esc(c.n)+'">'
     +g+'<path class="sp" d="'+p+'"/><line class="ax" x1="'+L+'" y1="'+base+'" x2="'+(W-R)+'" y2="'+base+'"/>'+lb
     +'<text class="tl" x="'+(W/2)+'" y="'+(base+30)+'" text-anchor="middle">número de onda (cm⁻¹) · eixo vertical: transmitância (%)</text></svg>';
@@ -299,13 +316,14 @@ function drawIV(){
   const box=$('#ivout');if(ivC===null){const a=COMP.find(x=>x.n==='acetona');ivC=a?a.i:COMP[0].i;}
   const c=COMP.find(x=>x.i===ivC);if(!c){box.innerHTML='<p class="empty">Escolha um composto acima.</p>';return;}
   const e=c.ex?IR.find(x=>x.n===c.ex):null,bs=ivBands(c);
-  let h='<div class="cfh ivh" style="margin-top:10px"><figure class="st"><div>'+c.s+'</div><figcaption>'+fmt(c.f)+'</figcaption></figure><div><b>'+esc(c.n)+'</b><div class="mut">'+(c.gf.length?esc(c.gf.join(', ')):'sem grupo funcional')+'</div><div class="mut">IDH = '+c.gdh+'</div></div></div>';
+  let h='<p style="margin:10px 0 0"><b>'+esc(c.n)+'</b> <span class="mut">· '+(c.gf.length?esc(c.gf.join(', ')):'sem grupo funcional')+' · IDH = '+c.gdh+'</span></p>'
+   +'<figure class="st ivfig hlfig"><div>'+(c.si||c.s)+'</div><figcaption>'+fmt(c.f)+'</figcaption><div class="hlro" data-dica="Toque num número do espectro ou numa linha da tabela: o trecho da molécula que dá a banda fica colorido.">Toque num número do espectro ou numa linha da tabela: o trecho da molécula que dá a banda fica colorido.</div></figure>';
   if(e)h+='<div class="ans" style="border-radius:6px;margin:10px 0"><span class="t">Pista do IV para o espectro de massas</span>'+esc(e.pista)+'</div>';
   const sd=c.sdbs||(c.ex&&typeof INTS!=='undefined'&&INTS[c.ex]?INTS[c.ex].sdbs:null);
-  h+='<h3 style="margin:12px 0 4px">Espectro simulado</h3><div class="nmrwrap">'+ivSpec(c,bs)+'</div>';
+  h+='<h3 style="margin:12px 0 4px">Espectro simulado</h3><div class="nmrwrap">'+ivSpec(c,bs)+'<button class="zbtn" type="button" data-zoom>Ampliar</button></div>';
   h+='<p class="srcl" style="margin:0 0 8px">'+(c.irc?srcTag(true,c.irc===1?'Conferido: SDBS':'Conferido em parte: SDBS')+' As bandas-chave foram conferidas no espectro do SDBS que você enviou (medido em '+esc(c.irm)+'). ':srcTag(false,'Escrito por Claude, sem fonte conferida')+' ')
     +'<b>O desenho é simulado, não é o medido.</b> Cada banda é posta no meio da faixa da tabela, com a intensidade típica. Os números dos círculos são os da tabela abaixo. No espectro real, conjugação, ligação de H e o meio da medida deslocam as bandas.'+(sd?' Nº SDBS: <b>'+sd+'</b>.':'')+'</p>';
-  h+='<div class="tbl"><table class="obt nostk cmp cmp-iv"><thead><tr><th>#</th><th>cm⁻¹</th><th>O que é</th></tr></thead><tbody>'+bs.map((b,i)=>'<tr><td><b>'+(i+1)+'</b></td><td class="n">'+(b.hi===b.lo?'~'+b.hi:b.lo+'–'+b.hi)+'</td><td>'+esc(b.t)+'<div class="mut sm">'+esc(ivIw(b.i))+' · '+esc(IVSRC[b.s]||b.s)+'</div></td></tr>').join('')+'</tbody></table></div>';
+  h+='<div class="tbl"><table class="obt nostk cmp cmp-iv"><thead><tr><th>#</th><th>cm⁻¹</th><th>O que é</th></tr></thead><tbody>'+bs.map((b,i)=>'<tr'+(b.at&&b.at.length?' class="hlr" data-at="'+b.at.join(',')+'" data-hk="b'+(i+1)+'" data-tx="'+ea('Banda '+(i+1)+': '+b.t+' · '+(b.hi===b.lo?'~'+b.hi:b.lo+'–'+b.hi)+' cm⁻¹')+'"':'')+'><td><b>'+(i+1)+'</b></td><td class="n">'+(b.hi===b.lo?'~'+b.hi:b.lo+'–'+b.hi)+'</td><td>'+esc(b.t)+'<div class="mut sm">'+esc(ivIw(b.i))+' · '+esc(IVSRC[b.s]||b.s)+'</div></td></tr>').join('')+'</tbody></table></div>';
   if(c.ivf&&c.ivf.length)h+='<h3 style="margin:14px 0 4px">O que desloca as bandas deste composto</h3><dl class="gl">'+c.ivf.map(f=>'<div><dt>'+esc(f[0])+'</dt><dd>'+esc(f[1])+'</dd></div>').join('')+'</dl>';
   if(e&&e.disc.length)h+='<details class="sec"><summary>Como a disciplina atribui</summary><div class="tbl"><table class="obt"><thead><tr><th>Banda (cm⁻¹)</th><th>O que é</th></tr></thead><tbody>'+e.disc.map(r=>'<tr><td class="n">'+r[0]+'</td><td>'+esc(r[1])+'</td></tr>').join('')+'</tbody></table></div></details>';
   h+='<p class="hint" style="margin-top:12px"><button class="btn ghost" type="button" data-cf="'+c.i+'">Abrir a ficha de '+esc(c.n)+'</button></p>';
@@ -324,3 +342,40 @@ function icBadges(){
 document.addEventListener('click',ev=>{if(typeof CUR!=='undefined'&&CUR==='p-ic')setTimeout(icBadges,120);});
 document.addEventListener('input',ev=>{if(typeof CUR!=='undefined'&&CUR==='p-ic')setTimeout(icBadges,120);});
 document.addEventListener('change',ev=>{if(typeof CUR!=='undefined'&&CUR==='p-ic')setTimeout(icBadges,120);});
+
+/* ---------- Destaque do trecho da molécula e botão Ampliar ---------- */
+function hlSet(sc,atoms){
+  sc.querySelectorAll('svg .hl.on').forEach(e=>e.classList.remove('on'));
+  atoms.forEach(a=>sc.querySelectorAll('svg .hl.h'+a).forEach(e=>e.classList.add('on')));
+}
+function hlClick(el){
+  const sc=el.closest('[data-hlscope]');if(!sc)return;
+  const was=el.classList.contains('sel'),ro=sc.querySelector('.hlro'),fig=sc.querySelector('.hlfig');
+  sc.querySelectorAll('.sel').forEach(e=>e.classList.remove('sel'));
+  if(was){hlSet(sc,[]);if(ro)ro.textContent=ro.dataset.dica||'';if(fig)fig.classList.remove('stuck');return;}
+  sc.querySelectorAll('[data-hk="'+el.dataset.hk+'"]').forEach(e=>e.classList.add('sel'));
+  hlSet(sc,(el.dataset.at||'').split(',').filter(Boolean).map(Number));
+  if(ro)ro.textContent=el.dataset.tx||'';
+  if(fig&&!sc.classList.contains('zmov'))fig.classList.add('stuck');
+}
+document.addEventListener('click',ev=>{
+  const z=ev.target.closest('[data-zoom]');if(z){zoomOpen(z);return;}
+  const el=ev.target.closest('[data-at]');if(el)hlClick(el);
+});
+document.addEventListener('keydown',ev=>{
+  if((ev.key==='Enter'||ev.key===' ')&&ev.target.matches&&ev.target.matches('.hpk[data-at]')){ev.preventDefault();hlClick(ev.target);}
+});
+function zoomOpen(btn){
+  const wrap=btn.closest('.nmrwrap'),svg=wrap&&wrap.querySelector('svg.nmrspec');if(!svg)return;
+  const sc=wrap.closest('[data-hlscope]'),fg=sc&&sc.querySelector('.hlfig svg');
+  const o=document.createElement('div');o.className='zmov';o.setAttribute('data-hlscope','');o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label','Espectro ampliado');
+  const dica='Toque num número para ver o trecho da molécula. Arraste para os lados para ver o espectro todo.';
+  o.innerHTML='<div class="zmh"><b>Espectro ampliado</b><button type="button" class="btn zmx">Fechar</button></div>'
+    +(fg?'<figure class="st hlfig zmfig"><div>'+fg.outerHTML+'</div><div class="hlro" data-dica="'+dica+'">'+dica+'</div></figure>':'<div class="hlro" data-dica="'+dica+'">'+dica+'</div>')
+    +'<div class="zmsc"><div class="zmsp">'+svg.outerHTML+'</div></div>';
+  const close=()=>{document.removeEventListener('keydown',kd);o.remove();document.body.classList.remove('zmopen');btn.focus();};
+  const kd=e=>{if(e.key==='Escape')close();};
+  document.addEventListener('keydown',kd);
+  o.querySelector('.zmx').onclick=close;
+  document.body.classList.add('zmopen');document.body.appendChild(o);o.querySelector('.zmx').focus();
+}
