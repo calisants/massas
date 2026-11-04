@@ -361,6 +361,7 @@ def cas_ok(c):
     d = c.replace("-", ""); body, chk = d[:-1], int(d[-1])
     return sum((i+1)*int(ch) for i, ch in enumerate(reversed(body))) % 10 == chk
 
+from compostos_sdbs import SDBSMS
 from compostos_pub import PUB, DIV, DATA as PUB_DATA
 
 def build_comp(svgfn, EXD):
@@ -382,6 +383,11 @@ def build_comp(svgfn, EXD):
             d["ms"] = MSK[nome]; d["msv"] = 0
         else:
             d["ms"] = None; d["msv"] = 0
+        if nome in SDBSMS:
+            no, msid, pk = SDBSMS[nome]
+            d["sdbs"] = no; d["msid"] = msid
+            d["msi"] = [list(p) for p in sorted(pk, key=lambda p: -p[0])]
+            d["ms"] = [p[0] for p in sorted(pk, key=lambda p: -p[0])]; d["msv"] = 2
         pb = PUB.get(nome, {})
         d["cid"] = pb.get("cid")
         d["pfs"] = "c" if "pf" in pb else ("d" if "pf" in DIV.get(nome, []) else "")

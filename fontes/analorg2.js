@@ -57,7 +57,7 @@ function rmDraw(){const c=COMP[+$('#rmSel').value||COMP.findIndex(x=>x.n===$('#r
 function openMS(n){const e=EX.find(x=>x.n===n);if(!e)return;curEx=n;pkSel=null;$('#inM').value=e.M;$('#inP').value=e.peaks.filter(p=>p!==e.M).join(', ');buildChips();analyze();anStage(true);go('p-an');$('#an-in').hidden=true;$('#an-res').hidden=false;}
 function cfDraw(i){
   const c=COMP[i],hoje=new Date().toLocaleDateString('pt-BR');
-  const sd=c.ex&&typeof INTS!=='undefined'&&INTS[c.ex]?INTS[c.ex].sdbs:null;
+  const sd=c.sdbs||(c.ex&&typeof INTS!=='undefined'&&INTS[c.ex]?INTS[c.ex].sdbs:null);
   let h='<h2 class="scr">'+esc(c.n)+'</h2>'+(c.a.length?'<p class="scrsub">Também: '+c.a.map(esc).join(', ')+'</p>':'');
   h+='<div class="cfh"><figure class="st"><div>'+c.s+'</div><figcaption>'+fmt(c.f)+'</figcaption></figure><table class="cft"><tbody>'
    +'<tr><th>Fórmula molecular</th><td>'+fmt(c.f)+'</td></tr>'
@@ -81,7 +81,8 @@ function cfDraw(i){
    +'<p class="srcl" style="margin-top:6px">As faixas vêm do grupo funcional (não é o espectro medido). Bandas de ordem "chave" são as que decidem a identificação.</p></details>';
   // MS
   h+='<details class="sec"><summary>Espectrometria de massas</summary><p>M = <b>'+c.M+'</b> ('+(c.M%2?'ímpar: número ímpar de N':'par: zero ou número par de N')+').</p>';
-  if(c.ms){h+='<p>'+c.ms.map((p,k)=>'<span class="pk'+(p===c.M?' base':'')+'">'+p+'</span>').join('')+'</p><p class="srcl">'+srcTag(c.msv,c.msv?'conferido (lousa e SDBS)':'sem fonte conferida')+' '+(c.msv?'Picos do exercício do app, com mecanismo.':'Picos típicos de EI 70 eV escritos por mim; confirme no SDBS.')+'</p>';}
+  if(c.ms){const tp=c.msi?c.msi.map(p=>'<span class="pk'+(p[0]===c.M?' base':'')+'">'+p[0]+' <small>'+p[1]+'%</small></span>').join(''):c.ms.map(p=>'<span class="pk'+(p===c.M?' base':'')+'">'+p+'</span>').join('');
+    h+='<p>'+tp+'</p><p class="srcl">'+srcTag(c.msv>0,c.msv===2?'conferido no SDBS':(c.msv?'conferido (lousa e SDBS)':'sem fonte conferida'))+' '+(c.msv===2?'Picos do espectro SDBS No. '+c.sdbs+' ('+esc(c.msid)+'), lidos do gráfico em 04/11/2026; a intensidade relativa tem erro de uns 3 pontos.':c.msv?'Picos do exercício do app, com mecanismo.':'Picos típicos de EI 70 eV escritos por mim; confirme no SDBS.')+'</p>';}
   else h+='<p class="empty">Sem picos cadastrados.</p>';
   if(nCl(c.f))h+='<p class="srcl">Contém Cl: aparece M+2 (isótopo ³⁷Cl). Com 1 Cl, M : M+2 é cerca de 3 : 1.</p>';
   if(c.ex)h+='<button class="btn" type="button" data-ms="'+c.ex+'">Ver os mecanismos de fragmentação</button>';
