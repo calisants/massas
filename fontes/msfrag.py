@@ -224,7 +224,21 @@ def hetero_alqueno(m, pai, picos):
             out.setdefault(mz, []).append(dict(item=_item(mz, pai["item"]["mz"], formula(m, keep, 1), nf, "um H do grupo ligado ao %s passa para ele e sai um alceno (%s)" % (x.GetSymbol(), nf), 5, mm), ion=keep, o=None))
     return out
 
+def _els(f):
+    return set(re.findall(r"[A-Z][a-z]?", f.translate(str.maketrans("₀₁₂₃₄₅₆₇₈₉", "0123456789"))))
+
+def coerente(m, x):
+    """Barreira final: só passa o que usa átomos que o composto tem (ex.: sem N ou S se a molécula não tem)."""
+    perm = {a.GetSymbol() for a in m.GetAtoms()} | {"H"}
+    return _els(x["f"]) <= perm and _els(x["n"]) <= perm
+
 def propor(m, M, pk):
+    itens, svgs, sem = _propor(m, M, pk)
+    ok = [x for x in itens if coerente(m, x)]
+    sem = sem + [x["mz"] for x in itens if not coerente(m, x)]
+    return ok, svgs, sem
+
+def _propor(m, M, pk):
     """pk: [(mz, int)]. Devolve (lista de itens para o app, {chave: svg})."""
     picos = {p[0] for p in pk}; inten = dict(pk)
     todas = {}
