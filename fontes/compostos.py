@@ -654,6 +654,8 @@ def liga_h_c(m, h1, c13):
 from compostos_sdbs import SDBSMS, IRMEIO, C13OBS, H1OBS
 from compostos_pub import PUB, DIV, DATA as PUB_DATA
 
+MSFS = {}
+MSFS_ID = {}
 def build_comp(svgfn, EXD):
     exm = {e["n"]: e for e in EXD}
     out = []
@@ -683,6 +685,15 @@ def build_comp(svgfn, EXD):
             d["ms"] = [p[0] for p in sorted(pk, key=lambda p: -p[0])]; d["msv"] = 2
         if d.get("ms"):
             d["msat"] = {str(k): [v[0], v[1]] for k, v in ms_atoms(m, d["M"], set(d["ms"])).items()}
+        if nome in SDBSMS and not exn:
+            import msfrag
+            its, sv, sem = msfrag.propor(m, d["M"], SDBSMS[nome][2])
+            ids = {}
+            for k, v in sv.items():
+                if k not in MSFS_ID: MSFS_ID[k] = str(len(MSFS_ID)); MSFS[MSFS_ID[k]] = v
+                ids[k] = MSFS_ID[k]
+            d["msf"] = [dict(mz=x["mz"], p=x["p"], f=x["f"], n=x["n"], de=x["de"], r=x["r"], nv=x["nv"], k=ids.get(x["k"], ""), alt=x["alt"]) for x in its]
+            d["msfs"] = sem
         if nome in C13OBS: d["c13m"] = C13OBS[nome]
         if nome in H1OBS: d["h1m"] = list(H1OBS[nome])
         pb = PUB.get(nome, {})

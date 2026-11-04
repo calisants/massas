@@ -22,6 +22,7 @@ function stInit(){
 /* ---------- Novidades e aviso de atualização ---------- */
 const NOVID=[
  {v:0,d:'04/11/2026',t:[
+  'MS: a ficha de 70 compostos agora traz "Fragmentos propostos": a estrutura do íon de cada pico, o que ele perdeu e a regra (clivagem α, benzílica, McLafferty, perda de CO). É proposta por regras, com a massa conferida contra o pico do SDBS; não é o mecanismo medido. Os picos que nenhuma regra simples explica ficam listados como sem proposta.',
   'Abas: Início, Compostos, Ensaios e Espectros. Em Espectros ficam IV, Massas e RMN, e o antigo "Mais" foi para o Início. As páginas de cada assunto têm o mesmo layout: título, resumo e uma faixa de seções, como na aba RMN.',
   'RMN: nova aba com os quatro passos num espectro real (acetato de etila, SDBS), régua do deslocamento, laboratório de acoplamento, calculadoras de Hz e ppm, integração e GDH, macetes e dois problemas resolvidos.',
   'Toque num pico, banda ou sinal (IV, massas e RMN) e o trecho da molécula fica colorido. Os espectros simulados ganharam o botão Ampliar, e a estrutura do IV ficou do mesmo tamanho da do RMN e centralizada.',

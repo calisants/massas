@@ -56,6 +56,14 @@ function rmDraw(){const c=COMP[+$('#rmSel').value||COMP.findIndex(x=>x.n===$('#r
 /* ---------- ficha do composto ---------- */
 function openMS(n){const e=EX.find(x=>x.n===n);if(!e)return;curEx=n;pkSel=null;$('#inM').value=e.M;$('#inP').value=e.peaks.filter(p=>p!==e.M).join(', ');buildChips();analyze();anStage(true);go('p-an');$('#an-in').hidden=true;$('#an-res').hidden=false;}
 let CFI=null;
+function msFrag(c){
+  if(!c.msf||!c.msf.length)return '';
+  const nv=x=>x>=5?'Provável':x>=3?'Possível':x>0?'Pouco estável, mas possível':'Só pela massa';
+  let h='<h3 style="margin:14px 0 4px">Fragmentos propostos</h3><p class="hint">Proposta por regras de fragmentação (clivagem α, benzílica, McLafferty, perda de CO). A massa de cada íon confere com o pico do SDBS, mas <b>não é o mecanismo medido</b>: dois caminhos diferentes podem dar o mesmo m/z.</p><div class="msfl">';
+  h+=c.msf.map(x=>'<div class="msfc"><div class="msfh"><b class="mono">m/z '+x.mz+'</b> <small>'+x.p+'%</small>'+(x.f?'<span class="msff">'+x.f+'</span>':'')+'</div><div class="msfb">'+(x.k?'<figure class="st">'+MSFS[x.k]+'</figure>':'')
+    +'<div><span>Vem de m/z '+x.de+', perdendo <b>'+esc(x.n)+'</b></span><br><small>'+esc(x.r)+'</small><br><small class="msfn">'+nv(x.nv)+(x.alt?'. Outro caminho dá o mesmo m/z.':'')+'</small></div></div></div>').join('')+'</div>';
+  if(c.msfs&&c.msfs.length)h+='<p class="hint">Sem proposta para m/z '+c.msfs.join(', ')+': nenhuma regra simples fecha a massa (rearranjos mais complexos ou abertura de anel).</p>';
+  return h;}
 function msSpec(c){
   const W=340,H=165,L=30,R=8,T=16,B=40,pk=c.msi,x0=0,x1=Math.ceil((c.M+8)/10)*10,X=v=>L+(v-x0)/(x1-x0)*(W-L-R),Y=v=>T+(100-v)/100*(H-T-B);
   let g='';
@@ -104,6 +112,7 @@ function cfDraw(i){
     const tp=c.msi?c.msi.map(p=>'<span class="pk'+(p[0]===c.M?' base':'')+'"'+mat(p[0])+'>'+p[0]+' <small>'+p[1]+'%</small></span>').join(''):c.ms.map(p=>'<span class="pk'+(p===c.M?' base':'')+'"'+mat(p)+'>'+p+'</span>').join('');
     h+=(c.msi?'<div class="nmrwrap">'+msSpec(c)+'<button class="zbtn" type="button" data-zoom>Ampliar</button></div>':'')+'<p>'+tp+'</p>'+(Object.keys(ma).length?'<p class="srcl">Os picos sublinhados têm um trecho da molécula associado: toque para ver. Só marquei os fragmentos que a regra do livro atribui sem ambiguidade (M⁺·, CH₃⁺, C₆H₅⁺, C₇H₇⁺, C₆H₅CO⁺, CH₃CO⁺, CH₂=OH⁺, CH₂=NH₂⁺). Os demais picos ficam sem destaque porque eu não tenho fonte para dizer qual parte da molécula os origina.</p>':'')+'<p class="srcl">'+srcTag(c.msv>0,c.msv===2?'Conferido: SDBS':(c.msv?'Conferido: lousa e SDBS':'Sem fonte conferida'))+' '+(c.msv===2?'Picos do espectro SDBS No. '+c.sdbs+' ('+esc(c.msid)+'), lidos do gráfico em 04/11/2026; a intensidade relativa tem erro de uns 3 pontos.':c.msv?'Picos do exercício do app, com mecanismo.':'Picos típicos de EI 70 eV escritos por mim; confirme no SDBS.')+'</p>';}
   else h+='<p class="empty">Sem picos cadastrados.</p>';
+  h+=msFrag(c);
   if(nCl(c.f))h+='<p class="srcl">Contém Cl: aparece M+2 (isótopo ³⁷Cl). Com 1 Cl, M : M+2 é cerca de 3 : 1.</p>';
   if(c.ex)h+='<button class="btn" type="button" data-ms="'+c.ex+'">Ver os mecanismos de fragmentação</button>';
   h+='</details>';
