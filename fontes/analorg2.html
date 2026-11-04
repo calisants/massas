@@ -1,0 +1,173 @@
+  <!-- ===== Analorg v2 ===== -->
+  <section id="p-cp" role="tabpanel" aria-labelledby="t-cp" hidden>
+    <h2 class="scr">Compostos</h2>
+    <p class="scrsub">Uma ficha por composto: estrutura, fórmula, grupo de solubilidade, cor, estado, PF e PE, e o que esperar em IV, MS e RMN.</p>
+    <div class="cpq">
+      <input type="search" id="cpQ" placeholder="Buscar por nome, fórmula ou CAS" aria-label="Buscar composto" autocomplete="off">
+      <label>Estado<select id="cpE"><option value="">Todos</option><option value="líquido">Líquido</option><option value="sólido">Sólido</option></select></label>
+      <label>Grupo de solubilidade<select id="cpG"><option value="">Todos</option></select></label>
+    </div>
+    <p class="hint" id="cpN"></p>
+    <div class="cpgrid" id="cpL"></div>
+  </section>
+
+  <section id="p-cf" role="region" aria-label="Ficha do composto" hidden>
+    <button class="back" type="button" data-go="p-cp">← Compostos</button>
+    <div id="cfB"></div>
+  </section>
+
+  <section id="p-ic" role="tabpanel" aria-labelledby="t-ic" hidden>
+    <h2 class="scr">Identificação do Composto</h2>
+    <p class="scrsub">Preencha o que você mediu, mesmo que seja pouco. O app compara com os compostos do banco e mostra os mais compatíveis, com uma porcentagem.</p>
+    <div class="icwarn">A porcentagem é a <b>compatibilidade entre os compostos do banco do app</b>, não uma probabilidade real. Se o seu composto não está na lista, o app mostra só o mais parecido. Quanto mais dados você der, mais separados ficam os candidatos.</div>
+    <div class="icf"><h3>1. Aspecto e solubilidade</h3>
+      <div class="icg">
+        <label>Estado (25 °C)<select id="icEst"><option value="">não sei</option><option value="líquido">líquido</option><option value="sólido">sólido</option></select></label>
+        <label>Cor<select id="icCor"><option value="">não sei</option><option value="inc">incolor ou branco</option><option value="col">amarelo ou marrom</option></select></label>
+        <label>Grupo de solubilidade<select id="icG"><option value="">não testei</option></select></label>
+      </div></div>
+    <div class="icf"><h3>2. PF, PE e elementos</h3>
+      <div class="icg">
+        <label>PF (°C)<input type="number" id="icPF" inputmode="decimal" step="any"></label>
+        <label>PE (°C)<input type="number" id="icPE" inputmode="decimal" step="any"></label>
+        <label>Precisão da medida<select id="icTol"><option value="2">±2 °C</option><option value="5" selected>±5 °C</option><option value="10">±10 °C</option></select></label>
+        <label>Tem N?<select id="icN"><option value="">não testei</option><option value="s">sim</option><option value="n">não</option></select></label>
+        <label>Tem halogênio?<select id="icX"><option value="">não testei</option><option value="s">sim</option><option value="n">não</option></select></label>
+        <label>Tem S?<select id="icS"><option value="">não testei</option><option value="s">sim</option><option value="n">não</option></select></label>
+      </div></div>
+    <div class="icf"><h3>3. Infravermelho</h3>
+      <label>Números de onda das bandas que você viu (cm⁻¹), separados por vírgula<input type="text" id="icIV" placeholder="ex.: 3350, 2960, 1715" autocomplete="off"></label>
+      <p class="hint" style="margin:6px 0 0">Bandas acima de 1500 cm⁻¹ pesam mais. Banco de bandas esperadas por grupo funcional: aba IV.</p></div>
+    <div class="icf"><h3>4. Espectrometria de massas</h3>
+      <div class="icg">
+        <label>M (íon molecular)<input type="number" id="icM" inputmode="numeric" min="1" max="999"></label>
+        <label style="grid-column:span 2">Outros picos (m/z)<input type="text" id="icP" placeholder="ex.: 43, 15" autocomplete="off"></label>
+      </div></div>
+    <div class="icf"><h3>5. RMN</h3>
+      <div class="icg">
+        <label>Nº de sinais de ¹H<input type="number" id="icH" inputmode="numeric" min="1" max="30"></label>
+        <label>Nº de sinais de ¹³C<input type="number" id="icC" inputmode="numeric" min="1" max="30"></label>
+        <label style="grid-column:span 2">Deslocamentos de ¹H (ppm)<input type="text" id="icHd" placeholder="ex.: 2.1" autocomplete="off"></label>
+      </div></div>
+    <div class="row" style="margin:6px 0 0">
+      <button class="btn" type="button" id="icGo">Identificar</button>
+      <button class="btn ghost" type="button" id="icClr">Limpar</button>
+      <label>Só para ver como funciona: preencher com os dados de<select id="icEx"><option value="">escolha</option></select></label>
+    </div>
+    <div id="icOut" class="icres" aria-live="polite"></div>
+  </section>
+
+  <section id="p-sp" role="tabpanel" aria-labelledby="t-sp" hidden>
+    <h2 class="scr">Espectros</h2>
+    <p class="scrsub">Os três métodos para descobrir a estrutura de um composto.</p>
+    <div class="menu">
+      <button class="mi" type="button" data-go="p-iv"><b>Infravermelho (IV)</b><span>Bandas por composto e por número de onda, guia por região.</span></button>
+      <button class="mi" type="button" data-go="p-an"><b>Espectrometria de massas (MS)</b><span>Picos, perdas, mecanismos de fragmentação e treino.</span></button>
+      <button class="mi" type="button" data-go="p-rm"><b>RMN de ¹H e ¹³C</b><span>Deslocamento, integração, multiplicidade e quantos sinais esperar.</span></button>
+      <button class="mi" type="button" data-go="p-ic"><b>Identificação do Composto</b><span>Junta tudo o que você mediu e mostra os compostos mais compatíveis.</span></button>
+    </div>
+    <p class="hint" style="margin-top:14px">Espectros reais: <a href="https://sdbs.db.aist.go.jp/" target="_blank" rel="noopener">SDBS (AIST)</a>. Cada ficha de composto tem o botão para abrir lá.</p>
+  </section>
+
+  <section id="p-rm" role="region" aria-label="RMN" hidden>
+    <button class="back" type="button" data-go="p-sp">← Espectros</button>
+    <h2 class="scr">RMN de ¹H e ¹³C</h2>
+    <p class="scrsub">Cada sinal é um grupo de núcleos equivalentes. Quatro perguntas: quantos sinais, onde, quanto vale cada um e como se divide.</p>
+    <details class="sec" open><summary>Como ler um espectro de ¹H</summary>
+      <p><b>1. Quantos sinais?</b> Um sinal por tipo de H. H que a simetria troca de lugar são equivalentes e dão o mesmo sinal. Etanol (CH₃CH₂OH): 3 sinais. Éter dietílico: 2.</p>
+      <p><b>2. Onde? (deslocamento, δ em ppm)</b> Quanto mais eletronegativo o vizinho, mais à esquerda (δ maior). O TMS é o zero.</p>
+      <p><b>3. Quanto vale? (integração)</b> A área do sinal é proporcional ao número de H. CH₃ vale 3, CH₂ vale 2.</p>
+      <p><b>4. Como se divide? (multiplicidade)</b> Regra n+1: n H vizinhos (no carbono ao lado) dividem o sinal em n+1 linhas. Um CH₃ ao lado de um CH₂ vira tripleto.</p>
+      <div class="tbl"><table class="obt"><thead><tr><th>H vizinhos (n)</th><th>Sinal</th><th>Proporção das linhas</th></tr></thead><tbody>
+        <tr><td>0</td><td>singleto (s)</td><td>1</td></tr><tr><td>1</td><td>dubleto (d)</td><td>1 : 1</td></tr><tr><td>2</td><td>tripleto (t)</td><td>1 : 2 : 1</td></tr>
+        <tr><td>3</td><td>quarteto (q)</td><td>1 : 3 : 3 : 1</td></tr><tr><td>4</td><td>quinteto</td><td>1 : 4 : 6 : 4 : 1</td></tr><tr><td>5</td><td>sexteto</td><td>1 : 5 : 10 : 10 : 5 : 1</td></tr></tbody></table></div>
+      <p class="srcl" style="margin-top:6px">O H de O–H e N–H costuma não acoplar (troca rápida) e sai como singleto largo. Agitar com D₂O faz esse sinal sumir.</p>
+    </details>
+    <details class="sec"><summary>Tabela de deslocamentos de ¹H (ppm)</summary>
+      <div class="tbl"><table class="obt"><thead><tr><th>Tipo de H</th><th>δ (ppm)</th></tr></thead><tbody>
+        <tr><td>CH₃ alifático</td><td>0,8–1,2</td></tr><tr><td>CH₂ alifático</td><td>1,2–1,7</td></tr><tr><td>CH alifático</td><td>1,4–2,0</td></tr>
+        <tr><td>C–H alílico</td><td>1,6–2,3</td></tr><tr><td>C–H α à carbonila</td><td>2,0–2,8</td></tr><tr><td>C–H benzílico</td><td>2,2–3,0</td></tr>
+        <tr><td>≡C–H</td><td>2,0–3,1</td></tr><tr><td>C–H ligado a N</td><td>2,2–3,2</td></tr><tr><td>C–H ligado a halogênio</td><td>3,0–4,4</td></tr>
+        <tr><td>C–H ligado a O</td><td>3,2–4,3</td></tr><tr><td>H de alceno</td><td>4,5–6,5</td></tr><tr><td>H aromático</td><td>6,5–8,0</td></tr>
+        <tr><td>H de aldeído</td><td>9,3–10,1</td></tr><tr><td>O–H de ácido carboxílico</td><td>10–13</td></tr>
+        <tr><td>O–H de álcool</td><td>1–5,5 (varia)</td></tr><tr><td>O–H de fenol</td><td>4–8 (varia)</td></tr><tr><td>N–H de amina</td><td>0,5–3 (varia)</td></tr><tr><td>N–H de amida</td><td>5–8,5</td></tr></tbody></table></div>
+      <p class="srcl" style="margin-top:6px"><b>Fonte:</b> faixas típicas de tabelas de livro-texto, escritas por mim, sem fonte conferida nesta sessão. Valores reais mudam com solvente, concentração e vizinhança.</p>
+    </details>
+    <details class="sec"><summary>¹³C: o que muda</summary>
+      <p>O espectro costuma ser desacoplado de ¹H: cada sinal é um singleto e a <b>integração não vale</b>. Conta-se um sinal por tipo de carbono (equivalentes pela simetria dão um só).</p>
+      <div class="tbl"><table class="obt"><thead><tr><th>Tipo de C</th><th>δ (ppm)</th></tr></thead><tbody>
+        <tr><td>CH₃ e C sp³ alifático</td><td>8–55</td></tr><tr><td>C sp³ ligado a N</td><td>30–65</td></tr><tr><td>C sp³ ligado a O</td><td>50–90</td></tr><tr><td>C≡C</td><td>65–90</td></tr>
+        <tr><td>C≡N</td><td>115–125</td></tr><tr><td>C de alceno</td><td>100–150</td></tr><tr><td>C aromático</td><td>110–165</td></tr>
+        <tr><td>C=O de éster, ácido e amida</td><td>160–185</td></tr><tr><td>C=O de aldeído</td><td>190–205</td></tr><tr><td>C=O de cetona</td><td>195–220</td></tr></tbody></table></div>
+      <p class="srcl" style="margin-top:6px"><b>Fonte:</b> faixas típicas de tabelas de livro-texto, escritas por mim, sem fonte conferida nesta sessão. Solvente CDCl₃: ¹H em 7,26 ppm (resíduo) e ¹³C em 77,2 ppm (tripleto).</p>
+    </details>
+    <details class="sec"><summary>Teoria: por que o núcleo "aparece" no RMN</summary>
+      <p><b>Spin.</b> Núcleos com spin I = 1/2 (¹H, ¹³C, ¹⁹F, ³¹P, ¹⁵N) dão sinal fácil. Núcleos com I = 0 (como ¹²C) não dão sinal. Núcleos com I ≥ 1 têm um momento de quadrupolo que atrapalha o sinal.</p>
+      <p><b>Dois níveis.</b> Número de orientações = 2I + 1. Para I = 1/2 são duas: a favor do campo B₀ (α, energia menor) e contra (β, energia maior). Há um pequeno excesso de núcleos em α (distribuição de Boltzmann). Quanto maior o B₀, maior a diferença de energia ΔE.</p>
+      <p><b>Ressonância.</b> A radiofrequência aplicada só é absorvida quando é igual à frequência de precessão do núcleo (frequência de Larmor). Exemplo do material de aula: para ¹H, 100 MHz corresponde a um campo de 2,35 T. Outros pares frequência/campo na mesma razão valem igual (por isso se fala em aparelho de 300, 400, 600 MHz).</p>
+      <p><b>Do sinal ao espectro.</b> Depois do pulso, a magnetização volta ao equilíbrio (relaxação) e a bobina capta um sinal que decai com o tempo, o FID. A transformada de Fourier converte o FID no espectro de RMN.</p>
+      <p class="srcl"><b>Fonte:</b> resumo meu dos slides "Análise Orgânica II, RMN, 1ª parte" (Prof. Jeronimo, IFRJ Nilópolis). As figuras dos slides não foram copiadas.</p>
+    </details>
+    <details class="sec"><summary>Acoplamento, J, integração e equivalência</summary>
+      <p><b>Grupo de H</b> = os H presos ao mesmo carbono. O acoplamento acontece entre grupos separados por três ligações (H–C–C–H) e é o que divide o sinal em dubleto, tripleto etc.</p>
+      <p><b>J (constante de acoplamento)</b> é a distância, em Hz, entre as linhas de um mesmo sinal. Não depende do aparelho. Exemplo dos slides: J = 7,0 Hz num grupo etila.</p>
+      <p><b>Integração.</b> A área de cada sinal dá a proporção de H. Com a proporção e o total de H da fórmula, calcula-se quantos H há em cada sinal.</p>
+      <p><b>Deslocamento químico</b> é a distância, em ppm, do sinal até o TMS (zero). Anel aromático desblinda os H presos a ele por causa da corrente eletrônica do anel, por isso saem em 6,5 a 8 ppm.</p>
+      <p><b>Sinais próximos.</b> Quando dois H acoplados têm deslocamentos muito parecidos, o sinal deixa de seguir a regra n+1: os dubletos se inclinam em direção um ao outro ("efeito de telhado") e, no limite, viram um só sinal.</p>
+      <p><b>Equivalência dos H de um CH₂.</b></p>
+      <div class="tbl"><table class="obt"><thead><tr><th>Tipo</th><th>Como saber</th><th>Sinal</th></tr></thead><tbody>
+        <tr><td>Homotópicos</td><td>Trocar um deles por D dá a mesma molécula (há eixo de simetria)</td><td>Mesmo δ sempre</td></tr>
+        <tr><td>Enantiotópicos</td><td>Trocar por D dá enantiômeros (há plano de simetria, sem eixo)</td><td>Mesmo δ em solvente aquiral, δ diferente em solvente quiral</td></tr>
+        <tr><td>Diastereotópicos</td><td>Trocar por D dá diastereoisômeros (por exemplo, há um centro quiral na molécula)</td><td>δ diferentes, mesmo em solvente aquiral</td></tr></tbody></table></div>
+      <p style="margin-top:8px">Os três H de um CH₃ são sempre homotópicos, porque o grupo gira rápido em torno da ligação C–C. H geminais diastereotópicos acoplam entre si e podem ter multiplicidades diferentes.</p>
+      <p><b>Exemplo: estireno.</b> Os três H do vinil formam um sistema de três spins (AMX), cada um um dubleto de dubletos, porque cada um acopla com os outros dois com J diferentes. Acoplamento trans (através da dupla) é o maior, cerca de 18 Hz; cis cerca de 11 Hz; geminal cerca de 1 Hz. Os H aromáticos (δ 7,2 a 7,5) saem como multipletos mal definidos e em geral não são interpretados em detalhe.</p>
+      <p class="srcl"><b>Fonte:</b> resumo meu dos slides de RMN, 2ª a 4ª partes (Prof. Jeronimo, IFRJ). Nos slides, o δ do H<sub>X</sub> do estireno aparece como 6,73 no texto e como 6,37 na lista final; confira antes de citar. Os espectros de exemplo dos slides (etilbenzeno, cumeno, acetato de benzila, 1-nitropropano, N-metilcarbamato de etila) são imagens e não estão no app: o app mostra a estimativa de cada composto na ficha.</p>
+    </details>
+    <details class="sec" open><summary>Ver o que esperar de um composto</summary>
+      <label style="max-width:360px">Composto<select id="rmSel"></select></label>
+      <div id="rmOut"></div>
+    </details>
+  </section>
+
+  <section id="p-ob" role="region" aria-label="Orgânica Básica" hidden>
+    <button class="back" type="button" data-go="p-in">← Início</button>
+    <h2 class="scr">Orgânica Básica</h2>
+    <p class="scrsub">O que você precisa saber antes de interpretar ensaios e espectros.</p>
+    <p class="srcl" style="margin:0 0 12px"><b>Fonte:</b> escrito por mim a partir de conteúdo de livro-texto, sem fonte conferida nesta sessão.</p>
+    <details class="sec" open><summary>Grupos funcionais e nomes</summary>
+      <div class="tbl"><table class="obt"><thead><tr><th>Grupo</th><th>Estrutura</th><th>Exemplo</th><th>Nome</th></tr></thead><tbody>
+        <tr><td>Alcano</td><td>C–C</td><td>CH₃CH₂CH₃</td><td>-ano</td></tr><tr><td>Alceno</td><td>C=C</td><td>CH₂=CH₂</td><td>-eno</td></tr><tr><td>Alcino</td><td>C≡C</td><td>HC≡CH</td><td>-ino</td></tr>
+        <tr><td>Haleto de alquila</td><td>R–X</td><td>CH₃Cl</td><td>cloro-, bromo-</td></tr><tr><td>Álcool</td><td>R–OH</td><td>CH₃CH₂OH</td><td>-ol</td></tr><tr><td>Fenol</td><td>Ar–OH</td><td>C₆H₅OH</td><td>fenol</td></tr>
+        <tr><td>Éter</td><td>R–O–R</td><td>CH₃OCH₃</td><td>-óxi- / éter</td></tr><tr><td>Aldeído</td><td>R–CHO</td><td>CH₃CHO</td><td>-al</td></tr><tr><td>Cetona</td><td>R–CO–R</td><td>CH₃COCH₃</td><td>-ona</td></tr>
+        <tr><td>Ácido carboxílico</td><td>R–COOH</td><td>CH₃COOH</td><td>ácido -óico</td></tr><tr><td>Éster</td><td>R–COO–R</td><td>CH₃COOCH₂CH₃</td><td>-oato de -ila</td></tr><tr><td>Amida</td><td>R–CONH₂</td><td>CH₃CONH₂</td><td>-amida</td></tr>
+        <tr><td>Amina</td><td>R–NH₂</td><td>CH₃CH₂NH₂</td><td>-amina</td></tr><tr><td>Nitrila</td><td>R–C≡N</td><td>CH₃CN</td><td>-nitrila</td></tr><tr><td>Nitro</td><td>R–NO₂</td><td>C₆H₅NO₂</td><td>nitro-</td></tr></tbody></table></div>
+      <p style="margin-top:8px">Prefixos da cadeia principal: 1 met, 2 et, 3 prop, 4 but, 5 pent, 6 hex, 7 hept, 8 oct, 9 non, 10 dec.</p>
+    </details>
+    <details class="sec"><summary>Hibridização do carbono e o que ela muda nos espectros</summary>
+      <div class="tbl"><table class="obt"><thead><tr><th>C</th><th>Geometria</th><th>C–H no IV</th><th>H no RMN</th></tr></thead><tbody>
+        <tr><td>sp³</td><td>tetraédrica, 109,5°</td><td>2960–2850 cm⁻¹</td><td>0,8–2 ppm</td></tr><tr><td>sp²</td><td>trigonal plana, 120°</td><td>3100–3000 cm⁻¹</td><td>4,5–8 ppm</td></tr><tr><td>sp</td><td>linear, 180°</td><td>~3300 cm⁻¹</td><td>2–3 ppm</td></tr></tbody></table></div>
+      <p style="margin-top:8px">Mais caráter s (sp 50%, sp² 33%, sp³ 25%) deixa a ligação mais curta e mais forte, e a banda de IV sobe de número de onda.</p>
+    </details>
+    <details class="sec"><summary>GDH: grau de deficiência de hidrogênio</summary>
+      <p>Conta anéis e ligações π. Para C<sub>c</sub>H<sub>h</sub>N<sub>n</sub>X<sub>x</sub>O<sub>o</sub>: <b>GDH = (2c + 2 + n − h − x) / 2</b>. O oxigênio e o enxofre não entram na conta.</p>
+      <p>0 = só ligações simples e sem anel. 1 = uma ligação dupla ou um anel. 4 = anel benzênico (3 duplas + 1 anel). 5 = benzeno com um C=O ou C=C.</p>
+      <div class="row"><label>Fórmula molecular<input type="text" id="gdhF" placeholder="ex.: C7H6O" autocomplete="off" style="width:170px"></label><button class="btn" type="button" id="gdhGo">Calcular</button></div>
+      <div id="gdhOut" class="mhint"></div>
+    </details>
+    <details class="sec"><summary>Lewis e carga formal</summary>
+      <p><b>Carga formal = (e⁻ de valência) − (e⁻ de pares livres) − (nº de ligações).</b> A soma das cargas formais é a carga da espécie.</p>
+      <p>Exemplos: N em NH₄⁺ tem 5 − 0 − 4 = +1. O em R–O⁻ tem 6 − 6 − 1 = −1. No grupo nitro, N = +1 e um O = −1 (carga total zero). C no carbocátion CH₃⁺ tem 4 − 0 − 3 = +1.</p>
+      <p>Regra prática: cada átomo quer o octeto (H quer 2). C faz 4 ligações, N faz 3, O faz 2, halogênio faz 1.</p>
+    </details>
+    <details class="sec"><summary>Acidez, basicidade e solubilidade</summary>
+      <div class="tbl"><table class="obt"><thead><tr><th>Espécie</th><th>pKa aproximado</th></tr></thead><tbody>
+        <tr><td>Ácido carboxílico (acético)</td><td>4,8</td></tr><tr><td>Ácido benzoico</td><td>4,2</td></tr><tr><td>Fenol</td><td>10</td></tr><tr><td>Água</td><td>15,7</td></tr><tr><td>Álcool (etanol)</td><td>16</td></tr><tr><td>Cetona (H α)</td><td>~20</td></tr><tr><td>Amônio de amina alifática (R–NH₃⁺)</td><td>~10–11</td></tr><tr><td>Anilínio (C₆H₅NH₃⁺)</td><td>4,6</td></tr><tr><td>Piridínio</td><td>5,2</td></tr></tbody></table></div>
+      <p style="margin-top:8px">Ácido carboxílico (pKa ~5) reage com NaHCO₃ (o H₂CO₃ tem pKa ~6,4): dissolve em NaHCO₃ e NaOH (grupo A₁). Fenol (pKa ~10) só reage com NaOH (grupo A₂). Amina reage com HCl e dissolve (grupo B). É isso que o <button class="back" style="display:inline;margin:0" data-go="p-so">fluxograma de solubilidade</button> usa.</p>
+    </details>
+    <details class="sec"><summary>Forças intermoleculares: PF, PE e solubilidade</summary>
+      <p>Da mais fraca para a mais forte: dispersão de London, dipolo-dipolo, ligação de hidrogênio. Quanto mais forte e mais numerosa, maior o PE (e em geral o PF).</p>
+      <p>Exemplos: etano (−89 °C de PE) &lt; etanol (78 °C), porque o etanol faz ligação de hidrogênio. Dentro de uma família, o PE sobe com a massa molar. Cadeia ramificada tem PE menor que a linear. Moléculas simétricas empacotam bem e têm PF mais alto.</p>
+      <p>Semelhante dissolve semelhante: polar dissolve em água, apolar dissolve em hexano. Álcoois de até 5 C são solúveis em água porque a parte polar (OH) ainda compensa a cadeia.</p>
+    </details>
+  </section>
+

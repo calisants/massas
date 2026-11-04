@@ -168,7 +168,7 @@ details dl{margin:10px 0 0;display:grid;gap:8px}details dt{font-weight:600}detai
 h1{font-size:1.15rem}
 .scr{font-size:1.25rem;margin:4px 0 2px}.scrsub{color:var(--muted);margin:0 0 14px;max-width:70ch}
 .bnav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
-.bnav .tab{flex:1;max-width:170px;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:.74rem;padding:7px 4px 8px;margin:0;border:0;border-top:3px solid transparent;color:var(--muted)}
+.bnav .tab{flex:1;min-width:0;max-width:170px;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:.68rem;padding:7px 2px 8px;margin:0;border:0;border-top:3px solid transparent;color:var(--muted)}
 .bnav .tab[aria-selected="true"]{color:var(--keep);border-top-color:var(--keep);border-bottom:0}
 .bnav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .bnav svg .dot{fill:currentColor;stroke:none}
@@ -260,6 +260,7 @@ button.back{border-radius:10px}
 #exchips,#ivchips{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding:2px 16px 8px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
 #exchips .chip,#ivchips .chip{flex:none;white-space:nowrap}
 #p-in .scrsub{margin-bottom:12px}
+/*@@ANALORG2_CSS@@*/
 /* BEGIN temas */
 :root[data-pal="quimica"]{--bg:#F2F7F8;--surface:#FFFFFF;--ink:#142629;--muted:#536B6E;--line:#D0DFE2;--keep:#0A6F7A;--focus:#0A6F7A;--keep-soft:#DDF0F3;--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%230A6F7A' stroke-opacity='.16' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate%2822 24%29 rotate%286%29'%3E%3Cpath d='M-5-13h10M-3-13v9l-9 17a3 3 0 0 0 3 4h18a3 3 0 0 0 3-4l-9-17v-9M-9 8h18'/%3E%3C/g%3E%3Cg transform='translate%2882 18%29 rotate%288%29'%3E%3Ccircle r='3'/%3E%3Ccircle cx='9' cy='-8' r='2'/%3E%3Ccircle cx='-8' cy='-9' r='1.5'/%3E%3C/g%3E%3Cg transform='translate%2852 52%29 rotate%28-20%29'%3E%3Cpath d='M-4-14v22a4 4 0 0 0 8 0v-22M-5-14h10M-4 2h8'/%3E%3C/g%3E%3Cg transform='translate%28104 62%29 rotate%2814%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Cpath d='M0-7l6 3.5v7L0 7l-6-3.5v-7z'/%3E%3C/g%3E%3Cg transform='translate%2820 86%29 rotate%2818%29'%3E%3Ccircle r='3'/%3E%3Ccircle cx='9' cy='-8' r='2'/%3E%3Ccircle cx='-8' cy='-9' r='1.5'/%3E%3C/g%3E%3Cg transform='translate%2874 100%29 rotate%28-2%29'%3E%3Cpath d='M-5-13h10M-3-13v9l-9 17a3 3 0 0 0 3 4h18a3 3 0 0 0 3-4l-9-17v-9M-9 8h18'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"])[data-pal="quimica"]{--bg:#0D1617;--surface:#152123;--ink:#E1EDEF;--muted:#9DB5B8;--line:#2B3D40;--keep:#7BD3E0;--focus:#7BD3E0;--keep-soft:#1C3F45;--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%237BD3E0' stroke-opacity='.2' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate%2822 24%29 rotate%286%29'%3E%3Cpath d='M-5-13h10M-3-13v9l-9 17a3 3 0 0 0 3 4h18a3 3 0 0 0 3-4l-9-17v-9M-9 8h18'/%3E%3C/g%3E%3Cg transform='translate%2882 18%29 rotate%288%29'%3E%3Ccircle r='3'/%3E%3Ccircle cx='9' cy='-8' r='2'/%3E%3Ccircle cx='-8' cy='-9' r='1.5'/%3E%3C/g%3E%3Cg transform='translate%2852 52%29 rotate%28-20%29'%3E%3Cpath d='M-4-14v22a4 4 0 0 0 8 0v-22M-5-14h10M-4 2h8'/%3E%3C/g%3E%3Cg transform='translate%28104 62%29 rotate%2814%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Cpath d='M0-7l6 3.5v7L0 7l-6-3.5v-7z'/%3E%3C/g%3E%3Cg transform='translate%2820 86%29 rotate%2818%29'%3E%3Ccircle r='3'/%3E%3Ccircle cx='9' cy='-8' r='2'/%3E%3Ccircle cx='-8' cy='-9' r='1.5'/%3E%3C/g%3E%3Cg transform='translate%2874 100%29 rotate%28-2%29'%3E%3Cpath d='M-5-13h10M-3-13v9l-9 17a3 3 0 0 0 3 4h18a3 3 0 0 0 3-4l-9-17v-9M-9 8h18'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}}
@@ -292,14 +293,13 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   <!-- ===== Analorg: telas novas ===== -->
   <section id="p-in" role="tabpanel" aria-labelledby="t-in">
     <h2 class="scr">Início</h2>
-    <p class="scrsub">Análise orgânica na ordem em que se faz no laboratório. Toque no passo que quer estudar.</p>
-    <div class="rule" id="inProva" hidden>
-      <h3>Aviso da turma: prova teórica em 3/11, às 9h</h3>
-      <p>Individual e com consulta (aviso do professor no Classroom). Segundo ele, caem: teste de solubilidade, descobrir o composto a partir das propriedades que ele der e análise de IV. O cronograma da disciplina lista &ldquo;infravermelho, ensaio de solubilidade, problemas de análise orgânica&rdquo;.</p>
-      <div class="row" style="margin:8px 0 0">
-        <button class="btn" type="button" data-go="p-id">Resolver um problema</button>
-        <button class="btn ghost" type="button" data-go="p-so">Treinar solubilidade</button>
-      </div>
+    <p class="scrsub">Consulta e estudo de Análise Orgânica: do básico aos espectros. Escolha por onde começar.</p>
+    <div class="menu">
+      <button class="mi" type="button" data-go="p-ob"><b>Orgânica Básica</b><span>Grupos funcionais, hibridização, GDH, Lewis, acidez e forças intermoleculares.</span></button>
+      <button class="mi" type="button" data-go="p-cp"><b>Compostos</b><span>Uma ficha por composto: estrutura, fórmula, solubilidade, cor, estado, PF, PE e espectros esperados.</span></button>
+      <button class="mi" type="button" data-go="p-ic"><b>Identificação do Composto</b><span>Dê o que você mediu (solubilidade, PF, PE, IV, MS, RMN) e veja os compostos mais compatíveis.</span></button>
+      <button class="mi" type="button" data-go="p-en"><b>Análise de Ensaios</b><span>Cor, ignição, PF e PE, solubilidade, análise elementar e problemas resolvidos.</span></button>
+      <button class="mi" type="button" data-go="p-sp"><b>Espectros: IV, MS e RMN</b><span>Bandas, fragmentações, deslocamentos e como ler cada um.</span></button>
     </div>
     <h2>Passos da análise</h2>
     <div class="menu">
@@ -307,37 +307,30 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
       <button class="mi" type="button" data-go="p-so"><b>2. Solubilidade</b><span>Fluxograma, os 10 grupos e treino.</span></button>
       <button class="mi" type="button" data-go="p-el"><b>3. Análise elementar</b><span>Testes para C, H, O, N, S, halogênios e P.</span></button>
       <button class="mi" type="button" data-go="p-iv"><b>4. Infravermelho (IV)</b><span>Bandas por composto e por número de onda.</span></button>
-      <button class="mi" type="button" data-go="p-an"><b>5. Espectrometria de massas</b><span>Exercícios do professor, treino e tabelas.</span></button>
+      <button class="mi" type="button" data-go="p-an"><b>5. Espectrometria de massas</b><span>Exemplos com mecanismo, treino e tabelas.</span></button>
+      <button class="mi" type="button" data-go="p-rm"><b>6. RMN de ¹H e ¹³C</b><span>Quantos sinais, onde aparecem e como se dividem.</span></button>
     </div>
-    <h2>Para a prova</h2>
-    <div class="chips tools">
-      <button class="chip" type="button" data-go="p-id">Identificar um composto</button>
-      <button class="chip" type="button" data-go="p-pb">Problemas resolvidos</button>
-      <button class="chip" type="button" data-go="p-cs">Consulta rápida</button>
-      <button class="chip" type="button" data-go="p-ec">Notação ECGF</button>
-    </div>
-    <details style="margin-top:16px"><summary>Cronograma da disciplina (do Classroom)</summary>
-      <div id="inCron" style="margin-top:10px"></div>
-      <p class="hint">Fonte: imagem &ldquo;Cronograma de AO I (2026-2)&rdquo;, postada pelo professor no Classroom em 6/8. É o plano da disciplina, não um registro do que foi dado.</p>
-    </details>
+    <div class="rule"><h3>SDBS: espectros reais</h3>
+      <p>O SDBS (AIST, Japão) é um banco aberto com IV, MS, RMN e outros espectros medidos de milhares de compostos. Cada ficha de composto aqui tem um botão que leva até ele. Ao usar dados de lá, cite a fonte (o app mostra o texto pronto).</p>
+      <div class="row" style="margin:8px 0 0"><a class="btn" href="https://sdbs.db.aist.go.jp/" target="_blank" rel="noopener">Abrir o SDBS</a></div></div>
   </section>
 
   <section id="p-en" role="tabpanel" aria-labelledby="t-en" hidden>
-    <h2 class="scr">Ensaios</h2>
+    <h2 class="scr">Análise de Ensaios</h2>
     <p class="scrsub">Os ensaios de bancada (via úmida), na ordem em que são feitos.</p>
     <div class="menu">
       <button class="mi" type="button" data-go="p-pf"><b>Preliminares e propriedades físicas</b><span>Cor, ignição, ponto de fusão e de ebulição.</span></button>
       <button class="mi" type="button" data-go="p-so"><b>Solubilidade</b><span>Fluxograma, grupos S<sub>2</sub> a I e treino.</span></button>
       <button class="mi" type="button" data-go="p-el"><b>Análise elementar</b><span>Testes para C, H, O, N, S, halogênios e P, com as cores.</span></button>
     </div>
-    <h2 class="mh">Ferramentas para a prova</h2>
+    <h2 class="mh">Ferramentas</h2>
     <div class="menu">
       <button class="mi" type="button" data-go="p-id"><b>Identificar um composto</b><span>Junta solubilidade, elementos e IV e mostra as classes compatíveis.</span></button>
       <button class="mi" type="button" data-go="p-pb"><b>Problemas resolvidos</b><span>Cinco casos de &ldquo;descobrir o composto&rdquo;, passo a passo.</span></button>
       <button class="mi" type="button" data-go="p-cs"><b>Consulta rápida</b><span>Uma folha com grupos, cores, bandas de IV e constantes.</span></button>
       <button class="mi" type="button" data-go="p-ec"><b>Notação ECGF</b><span>Código de cada grupo funcional, com treino.</span></button>
     </div>
-    <p class="hint" style="margin-top:14px">Ferramenta de busca do professor (por elementos, PF, PEb, CAS e grupo funcional): <a href="https://analor.com.br/" target="_blank" rel="noopener">analor.com.br</a>. Texto e tabelas dos ensaios: <a href="https://analor.com.br/plataforma.html" target="_blank" rel="noopener">Plataforma QO é Vida</a>.</p>
+    <p class="hint" style="margin-top:14px">Ferramenta de busca Analor (por elementos, PF, PEb, CAS e grupo funcional): <a href="https://analor.com.br/" target="_blank" rel="noopener">analor.com.br</a>. Texto e tabelas dos ensaios: <a href="https://analor.com.br/plataforma.html" target="_blank" rel="noopener">Plataforma QO é Vida</a>.</p>
   </section>
 
   <section id="p-pf" role="region" aria-label="Preliminares e propriedades físicas" hidden>
@@ -383,7 +376,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
 
     <div class="el"><h3>Para que servem o PF e o PEb na identificação</h3>
       <p>Depois da solubilidade e da análise elementar sobram algumas classes. O PF (sólido) ou o PEb (líquido) mede-se e compara-se com valores tabelados: na Ferramenta Analor dá para buscar por PF, PEb e elementos ao mesmo tempo. Uma faixa de fusão estreita (1 a 2 °C) sugere substância pura; faixa larga e mais baixa sugere impureza.</p>
-      <p class="src"><span class="tag sm">escrito por mim, sem fonte conferida</span> regra geral; confirme com o professor como ele quer a resposta na prova.</p></div>
+      <p class="src"><span class="tag sm">escrito por mim, sem fonte conferida</span> regra geral; em relatório ou prova, confirme o formato de resposta que o seu professor pede.</p></div>
 
     <h2>Treinar</h2>
     <div id="pfQuiz"></div>
@@ -483,7 +476,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
       <label for="idPf">Ponto de fusão (°C)<input class="f-m" type="text" id="idPf" placeholder="ex.: 121–122"></label>
       <label for="idPeb">Ponto de ebulição (°C)<input class="f-m" type="text" id="idPeb" placeholder="ex.: 178"></label>
     </div>
-    <p class="hint">O app não tem banco de compostos. Para comparar PF/PEb com valores tabelados, use a <a href="https://analor.com.br/" target="_blank" rel="noopener">Ferramenta Analor</a> do professor.</p>
+    <p class="hint">Para comparar PF/PEb com valores tabelados de mais compostos, use a <a href="https://analor.com.br/" target="_blank" rel="noopener">Ferramenta Analor</a>.</p>
     <h2>Classes que sobram</h2>
     <div id="idOut"></div>
   </section>
@@ -499,7 +492,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   <section id="p-cs" role="region" aria-label="Consulta rápida" hidden>
     <button class="back" type="button" data-go="p-en">← Ensaios</button>
     <h2 class="scr">Consulta rápida</h2>
-    <p class="scrsub">Tudo de ensaios em uma folha, para consultar durante a prova (que é com consulta). Os dados vêm das outras telas; a organização é minha.</p>
+    <p class="scrsub">Tudo de ensaios em uma folha, para consultar com rapidez. Os dados vêm das outras telas; a organização é minha.</p>
     <div id="csBody"></div>
   </section>
 
@@ -516,13 +509,13 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-an" role="tabpanel" aria-labelledby="t-an" hidden>
+    <button class="back" type="button" data-go="p-sp">← Espectros</button>
     <div class="sgm msub" role="group" aria-label="Massas"><button type="button" data-go="p-an" aria-pressed="false">Analisar</button><button type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button type="button" data-go="p-tb" aria-pressed="false">Livro</button></div>
     <div id="an-in">
     <h2 class="scr">Espectrometria de massas</h2>
-    <div class="rule" id="hoje"></div>
-    <p class="scrsub">Escolha um exercício ou digite M e os picos. Depois toque num pico para ver o que ficou e o que saiu. <button class="back" style="display:inline;margin:0" data-go="p-aj">Como ler um pico?</button></p>
-    <div class="hint" style="margin:0 0 6px">Exercícios da lista (nos PDFs a numeração vai do 10 direto ao 12):</div>
-    <details class="how" style="margin-bottom:10px"><summary style="cursor:pointer;font-weight:600">Em que ordem estudar?</summary><p class="hint" style="margin-top:8px">Do mais simples ao mais complexo: <b>6</b> (álcool, clivagem α) → <b>9</b> (ácido, McLafferty) → <b>5</b> (cetona) → <b>10</b> (amina) → <b>12</b> (aldeído) → <b>11</b> (éster) → <b>4</b> (benzofenona) → <b>1</b> (etilbenzeno) → <b>3</b> (estireno) → <b>8</b> (piridina) → <b>7</b> (dioxano) → <b>2</b> (furano). Os anéis ficam para o fim porque abrem e se rearranjam. Marque cada um como estudado depois de resolver.</p></details>
+    <p class="scrsub">Escolha um composto ou digite M e os picos. Depois toque num pico para ver o que ficou e o que saiu. <button class="back" style="display:inline;margin:0" data-go="p-aj">Como ler um pico?</button></p>
+    <div class="hint" style="margin:0 0 6px">Compostos com mecanismo de fragmentação:</div>
+    <details class="how" style="margin-bottom:10px"><summary style="cursor:pointer;font-weight:600">Em que ordem estudar?</summary><p class="hint" style="margin-top:8px">Do mais simples ao mais complexo: <b>1-propanol</b> (álcool, clivagem α) → <b>ácido butanoico</b> (McLafferty) → <b>3-pentanona</b> (cetona) → <b>N,N-dimetiletilamina</b> (amina) → <b>pentanal</b> (aldeído) → <b>pentanoato de metila</b> (éster) → <b>benzofenona</b> → <b>etilbenzeno</b> → <b>estireno</b> → <b>piridina</b> → <b>1,4-dioxano</b> → <b>furano</b>. Os anéis ficam para o fim porque abrem e se rearranjam. Marque cada um como estudado depois de resolver.</p></details>
     <div class="chips" id="exchips"></div>
     <div class="row">
       <label for="inM">M (íon molecular)<input class="f-m" type="number" id="inM" inputmode="numeric" min="1" max="999" value="60"></label>
@@ -544,6 +537,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-tr" role="tabpanel" aria-labelledby="t-tr" hidden>
+    <button class="back" type="button" data-go="p-sp">← Espectros</button>
     <div class="sgm msub" role="group" aria-label="Massas"><button type="button" data-go="p-an" aria-pressed="false">Analisar</button><button type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button type="button" data-go="p-tb" aria-pressed="false">Livro</button></div>
     <h2 class="scr">Treinar massas</h2>
     <p class="scrsub">Cada rodada tem 5 cartões e depois você pode parar. Escolha um modo. &ldquo;Qual saiu?&rdquo; mostra a perda entre dois picos e opções. &ldquo;Tente antes de ver&rdquo; pergunta também o tipo de cisão e a regra. O que você errar fica guardado em &ldquo;Revisar erros&rdquo;.</p>
@@ -552,6 +546,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-tb" role="tabpanel" aria-labelledby="t-tb" hidden>
+    <button class="back" type="button" data-go="p-sp">← Espectros</button>
     <div class="sgm msub" role="group" aria-label="Massas"><button type="button" data-go="p-an" aria-pressed="false">Analisar</button><button type="button" data-go="p-tr" aria-pressed="false">Treinar</button><button type="button" data-go="p-tb" aria-pressed="false">Livro</button></div>
     <h2 class="scr">Livro</h2>
     <p class="scrsub">Tabelas do Silverstein: o que saiu (Apêndice C) e o que ficou (Apêndice B).</p>
@@ -566,12 +561,13 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   </section>
 
   <section id="p-iv" role="tabpanel" aria-labelledby="t-iv" hidden>
-    <h2 class="scr">IV</h2>
+    <button class="back" type="button" data-go="p-sp">← Espectros</button>
+    <h2 class="scr">Infravermelho (IV)</h2>
     <div class="seg" role="group" aria-label="Partes do IV">
       <button type="button" data-v="v-comp" aria-pressed="true">Composto</button>
       <button type="button" data-v="v-num" aria-pressed="false">Número de onda</button>
       <button type="button" data-v="v-guia" aria-pressed="false">Guia</button>
-      <button type="button" data-v="v-tr" aria-pressed="false">Treinar</button>
+      <button type="button" data-v="v-tr" data-go="p-ic" aria-pressed="false">Identificar</button>
     </div>
     <div id="v-comp">
       <p class="scrsub">Escolha um composto para ver as bandas dele e a pista para o espectro de massas.</p>
@@ -635,13 +631,9 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <div class="menu">
       <button class="mi" type="button" data-go="p-ca"><b>Calculadora de massa</b><span>Some a fórmula de um pedaço e veja o que o livro lista para esse número.</span></button>
       <button class="mi" type="button" data-go="p-es"><b>Espectro novo (modo detetive)</b><span>Digite fórmula, picos e bandas de IV de um composto desconhecido e veja as pistas.</span></button>
-      <button class="mi" type="button" data-go="p-sl"><b>Slides do professor</b><span>Regras e mecanismos do deck dele: benzamida, álcoois, cetonas, ácidos, isômeros.</span></button>
+      <button class="mi" type="button" data-go="p-sl"><b>Slides de mecanismos</b><span>Regras e mecanismos de aula: benzamida, álcoois, cetonas, ácidos, isômeros.</span></button>
       <button class="mi" type="button" data-go="p-pq"><b>Entender as quebras (regras e setas)</b><span>Por que a ligação quebra ali, cisão homolítica e heterolítica, rearranjos e os modelos com setas.</span></button>
       <button class="mi" type="button" data-go="p-aj"><b>Como ler um pico e glossário</b><span>Os 4 passos, o que são +, +· e ·, clivagem α e McLafferty.</span></button>
-    </div>
-    <h2 class="mh">Estudo</h2>
-    <div class="menu">
-      <button class="mi" type="button" data-go="p-pr"><b>Perguntas para o professor</b><span>As dúvidas que ainda não consegui confirmar. Marque as que já perguntou.</span></button>
     </div>
     <h2 class="mh">O app</h2>
     <div class="menu">
@@ -753,7 +745,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <div class="rule"><h3>8. Rearranjo: o íon pode mudar de forma sem mudar de massa</h3>
       <p>O espectro só mostra o m/z. Por isso um íon pode se rearranjar para uma forma mais estável e continuar com o mesmo número. Os rearranjos mais comuns:</p>
       <p>• <b>Cátion primário → secundário → terciário:</b> um H (ou um CH3) passa para o carbono com carga, porque mais carbonos ligados estabilizam melhor. Ex.: n-butila → terc-butila (57).<br>• <b>Enol ⇄ ceto:</b> o H passa do O para o carbono. Ex.: CH2=CH–OH⁺· ⇄ CH3CHO⁺· (44).<br>• <b>Benzila → tropílio:</b> o CH2 entra no anel de 6 e forma um anel aromático de 7 (91).<br>• <b>H que passa para o heteroátomo:</b> deixa o N ou o O com octeto completo.</p>
-      <p class="hint">Na prova, desenhe o rearranjo que o professor desenhou. Rearranjo que ele não mostrou é possibilidade, não obrigação. Nos cartões, a caixa &ldquo;Possível rearranjo&rdquo; mostra as formas com a mesma massa.</p></div>
+      <p class="hint">Os rearranjos desenhados aqui vêm das aulas de referência. Rearranjo que não aparece nelas é possibilidade, não obrigação. Nos cartões, a caixa &ldquo;Possível rearranjo&rdquo; mostra as formas com a mesma massa.</p></div>
 
     <p class="hint">Fonte dos princípios: Silverstein et al., cap. 1 (fragmentação de EI) e as lousas do professor. As regras são tendências, não leis: quando o exercício e a regra discordarem, vale a lousa.</p>
   <div id="se-anchor">    <h2 class="scr" style="margin-top:28px">Modelos com setas</h2>
@@ -764,25 +756,18 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <div class="mdl"><h3>2. McLafferty (homolítica, em sequência)</h3><svg viewBox="0 0 340 185" role="img" aria-label="McLafferty: o oxigênio puxa o hidrogênio do carbono gama por um anel de seis átomos, e sai um alqueno neutro" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:520px"><text x="60" y="57" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">O</text><text x="72" y="46" font-size="11" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><circle cx="46" cy="42" r="2.4" fill="currentColor"/><text x="60" y="107" font-size="15" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">C</text><line x1="57.0" y1="62.0" x2="57.0" y2="92.0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="63.0" y1="62.0" x2="63.0" y2="92.0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="106" y="142" font-size="13" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">Cα</text><text x="168" y="107" font-size="13" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">Cβ</text><text x="168" y="57" font-size="13" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">Cγ</text><text x="106" y="22" font-size="14" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">H</text><line x1="68" y1="110" x2="98" y2="118" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="114" y1="120" x2="144" y2="108" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="152" y1="90" x2="152" y2="64" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="144" y1="44" x2="112" y2="30" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="72" y1="42" x2="100" y2="28" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="3 4"/><path d="M128 36 Q92 22 76 40" fill="none" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round"/><path d="M76 40 L78.6 31.4" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round" fill="none"/><text x="92" y="18" font-size="12" text-anchor="middle" fill="var(--arrow)" font-weight="600" font-family="IBM Plex Mono,ui-monospace,monospace">1</text><path d="M130 118 Q168 92 160 76" fill="none" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round"/><path d="M160 76 L167.0 81.6" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round" fill="none"/><text x="168" y="88" font-size="12" text-anchor="middle" fill="var(--arrow)" font-weight="600" font-family="IBM Plex Mono,ui-monospace,monospace">2</text><path d="M54 76 Q40 94 68 114" fill="none" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round"/><path d="M68 114 L59.2 112.4" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round" fill="none"/><text x="40" y="90" font-size="12" text-anchor="middle" fill="var(--arrow)" font-weight="600" font-family="IBM Plex Mono,ui-monospace,monospace">3</text><text x="222" y="95" font-size="22" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">→</text><text x="282" y="70" font-size="13" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">HO–C=Cα</text><text x="282" y="86" font-size="12" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">enol⁺·</text><text x="282" y="120" font-size="13" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+  Cβ=Cγ</text><text x="282" y="136" font-size="12" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">alqueno neutro</text></svg><p><b>1:</b> o H do carbono γ passa para o O (anel de 6 átomos). <b>2:</b> 1 elétron da ligação Cα–Cβ forma a ligação dupla Cβ=Cγ. <b>3:</b> o elétron da ligação π do C=O forma a nova ligação dupla com o Cα. Sai um alqueno neutro e fica o enol⁺·. Aparece em: ácido butanoico (60), pentanoato de metila (74), pentanal (44).</p></div>
     <div class="mdl"><h3>3. Cátion acílio perde CO (heterolítica)</h3><svg viewBox="0 0 340 134" role="img" aria-label="Cisão heterolítica: o cátion acílio solta CO levando o par de elétrons da ligação" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:520px"><text x="40" y="70" font-size="17" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R</text><line x1="52" y1="66" x2="100" y2="66" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="112" y="70" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">C</text><line x1="124" y1="64" x2="152" y2="64" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="124" y1="68" x2="152" y2="68" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="124" y1="60" x2="152" y2="60" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="164" y="70" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">O</text><text x="178" y="58" font-size="12" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><path d="M76 64 Q104 26 112 54" fill="none" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round"/><path d="M112 54 L106.1 47.2 L113.4 45.1Z" fill="var(--arrow)"/><text x="104" y="22" font-size="12" text-anchor="middle" fill="var(--arrow)" font-weight="600" font-family="IBM Plex Mono,ui-monospace,monospace">par</text><text x="212" y="72" font-size="22" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">→</text><text x="262" y="50" font-size="17" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">R</text><text x="275" y="38" font-size="12" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><text x="256" y="100" font-size="15" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><circle cx="278" cy="92" r="2.4" fill="currentColor"/><circle cx="278" cy="100" r="2.4" fill="currentColor"/><text x="304" y="104" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">C≡O</text><text x="76" y="86" font-size="10" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">2 e⁻</text><text x="138" y="44" font-size="10" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">6 e⁻</text><text x="278" y="120" font-size="10" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">par 2 e⁻ + C≡O 6 e⁻</text><text x="280" y="68" font-size="10" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">sexteto: 6 e⁻</text></svg><p>Aqui a seta é inteira: o par de elétrons da ligação R–C vai para o carbono do CO. O CO sai neutro levando o par, e a carga fica no R. Aparece em: 85 → 57 (pentanal e pentanoato), 105 → 77 (benzofenona), 57 → 29 (3-pentanona).</p></div>
     <div class="mdl"><h3>4. Perda de H· (M − 1)</h3><svg viewBox="0 0 340 170" role="img" aria-label="Perda de H: o heteroátomo forma a ligação dupla com o carbono e o H sai como radical" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:520px"><text x="40" y="98" font-size="17" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">Y</text><text x="53" y="86" font-size="12" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><circle cx="40" cy="72" r="2.4" fill="currentColor"/><line x1="52" y1="95" x2="86" y2="95" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="104" y="99" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">C</text><line x1="104" y1="86" x2="104" y2="52" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="104" y="42" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">H</text><path d="M40 70 Q54 42 84 84" fill="none" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round"/><path d="M84 84 L76.2 79.6" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round" fill="none"/><text x="54" y="38" font-size="12" text-anchor="middle" fill="var(--arrow)" font-weight="600" font-family="IBM Plex Mono,ui-monospace,monospace">1</text><path d="M108 70 Q130 46 116 44" fill="none" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round"/><path d="M116 44 L124.6 41.4" stroke="var(--arrow)" stroke-width="2" stroke-linecap="round" fill="none"/><text x="130" y="42" font-size="12" text-anchor="middle" fill="var(--arrow)" font-weight="600" font-family="IBM Plex Mono,ui-monospace,monospace">2</text><text x="200" y="98" font-size="22" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">→</text><text x="246" y="98" font-size="17" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">Y</text><text x="259" y="86" font-size="12" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><line x1="258.0" y1="98.0" x2="288.0" y2="98.0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="258.0" y1="92.0" x2="288.0" y2="92.0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><text x="304" y="99" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">C</text><text x="256" y="146" font-size="16" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">+</text><circle cx="284" cy="144" r="2.4" fill="currentColor"/><text x="302" y="148" font-size="14" text-anchor="middle" fill="currentColor" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">H·: 1 e⁻</text><text x="70" y="112" font-size="10" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">2 e⁻</text><text x="122" y="70" font-size="10" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">2 e⁻</text><text x="18" y="76" font-size="10" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">1 e⁻</text><text x="273" y="114" font-size="10" text-anchor="middle" fill="var(--muted)" font-weight="400" font-family="IBM Plex Mono,ui-monospace,monospace">4 e⁻ (dupla)</text></svg><p><b>1:</b> o elétron sozinho de Y forma a ligação dupla. <b>2:</b> 1 elétron da ligação C–H vai com o H, que sai como radical. Aparece em: dimetiletilamina (72), pentanal (85).</p></div>
-    <p class="hint">Estes são modelos. A lousa do professor vale para a prova: se ele desenhar de outro jeito, siga o dele.</p>
+    <p class="hint">Estes são modelos. Se o seu professor desenhar de outro jeito, siga o dele.</p>
   </div>
   </section>
 
-  <section id="p-sl" role="region" aria-label="Slides do professor" hidden>
+  <section id="p-sl" role="region" aria-label="Slides de mecanismos" hidden>
     <button class="back" data-go="p-ma">← Mais</button>
-    <h2 class="scr">Slides do professor</h2>
+    <h2 class="scr">Slides de mecanismos</h2>
     <p class="hint">Resumo do deck &ldquo;Análise Orgânica II, Espectroscopia de Massas&rdquo; (Prof. Jeronimo). Texto e figuras vêm dos slides dele. Toque na figura para ampliar.</p>
     <div class="rule"><h3>Regras do slide (resumo)</h3>
       <ul><li><b>Regra do nitrogênio:</b> massa par = nenhum N ou N par. Massa ímpar = N ímpar. Íon molecular par: quebra de ligação simples dá fragmento ímpar. Íon molecular ímpar: dá fragmento par. O fragmento deve conter todos os N.</li><li><b>M+• mais intenso:</b> aromáticos &gt; alquenos conjugados &gt; cíclicos &gt; sulfetos &gt; alcanos normais curtos &gt; mercaptanas.</li><li><b>Por grupo:</b> cetonas &gt; aminas &gt; ésteres &gt; éteres &gt; ácidos = aldeídos = amidas = halogenetos.</li><li><b>Em geral não aparece M+•:</b> álcoois alifáticos, nitritos, nitratos, nitro, nitrilas e compostos muito ramificados.</li><li><b>Elétron mais fácil de tirar:</b> não ligante &gt; π &gt; σ.</li></ul></div>
     <div id="slBody"></div>
-    <p class="hint">Fonte: slides do professor. Os resumos em texto são meus, as figuras são dos slides.</p>
-  </section>
-
-  <section id="p-pr" role="region" aria-label="Perguntas para o professor" hidden>
-    <button class="back" data-go="p-ma">← Mais</button>
-    <h2 class="scr">Perguntas para o professor</h2>
-    <p class="hint">Estas são as dúvidas em que não tenho certeza. Marque a caixa quando perguntar. Anote a resposta dele na nota do exercício.</p>
-    <div id="pergL"></div>
+    <p class="hint">Fonte: slides de aula de Análise Orgânica (IFRJ). Os resumos em texto são meus, as figuras são dos slides.</p>
   </section>
 
   <section id="p-pg" role="region" aria-label="Salvar e levar o progresso" hidden>
@@ -827,13 +812,166 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
       <p>Pontos em aberto: β-dicetonas aparecem em A₁ e em A₂ na tabela do professor; há um bloco sem rótulo sob N; a ligação até MN. Pergunte a ele se cair.</p>
   </section>
 
+  <!-- ===== Analorg v2 ===== -->
+  <section id="p-cp" role="tabpanel" aria-labelledby="t-cp" hidden>
+    <h2 class="scr">Compostos</h2>
+    <p class="scrsub">Uma ficha por composto: estrutura, fórmula, grupo de solubilidade, cor, estado, PF e PE, e o que esperar em IV, MS e RMN.</p>
+    <div class="cpq">
+      <input type="search" id="cpQ" placeholder="Buscar por nome, fórmula ou CAS" aria-label="Buscar composto" autocomplete="off">
+      <label>Estado<select id="cpE"><option value="">Todos</option><option value="líquido">Líquido</option><option value="sólido">Sólido</option></select></label>
+      <label>Grupo de solubilidade<select id="cpG"><option value="">Todos</option></select></label>
+    </div>
+    <p class="hint" id="cpN"></p>
+    <div class="cpgrid" id="cpL"></div>
+  </section>
+
+  <section id="p-cf" role="region" aria-label="Ficha do composto" hidden>
+    <button class="back" type="button" data-go="p-cp">← Compostos</button>
+    <div id="cfB"></div>
+  </section>
+
+  <section id="p-ic" role="tabpanel" aria-labelledby="t-ic" hidden>
+    <h2 class="scr">Identificação do Composto</h2>
+    <p class="scrsub">Preencha o que você mediu, mesmo que seja pouco. O app compara com os compostos do banco e mostra os mais compatíveis, com uma porcentagem.</p>
+    <div class="icwarn">A porcentagem é a <b>compatibilidade entre os compostos do banco do app</b>, não uma probabilidade real. Se o seu composto não está na lista, o app mostra só o mais parecido. Quanto mais dados você der, mais separados ficam os candidatos.</div>
+    <div class="icf"><h3>1. Aspecto e solubilidade</h3>
+      <div class="icg">
+        <label>Estado (25 °C)<select id="icEst"><option value="">não sei</option><option value="líquido">líquido</option><option value="sólido">sólido</option></select></label>
+        <label>Cor<select id="icCor"><option value="">não sei</option><option value="inc">incolor ou branco</option><option value="col">amarelo ou marrom</option></select></label>
+        <label>Grupo de solubilidade<select id="icG"><option value="">não testei</option></select></label>
+      </div></div>
+    <div class="icf"><h3>2. PF, PE e elementos</h3>
+      <div class="icg">
+        <label>PF (°C)<input type="number" id="icPF" inputmode="decimal" step="any"></label>
+        <label>PE (°C)<input type="number" id="icPE" inputmode="decimal" step="any"></label>
+        <label>Precisão da medida<select id="icTol"><option value="2">±2 °C</option><option value="5" selected>±5 °C</option><option value="10">±10 °C</option></select></label>
+        <label>Tem N?<select id="icN"><option value="">não testei</option><option value="s">sim</option><option value="n">não</option></select></label>
+        <label>Tem halogênio?<select id="icX"><option value="">não testei</option><option value="s">sim</option><option value="n">não</option></select></label>
+        <label>Tem S?<select id="icS"><option value="">não testei</option><option value="s">sim</option><option value="n">não</option></select></label>
+      </div></div>
+    <div class="icf"><h3>3. Infravermelho</h3>
+      <label>Números de onda das bandas que você viu (cm⁻¹), separados por vírgula<input type="text" id="icIV" placeholder="ex.: 3350, 2960, 1715" autocomplete="off"></label>
+      <p class="hint" style="margin:6px 0 0">Bandas acima de 1500 cm⁻¹ pesam mais. Banco de bandas esperadas por grupo funcional: aba IV.</p></div>
+    <div class="icf"><h3>4. Espectrometria de massas</h3>
+      <div class="icg">
+        <label>M (íon molecular)<input type="number" id="icM" inputmode="numeric" min="1" max="999"></label>
+        <label style="grid-column:span 2">Outros picos (m/z)<input type="text" id="icP" placeholder="ex.: 43, 15" autocomplete="off"></label>
+      </div></div>
+    <div class="icf"><h3>5. RMN</h3>
+      <div class="icg">
+        <label>Nº de sinais de ¹H<input type="number" id="icH" inputmode="numeric" min="1" max="30"></label>
+        <label>Nº de sinais de ¹³C<input type="number" id="icC" inputmode="numeric" min="1" max="30"></label>
+        <label style="grid-column:span 2">Deslocamentos de ¹H (ppm)<input type="text" id="icHd" placeholder="ex.: 2.1" autocomplete="off"></label>
+      </div></div>
+    <div class="row" style="margin:6px 0 0">
+      <button class="btn" type="button" id="icGo">Identificar</button>
+      <button class="btn ghost" type="button" id="icClr">Limpar</button>
+      <label>Só para ver como funciona: preencher com os dados de<select id="icEx"><option value="">escolha</option></select></label>
+    </div>
+    <div id="icOut" class="icres" aria-live="polite"></div>
+  </section>
+
+  <section id="p-sp" role="tabpanel" aria-labelledby="t-sp" hidden>
+    <h2 class="scr">Espectros</h2>
+    <p class="scrsub">Os três métodos para descobrir a estrutura de um composto.</p>
+    <div class="menu">
+      <button class="mi" type="button" data-go="p-iv"><b>Infravermelho (IV)</b><span>Bandas por composto e por número de onda, guia por região.</span></button>
+      <button class="mi" type="button" data-go="p-an"><b>Espectrometria de massas (MS)</b><span>Picos, perdas, mecanismos de fragmentação e treino.</span></button>
+      <button class="mi" type="button" data-go="p-rm"><b>RMN de ¹H e ¹³C</b><span>Deslocamento, integração, multiplicidade e quantos sinais esperar.</span></button>
+      <button class="mi" type="button" data-go="p-ic"><b>Identificação do Composto</b><span>Junta tudo o que você mediu e mostra os compostos mais compatíveis.</span></button>
+    </div>
+    <p class="hint" style="margin-top:14px">Espectros reais: <a href="https://sdbs.db.aist.go.jp/" target="_blank" rel="noopener">SDBS (AIST)</a>. Cada ficha de composto tem o botão para abrir lá.</p>
+  </section>
+
+  <section id="p-rm" role="region" aria-label="RMN" hidden>
+    <button class="back" type="button" data-go="p-sp">← Espectros</button>
+    <h2 class="scr">RMN de ¹H e ¹³C</h2>
+    <p class="scrsub">Cada sinal é um grupo de núcleos equivalentes. Quatro perguntas: quantos sinais, onde, quanto vale cada um e como se divide.</p>
+    <details class="sec" open><summary>Como ler um espectro de ¹H</summary>
+      <p><b>1. Quantos sinais?</b> Um sinal por tipo de H. H que a simetria troca de lugar são equivalentes e dão o mesmo sinal. Etanol (CH₃CH₂OH): 3 sinais. Éter dietílico: 2.</p>
+      <p><b>2. Onde? (deslocamento, δ em ppm)</b> Quanto mais eletronegativo o vizinho, mais à esquerda (δ maior). O TMS é o zero.</p>
+      <p><b>3. Quanto vale? (integração)</b> A área do sinal é proporcional ao número de H. CH₃ vale 3, CH₂ vale 2.</p>
+      <p><b>4. Como se divide? (multiplicidade)</b> Regra n+1: n H vizinhos (no carbono ao lado) dividem o sinal em n+1 linhas. Um CH₃ ao lado de um CH₂ vira tripleto.</p>
+      <div class="tbl"><table class="obt"><thead><tr><th>H vizinhos (n)</th><th>Sinal</th><th>Proporção das linhas</th></tr></thead><tbody>
+        <tr><td>0</td><td>singleto (s)</td><td>1</td></tr><tr><td>1</td><td>dubleto (d)</td><td>1 : 1</td></tr><tr><td>2</td><td>tripleto (t)</td><td>1 : 2 : 1</td></tr>
+        <tr><td>3</td><td>quarteto (q)</td><td>1 : 3 : 3 : 1</td></tr><tr><td>4</td><td>quinteto</td><td>1 : 4 : 6 : 4 : 1</td></tr><tr><td>5</td><td>sexteto</td><td>1 : 5 : 10 : 10 : 5 : 1</td></tr></tbody></table></div>
+      <p class="srcl" style="margin-top:6px">O H de O–H e N–H costuma não acoplar (troca rápida) e sai como singleto largo. Agitar com D₂O faz esse sinal sumir.</p>
+    </details>
+    <details class="sec"><summary>Tabela de deslocamentos de ¹H (ppm)</summary>
+      <div class="tbl"><table class="obt"><thead><tr><th>Tipo de H</th><th>δ (ppm)</th></tr></thead><tbody>
+        <tr><td>CH₃ alifático</td><td>0,8–1,2</td></tr><tr><td>CH₂ alifático</td><td>1,2–1,7</td></tr><tr><td>CH alifático</td><td>1,4–2,0</td></tr>
+        <tr><td>C–H alílico</td><td>1,6–2,3</td></tr><tr><td>C–H α à carbonila</td><td>2,0–2,8</td></tr><tr><td>C–H benzílico</td><td>2,2–3,0</td></tr>
+        <tr><td>≡C–H</td><td>2,0–3,1</td></tr><tr><td>C–H ligado a N</td><td>2,2–3,2</td></tr><tr><td>C–H ligado a halogênio</td><td>3,0–4,4</td></tr>
+        <tr><td>C–H ligado a O</td><td>3,2–4,3</td></tr><tr><td>H de alceno</td><td>4,5–6,5</td></tr><tr><td>H aromático</td><td>6,5–8,0</td></tr>
+        <tr><td>H de aldeído</td><td>9,3–10,1</td></tr><tr><td>O–H de ácido carboxílico</td><td>10–13</td></tr>
+        <tr><td>O–H de álcool</td><td>1–5,5 (varia)</td></tr><tr><td>O–H de fenol</td><td>4–8 (varia)</td></tr><tr><td>N–H de amina</td><td>0,5–3 (varia)</td></tr><tr><td>N–H de amida</td><td>5–8,5</td></tr></tbody></table></div>
+      <p class="srcl" style="margin-top:6px"><b>Fonte:</b> faixas típicas de tabelas de livro-texto, escritas por mim, sem fonte conferida nesta sessão. Valores reais mudam com solvente, concentração e vizinhança.</p>
+    </details>
+    <details class="sec"><summary>¹³C: o que muda</summary>
+      <p>O espectro costuma ser desacoplado de ¹H: cada sinal é um singleto e a <b>integração não vale</b>. Conta-se um sinal por tipo de carbono (equivalentes pela simetria dão um só).</p>
+      <div class="tbl"><table class="obt"><thead><tr><th>Tipo de C</th><th>δ (ppm)</th></tr></thead><tbody>
+        <tr><td>CH₃ e C sp³ alifático</td><td>8–55</td></tr><tr><td>C sp³ ligado a N</td><td>30–65</td></tr><tr><td>C sp³ ligado a O</td><td>50–90</td></tr><tr><td>C≡C</td><td>65–90</td></tr>
+        <tr><td>C≡N</td><td>115–125</td></tr><tr><td>C de alceno</td><td>100–150</td></tr><tr><td>C aromático</td><td>110–165</td></tr>
+        <tr><td>C=O de éster, ácido e amida</td><td>160–185</td></tr><tr><td>C=O de aldeído</td><td>190–205</td></tr><tr><td>C=O de cetona</td><td>195–220</td></tr></tbody></table></div>
+      <p class="srcl" style="margin-top:6px"><b>Fonte:</b> faixas típicas de tabelas de livro-texto, escritas por mim, sem fonte conferida nesta sessão. Solvente CDCl₃: ¹H em 7,26 ppm (resíduo) e ¹³C em 77,2 ppm (tripleto).</p>
+    </details>
+    <details class="sec" open><summary>Ver o que esperar de um composto</summary>
+      <label style="max-width:360px">Composto<select id="rmSel"></select></label>
+      <div id="rmOut"></div>
+    </details>
+  </section>
+
+  <section id="p-ob" role="region" aria-label="Orgânica Básica" hidden>
+    <button class="back" type="button" data-go="p-in">← Início</button>
+    <h2 class="scr">Orgânica Básica</h2>
+    <p class="scrsub">O que você precisa saber antes de interpretar ensaios e espectros.</p>
+    <p class="srcl" style="margin:0 0 12px"><b>Fonte:</b> escrito por mim a partir de conteúdo de livro-texto, sem fonte conferida nesta sessão.</p>
+    <details class="sec" open><summary>Grupos funcionais e nomes</summary>
+      <div class="tbl"><table class="obt"><thead><tr><th>Grupo</th><th>Estrutura</th><th>Exemplo</th><th>Nome</th></tr></thead><tbody>
+        <tr><td>Alcano</td><td>C–C</td><td>CH₃CH₂CH₃</td><td>-ano</td></tr><tr><td>Alceno</td><td>C=C</td><td>CH₂=CH₂</td><td>-eno</td></tr><tr><td>Alcino</td><td>C≡C</td><td>HC≡CH</td><td>-ino</td></tr>
+        <tr><td>Haleto de alquila</td><td>R–X</td><td>CH₃Cl</td><td>cloro-, bromo-</td></tr><tr><td>Álcool</td><td>R–OH</td><td>CH₃CH₂OH</td><td>-ol</td></tr><tr><td>Fenol</td><td>Ar–OH</td><td>C₆H₅OH</td><td>fenol</td></tr>
+        <tr><td>Éter</td><td>R–O–R</td><td>CH₃OCH₃</td><td>-óxi- / éter</td></tr><tr><td>Aldeído</td><td>R–CHO</td><td>CH₃CHO</td><td>-al</td></tr><tr><td>Cetona</td><td>R–CO–R</td><td>CH₃COCH₃</td><td>-ona</td></tr>
+        <tr><td>Ácido carboxílico</td><td>R–COOH</td><td>CH₃COOH</td><td>ácido -óico</td></tr><tr><td>Éster</td><td>R–COO–R</td><td>CH₃COOCH₂CH₃</td><td>-oato de -ila</td></tr><tr><td>Amida</td><td>R–CONH₂</td><td>CH₃CONH₂</td><td>-amida</td></tr>
+        <tr><td>Amina</td><td>R–NH₂</td><td>CH₃CH₂NH₂</td><td>-amina</td></tr><tr><td>Nitrila</td><td>R–C≡N</td><td>CH₃CN</td><td>-nitrila</td></tr><tr><td>Nitro</td><td>R–NO₂</td><td>C₆H₅NO₂</td><td>nitro-</td></tr></tbody></table></div>
+      <p style="margin-top:8px">Prefixos da cadeia principal: 1 met, 2 et, 3 prop, 4 but, 5 pent, 6 hex, 7 hept, 8 oct, 9 non, 10 dec.</p>
+    </details>
+    <details class="sec"><summary>Hibridização do carbono e o que ela muda nos espectros</summary>
+      <div class="tbl"><table class="obt"><thead><tr><th>C</th><th>Geometria</th><th>C–H no IV</th><th>H no RMN</th></tr></thead><tbody>
+        <tr><td>sp³</td><td>tetraédrica, 109,5°</td><td>2960–2850 cm⁻¹</td><td>0,8–2 ppm</td></tr><tr><td>sp²</td><td>trigonal plana, 120°</td><td>3100–3000 cm⁻¹</td><td>4,5–8 ppm</td></tr><tr><td>sp</td><td>linear, 180°</td><td>~3300 cm⁻¹</td><td>2–3 ppm</td></tr></tbody></table></div>
+      <p style="margin-top:8px">Mais caráter s (sp 50%, sp² 33%, sp³ 25%) deixa a ligação mais curta e mais forte, e a banda de IV sobe de número de onda.</p>
+    </details>
+    <details class="sec"><summary>GDH: grau de deficiência de hidrogênio</summary>
+      <p>Conta anéis e ligações π. Para C<sub>c</sub>H<sub>h</sub>N<sub>n</sub>X<sub>x</sub>O<sub>o</sub>: <b>GDH = (2c + 2 + n − h − x) / 2</b>. O oxigênio e o enxofre não entram na conta.</p>
+      <p>0 = só ligações simples e sem anel. 1 = uma ligação dupla ou um anel. 4 = anel benzênico (3 duplas + 1 anel). 5 = benzeno com um C=O ou C=C.</p>
+      <div class="row"><label>Fórmula molecular<input type="text" id="gdhF" placeholder="ex.: C7H6O" autocomplete="off" style="width:170px"></label><button class="btn" type="button" id="gdhGo">Calcular</button></div>
+      <div id="gdhOut" class="mhint"></div>
+    </details>
+    <details class="sec"><summary>Lewis e carga formal</summary>
+      <p><b>Carga formal = (e⁻ de valência) − (e⁻ de pares livres) − (nº de ligações).</b> A soma das cargas formais é a carga da espécie.</p>
+      <p>Exemplos: N em NH₄⁺ tem 5 − 0 − 4 = +1. O em R–O⁻ tem 6 − 6 − 1 = −1. No grupo nitro, N = +1 e um O = −1 (carga total zero). C no carbocátion CH₃⁺ tem 4 − 0 − 3 = +1.</p>
+      <p>Regra prática: cada átomo quer o octeto (H quer 2). C faz 4 ligações, N faz 3, O faz 2, halogênio faz 1.</p>
+    </details>
+    <details class="sec"><summary>Acidez, basicidade e solubilidade</summary>
+      <div class="tbl"><table class="obt"><thead><tr><th>Espécie</th><th>pKa aproximado</th></tr></thead><tbody>
+        <tr><td>Ácido carboxílico (acético)</td><td>4,8</td></tr><tr><td>Ácido benzoico</td><td>4,2</td></tr><tr><td>Fenol</td><td>10</td></tr><tr><td>Água</td><td>15,7</td></tr><tr><td>Álcool (etanol)</td><td>16</td></tr><tr><td>Cetona (H α)</td><td>~20</td></tr><tr><td>Amônio de amina alifática (R–NH₃⁺)</td><td>~10–11</td></tr><tr><td>Anilínio (C₆H₅NH₃⁺)</td><td>4,6</td></tr><tr><td>Piridínio</td><td>5,2</td></tr></tbody></table></div>
+      <p style="margin-top:8px">Ácido carboxílico (pKa ~5) reage com NaHCO₃ (o H₂CO₃ tem pKa ~6,4): dissolve em NaHCO₃ e NaOH (grupo A₁). Fenol (pKa ~10) só reage com NaOH (grupo A₂). Amina reage com HCl e dissolve (grupo B). É isso que o <button class="back" style="display:inline;margin:0" data-go="p-so">fluxograma de solubilidade</button> usa.</p>
+    </details>
+    <details class="sec"><summary>Forças intermoleculares: PF, PE e solubilidade</summary>
+      <p>Da mais fraca para a mais forte: dispersão de London, dipolo-dipolo, ligação de hidrogênio. Quanto mais forte e mais numerosa, maior o PE (e em geral o PF).</p>
+      <p>Exemplos: etano (−89 °C de PE) &lt; etanol (78 °C), porque o etanol faz ligação de hidrogênio. Dentro de uma família, o PE sobe com a massa molar. Cadeia ramificada tem PE menor que a linear. Moléculas simétricas empacotam bem e têm PF mais alto.</p>
+      <p>Semelhante dissolve semelhante: polar dissolve em água, apolar dissolve em hexano. Álcoois de até 5 C são solúveis em água porque a parte polar (OH) ainda compensa a cadeia.</p>
+    </details>
+  </section>
+
+
 </div>
 
 <nav class="bnav" role="tablist" aria-label="Seções">
   <button class="tab" role="tab" id="t-in" aria-selected="true" aria-controls="p-in"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg>Início</button>
+  <button class="tab" role="tab" id="t-cp" aria-selected="false" aria-controls="p-cp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 4v8l-7 4-7-4V7z"/><path d="M12 11v8M5 7l7 4 7-4"/></svg>Compostos</button>
+  <button class="tab" role="tab" id="t-ic" aria-selected="false" aria-controls="p-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.4-4.4"/></svg>Identificar</button>
   <button class="tab" role="tab" id="t-en" aria-selected="false" aria-controls="p-en"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/></svg>Ensaios</button>
-  <button class="tab" role="tab" id="t-iv" aria-selected="false" aria-controls="p-iv"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h3.5l2-6 4 12 2.5-6H21"/></svg>IV</button>
-  <button class="tab" role="tab" id="t-an" aria-selected="false" aria-controls="p-an"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.4-4.4"/></svg>Massas</button>
+  <button class="tab" role="tab" id="t-sp" aria-selected="false" aria-controls="p-sp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h3.5l2-6 4 12 2.5-6H21"/></svg>Espectros</button>
   <button class="tab" role="tab" id="t-ma" aria-selected="false" aria-controls="p-ma"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="5.5" cy="12" r="1.6"/><circle class="dot" cx="12" cy="12" r="1.6"/><circle class="dot" cx="18.5" cy="12" r="1.6"/></svg>Mais</button>
 </nav>
 
@@ -938,7 +1076,7 @@ function ionHTML(mz){
 }
 function exRefs(d){
   const refs=[];
-  EX.forEach(e=>e.rows.forEach(r=>{if(r[1]-r[0]===d)refs.push('Ex. '+e.n+' ('+r[1]+' → '+r[0]+')');}));
+  EX.forEach(e=>e.rows.forEach(r=>{if(r[1]-r[0]===d)refs.push(e.nome+' ('+r[1]+' → '+r[0]+')');}));
   return refs;
 }
 
@@ -991,7 +1129,7 @@ function rearrBox(ex,row){
   const poss=POSS.indexOf(ex.n+':'+row[0])>=0;
   let h='<details class="why rearr"><summary>Possível rearranjo (mesma massa)<span class="tag">'+(poss?'possibilidade':'bem descrito')+'</span></summary><p>'+fmt(esc(r[0]))+'</p>';
   if(r[1].length){h+='<div class="sp">'+r[1].map((s,i)=>(i?'<span class="op">⇄</span>':'')+fig(s[0],s[1],'keep','forma')).join('')+'</div>';}
-  return h+'<p class="src">Na prova, desenhe só o que o professor desenhou.</p></details>';
+  return h+'<p class="src">Desenhe só os passos que você consegue justificar.</p></details>';
 }
 function resumoTxt(ex,row){const t=(typeof RESUMO!=='undefined')&&RESUMO[ex.n+':'+row[0]];return t?'<p class="resumo"><b>Resumo.</b> '+esc(t)+'</p>':'';}
 function whyBox(ex,row){
@@ -1025,7 +1163,7 @@ function buildChips(){
   EX.forEach(e=>{
     const b=document.createElement('button');
     b.className='chip';b.type='button';b.setAttribute('aria-pressed',curEx===e.n?'true':'false');
-    b.textContent=(isStud(e.n)?'✓ ':'')+'Ex. '+e.n+' '+e.nome;
+    b.textContent=(isStud(e.n)?'✓ ':'')+e.nome;
     b.onclick=()=>{curEx=e.n;pkSel=null;$('#inM').value=e.M;$('#inP').value=e.peaks.filter(p=>p!==e.M).join(', ');buildChips();analyze();anStage(true);};
     box.appendChild(b);
   });
@@ -1079,7 +1217,7 @@ function analyze(){
   const peaks=[...new Set(($('#inP').value.match(/\d+/g)||[]).map(Number))].filter(p=>p>0).sort((a,b)=>b-a);
   const ex=EX.find(e=>e.n===curEx&&e.M===M);
   if(!ex)curEx=null;
-  $('#exinfo').innerHTML=ex?'<div class="ex-head"><b>Ex. '+ex.n+': '+esc(ex.nome)+'</b><span class="mono">'+fmt(ex.f)+'</span><span>'+esc(ex.g)+'</span><span class="badge '+(ex.ok?'ok':'chk')+'">'+(ex.ok?'conferido com a lousa':'conferir com o professor')+'</span><span class="mol">'+fig(ex.smi,ex.f,'keep','molécula')+'</span></div>'+(ex.sug?'<p class="note-sug">Este exercício não tem resolução do professor nos seus arquivos. As quebras abaixo são sugestão minha a partir do livro, então confira.</p>':''):'';
+  $('#exinfo').innerHTML=ex?'<div class="ex-head"><b>'+esc(ex.nome)+'</b><span class="mono">'+fmt(ex.f)+'</span><span>'+esc(ex.g)+'</span><span class="badge '+(ex.ok?'ok':'chk')+'">'+(ex.ok?'conferido com a lousa':'conferir com o professor')+'</span><span class="mol">'+fig(ex.smi,ex.f,'keep','molécula')+'</span></div>'+(ex.sug?'<p class="note-sug">Este exercício não tem resolução do professor nos seus arquivos. As quebras abaixo são sugestão minha a partir do livro, então confira.</p>':''):'';
   decorateEx(ex);$('#nrule').innerHTML=M?'Regra do nitrogênio: M = '+M+' é <b>'+(M%2?'ímpar → número ímpar de N (1, 3...)':'par → zero ou número par de N')+'</b>.':'';
   if(!M||!peaks.length){$('#out').innerHTML='<p class="empty">Digite M e pelo menos um pico.</p>';$('#pairs').innerHTML='';$('#pkbar').innerHTML='';$('#pkh').textContent='';return;}
   const cards={};
@@ -1166,7 +1304,7 @@ function drawTable(){
     $('#tbnote').textContent='Apêndice B, p. 67–68. Todos os íons têm carga +1. Os exercícios aparecem à direita quando o pico está na sua lista.';
     $('#tbhead').innerHTML='<tr><th>m/z</th><th>Íons (livro)</th><th>Nos seus exercícios</th></tr>';
     $('#tbbody').innerHTML=B.filter(([mz,it])=>!qs||String(mz)===qs||it.some(x=>nm(x).toLowerCase().includes(qs))).map(([mz,it])=>{
-      const refs=[];EX.forEach(e=>e.rows.forEach(r=>{if(r[0]===mz)refs.push('Ex. '+e.n);}));
+      const refs=[];EX.forEach(e=>e.rows.forEach(r=>{if(r[0]===mz)refs.push(e.nome);}));
       return '<tr><td class="n">'+mz+'</td><td>'+it.map(x=>'<div class="te">'+ent(x)+'</div>').join('')+'</td><td>'+[...new Set(refs)].map(r=>'<span class="xr">'+r+'</span>').join('')+'</td></tr>';}).join('');
   }
   if(!$('#tbbody').innerHTML)$('#tbbody').innerHTML='<tr><td colspan="3" class="empty">Nada encontrado no livro para essa busca.</td></tr>';
@@ -1206,13 +1344,13 @@ const ivKey=c=>c.n!==null?c.n:c.id;
 const ivNums=t=>(String(t).match(/\d+/g)||[]).map(Number);
 function drawIVChips(){const box=$('#ivchips');box.innerHTML='';
   IR.forEach(c=>{const b=document.createElement('button');b.type='button';b.className='chip';b.setAttribute('aria-pressed',ivEx===ivKey(c)?'true':'false');
-    const e=c.n!==null?EX.find(x=>x.n===c.n):null;b.textContent=c.n!==null?'Ex. '+c.n+' '+e.nome:'Etanol (exemplo)';
+    const e=c.n!==null?EX.find(x=>x.n===c.n):null;b.textContent=c.n!==null?e.nome:'Etanol (exemplo)';
     b.onclick=()=>{ivEx=ivKey(c);drawIVChips();drawIV();};box.appendChild(b);});}
 function drawIV(){
   const c=IR.find(x=>ivKey(x)===ivEx),box=$('#ivout');
   if(!c){box.innerHTML='<p class="empty">Escolha um composto acima.</p>';return;}
   const e=c.n!==null?EX.find(x=>x.n===c.n):null;
-  const nome=e?'Ex. '+e.n+': '+e.nome:c.nome,f=e?e.f:c.f;
+  const nome=e?e.nome:c.nome,f=e?e.f:c.f;
   let h='<div class="ex-head"><b>'+esc(nome)+'</b><span class="mono">'+fmt(f)+'</span>'+(e?'<span>'+esc(e.g)+'</span>':'')+'<span class="badge ok" title="Índice de deficiência de hidrogênio: anéis + ligações π">IDH = '+c.idh+'</span></div>';
   h+='<div class="ans" style="border-radius:6px;margin-bottom:12px"><span class="t">Pista do IV'+(e?' para o espectro de massas':'')+'</span>'+esc(c.pista)+'</div>';
   if(c.disc.length){
@@ -1222,7 +1360,7 @@ function drawIV(){
     h+='<p class="hint">Este composto não está na tabela da disciplina. As atribuições abaixo usam as regras da apostila.</p>';
   }
   if(c.p.length){
-    h+='<h2 style="margin-top:18px">Bandas do arquivo de dados (atribuição minha, fora da tabela do curso)</h2><p class="hint">Estas atribuições são minhas, a partir do espectro do SDBS. Se a prova só aceita a tabela da disciplina, use a tabela de cima. Cada selo mostra a confiança: <b>alta</b> é região de tabela, <b>média</b> é atribuição típica, <b>baixa</b> é palpite ou sem atribuição segura.</p><div class="tbl"><table><thead><tr><th>Banda (cm⁻¹)</th><th>O que é</th><th>Confiança</th></tr></thead><tbody>'+
+    h+='<h2 style="margin-top:18px">Bandas do arquivo de dados (atribuição minha, fora da tabela de referência)</h2><p class="hint">Estas atribuições são minhas, a partir do espectro do SDBS. Se o seu curso só aceita a tabela de referência, use a tabela de cima. Cada selo mostra a confiança: <b>alta</b> é região de tabela, <b>média</b> é atribuição típica, <b>baixa</b> é palpite ou sem atribuição segura.</p><div class="tbl"><table><thead><tr><th>Banda (cm⁻¹)</th><th>O que é</th><th>Confiança</th></tr></thead><tbody>'+
       c.p.map(r=>'<tr><td class="n">'+r[0]+'</td><td>'+esc(r[1])+'</td><td><span class="badge '+(r[2]==='alta'?'ok':'chk')+'">'+r[2]+'</span></td></tr>').join('')+'</tbody></table></div>';
   }
   box.innerHTML=h;
@@ -1233,7 +1371,7 @@ function ivLookup(){
   if(!v){box.innerHTML='';return;}
   const hits=IRT.filter(r=>{const w=r[0]-r[1],tol=w<20?10:0;return v<=r[0]+tol&&v>=r[1]-tol;}).sort((a,b)=>(a[0]-a[1])-(b[0]-b[1]));
   const mine=[];
-  IR.forEach(c=>{const tag=c.n!==null?'Ex. '+c.n:'Etanol';
+  IR.forEach(c=>{const tag=c.n!==null?EX.find(x=>x.n===c.n).nome:'Etanol';
     c.p.forEach(r=>{const n=ivNums(r[0]);if(v>=Math.min(...n)-8&&v<=Math.max(...n)+8)mine.push(tag+' ('+r[0]+')');});
     c.disc.forEach(r=>{r[0].split(',').forEach(part=>{const n=ivNums(part);if(n.length&&v>=Math.min(...n)-8&&v<=Math.max(...n)+8)mine.push(tag+' tabela ('+part.trim()+')');});});});
   const uniq=[...new Set(mine)];
@@ -1273,7 +1411,7 @@ function drawPals(){
   if(!PALS.some(x=>x[0]===n))n='azul';setPal(n);})();
 
 /* ---------- armazenamento (com proteção) ---------- */
-const VERSAO='v9 · 15/10/2026';
+const VERSAO='v10 · 04/11/2026';
 const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
 const isStud=n=>(LS.get('massas-stud',[])).indexOf(n)>=0;
 function ionBox(ex){const d=(typeof IONI!=='undefined')&&IONI[ex.n];if(!d)return '';
@@ -1492,7 +1630,7 @@ function smDraw(){
   if(SM.i>=SM.qs.length){
     const sec=Math.round((Date.now()-SM.t0)/1000),mm=Math.floor(sec/60),ss=('0'+(sec%60)).slice(-2);
     SM.bad.forEach(r=>repAdd(e.n+':'+r[0]));e.rows.forEach(r=>{if(SM.bad.indexOf(r)<0)repOk(e.n+':'+r[0]);});trLabel();
-    let h='<div class="ans" style="border-radius:6px"><span class="t">Nota: '+SM.ok+' de '+SM.qs.length+' · tempo '+mm+':'+ss+'</span>Exercício '+e.n+': <b>'+esc(e.nome)+'</b> <span class="mono">'+fmt(e.f)+'</span>.</div>';
+    let h='<div class="ans" style="border-radius:6px"><span class="t">Nota: '+SM.ok+' de '+SM.qs.length+' · tempo '+mm+':'+ss+'</span><b>'+esc(e.nome)+'</b> <span class="mono">'+fmt(e.f)+'</span>.</div>';
     if(SM.bad.length){h+='<h3>Para revisar</h3><ul>'+SM.bad.map(r=>{const d=r[1]-r[0];return '<li>Pico <b class="mono">'+r[0]+'</b> (de '+r[1]+'): saiu <b>'+d+'</b>, que foi <b>'+fmt(r[3])+'</b> ('+esc(r[4])+').</li>';}).join('')+'</ul>';}
     else h+='<p>Sem erros neste exercício.</p>';
     h+='<div class="row" style="margin-top:10px"><button class="btn" id="smagain" type="button">Outro simulado</button></div>';
@@ -1666,18 +1804,11 @@ function esRun(){
 ['#esF','#esM','#esP','#esI'].forEach(s=>$(s).addEventListener('input',esRun));
 
 (function(){const v=document.getElementById('vers');if(v)v.textContent=VERSAO;})();
+/*@@ANALORG2_JS@@*/
 /* ---------- Analorg: módulos novos (início, ensaios, solubilidade, elementar, identificar) ---------- */
-const CRON=[['11/08','Apresentação do curso; revisão de conceitos de QO 1; aplicações e métodos de análise orgânica'],['18/08','Ensaio de solubilidade e notação linear ECGF, ANALOR e método dos cortes'],['25/08','Ensaio de solubilidade: lista de exercício'],['01/09','Espectroscopia IV, parte 1'],['08/09','Espectroscopia IV, parte 2; exercícios de infravermelho (Pavia)'],['15/09','Exercícios de infravermelho (Pavia)'],['22/09','Exercícios de infravermelho: teoria e entrega de analitos, testes preliminares, queima e solubilidade'],['29/09','Exercícios de infravermelho e constantes físicas, parte 1 (ponto de ebulição)'],['06/10','Exercícios de infravermelho e constantes físicas, parte 2 (ponto de fusão)'],['13/10','Análise elementar de halogênios'],['20/10','Análise elementar de oxigênio, nitrogênio e enxofre; envio final dos resultados'],['27/10','Retificação de experimentos e uso da plataforma ANALOR'],['03/11','PROVA: infravermelho, ensaio de solubilidade, problemas de análise orgânica']];
 function agHoje(){const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
-function agInit2(){const ip=$('#inProva');if(ip)ip.hidden=!(agHoje()<=new Date(2026,10,3));}
+function agInit2(){}
 function agInit(){
-  const h=agHoje(),lim=new Date(2026,10,3);
-  const ip=$('#inProva');if(ip)ip.hidden=!(h.getFullYear()===2026&&h<=lim);
-  const cr=$('#inCron');
-  if(cr)cr.innerHTML='<div class="tbl"><table class="cron"><thead><tr><th>Data</th><th>Assunto</th></tr></thead><tbody>'+CRON.map(r=>{
-    const p=r[0].split('/'),dt=new Date(2026,+p[1]-1,+p[0]);
-    const cl=r[1].indexOf('PROVA')===0?'prova':(dt<h?'past':'');
-    return '<tr class="'+cl+'"><td>'+r[0]+'</td><td>'+esc(r[1])+'</td></tr>';}).join('')+'</tbody></table></div>';
   sgmBind('so','so-');sgmBind('el','el-');
   soInit();elInit();pfInit();idInit();ivQuizInit();pbInit();ecInit();
 }
@@ -2007,9 +2138,9 @@ function ecInit(){
   miniQuiz('#ecQuiz',bank,'Pergunta');
 }
 
-const SCR=['p-ec','p-pb','p-cs','p-in','p-en','p-pf','p-so','p-el','p-id','p-an','p-tr','p-tb','p-iv','p-ma','p-ca','p-aj','p-fo','p-pq','p-sl','p-co','p-es','p-pr','p-pg'];
-const OWN={'p-ec':'t-en','p-pb':'t-en','p-cs':'t-en','p-pf':'t-en','p-so':'t-en','p-el':'t-en','p-id':'t-en','p-tr':'t-an','p-tb':'t-an','p-ca':'t-ma','p-aj':'t-ma','p-fo':'t-ma','p-pq':'t-ma','p-sl':'t-ma','p-co':'t-ma','p-es':'t-ma','p-pr':'t-ma','p-pg':'t-ma'};
-const NAV=['t-in','t-en','t-iv','t-an','t-ma'];
+const SCR=['p-ec','p-pb','p-cs','p-in','p-en','p-pf','p-so','p-el','p-id','p-an','p-tr','p-tb','p-iv','p-ma','p-ca','p-aj','p-fo','p-pq','p-sl','p-co','p-es','p-pg','p-cp','p-cf','p-ic','p-sp','p-rm','p-ob'];
+const OWN={'p-ec':'t-en','p-pb':'t-en','p-cs':'t-en','p-pf':'t-en','p-so':'t-en','p-el':'t-en','p-id':'t-en','p-tr':'t-sp','p-tb':'t-sp','p-an':'t-sp','p-iv':'t-sp','p-rm':'t-sp','p-cf':'t-cp','p-ob':'t-in','p-ca':'t-ma','p-aj':'t-ma','p-fo':'t-ma','p-pq':'t-ma','p-sl':'t-ma','p-co':'t-ma','p-es':'t-ma','p-pg':'t-ma'};
+const NAV=['t-in','t-cp','t-ic','t-en','t-sp','t-ma'];
 function drawSl(){const b=$('#slBody');if(!b||b.dataset.ok||typeof SLD==='undefined')return;b.dataset.ok='1';
   b.innerHTML=SLD.map((s,i)=>'<div class="rule"><h3>'+esc(s[0])+'</h3><p>'+esc(s[1])+'</p><figure class="mech"><button type="button" class="mechb" data-sl="'+i+'"><img src="'+s[2]+'" alt="Slide do professor: '+esc(s[0])+'"></button></figure></div>').join('');
   b.querySelectorAll('[data-sl]').forEach(x=>x.onclick=()=>mechZoom(SLD[+x.dataset.sl][2],x));}
@@ -2019,20 +2150,17 @@ function go(id){
   const own=OWN[id]||('t-'+id.slice(2));
   NAV.forEach(t=>$('#'+t).setAttribute('aria-selected',t===own?'true':'false'));
   document.querySelectorAll('.msub button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.go===id?'true':'false'));
-  if(id==='p-in')agInit2();
   if(id==='p-cs')csDraw();
   if(id==='p-ec')ecDraw();
   if(id==='p-tr')trInit();
-  if(id==='p-pr')drawPerg();
   if(id==='p-sl')drawSl();
-  if(id==='p-an')drawHoje();
   window.scrollTo(0,0);
 }
 NAV.forEach((t,i)=>{const el=$('#'+t);
   el.onclick=()=>go('p-'+t.slice(2));
   el.addEventListener('keydown',ev=>{const d=ev.key==='ArrowRight'?1:ev.key==='ArrowLeft'?-1:0;if(!d)return;ev.preventDefault();const n=NAV[(i+d+NAV.length)%NAV.length];$('#'+n).focus();$('#'+n).click();});});
 document.addEventListener('click',ev=>{const b=ev.target.closest('[data-go]');if(b)go(b.dataset.go);});
-document.querySelectorAll('.seg').forEach(g=>g.querySelectorAll('button').forEach(b=>{b.onclick=()=>{
+document.querySelectorAll('.seg').forEach(g=>g.querySelectorAll('button').forEach(b=>{b.onclick=()=>{if(b.dataset.go)return;
   g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
   ['v-comp','v-num','v-guia','v-tr'].forEach(id=>{$('#'+id).hidden=id!==b.dataset.v;});};}));
 
@@ -2040,6 +2168,7 @@ document.querySelectorAll('.seg').forEach(g=>g.querySelectorAll('button').forEac
 $('#glos').innerHTML=[['+ (cátion)','Fragmento com carga positiva e nenhum elétron sozinho. É o que o aparelho enxerga.'],['+· (íon-radical)','Carga positiva e um elétron sozinho. O íon molecular M e os fragmentos de rearranjo são assim.'],['· (radical)','Pedaço neutro com um elétron sozinho. Sai da molécula e não aparece no espectro.'],[GLOS.alfa[0],GLOS.alfa[1]],[GLOS.mcl[0],GLOS.mcl[1]],[GLOS.neu[0],GLOS.neu[1]],[GLOS.anel[0],GLOS.anel[1]]].map(x=>'<div><dt>'+x[0]+'</dt><dd>'+x[1]+'</dd></div>').join('');
 pgInit();curEx=6;$('#inM').value=60;$('#inP').value='59, 42, 31';
 agInit();buildChips();analyze();drawHoje();drawTable();calc();drawIVChips();drawIV();drawIVReg();drawIRT();$('#ivq').addEventListener('input',ivLookup);
+cpInit();icInit();obInit();
 go('p-in');
 (function(){
   function stk(){

@@ -1,0 +1,49 @@
+/* ===== Analorg v2: compostos, identificação, RMN, orgânica básica ===== */
+.cpgrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+.cpc{font:inherit;text-align:left;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--sh);padding:10px 12px;cursor:pointer;display:grid;grid-template-columns:92px 1fr;gap:10px;align-items:center;min-height:84px}
+.cpc:hover{border-color:var(--keep)}
+.cpc .thumb{margin:0}.cpc .thumb svg{width:92px}
+.cpc b{display:block;font-weight:600;line-height:1.2}
+.cpc .m{display:block;color:var(--muted);font-size:.84rem;margin-top:2px}
+.cpq{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin:0 0 10px}
+.cpq input[type=search]{font:inherit;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0;flex:1 1 220px}
+.cpq select{font-family:var(--sans)}
+.cfh{display:grid;grid-template-columns:minmax(150px,230px) 1fr;gap:14px;align-items:start;margin:0 0 12px}
+@media (max-width:560px){.cfh{grid-template-columns:1fr}}
+.cfh figure.st svg{width:100%;max-width:230px}
+.cft{width:100%;min-width:0;border-collapse:collapse}
+.cft th{position:static;text-transform:none;letter-spacing:0;font-size:.86rem;color:var(--muted);width:38%;font-weight:500;padding:6px 10px 6px 0}
+.cft td{padding:6px 0;border-bottom:1px solid var(--line)}.cft th{border-bottom:1px solid var(--line)}
+.cft tr:last-child th,.cft tr:last-child td{border-bottom:0}
+.sec{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--sh);padding:12px 14px;margin:0 0 12px}
+.sec>summary{font-weight:600;cursor:pointer}
+.sec[open]>summary{margin-bottom:8px}
+.sec p{margin:0 0 6px}
+.pk{display:inline-block;font-family:var(--mono);font-size:.9rem;background:var(--keep-soft);color:var(--keep);border-radius:6px;padding:2px 8px;margin:2px 4px 2px 0}
+.pk.base{font-weight:700}
+.nmrsk{width:100%;max-width:520px;height:auto;display:block;margin:8px 0 4px;color:var(--ink)}
+.nmrsk .bx{fill:var(--keep);opacity:.55}
+.nmrsk text{fill:currentColor;font:10px var(--mono)}
+.nmrsk .ax{stroke:currentColor;stroke-width:1;opacity:.6}
+.icf{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--sh);padding:12px 14px;margin:0 0 10px}
+.icf h3{margin:0 0 6px;font-size:1rem}
+.icg{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.icg select,.icg input{width:100%;font-family:var(--sans)}
+.icg input[type=text]{font-family:var(--mono)}
+.icres{display:grid;gap:10px;margin-top:12px}
+.icr{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--sh);padding:12px 14px}
+.icr .top{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.icr .pct{font-family:var(--mono);font-size:1.3rem;font-weight:600}
+.icr .bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin:6px 0 8px}
+.icr .bar i{display:block;height:100%;background:var(--keep)}
+.icr .cr{display:flex;flex-wrap:wrap;gap:4px 6px}
+.icr .cr span{font-size:.78rem;border-radius:6px;padding:2px 8px;background:var(--line);color:var(--muted)}
+.icr .cr span.ok{background:var(--keep-soft);color:var(--keep)}
+.icr .cr span.md{background:var(--note-soft);color:var(--note)}
+.icr .cr span.no{background:var(--lost-soft);color:var(--lost)}
+.icr .det{font-size:.86rem;color:var(--muted);margin:6px 0 0}
+.icwarn{background:var(--note-soft);border-radius:10px;padding:10px 14px;font-size:.92rem;margin:0 0 10px}
+.obt{width:100%;min-width:0}
+.obt td,.obt th{font-size:.9rem}
+.srcl{font-size:.8rem;color:var(--muted)}
+.srcl b{font-weight:600}
