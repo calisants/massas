@@ -1,4 +1,4 @@
-<title>Analorg</title>
+<title>Anaquim</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
@@ -278,7 +278,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
 </style>
 
 <div class="wrap">
-  <h1>Analorg</h1>
+  <h1>Anaquim</h1>
 
   <!-- ===== Analorg: telas novas ===== -->
   <section id="p-in" role="tabpanel" aria-labelledby="t-in">
@@ -827,9 +827,13 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <h2 class="scr">Fontes e avisos</h2>
     <p class="hint">Versão do app: <b class="mono" id="vers"></b>. Se a data não for a mais recente, feche e abra o app duas vezes.</p>
       <p>Fonte das tabelas: Silverstein, Webster, Kiemle, Bryce. Spectrometric Identification of Organic Compounds, 8ª ed. (2014), Apêndice B (p. 67–68) e Apêndice C (p. 69–70). O livro avisa que as listas são sugestivas e não completas. Nas entradas com anel, o nome e a estrutura são a leitura que Claude fez do desenho do livro; confira na página indicada. "+ H" ou "+ 2H" indica rearranjo com transferência de hidrogênio. Nas estruturas, o desenho mostra o esqueleto; a carga + e o elétron desemparelhado (·) aparecem na legenda e, quando possível, no desenho.</p>
-    <h2>Sobre o conteúdo de ensaios (Analorg)</h2>
+    <h2>Sobre o conteúdo de ensaios (Anaquim)</h2>
       <p>Solubilidade, análise elementar, ignição, cor, ponto de fusão e ponto de ebulição seguem a <i>Plataforma QO é Vida</i> do Prof. Marcelo Sierpe Pedrosa (analor.com.br e as páginas dele no Google Sites). O texto foi parafraseado por Claude, não copiado. Os procedimentos de análise elementar citam Costa Neto (2004) e Feigl (1966), como o site. O cronograma vem da imagem postada no Classroom.</p>
       <p>Cada bloco tem um item &ldquo;Fonte&rdquo; recolhido: toque para ver de onde vem. Quando diz &ldquo;não conferida&rdquo;, o texto não tem fonte verificada. Estão nesse caso: os exemplos de compostos, as perguntas de treino, a lista de classes e as regras da tela &ldquo;Identificar&rdquo;, o uso do PF como indício de pureza e a leitura da linha tracejada do fluxograma (N ou S leva a MN).</p>
+    <h2>Créditos</h2>
+      <p>Feito por Camila, aluna de Química do IFRJ, como material de apoio ao estudo de Análise Orgânica.</p>
+      <p>Conteúdo de ensaios: Plataforma QO é Vida, do Prof. Marcelo Sierpe Pedrosa (IFRJ). Teoria de RMN: resumo dos slides do Prof. Jeronimo (IFRJ). Dados de espectros e constantes físicas: SDBS (AIST, Japão), PubChem (NIH, EUA) e as tabelas de Silverstein et al. citadas acima. Estruturas e cálculos: RDKit (licença BSD). Fontes de texto: IBM Plex (SIL Open Font License).</p>
+      <p>Este app é material de apoio ao estudo. Confira em fonte oficial antes de usar em laboratório.</p>
   </section>
 
   <!--@@ANALORG2_HTML@@-->
@@ -1986,7 +1990,7 @@ function drawSl(){const b=$('#slBody');if(!b||b.dataset.ok||typeof SLD==='undefi
   b.innerHTML=SLD.map((s,i)=>'<div class="rule"><h3>'+esc(s[0])+'</h3><p>'+esc(s[1])+'</p><figure class="mech"><button type="button" class="mechb" data-sl="'+i+'"><img src="'+s[2]+'" alt="Slide do professor: '+esc(s[0])+'"></button></figure></div>').join('');
   b.querySelectorAll('[data-sl]').forEach(x=>x.onclick=()=>mechZoom(SLD[+x.dataset.sl][2],x));}
 let CUR='p-in';
-function go(id){
+function go(id,fromPop){
   if(id==='p-se'){go('p-pq');const a=$('#se-anchor');if(a)a.scrollIntoView();return;}
   SCR.forEach(x=>{$('#'+x).hidden=x!==id;});
   const own=OWN[id]||('t-'+id.slice(2));
@@ -2001,12 +2005,62 @@ function go(id){
   if(id==='p-ec')ecDraw();
   if(id==='p-tr')trInit();
   if(id==='p-sl')drawSl();
+  if(!fromPop)navRecord(id);
   window.scrollTo(0,0);
 }
+
+/* ---------- Histórico: o botão voltar do aparelho volta uma tela dentro do app ----------
+   Cada tela vira uma entrada do histórico do navegador (endereço #/ensaios, #/cf/67-64-1 etc.).
+   Na tela Início, voltar sai do app, como em qualquer app. */
+const NAVSID=Math.random().toString(36).slice(2);
+const NAVHASH0=location.hash;
+let NAVI=0,NAVH=[],NAVPOP=false;
+function navHash(id){
+  if(id==='p-in')return '';
+  if(id==='p-cf'&&CFI!=null&&COMP[CFI])return '#/cf/'+COMP[CFI].cas;
+  return '#/'+id.slice(2);
+}
+function navRecord(id){
+  try{
+    const cf=id==='p-cf'?CFI:null,url=location.pathname+location.search+navHash(id);
+    if(!NAVH.length){NAVI=0;NAVH[0]=id;history.replaceState({sid:NAVSID,tela:id,cf:cf,i:0},'',url);return;}
+    const s=history.state;
+    if(s&&s.sid===NAVSID&&!s.ov&&s.tela===id&&s.cf===cf)return;
+    NAVI++;NAVH.length=NAVI;NAVH[NAVI]=id;
+    history.pushState({sid:NAVSID,tela:id,cf:cf,i:NAVI},'',url);
+  }catch(e){}
+}
+function navBackTo(t){
+  try{const s=history.state;if(s&&s.sid===NAVSID&&!s.ov&&NAVI>0&&NAVH[NAVI-1]===t){history.back();return true;}}catch(e){}
+  return false;
+}
+function navFromHash(h){
+  const p=String(h||'').replace(/^#\/?/,'').split('/');if(!p[0])return false;
+  if(p[0]==='cf'){const cas=decodeURIComponent(p.slice(1).join('/')),i=COMP.findIndex(c=>c.cas===cas);if(i<0)return false;cfDraw(i);go('p-cf');return true;}
+  const id='p-'+p[0];if(SCR.indexOf(id)<0)return false;go(id);return true;
+}
+window.addEventListener('popstate',ev=>{
+  const s=ev.state;NAVPOP=true;
+  try{
+    const ov=document.querySelector('.mechov,.zmov');
+    if(ov){const x=ov.querySelector('.mechx,.zmx');if(x)x.click();}
+    if(s&&s.sid===NAVSID){
+      NAVI=s.i;
+      if(s.ov){if(!ov)history.back();}
+      else if(s.tela!==CUR||(s.tela==='p-cf'&&s.cf!==CFI)){if(s.tela==='p-cf'&&s.cf!=null)cfDraw(s.cf);go(s.tela,true);}
+    }else if(!navFromHash(location.hash))go('p-in',true);
+  }catch(e){}
+  NAVPOP=false;
+});
+/* ampliações (mecanismo, espectro) ganham uma entrada própria: voltar fecha a ampliação */
+new MutationObserver(ms=>ms.forEach(m=>{
+  m.addedNodes.forEach(n=>{if(n.nodeType===1&&n.matches('.mechov,.zmov')){try{NAVI++;NAVH.length=NAVI;NAVH[NAVI]=CUR+'#ov';history.pushState({sid:NAVSID,tela:CUR,cf:CUR==='p-cf'?CFI:null,i:NAVI,ov:1},'',location.href);}catch(e){}}});
+  m.removedNodes.forEach(n=>{if(n.nodeType===1&&n.matches('.mechov,.zmov')&&!NAVPOP){try{const s=history.state;if(s&&s.sid===NAVSID&&s.ov)history.back();}catch(e){}}});
+})).observe(document.body,{childList:true});
 NAV.forEach((t,i)=>{const el=$('#'+t);
   el.onclick=()=>go('p-'+t.slice(2));
   el.addEventListener('keydown',ev=>{const d=ev.key==='ArrowRight'?1:ev.key==='ArrowLeft'?-1:0;if(!d)return;ev.preventDefault();const n=NAV[(i+d+NAV.length)%NAV.length];$('#'+n).focus();$('#'+n).click();});});
-document.addEventListener('click',ev=>{const b=ev.target.closest('[data-go]');if(b)go(b.dataset.go);});
+document.addEventListener('click',ev=>{const b=ev.target.closest('[data-go]');if(!b)return;if(b.classList.contains('back')&&navBackTo(b.dataset.go))return;go(b.dataset.go);});
 document.querySelectorAll('.seg,.ivseg').forEach(g=>g.querySelectorAll('button').forEach(b=>{b.onclick=()=>{if(b.dataset.go||!b.dataset.v)return;
   g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
   ['v-comp','v-num','v-guia','v-tr'].forEach(id=>{$('#'+id).hidden=id!==b.dataset.v;});};}));
@@ -2016,7 +2070,7 @@ $('#glos').innerHTML=[['+ (cátion)','Fragmento com carga positiva e nenhum elé
 pgInit();curEx=6;$('#inM').value=60;$('#inP').value='59, 42, 31';
 agInit();buildChips();analyze();drawHoje();drawTable();calc();drawIVChips();drawIV();drawIVReg();drawIRT();drawIVFat();$('#ivq').addEventListener('input',ivLookup);
 cpInit();icInit();obInit();stInit();nvInit();sugInit();
-go('p-in');sesRestore();
+go('p-in');sesRestore();if(NAVHASH0)navFromHash(NAVHASH0);
 (function(){
   function stk(){
     document.querySelectorAll('.tbl table').forEach(t=>{

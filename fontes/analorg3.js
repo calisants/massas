@@ -21,7 +21,12 @@ function stInit(){
 
 /* ---------- Novidades e aviso de atualização ---------- */
 const NOVID=[
- {v:0,d:'04/11/2026',t:[
+ {v:0,d:'06/11/2026',t:[
+  'O app agora se chama Anaquim (antes Analorg).',
+  'Botão voltar: o voltar do celular agora volta uma tela dentro do app, em vez de sair. Fechar uma ampliação (mecanismo ou espectro) também é pelo voltar. Cada tela e cada ficha de composto tem endereço próprio (a ficha usa #/cf/ seguido do CAS), que dá para copiar e mandar.',
+  'Fontes e avisos: nova seção de créditos.'
+ ]},
+ {r:129,d:'04/11/2026',t:[
   'Novo composto: ácido 5-formilsalicílico (SDBS 23378), com MS, IV (pasta em Nujol, conferido em parte), ¹³C (8 sinais) e ¹H (4 de 5 sinais, o do ácido saiu cortado no print) medidos. O IV agora também mostra a banda do C=O de aldeído aromático em compostos com mais de uma carbonila. Nos fragmentos de MS, a perda de água seguida de CO (como no ácido salicílico) aparece em texto, sem estrutura desenhada.',
   'MS: a ficha de 70 compostos agora traz "Fragmentos propostos": a estrutura do íon de cada pico, o que ele perdeu e a regra (clivagem α, benzílica, McLafferty, perda de CO). É proposta por regras, com a massa conferida contra o pico do SDBS; não é o mecanismo medido. Os picos que nenhuma regra simples explica ficam listados como sem proposta.',
   'Abas: Início, Compostos, Ensaios e Espectros. Em Espectros ficam IV, Massas e RMN, e o antigo "Mais" foi para o Início. As páginas de cada assunto têm o mesmo layout: título, resumo e uma faixa de seções, como na aba RMN.',
@@ -71,15 +76,25 @@ function nvBanner(){
   const mostrar=visto!==null&&visto<VNUM;
   if(!mostrar){if(b)b.hidden=true;return;}
   if(!b){b=document.createElement('div');b.id='nvBanner';b.className='nvb';b.setAttribute('role','status');
-    b.innerHTML='<span>O Analorg foi atualizado para <b id="nvV"></b>. Leia as novidades.</span><span class="nvbb"><button type="button" class="btn" id="nvLer">Ler</button><button type="button" class="btn ghost" id="nvOk">Já li</button></span>';
+    b.innerHTML='<span>O Anaquim foi atualizado para <b id="nvV"></b>. Leia as novidades.</span><span class="nvbb"><button type="button" class="btn" id="nvLer">Ler</button><button type="button" class="btn ghost" id="nvOk">Já li</button></span>';
     const w=document.querySelector('.wrap');w.insertBefore(b,w.children[1]||null);
     $('#nvLer').onclick=()=>go('p-nv');
     $('#nvOk').onclick=()=>{LS.set('massas-visto',VNUM);b.hidden=true;};}
   $('#nvV').textContent='v'+VNUM;b.hidden=false;
 }
+/* Quando o app mudar de endereço, preencha NOVO_ENDERECO (ex.: 'https://anaquim.seudominio.com.br/'). Quem abrir o endereço antigo vê o aviso. */
+const NOVO_ENDERECO='';
+function endBanner(){
+  if(!NOVO_ENDERECO)return;
+  let h;try{h=new URL(NOVO_ENDERECO).host;}catch(e){return;}
+  if(location.host===h||location.protocol==='file:')return;
+  const b=document.createElement('div');b.id='endBanner';b.className='nvb';b.setAttribute('role','status');
+  b.innerHTML='<span>O Anaquim mudou de endereço. Antes de trocar, salve seu progresso em Início, O app, Salvar progresso, e cole o código no endereço novo.</span><span class="nvbb"><a class="btn" href="'+esc(NOVO_ENDERECO)+'">Abrir o novo</a></span>';
+  const w=document.querySelector('.wrap');w.insertBefore(b,w.children[1]||null);
+}
 function nvInit(){
   if(LS.get('massas-visto',null)===null)LS.set('massas-visto',window.PRIMEIRA===false?0:VNUM);
-  nvBanner();
+  nvBanner();endBanner();
 }
 
 /* ---------- Revisão espaçada das perguntas dos quizzes (1, 3 e 7 dias) ---------- */
@@ -124,7 +139,7 @@ function sesRestore(){
     if(d.an){if(d.an.M)$('#inM').value=d.an.M;if(d.an.P)$('#inP').value=d.an.P;}
     if(d.cpq){$('#cpQ').value=d.cpq;cpDraw();}
     if(d.tr)TR.mode=d.tr;
-    if(d.tela&&d.tela!=='p-in'&&SCR.indexOf(d.tela)>=0){
+    if(d.tela&&d.tela!=='p-in'&&!NAVHASH0&&SCR.indexOf(d.tela)>=0){
       if(d.tela==='p-cf'){if(d.cf==null)return;cfDraw(d.cf);}
       go(d.tela);
       setTimeout(()=>window.scrollTo(0,d.y||0),80);
