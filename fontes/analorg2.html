@@ -7,6 +7,7 @@
       <input type="search" id="cpQ" placeholder="Buscar por nome, fórmula ou CAS" aria-label="Buscar composto" autocomplete="off">
       <label>Estado<select id="cpE"><option value="">Todos</option><option value="líquido">Líquido</option><option value="sólido">Sólido</option></select></label>
       <label>Grupo de solubilidade<select id="cpG"><option value="">Todos</option></select></label>
+      <button class="chip" type="button" id="cpF" aria-pressed="false">★ Só favoritos</button>
     </div>
     <p class="hint" id="cpN"></p>
     <div class="cpgrid" id="cpL"></div>
@@ -82,9 +83,29 @@
       <p class="hint" style="margin:8px 0 0">A fórmula só conta se bater exata. O GDH sai da fórmula (calculadora em Orgânica Básica). Bandas acima de 1500 cm⁻¹ pesam mais.</p>
     </details>
 
+    <details class="sec icsec"><summary>7. Subestruturas (opcional) <span class="bdg" data-b="7"></span></summary>
+    <p class="hint">O que a molécula tem ou não tem: anel benzênico, grupos funcionais, halogênio. Marque Sim ou Não só do que você sabe.</p>
+    <div id="icSubR"></div>
+    </details>
+
+    <details class="sec icsec" id="icSin"><summary>Procurar por um único sinal</summary>
+    <p class="hint">Ferramenta à parte: mostra quais compostos do banco têm um sinal específico, sem entrar na conta acima.</p>
+    <div class="row">
+      <label for="icSinT">Tipo de sinal<select id="icSinT"><option value="iv">IV (cm⁻¹)</option><option value="h">RMN de ¹H (δ, ppm)</option><option value="c">RMN de ¹³C (δ, ppm)</option><option value="ms">MS (m/z)</option></select></label>
+      <label for="icSinV">Valor<input class="f-m" type="text" id="icSinV" inputmode="decimal" placeholder="ex.: 1715" autocomplete="off"></label>
+    </div>
+    <div id="icSinO" aria-live="polite"></div>
+    </details>
+
     <h2 id="icResT">Resultado</h2>
     <div class="icwarn">A porcentagem é a <b>compatibilidade entre os compostos do banco do app</b>, não uma probabilidade real. Se o seu composto não está na lista, o app mostra só o mais parecido.</div>
     <div id="icOut" class="icres" aria-live="polite"></div>
+    <div class="row" id="icExp" hidden>
+      <button class="btn" type="button" id="icCopy">Copiar resultado</button>
+      <button class="btn ghost" type="button" id="icShare">Compartilhar</button>
+      <button class="btn ghost" type="button" id="icDown">Baixar (.txt)</button>
+    </div>
+    <p class="hint" id="icExpMsg" role="status"></p>
   </section>
 
   <section id="p-rm" role="tabpanel" aria-labelledby="t-sp" hidden>

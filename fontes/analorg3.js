@@ -7,13 +7,15 @@ function zoomAplicar(on){
   if(m)m.setAttribute('content',on?'width=device-width,initial-scale=1':'width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no');
   document.documentElement.classList.toggle('semzoom',!on);
 }
-['gesturestart','gesturechange'].forEach(ev=>document.addEventListener(ev,e=>{if(!LS.get('massas-zoom',false))e.preventDefault();},{passive:false}));
+['gesturestart','gesturechange'].forEach(ev=>document.addEventListener(ev,e=>{if(!LS.get('massas-zoom',true))e.preventDefault();},{passive:false}));
 function stDraw(){
-  $('#stZoom').checked=!!LS.get('massas-zoom',false);
+  $('#stZoom').checked=!!LS.get('massas-zoom',true);
+  acessDraw();
   $('#stSem').checked=!!semDica();
+  offDraw();
 }
 function stInit(){
-  zoomAplicar(!!LS.get('massas-zoom',false));
+  zoomAplicar(!!LS.get('massas-zoom',true));acessAplicar();
   $('#stZoom').onchange=e=>{LS.set('massas-zoom',e.target.checked);zoomAplicar(e.target.checked);};
   $('#stSem').onchange=e=>{LS.set('massas-semdica',e.target.checked);if(TR.cur)trDraw();};
   stDraw();
@@ -22,6 +24,13 @@ function stInit(){
 /* ---------- Novidades e aviso de atualização ---------- */
 const NOVID=[
  {v:0,d:'06/11/2026',t:[
+  'Créditos: "Feito por Camila Silva, aluna de Bacharelado em Química do IFRJ, como material de apoio ao estudo de Análise Orgânica." Fontes, Avisos e Créditos agora são três abas separadas.',
+  'Identificar: filtro por subestrutura (anel benzênico, grupos funcionais, halogênio), com Sim ou Não. Nova caixa "Procurar por um único sinal" (IV, ¹H, ¹³C ou m/z). O resultado pode ser copiado, compartilhado ou baixado em .txt.',
+  'Favoritos: marque um composto com a estrela na ficha. Os favoritos sobem para o topo da lista e há um filtro "Só favoritos". Ficam guardados neste aparelho e entram no "Salvar progresso".',
+  'Uso sem internet: Ajustes mostra o que está guardado, o espaço usado, a versão e se há uma atualização. Uma faixa avisa quando o aparelho fica sem conexão.',
+  'Acessibilidade: zoom com dois dedos liberado por padrão; tamanho da letra (normal, grande, muito grande), alto contraste e reduzir animações em Ajustes; leitor de tela anuncia a tela nova; regiões da página marcadas; figuras sem descrição não atrapalham mais a leitura.',
+ ]},
+ {r:130,d:'06/11/2026',t:[
   'O app agora se chama Anaquim (antes Analorg).',
   'Botão voltar: o voltar do celular agora volta uma tela dentro do app, em vez de sair. Fechar uma ampliação (mecanismo ou espectro) também é pelo voltar. Cada tela e cada ficha de composto tem endereço próprio (a ficha usa #/cf/ seguido do CAS), que dá para copiar e mandar.',
   'Fontes e avisos: nova seção de créditos.'
@@ -94,7 +103,7 @@ function endBanner(){
 }
 function nvInit(){
   if(LS.get('massas-visto',null)===null)LS.set('massas-visto',window.PRIMEIRA===false?0:VNUM);
-  nvBanner();endBanner();
+  nvBanner();endBanner();offBar();
 }
 
 /* ---------- Revisão espaçada das perguntas dos quizzes (1, 3 e 7 dias) ---------- */
@@ -122,6 +131,109 @@ function rvDraw(){
   }
   RVMODE=true;
   miniQuiz('#rvBox',due.map(k=>r[k].q),'Revisão');
+}
+
+
+
+/* ---------- Uso sem internet: estado claro ---------- */
+const fmtMB=b=>(b/1048576).toFixed(1).replace('.',',')+' MB';
+async function offDraw(){
+  const box=$('#offBox');if(!box)return;
+  const L=[['Conexão',navigator.onLine?'Com internet':'Sem internet agora']];
+  let sw='Só funciona abrindo pelo endereço do app (não vale para arquivo aberto direto).',ok=false;
+  try{
+    if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0){
+      const r=await navigator.serviceWorker.getRegistration();
+      if(r&&r.active){ok=true;sw='Pronto: o app está guardado neste aparelho';}
+      else sw='Ainda não guardado. Abra o app uma vez com internet.';
+    }
+  }catch(e){}
+  L.push(['Uso sem internet',sw]);
+  try{
+    if(window.caches){
+      let n=0;
+      for(const k of await caches.keys()){if(k.indexOf('anaquim-')===0){const c=await caches.open(k);n+=(await c.keys()).length;}}
+      if(n)L.push(['Arquivos guardados',n+' (app, ícones e fontes)']);
+    }
+  }catch(e){}
+  try{
+    if(navigator.storage&&navigator.storage.estimate){
+      const e=await navigator.storage.estimate();
+      if(e&&e.usage!=null)L.push(['Espaço usado no aparelho',fmtMB(e.usage)+(e.quota?' (de '+fmtMB(e.quota)+' disponíveis)':'')]);
+    }
+  }catch(e){}
+  L.push(['Versão guardada',String(VERSAO)]);
+  const nf=favGet().length;
+  L.push(['Favoritos',nf+(nf===1?' composto':' compostos')+'. Ficam sempre disponíveis sem internet, porque o app inteiro fica guardado.']);
+  box.innerHTML=L.map(r=>'<div class="cfr"><dt>'+esc(r[0])+'</dt><dd>'+esc(r[1])+'</dd></div>').join('');
+  box.dataset.pronto=ok?'1':'0';
+}
+async function offCheck(){
+  const m=$('#offMsg');m.textContent='Verificando...';
+  try{
+    const r=await fetch('index.html',{cache:'no-store'}),t=await r.text(),v=(t.match(/const VERSAO='([^']*)'/)||[])[1];
+    m.textContent=!v?'Não deu para ler a versão publicada.':v===VERSAO?'Você está na versão mais recente ('+v+').':'Há uma versão nova ('+v+'). Feche e abra o app duas vezes para atualizar.';
+  }catch(e){m.textContent='Sem internet: não deu para verificar agora.';}
+}
+function offBar(){
+  let b=$('#offBar');
+  if(navigator.onLine){if(b)b.hidden=true;return;}
+  if(!b){b=document.createElement('div');b.id='offBar';b.className='offbar';b.setAttribute('role','status');
+    b.textContent='Sem internet. O app continua funcionando; só os links para fora (SDBS) não abrem.';
+    const w=document.querySelector('.wrap');w.insertBefore(b,w.firstChild);}
+  b.hidden=false;
+}
+window.addEventListener('online',()=>{offBar();offDraw();});
+window.addEventListener('offline',()=>{offBar();offDraw();});
+document.addEventListener('click',ev=>{if(ev.target.closest('#offChk'))offCheck();});
+
+
+/* ---------- Acessibilidade: tamanho da letra, alto contraste, menos animação, rótulos e foco ---------- */
+function acessAplicar(){
+  const r=document.documentElement,fs=LS.get('massas-fonte',100);
+  r.style.fontSize=fs===100?'':fs+'%';
+  r.classList.toggle('altoc',!!LS.get('massas-altoc',false));
+  r.classList.toggle('semmov',!!LS.get('massas-semmov',false));
+}
+function acessDraw(){
+  const fs=LS.get('massas-fonte',100);
+  document.querySelectorAll('#stFonte button').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.fs===fs)));
+  $('#stAltoc').checked=!!LS.get('massas-altoc',false);
+  $('#stSemmov').checked=!!LS.get('massas-semmov',false);
+}
+document.addEventListener('click',ev=>{
+  const b=ev.target.closest('#stFonte button');
+  if(b){LS.set('massas-fonte',+b.dataset.fs);acessAplicar();acessDraw();}
+});
+document.addEventListener('change',ev=>{
+  if(ev.target.id==='stAltoc'){LS.set('massas-altoc',ev.target.checked);acessAplicar();}
+  if(ev.target.id==='stSemmov'){LS.set('massas-semmov',ev.target.checked);acessAplicar();}
+});
+/* desenhos sem texto alternativo viram decoração (o nome e a fórmula já estão em texto ao lado) */
+function a11yFix(root){
+  (root||document).querySelectorAll('svg[role="img"]:not([aria-label]):not([aria-labelledby])').forEach(s=>{
+    s.removeAttribute('role');s.setAttribute('aria-hidden','true');s.setAttribute('focusable','false');
+  });
+}
+(function(){let t;new MutationObserver(()=>{clearTimeout(t);t=setTimeout(()=>a11yFix(document),40);}).observe(document.body,{childList:true,subtree:true});a11yFix(document);})();
+/* ao trocar de tela, o foco vai para o título: o leitor de tela anuncia a tela nova */
+function focoTitulo(id){
+  const h=document.querySelector('#'+id+' h2.scr')||document.querySelector('#'+id+' h2');
+  if(h){h.setAttribute('tabindex','-1');try{h.focus({preventScroll:true});}catch(e){}}
+}
+
+/* ---------- Favoritos: guardados no aparelho (por CAS), aparecem primeiro na lista e entram no "Salvar progresso" ---------- */
+let CPFAV=false;
+const favGet=()=>LS.get('massas-fav',[]);
+const favHas=c=>favGet().indexOf(c.cas)>=0?1:0;
+function favToggle(c){
+  const l=favGet(),i=l.indexOf(c.cas);
+  if(i>=0)l.splice(i,1);else l.push(c.cas);
+  LS.set('massas-fav',l);
+}
+function favBtnHtml(c){
+  const on=favHas(c);
+  return '<button class="btn ghost" type="button" id="favBtn" aria-pressed="'+(on?'true':'false')+'">'+(on?'★ Favorito (toque para remover)':'☆ Favoritar')+'</button>';
 }
 
 /* ---------- Estado salvo ao sair do app (celular pode fechar o app em segundo plano) ---------- */
@@ -208,7 +320,7 @@ function nmrSpec(c,kind){
     if(y<8)y=8;placed.push([x,y]);
     const src=(isH?c.h1:c.c13)[o.idx];
     lb+=pkG(x.toFixed(1),y.toFixed(1),o.idx+1,isH?src.on:src.at,(isH?'h':'c')+(o.idx+1),(isH?'¹H, sinal ':'¹³C, sinal ')+(o.idx+1)+': '+src.t+' · '+(isH?src.h+' H':src.n+' C')+(isH&&src.c?' em '+src.c:'')+' · δ '+src.lo+'–'+src.hi+' ppm');});
-  return '<svg class="nmrspec" viewBox="0 0 '+W+' '+(base+34)+'" role="img" aria-label="Espectro de '+(isH?'1H':'13C')+' simulado">'
+  return '<svg class="nmrspec" viewBox="0 0 '+W+' '+(base+34)+'" role="group" aria-label="Espectro de '+(isH?'1H':'13C')+' simulado">'
     +(isH?'<path class="int" d="'+ip+'"/>':'')+'<path class="sp" d="'+p+'"/><line class="ax" x1="'+L+'" y1="'+base+'" x2="'+(W-R)+'" y2="'+base+'"/>'+tk+lb
     +'<text class="tl" x="'+(W/2)+'" y="'+(base+30)+'" text-anchor="middle">δ (ppm)'+(isH?'':' · ¹³C com desacoplamento de ¹H')+'</text></svg>';
 }
@@ -319,7 +431,7 @@ function ivSpec(c,bs){
     while(placed.some(o=>Math.abs(o[0]-cx)<15&&Math.abs(o[1]-y)<14))y-=14;
     if(y<top+4)y=top+4;placed.push([cx,y]);
     lb+=pkG(cx.toFixed(1),y.toFixed(1),i+1,b.at,'b'+(i+1),'Banda '+(i+1)+': '+b.t+' · '+(b.hi===b.lo?'~'+b.hi:b.lo+'–'+b.hi)+' cm⁻¹');});
-  return '<svg class="nmrspec irspec" viewBox="0 0 '+W+' '+(base+34)+'" role="img" aria-label="Espectro de IV simulado de '+esc(c.n)+'">'
+  return '<svg class="nmrspec irspec" viewBox="0 0 '+W+' '+(base+34)+'" role="group" aria-label="Espectro de IV simulado de '+esc(c.n)+'">'
     +g+'<path class="sp" d="'+p+'"/><line class="ax" x1="'+L+'" y1="'+base+'" x2="'+(W-R)+'" y2="'+base+'"/>'+lb
     +'<text class="tl" x="'+(W/2)+'" y="'+(base+30)+'" text-anchor="middle">número de onda (cm⁻¹) · eixo vertical: transmitância (%)</text></svg>';
 }
@@ -357,7 +469,7 @@ document.addEventListener('input',ev=>{if(ev.target.id==='ivQ')drawIVChips();});
 function icBadges(){
   const v=id=>{const e=$('#'+id);return e&&String(e.value).trim()!==''?1:0;};
   const n=Object.values(icSt.el||{}).filter(Boolean).length,ir=Object.values(icSt.ir||{}).filter(Boolean).length+v('icIV');
-  const c={1:(icSt.est?1:0)+(icSt.cor?1:0),2:icSt.g?1:0,3:v('icPF')+v('icPE'),4:n,5:ir,6:['icF','icGDH','icGF','icM','icP','icH','icC','icHd'].reduce((a,k)=>a+v(k),0)};
+  const c={1:(icSt.est?1:0)+(icSt.cor?1:0),2:icSt.g?1:0,3:v('icPF')+v('icPE'),4:n,5:ir,7:Object.values(icSt.sub||{}).filter(Boolean).length,6:['icF','icGDH','icGF','icM','icP','icH','icC','icHd'].reduce((a,k)=>a+v(k),0)};
   document.querySelectorAll('#p-ic .bdg').forEach(b=>{const k=+b.dataset.b;b.textContent=c[k]?c[k]+(c[k]>1?' marcados':' marcado'):'';});
 }
 document.addEventListener('click',ev=>{if(typeof CUR!=='undefined'&&CUR==='p-ic')setTimeout(icBadges,120);});

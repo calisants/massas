@@ -663,6 +663,20 @@ from compostos_pub import PUB, DIV, DATA as PUB_DATA
 
 MSFS = {}
 MSFS_ID = {}
+# Subestruturas para a busca por estrutura (chave, SMARTS). Os rótulos ficam no app (SUBL).
+SUBS = [
+    ("benz", "c1ccccc1"), ("fenol", "[OX2H]c"), ("alcool", "[CX4][OX2H]"),
+    ("ald", "[CX3H1](=O)[#6]"), ("cetona", "[#6][CX3](=O)[#6]"), ("acido", "[CX3](=O)[OX2H1]"),
+    ("ester", "[#6][CX3](=O)[OX2][#6]"), ("amida", "[CX3](=O)[NX3]"),
+    ("eter", "[OD2;!$(O-C=O)]([#6])[#6]"),
+    ("amina", "[NX3;!$(NC=[O,N,S]);!$(N=O);!$(N-[O,N]);!$(N-a)][CX4]"),
+    ("anilina", "[NX3;H2,H1;!$(NC=O)]c"), ("nitro", "[N+](=O)[O-]"), ("nitrila", "C#N"),
+    ("alcino", "C#C"), ("alceno", "[CX3]=[CX3]"), ("haleto", "[F,Cl,Br,I]"), ("tiol", "[SX2H]"),
+]
+_SUBP = [(k, Chem.MolFromSmarts(s)) for k, s in SUBS]
+assert all(p is not None for k, p in _SUBP)
+def subestruturas(m):
+    return [k for k, p in _SUBP if m.HasSubstructMatch(p)]
 def build_comp(svgfn, EXD):
     exm = {e["n"]: e for e in EXD}
     out = []
@@ -674,7 +688,7 @@ def build_comp(svgfn, EXD):
         grupos, bands, ivf = iv_bands(m)
         d = dict(i=i, n=nome, a=alts, f=f, mw=round(Descriptors.MolWt(m), 2), M=M, smi=smi, s=svgfn(smi, 170, 120),
                  cas=cas, est=est, cor=cor, pf=pf, pe=pe, g=g, ex=exn, obs=obs, gdh=gdh(m),
-                 gf=grupos, iv=[list(b) for b in bands], ivf=[list(x) for x in ivf], h1=nmr_h(m), c13=nmr_c(m))
+                 gf=grupos, iv=[list(b) for b in bands], ivf=[list(x) for x in ivf], h1=nmr_h(m), c13=nmr_c(m), sub=subestruturas(m))
         d["sn"] = svg_numerado(m, d["c13"]); d["si"] = _hl_svg(m, 300, 200, 40); d["ivat"] = [iv_atoms(m, b[2]) for b in bands]; liga_h_c(m, d["h1"], d["c13"])
         if exn:
             e = exm[exn]; assert e["M"] == M or True

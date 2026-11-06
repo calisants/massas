@@ -19,17 +19,19 @@ function cpInit(){
   GORD.forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=SOLNM[k];g.appendChild(o);});
   const byName=[...COMP].sort((a,b)=>a.n.localeCompare(b.n,'pt'));
   byName.forEach(c=>{[sel,ex].forEach(s=>{const o=document.createElement('option');o.value=c.i;o.textContent=c.n;s.appendChild(o);});});
+  $('#cpF').addEventListener('click',()=>{CPFAV=!CPFAV;$('#cpF').setAttribute('aria-pressed',CPFAV?'true':'false');cpDraw();});
   $('#cpQ').addEventListener('input',cpDraw);['#cpE','#cpG'].forEach(id=>$(id).addEventListener('change',cpDraw));
   sel.onchange=rmDraw;
   cpDraw();rmDraw();
 }
 function cpDraw(){
   const q=norm2($('#cpQ').value),e=$('#cpE').value,g=$('#cpG').value;
-  const l=COMP.filter(c=>(!q||[c.n,...c.a,c.f,c.cas].some(x=>norm2(x).includes(q)))&&(!e||c.est.indexOf(e)===0)&&(!g||c.g===g)).sort((a,b)=>a.n.localeCompare(b.n,'pt'));
+  const l=COMP.filter(c=>(!q||[c.n,...c.a,c.f,c.cas].some(x=>norm2(x).includes(q)))&&(!e||c.est.indexOf(e)===0)&&(!g||c.g===g)&&(!CPFAV||favHas(c))).sort((a,b)=>(favHas(b)-favHas(a))||a.n.localeCompare(b.n,'pt'));
   $('#cpN').textContent=l.length+' de '+COMP.length+' compostos';
-  $('#cpL').innerHTML=l.length?l.map(c=>'<button class="cpc" type="button" data-cf="'+c.i+'"><span class="thumb">'+c.s+'</span><span><b>'+esc(c.n)+'</b><span class="m">'+fmt(c.f)+' · '+SOLNM[c.g]+'</span><span class="m">'+esc(c.est)+(c.pf!=null?' · PF '+tC(c.pf):'')+(c.pe!=null?' · PE '+tC(c.pe):'')+'</span></span></button>').join(''):'<p class="empty">Nenhum composto com esse filtro.</p>';
+  $('#cpL').innerHTML=l.length?l.map(c=>'<button class="cpc" type="button" data-cf="'+c.i+'"><span class="thumb">'+c.s+'</span><span><b>'+esc(c.n)+'</b>'+(favHas(c)?' <span class="favst" role="img" aria-label="favorito">★</span>':'')+'<span class="m">'+fmt(c.f)+' · '+SOLNM[c.g]+'</span><span class="m">'+esc(c.est)+(c.pf!=null?' · PF '+tC(c.pf):'')+(c.pe!=null?' · PE '+tC(c.pe):'')+'</span></span></button>').join(''):'<p class="empty">'+(CPFAV&&!favGet().length?'Nenhum favorito ainda. Abra uma ficha e toque em Favoritar.':'Nenhum composto com esse filtro.')+'</p>';
 }
-document.addEventListener('click',ev=>{const b=ev.target.closest('[data-cf]');if(b){cfDraw(+b.dataset.cf);go('p-cf');}
+document.addEventListener('click',ev=>{const fb=ev.target.closest('#favBtn');if(fb&&CFI!=null){favToggle(COMP[CFI]);fb.outerHTML=favBtnHtml(COMP[CFI]);const nb=$('#favBtn');if(nb)nb.focus();cpDraw();return;}
+  const b=ev.target.closest('[data-cf]');if(b){cfDraw(+b.dataset.cf);go('p-cf');}
   const cp=ev.target.closest('[data-copy]');if(cp)copyTxt(cp.dataset.copy,cp);});
 
 /* ---------- RMN estimado ---------- */
@@ -78,7 +80,7 @@ function msSpec(c){
 function cfDraw(i){
   CFI=i;const c=COMP[i],hoje=new Date().toLocaleDateString('pt-BR');
   const sd=c.sdbs||(c.ex&&typeof INTS!=='undefined'&&INTS[c.ex]?INTS[c.ex].sdbs:null);
-  let h='<h2 class="scr">'+esc(c.n)+'</h2>'+(c.a.length?'<p class="scrsub">Também: '+c.a.map(esc).join(', ')+'</p>':'');
+  let h='<h2 class="scr">'+esc(c.n)+'</h2>'+(c.a.length?'<p class="scrsub">Também: '+c.a.map(esc).join(', ')+'</p>':'')+'<div class="row" style="margin:0 0 8px">'+favBtnHtml(c)+'</div>';
   const rowd=(k,v)=>'<div class="cfr"><dt>'+k+'</dt><dd>'+v+'</dd></div>';
   h+='<figure class="cfs hlfig"><div>'+(c.si||c.s)+'</div><figcaption>'+fmt(c.f)+' · '+String(c.mw).replace('.',',')+' g/mol'+''+'</figcaption>'+HLRO+'</figure>'
    +'<div class="cfq">'
@@ -144,7 +146,7 @@ const corFam=s=>{s=String(s||'').toLowerCase();const k=s.indexOf('('),main=k<0?s
   const f=t=>{const r=new Set();if(/incolor|branc/.test(t))r.add('inc');if(/amarel/.test(t))r.add('amarelo');if(/laranj/.test(t))r.add('laranja');if(/verm|ros/.test(t))r.add('vermelho');if(/marrom|castanh/.test(t))r.add('marrom');if(/verde/.test(t))r.add('verde');if(/azul/.test(t))r.add('azul');if(/viole|roxo|purpur/.test(t))r.add('violeta');return r;};
   return [f(main),f(par)];};
 const IC_CAMPOS=['#icPF','#icPE','#icTol','#icIV','#icM','#icP','#icH','#icC','#icHd','#icF','#icGDH','#icGF'];
-let icSt={est:'',cor:'',g:'',el:{},ir:{}};
+let icSt={est:'',cor:'',g:'',el:{},ir:{},sub:{}};
 const sx=h=>String(h).replace(/<[^>]*>/g,'');
 
 function icChips(key,opts){
@@ -160,13 +162,14 @@ function icDraw(){
   $('#icGrpC').innerHTML=icChips('g',[['','Não sei']].concat(SOLG.map(x=>[x.k,SOLN[x.k]])));
   $('#icElR').innerHTML=ELORD.map(k=>icTri('el',k,ELS.find(e=>e[0]===k)[1])).join('');
   $('#icIrR').innerHTML=IDIR.map(x=>icTri('ir',x[0],x[1])).join('');
+  $('#icSubR').innerHTML=SUBL.map(x=>icTri('sub',x[0],x[1])).join('');
 }
-function icReset(){icSt={est:'',cor:'',g:'',el:{},ir:{}};IC_CAMPOS.forEach(i=>$(i).value='');$('#icTol').value='5';$('#icEx').value='';}
+function icReset(){icSt={est:'',cor:'',g:'',el:{},ir:{},sub:{}};IC_CAMPOS.forEach(i=>$(i).value='');$('#icTol').value='5';$('#icEx').value='';}
 let icTm;
 function icQueue(){clearTimeout(icTm);icTm=setTimeout(()=>{icRun();icSave();},160);}
 function icSave(){const f={};IC_CAMPOS.forEach(i=>f[i]=$(i).value);LS.set('massas-ic',{st:icSt,f:f});}
 function icLoad(){const d=LS.get('massas-ic',null);if(!d||!d.st)return;
-  icSt={est:d.st.est||'',cor:d.st.cor||'',g:d.st.g||'',el:d.st.el||{},ir:d.st.ir||{}};
+  icSt={est:d.st.est||'',cor:d.st.cor||'',g:d.st.g||'',el:d.st.el||{},ir:d.st.ir||{},sub:d.st.sub||{}};
   IC_CAMPOS.forEach(i=>{if(d.f&&d.f[i]!=null)$(i).value=d.f[i];});}
 function icRange(id,tol){
   let s=$(id).value.trim().replace(/[–—]|\s+a\s+/g,'|').replace(/,/g,'.');if(!s)return null;
@@ -180,7 +183,7 @@ function icInputs(){
   const num=id=>{const x=parseFloat(v(id).replace(',','.'));return isFinite(x)?x:null;};
   const tol=+v('#icTol')||5;
   return {est:icSt.est,cor:icSt.cor,g:icSt.g,F:v('#icF').replace(/\s+/g,''),gdh:num('#icGDH'),gf:v('#icGF'),
-    els:ELORD.map(e=>[e,icSt.el[e]]).filter(e=>e[1]),ir:icSt.ir,
+    els:ELORD.map(e=>[e,icSt.el[e]]).filter(e=>e[1]),ir:icSt.ir,sub:icSt.sub||{},
     pf:icRange('#icPF',tol),pe:icRange('#icPE',tol),
     iv:numsInt(v('#icIV')),M:num('#icM'),pk:numsInt(v('#icP')),h:num('#icH'),c:num('#icC'),hd:nums(v('#icHd'))};
 }
@@ -196,6 +199,7 @@ function icScore(c,x){
   if(x.els.length){c._el=c._el||elCount(c.f);}
   x.els.forEach(([e,v])=>{const has=!!(c._el&&c._el[e]);add('el','elemento '+e,(v==='sim')===has?1:0.03,has?'tem '+e:'sem '+e);});
   IDIR.forEach(([k,lab])=>{const u=x.ir[k];if(!u)return;const has=cIr(c,k);add('irf','IV: '+lab.replace(/ \(.*/,''),(u==='sim')===has?1:0.05,has?'tem essa banda':'não tem essa banda');});
+  SUBL.forEach(([k,lab])=>{const u=x.sub[k];if(!u)return;const has=(c.sub||[]).indexOf(k)>=0;add('sub',lab.replace(/ \(.*/,''),(u==='sim')===has?1:0.04,has?'tem':'não tem');});
   if(x.F){const a=elCount(x.F),b=c._el||(c._el=elCount(c.f));const ks=new Set([...Object.keys(a),...Object.keys(b)]);const ok=[...ks].every(k=>(a[k]||0)===(b[k]||0));add('F','fórmula',ok?1:0.02,c.f);}
   if(x.gdh!=null)add('gdh','GDH',c.gdh===x.gdh?1:0.05,'GDH '+c.gdh);
   if(x.gf)add('gf','grupo funcional',c.gf.indexOf(x.gf)>=0?1:0.04,c.gf.join(', ')||'sem grupo funcional');
@@ -257,7 +261,7 @@ function icRun(){setTimeout(()=>{if(typeof icBadges==="function")icBadges();},0)
   const res=COMP.map(c=>({c,...icScore(c,x)}));
   const used=res[0].parts.length;
   let h='',sum='';
-  if(!used&&!cl.any){$('#icOut').innerHTML='<p class="empty">Marque pelo menos um dado acima.</p>';$('#icSum').textContent='Marque pelo menos um dado.';return;}
+  if(!used&&!cl.any){ICLAST=null;icExpShow();$('#icOut').innerHTML='<p class="empty">Marque pelo menos um dado acima.</p>';$('#icSum').textContent='Marque pelo menos um dado.';return;}
   /* 1. classes */
   h+='<details class="sec" open><summary>Classes que sobram'+(cl.any?' ('+cl.ok.length+' de '+IDCLS.length+')':'')+'</summary>';
   if(!cl.any)h+='<p class="empty">Marque solubilidade, elementos ou bandas de IV para filtrar as classes.</p>';
@@ -285,16 +289,18 @@ function icRun(){setTimeout(()=>{if(typeof icBadges==="function")icBadges();},0)
   }
   h+='</details>';
   $('#icOut').innerHTML=h;
+  ICLAST={x,cl,top:used?res.slice(0,5).filter((r,i)=>i<3||r.p>=1):[],used};icExpShow();
   $('#icSum').innerHTML=(cl.any?'<b>'+cl.ok.length+'</b> de '+IDCLS.length+' classes':'<b>'+used+'</b> critério'+(used>1?'s':''))+sum+' <span class="mut">· ver resultado ↓</span>';
   fontesRecolher($('#icOut'));
 }
-function icClear(){icReset();icDraw();$('#icOut').innerHTML='<p class="empty">Marque pelo menos um dado acima.</p>';$('#icSum').textContent='Marque pelo menos um dado.';$('#icBandOut').innerHTML='';icSave();}
+function icClear(){icReset();icDraw();ICLAST=null;icExpShow();$('#icOut').innerHTML='<p class="empty">Marque pelo menos um dado acima.</p>';$('#icSum').textContent='Marque pelo menos um dado.';$('#icBandOut').innerHTML='';icSave();}
 function icFill(i){
   const c=COMP[i];icReset();
   icSt.est=c.est.indexOf('líquido')===0?'líquido':'sólido';icSt.g=c.g;
   icSt.cor=[...corFam(c.cor)[0]][0]||'';
   const ce=elCount(c.f);['O','N','S','Cl','Br','I'].forEach(e=>{icSt.el[e]=ce[e]?'sim':'nao';});
   IDIR.forEach(([k])=>{icSt.ir[k]=cIr(c,k)?'sim':'nao';});
+  SUBL.forEach(([k])=>{icSt.sub[k]=(c.sub||[]).indexOf(k)>=0?'sim':'nao';});
   if(c.pf!=null&&c.est.indexOf('sólido')===0)$('#icPF').value=c.pf;
   if(c.pe!=null&&c.est.indexOf('líquido')===0)$('#icPE').value=c.pe;
   $('#icIV').value=c.iv.filter(b=>b[4]).map(b=>Math.round((b[0]+b[1])/2)).join(', ');
@@ -303,6 +309,81 @@ function icFill(i){
   $('#icH').value=c.h1.length;$('#icC').value=c.c13.length;$('#icEx').value=String(i);
   icDraw();icRun();icSave();
 }
+
+/* ---------- Identificar: exportar/compartilhar e busca por um sinal ---------- */
+let ICLAST=null;
+function icExpShow(){const e=$('#icExp');if(e)e.hidden=!ICLAST;const m=$('#icExpMsg');if(m)m.textContent='';}
+function icTexto(){
+  const L=ICLAST;if(!L)return '';const x=L.x,o=[];
+  const pct=r=>(r.p>=10?r.p.toFixed(0):r.p.toFixed(1)).replace('.',',');
+  o.push('Anaquim: identificação do composto');
+  o.push(new Date().toLocaleDateString('pt-BR'));
+  o.push('');o.push('DADOS INFORMADOS');
+  const d=[];
+  if(x.est)d.push('Estado: '+x.est);
+  if(x.cor){const c=COR.find(k=>k[0]===x.cor);d.push('Cor: '+(c?c[1]:x.cor));}
+  if(x.g)d.push('Grupo de solubilidade: '+sx(SOLN[x.g]));
+  const v=id=>$(id).value.trim();
+  if(v('#icPF'))d.push('PF: '+v('#icPF')+' °C (±'+v('#icTol')+')');
+  if(v('#icPE'))d.push('PE: '+v('#icPE')+' °C (±'+v('#icTol')+')');
+  x.els.forEach(([e,u])=>d.push('Elemento '+e+': '+(u==='sim'?'presente':'ausente')));
+  IDIR.forEach(([k,lab])=>{if(x.ir[k])d.push('IV, '+lab.replace(/ \(.*/,'')+': '+(x.ir[k]==='sim'?'sim':'não'));});
+  if(v('#icIV'))d.push('Bandas de IV (cm⁻¹): '+v('#icIV'));
+  SUBL.forEach(([k,lab])=>{if(x.sub[k])d.push('Subestrutura, '+lab.replace(/ \(.*/,'')+': '+(x.sub[k]==='sim'?'sim':'não'));});
+  if(x.F)d.push('Fórmula: '+x.F);if(x.gdh!=null)d.push('GDH: '+x.gdh);
+  if(x.M!=null)d.push('M: '+x.M);if(v('#icP'))d.push('Picos de MS (m/z): '+v('#icP'));
+  if(x.h!=null)d.push('Sinais de ¹H: '+x.h);if(x.c!=null)d.push('Sinais de ¹³C: '+x.c);
+  if(v('#icHd'))d.push('δ de ¹H (ppm): '+v('#icHd'));
+  o.push(...(d.length?d.map(t=>'- '+t):['- (nenhum)']));
+  if(L.cl.any){o.push('');o.push('CLASSES QUE SOBRAM ('+L.cl.ok.length+' de '+IDCLS.length+')');
+    o.push(L.cl.ok.length?L.cl.ok.map(k=>sx(k.c.n)).join('; '):'nenhuma');}
+  if(L.top.length){o.push('');o.push('COMPOSTOS MAIS COMPATÍVEIS');
+    L.top.forEach((r,i)=>{o.push((i+1)+'. '+r.c.n+' ('+r.c.f+', CAS '+r.c.cas+'): '+pct(r)+'%');
+      const no=r.parts.filter(p=>p.f<0.7).map(p=>p.lab);if(no.length)o.push('   não combina bem: '+no.join(', '));});}
+  o.push('');o.push('A porcentagem compara os compostos do banco do app; não é uma probabilidade real. Confirme com os espectros e com a literatura.');
+  o.push('Feito no Anaquim: https://anaquim.litteraria.com.br');
+  return o.join('\n');
+}
+function icMsg(t){const m=$('#icExpMsg');if(m)m.textContent=t;}
+async function icCopiar(){
+  const t=icTexto();if(!t)return;
+  try{await navigator.clipboard.writeText(t);icMsg('Resultado copiado.');}
+  catch(e){const a=document.createElement('textarea');a.value=t;a.setAttribute('readonly','');a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();
+    try{document.execCommand('copy');icMsg('Resultado copiado.');}catch(e2){icMsg('Não consegui copiar. Use "Baixar".');}a.remove();}
+}
+async function icCompartilhar(){
+  const t=icTexto();if(!t)return;
+  if(navigator.share){try{await navigator.share({title:'Identificação do composto (Anaquim)',text:t});return;}catch(e){if(e&&e.name==='AbortError')return;}}
+  icCopiar();icMsg('Este aparelho não abre o menu de compartilhar. O resultado foi copiado.');
+}
+function icBaixar(){
+  const t=icTexto();if(!t)return;
+  const b=new Blob([t+'\n'],{type:'text/plain;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');
+  a.href=u;a.download='identificacao-anaquim.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500);
+  icMsg('Arquivo baixado.');
+}
+/* quais compostos têm um sinal: tolerância própria de cada técnica */
+function icSinRun(){
+  const t=$('#icSinT').value,raw=$('#icSinV').value.trim(),o=$('#icSinO');
+  const ph={iv:'ex.: 1715',h:'ex.: 7,3',c:'ex.: 128',ms:'ex.: 105'};$('#icSinV').placeholder=ph[t];
+  const n=nums(raw);if(!n.length){o.innerHTML='';return;}
+  const v=n[0],tol={iv:20,h:0.3,c:5,ms:0.5}[t];
+  const hit=[];
+  COMP.forEach(c=>{
+    let d=null;
+    if(t==='iv'){const b=c.iv.find(b=>{const r=ivr(b);return v>=r[0]-tol&&v<=r[1]+tol;});if(b)d=b[2].split(' (')[0]+(b[4]?' (banda-chave)':'');}
+    else if(t==='h'){const s=c.h1.find(s=>v>=s.lo-tol&&v<=s.hi+tol);if(s)d=s.t+', '+s.lo+' a '+s.hi+' ppm';}
+    else if(t==='c'){const s=c.c13.find(s=>v>=s.lo-tol&&v<=s.hi+tol);if(s)d=s.t+', '+s.lo+' a '+s.hi+' ppm';}
+    else if(c.ms&&c.ms.some(p=>Math.abs(p-v)<=tol))d=(c.ms.indexOf(v)===0||Math.round(v)===c.M)?'íon molecular':'pico no espectro do banco';
+    if(d)hit.push([c,d]);
+  });
+  const un={iv:' cm⁻¹ (±20)',h:' ppm (±0,3)',c:' ppm (±5)',ms:' (±0,5)'}[t];
+  o.innerHTML='<p class="hint"><b>'+hit.length+'</b> de '+COMP.length+' compostos com sinal em '+String(v).replace('.',',')+un+'.</p>'
+    +hit.slice(0,40).map(([c,d])=>'<p style="margin:4px 0"><button class="back" style="margin:0" type="button" data-cf="'+c.i+'">'+esc(c.n)+'</button> <span class="hint">'+esc(d)+'</span></p>').join('')
+    +(hit.length>40?'<p class="hint">Mostrando 40. Acrescente outros dados na conta acima para afunilar.</p>':'')
+    +'<p class="hint">As faixas são as esperadas pelo grupo funcional, não o espectro medido. Vários grupos caem na mesma região.</p>';
+}
+
 function icInit(){
   [...new Set(COMP.flatMap(c=>c.gf))].sort((a,b)=>a.localeCompare(b,'pt')).forEach(g=>{const o=document.createElement('option');o.value=g;o.textContent=g;$('#icGF').appendChild(o);});
   icLoad();icDraw();
@@ -315,6 +396,8 @@ function icInit(){
   });
   P.addEventListener('input',icQueue);P.addEventListener('change',e=>{if(e.target.id==='icEx'){if(e.target.value!=='')icFill(+e.target.value);return;}icQueue();});
   $('#icClr').onclick=icClear;
+  $('#icCopy').onclick=icCopiar;$('#icShare').onclick=icCompartilhar;$('#icDown').onclick=icBaixar;
+  $('#icSinT').onchange=icSinRun;$('#icSinV').oninput=icSinRun;
   $('#icSum').onclick=()=>{const r=$('#icResT');if(r)r.scrollIntoView({behavior:'smooth',block:'start'});};
   icRun();
 }

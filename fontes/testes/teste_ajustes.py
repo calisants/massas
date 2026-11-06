@@ -10,10 +10,12 @@ with sync_playwright() as p:
     b=abrir(p);ctx=b.new_context(viewport={'width':360,'height':740});pg=ctx.new_page()
     pg.on('pageerror',lambda e:errs.append(str(e)))
     pg.goto('file:///home/claude/massas/index.html');pg.wait_for_timeout(500)
-    chk('zoom travado por padrão',pg.evaluate("document.querySelector('meta[name=viewport]').content.includes('user-scalable=no')"))
-    pg.evaluate("go('p-st')");pg.check('#stZoom')
-    chk('zoom liga no ajuste',pg.evaluate("!document.querySelector('meta[name=viewport]').content.includes('user-scalable=no')"))
-    pg.uncheck('#stZoom')
+    MV="document.querySelector('meta[name=viewport]').content.includes('user-scalable=no')"
+    chk('zoom liberado por padrão (acessibilidade)',not pg.evaluate(MV))
+    pg.evaluate("go('p-st')");pg.uncheck('#stZoom')
+    chk('zoom trava quando o ajuste é desligado',pg.evaluate(MV))
+    pg.check('#stZoom')
+    chk('zoom volta a liberar ao ligar o ajuste',not pg.evaluate(MV))
     # sem pistas
     pg.evaluate("go('p-tr')");pg.click('#trmode [data-m=qual]')
     chk('dica aparece por padrão',pg.query_selector('#trh') is not None)

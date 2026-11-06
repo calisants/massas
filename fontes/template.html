@@ -74,7 +74,7 @@ figure.spec{margin:6px 0 12px}
 .ctx{margin:0 0 10px}
 .stud{font:inherit;font-size:.82rem;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:3px 10px;cursor:pointer}
 .stud[aria-pressed="true"]{background:var(--keep);color:var(--surface);border-color:var(--keep)}
-body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:18px 96px}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:.9375rem;line-height:1.5;padding-inline:16px;padding-block:18px 96px}
 .wrap{max-width:980px;margin:0 auto}
 h1{font-size:1.6rem;line-height:1.15;margin:0 0 4px;font-weight:600;text-wrap:balance}
 .sub{color:var(--muted);margin:0 0 18px;max-width:62ch}
@@ -83,7 +83,9 @@ sub,sup{font-size:.72em;line-height:0}
 .tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:18px}
 .tab{font:inherit;font-weight:500;color:var(--muted);background:none;border:0;border-bottom:3px solid transparent;padding:10px 12px;cursor:pointer;margin-bottom:-1px}
 .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--keep)}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+h2.scr:focus,h2:focus{outline:none}
+html,body{touch-action:manipulation}
 .how{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;margin-bottom:18px}
 .how ol{margin:6px 0 0;padding-left:20px;display:grid;gap:2px}
 .how b{font-weight:600}
@@ -172,6 +174,7 @@ h1{font-size:1.15rem}
 .bnav .tab[aria-selected="true"]{color:var(--keep);border-top-color:var(--keep);border-bottom:0}
 .bnav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .bnav svg .dot{fill:currentColor;stroke:none}
+.fopane[hidden]{display:none}
 .seg{display:flex;margin:0 0 14px}
 .seg button{flex:1;font:inherit;font-weight:500;background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:8px 6px;cursor:pointer}
 .seg button:first-child{border-radius:6px 0 0 6px}.seg button:last-child{border-radius:0 6px 6px 0}.seg button+button{border-left:0}
@@ -277,7 +280,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
 /* END temas */
 </style>
 
-<div class="wrap">
+<div class="wrap" role="main">
   <h1>Anaquim</h1>
 
   <!-- ===== Analorg: telas novas ===== -->
@@ -309,7 +312,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
       <button class="mi" type="button" data-go="p-nv"><b>Novidades</b><span>O que mudou em cada atualização.</span></button>
       <a class="mi" id="mSug" href="#" target="_blank" rel="noopener" hidden><b>Enviar sugestão ou erro</b><span>Abre o formulário. As respostas vão para uma planilha.</span></a>
       <button class="mi" type="button" data-go="p-pg"><b>Salvar e levar o progresso</b><span>Gere um código para passar o que você estudou para outro aparelho.</span></button>
-      <button class="mi" type="button" data-go="p-fo"><b>Fontes e avisos</b><span>De onde vêm as tabelas e o que ainda precisa de conferência.</span></button>
+      <button class="mi" type="button" data-go="p-fo"><b>Fontes, avisos e créditos</b><span>De onde vêm as tabelas e o que ainda precisa de conferência.</span></button>
     </div>
   </section>
 
@@ -642,8 +645,21 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <div class="menu">
       <button class="mi" type="button" data-go="p-co"><b>Cor do app</b><span>Escolha o tom que for mais confortável para você.</span></button>
     </div>
-    <label class="sw"><input type="checkbox" id="stZoom"><span><b>Permitir zoom com os dedos</b><small>Desligado por padrão: o toque duplo não amplia a tela sem querer. Ligue se precisar ampliar uma figura.</small></span></label>
+    <label class="sw"><input type="checkbox" id="stZoom"><span><b>Permitir zoom com os dedos</b><small>Ligado por padrão: use dois dedos para ampliar uma figura. O toque duplo não amplia a tela sem querer. Desligue se preferir travar o zoom.</small></span></label>
     <label class="sw"><input type="checkbox" id="stSem"><span><b>Treinos sem pistas</b><small>Esconde o nome da molécula e o botão de dica nos treinos de massas, para você tentar antes de ver.</small></span></label>
+    <h3 style="margin:20px 0 6px">Leitura e acessibilidade</h3>
+    <div class="seg" id="stFonte" role="group" aria-label="Tamanho da letra">
+      <button type="button" data-fs="100" aria-pressed="true">Letra normal</button>
+      <button type="button" data-fs="118" aria-pressed="false">Grande</button>
+      <button type="button" data-fs="136" aria-pressed="false">Muito grande</button>
+    </div>
+    <label class="sw"><input type="checkbox" id="stAltoc"><span><b>Alto contraste</b><small>Textos secundários e linhas ficam na cor principal, mais fáceis de ler.</small></span></label>
+    <label class="sw"><input type="checkbox" id="stSemmov"><span><b>Reduzir animações</b><small>Tira as transições. Se o aparelho já pede menos movimento, o app respeita.</small></span></label>
+    <h3 style="margin:20px 0 6px">Uso sem internet</h3>
+    <p class="hint" style="margin:0 0 6px">Depois da primeira abertura com internet, todas as telas funcionam sem conexão. Só os links para fora do app (como o SDBS) precisam de internet.</p>
+    <dl class="cfd" id="offBox" aria-live="polite"></dl>
+    <div class="row"><button class="btn ghost" type="button" id="offChk">Verificar atualização</button></div>
+    <p class="hint" id="offMsg" role="status"></p>
   </section>
 
   <section id="p-nv" role="region" aria-label="Novidades" hidden>
@@ -822,29 +838,44 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <div id="esOut" style="margin-top:16px"></div>
   </section>
 
-  <section id="p-fo" role="region" aria-label="Fontes e avisos" hidden>
+  <section id="p-fo" role="region" aria-label="Fontes, avisos e créditos" hidden>
     <button class="back" data-go="p-in">← Início</button>
-    <h2 class="scr">Fontes e avisos</h2>
+    <h2 class="scr">Fontes, avisos e créditos</h2>
     <p class="hint">Versão do app: <b class="mono" id="vers"></b>. Se a data não for a mais recente, feche e abra o app duas vezes.</p>
+    <div class="seg" id="foTabs" role="group" aria-label="Seções desta página">
+      <button type="button" data-fo="fo-fontes" aria-pressed="true">Fontes</button>
+      <button type="button" data-fo="fo-avisos" aria-pressed="false">Avisos</button>
+      <button type="button" data-fo="fo-creditos" aria-pressed="false">Créditos</button>
+    </div>
+    <div id="fo-fontes" class="fopane">
       <p>Fonte das tabelas: Silverstein, Webster, Kiemle, Bryce. Spectrometric Identification of Organic Compounds, 8ª ed. (2014), Apêndice B (p. 67–68) e Apêndice C (p. 69–70). O livro avisa que as listas são sugestivas e não completas. Nas entradas com anel, o nome e a estrutura são a leitura que Claude fez do desenho do livro; confira na página indicada. "+ H" ou "+ 2H" indica rearranjo com transferência de hidrogênio. Nas estruturas, o desenho mostra o esqueleto; a carga + e o elétron desemparelhado (·) aparecem na legenda e, quando possível, no desenho.</p>
-    <h2>Sobre o conteúdo de ensaios (Anaquim)</h2>
+      <h2>Sobre o conteúdo de ensaios (Anaquim)</h2>
       <p>Solubilidade, análise elementar, ignição, cor, ponto de fusão e ponto de ebulição seguem a <i>Plataforma QO é Vida</i> do Prof. Marcelo Sierpe Pedrosa (analor.com.br e as páginas dele no Google Sites). O texto foi parafraseado por Claude, não copiado. Os procedimentos de análise elementar citam Costa Neto (2004) e Feigl (1966), como o site. O cronograma vem da imagem postada no Classroom.</p>
+      <p>Espectros e constantes físicas: SDBS (AIST, Japão) e PubChem (NIH, EUA). O app só liga para o SDBS e mostra o texto de citação; ele não copia os espectros de lá.</p>
+    </div>
+    <div id="fo-avisos" class="fopane" hidden>
       <p>Cada bloco tem um item &ldquo;Fonte&rdquo; recolhido: toque para ver de onde vem. Quando diz &ldquo;não conferida&rdquo;, o texto não tem fonte verificada. Estão nesse caso: os exemplos de compostos, as perguntas de treino, a lista de classes e as regras da tela &ldquo;Identificar&rdquo;, o uso do PF como indício de pureza e a leitura da linha tracejada do fluxograma (N ou S leva a MN).</p>
-    <h2>Créditos</h2>
-      <p>Feito por Camila, aluna de Química do IFRJ, como material de apoio ao estudo de Análise Orgânica.</p>
-      <p>Conteúdo de ensaios: Plataforma QO é Vida, do Prof. Marcelo Sierpe Pedrosa (IFRJ). Teoria de RMN: resumo dos slides do Prof. Jeronimo (IFRJ). Dados de espectros e constantes físicas: SDBS (AIST, Japão), PubChem (NIH, EUA) e as tabelas de Silverstein et al. citadas acima. Estruturas e cálculos: RDKit (licença BSD). Fontes de texto: IBM Plex (SIL Open Font License).</p>
+      <p>Pontos de fusão e de ebulição de 185 valores foram conferidos no PubChem (mediana de várias fontes; os que divergiram ficam marcados). Estado, cor, dígito verificador do CAS e grupo de solubilidade foram escritos sem fonte conferida. Fórmula, massa, GDH, estrutura, número de sinais de RMN e multiplicidade são calculados pelo RDKit. Os deslocamentos de RMN são faixas típicas de tabela, e o valor medido aparece na ficha quando foi conferido no SDBS.</p>
+      <p>Os prints de ¹H do SDBS não trazem integração nem constantes de acoplamento, e alguns vêm cortados. Os exercícios B 51 (CH₂F₂), B 58 (C₂H₅S) e C 102 estão como impressos no livro, mas a massa não bate (provável erro de impressão).</p>
       <p>Este app é material de apoio ao estudo. Confira em fonte oficial antes de usar em laboratório.</p>
+    </div>
+    <div id="fo-creditos" class="fopane" hidden>
+      <p>Feito por Camila Silva, aluna de Bacharelado em Química do IFRJ, como material de apoio ao estudo de Análise Orgânica.</p>
+      <p>Conteúdo de ensaios: Plataforma QO é Vida, do Prof. Marcelo Sierpe Pedrosa (IFRJ). Teoria de RMN: resumo dos slides do Prof. Jeronimo (IFRJ). Dados de espectros e constantes físicas: SDBS (AIST, Japão), PubChem (NIH, EUA) e as tabelas de Silverstein et al. citadas em Fontes. Estruturas e cálculos: RDKit (licença BSD). Fontes de texto: IBM Plex (SIL Open Font License).</p>
+    </div>
   </section>
 
   <!--@@ANALORG2_HTML@@-->
 </div>
 
-<nav class="bnav" role="tablist" aria-label="Seções">
+<div role="navigation" aria-label="Seções">
+<nav class="bnav" role="tablist" aria-label="Abas principais">
   <button class="tab" role="tab" id="t-in" aria-selected="true" aria-controls="p-in"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg>Início</button>
   <button class="tab" role="tab" id="t-cp" aria-selected="false" aria-controls="p-cp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 4v8l-7 4-7-4V7z"/><path d="M12 11v8M5 7l7 4 7-4"/></svg>Compostos</button>
   <button class="tab" role="tab" id="t-en" aria-selected="false" aria-controls="p-en"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/></svg>Ensaios</button>
   <button class="tab" role="tab" id="t-sp" aria-selected="false" aria-controls="p-sp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h3.5l2-6 4 12 2.5-6H21"/></svg>Espectros</button>
 </nav>
+</div>
 
 <script>
 /* ---------- dados: Apêndice C (M − pico → o que saiu) ---------- */
@@ -1874,6 +1905,7 @@ function pfInit(){
 /* ================= IDENTIFICAR ================= */
 /* regras: g = grupos de solubilidade possíveis; el = elementos (1 exige, 0 proíbe); ir = bandas (1 exige, 0 proíbe) */
 const IDEL=[['N','Nitrogênio'],['S','Enxofre'],['X','Halogênio (Cl, Br ou I)'],['O','Oxigênio']];
+const SUBL=[['benz','Anel benzênico'],['fenol','Fenol (OH no anel)'],['alcool','Álcool (OH em C saturado)'],['ald','Aldeído (CHO)'],['cetona','Cetona (C=O entre dois C)'],['acido','Ácido carboxílico (COOH)'],['ester','Éster (COOR)'],['amida','Amida (C=O–N)'],['eter','Éter (C–O–C)'],['amina','Amina alifática'],['anilina','Anilina (NH no anel)'],['nitro','Nitro (NO₂)'],['nitrila','Nitrila (C≡N)'],['alcino','Alcino (C≡C)'],['alceno','Alceno (C=C)'],['haleto','Halogênio (F, Cl, Br, I)'],['tiol','Tiol (SH)']];
 const IDIR=[['oh','O–H (banda larga, 3550–3200)'],['nh','N–H (3500–3300)'],['co','C=O (forte, 1850–1630)'],['ald','C–H de aldeído (2820 e 2720)'],['cn','C≡N (2260–2210)'],['cc','C≡C (2260–2100)'],['dc','C=C de alceno (1680–1620)'],['no2','NO₂ (1550–1500 e 1370–1300)'],['ar','Anel aromático (1600–1450)']];
 const IDCLS=[
  {n:'Sal de ácido orgânico ou sulfonato',g:['S2'],ir:{oh:0}},
@@ -1991,6 +2023,7 @@ function drawSl(){const b=$('#slBody');if(!b||b.dataset.ok||typeof SLD==='undefi
   b.querySelectorAll('[data-sl]').forEach(x=>x.onclick=()=>mechZoom(SLD[+x.dataset.sl][2],x));}
 let CUR='p-in';
 function go(id,fromPop){
+  const prevScr=CUR;
   if(id==='p-se'){go('p-pq');const a=$('#se-anchor');if(a)a.scrollIntoView();return;}
   SCR.forEach(x=>{$('#'+x).hidden=x!==id;});
   const own=OWN[id]||('t-'+id.slice(2));
@@ -2007,6 +2040,7 @@ function go(id,fromPop){
   if(id==='p-sl')drawSl();
   if(!fromPop)navRecord(id);
   window.scrollTo(0,0);
+  if(prevScr!==id&&NAVH.length>1)focoTitulo(id);
 }
 
 /* ---------- Histórico: o botão voltar do aparelho volta uma tela dentro do app ----------
@@ -2057,6 +2091,10 @@ new MutationObserver(ms=>ms.forEach(m=>{
   m.addedNodes.forEach(n=>{if(n.nodeType===1&&n.matches('.mechov,.zmov')){try{NAVI++;NAVH.length=NAVI;NAVH[NAVI]=CUR+'#ov';history.pushState({sid:NAVSID,tela:CUR,cf:CUR==='p-cf'?CFI:null,i:NAVI,ov:1},'',location.href);}catch(e){}}});
   m.removedNodes.forEach(n=>{if(n.nodeType===1&&n.matches('.mechov,.zmov')&&!NAVPOP){try{const s=history.state;if(s&&s.sid===NAVSID&&s.ov)history.back();}catch(e){}}});
 })).observe(document.body,{childList:true});
+document.querySelectorAll('#foTabs button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#foTabs button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
+  document.querySelectorAll('.fopane').forEach(p=>{p.hidden=p.id!==b.dataset.fo;});
+}));
 NAV.forEach((t,i)=>{const el=$('#'+t);
   el.onclick=()=>go('p-'+t.slice(2));
   el.addEventListener('keydown',ev=>{const d=ev.key==='ArrowRight'?1:ev.key==='ArrowLeft'?-1:0;if(!d)return;ev.preventDefault();const n=NAV[(i+d+NAV.length)%NAV.length];$('#'+n).focus();$('#'+n).click();});});
