@@ -293,7 +293,7 @@ function icRun(){setTimeout(()=>{if(typeof icBadges==="function")icBadges();},0)
   $('#icSum').innerHTML=(cl.any?'<b>'+cl.ok.length+'</b> de '+IDCLS.length+' classes':'<b>'+used+'</b> critério'+(used>1?'s':''))+sum+' <span class="mut">· ver resultado ↓</span>';
   fontesRecolher($('#icOut'));
 }
-function icClear(){icReset();icDraw();ICLAST=null;icExpShow();$('#icOut').innerHTML='<p class="empty">Marque pelo menos um dado acima.</p>';$('#icSum').textContent='Marque pelo menos um dado.';$('#icBandOut').innerHTML='';icSave();}
+function icClear(){icReset();if($('#icNome'))$('#icNome').value='';if($('#icObs'))$('#icObs').value='';icDraw();ICLAST=null;icExpShow();$('#icOut').innerHTML='<p class="empty">Marque pelo menos um dado acima.</p>';$('#icSum').textContent='Marque pelo menos um dado.';$('#icBandOut').innerHTML='';icSave();}
 function icFill(i){
   const c=COMP[i];icReset();
   icSt.est=c.est.indexOf('líquido')===0?'líquido':'sólido';icSt.g=c.g;
@@ -310,39 +310,99 @@ function icFill(i){
   icDraw();icRun();icSave();
 }
 
-/* ---------- Identificar: exportar/compartilhar e busca por um sinal ---------- */
+/* ---------- Identificar: exportar/compartilhar, relatório e análises salvas ---------- */
 let ICLAST=null;
 function icExpShow(){const e=$('#icExp');if(e)e.hidden=!ICLAST;const m=$('#icExpMsg');if(m)m.textContent='';}
+const icPct=r=>(r.p>=10?r.p.toFixed(0):r.p.toFixed(1)).replace('.',',');
+/* os dados informados, em grupos (usado pelo texto e pelo relatório) */
+function icDados(){
+  const L=ICLAST;if(!L)return [];const x=L.x,v=id=>$(id).value.trim(),G=[];
+  const add=(t,it)=>{if(it.length)G.push({t,it});};
+  const ap=[];if(x.est)ap.push(['Estado',x.est]);
+  if(x.cor){const c=COR.find(k=>k[0]===x.cor);ap.push(['Cor',c?c[1]:x.cor]);}
+  add('Aparência',ap);
+  add('Solubilidade',x.g?[['Grupo',sx(SOLN[x.g])]]:[]);
+  const cf=[];if(v('#icPF'))cf.push(['PF',v('#icPF')+' °C (±'+v('#icTol')+')']);if(v('#icPE'))cf.push(['PE',v('#icPE')+' °C (±'+v('#icTol')+')']);
+  add('Constantes físicas',cf);
+  add('Análise elementar',x.els.map(([e,u])=>[e,u==='sim'?'presente':'ausente']));
+  const iv=[];IDIR.forEach(([k,lab])=>{if(x.ir[k])iv.push([lab.replace(/ \(.*/,''),x.ir[k]==='sim'?'sim':'não']);});
+  if(v('#icIV'))iv.push(['Bandas (cm⁻¹)',v('#icIV')]);
+  add('Infravermelho',iv);
+  const sb=[];SUBL.forEach(([k,lab])=>{if(x.sub[k])sb.push([lab.replace(/ \(.*/,''),x.sub[k]==='sim'?'sim':'não']);});
+  add('Subestrutura',sb);
+  const ms=[];if(x.F)ms.push(['Fórmula',x.F]);if(x.gdh!=null)ms.push(['GDH',String(x.gdh)]);
+  if(x.M!=null)ms.push(['M',String(x.M)]);if(v('#icP'))ms.push(['Picos de MS (m/z)',v('#icP')]);
+  add('Fórmula e massas',ms);
+  const rm=[];if(x.h!=null)rm.push(['Sinais de ¹H',String(x.h)]);if(x.c!=null)rm.push(['Sinais de ¹³C',String(x.c)]);
+  if(v('#icHd'))rm.push(['δ de ¹H (ppm)',v('#icHd')]);
+  add('RMN',rm);
+  return G;
+}
+function icNomeObs(){const n=$('#icNome'),o=$('#icObs');return {nome:n?n.value.trim():'',obs:o?o.value.trim():''};}
 function icTexto(){
-  const L=ICLAST;if(!L)return '';const x=L.x,o=[];
-  const pct=r=>(r.p>=10?r.p.toFixed(0):r.p.toFixed(1)).replace('.',',');
-  o.push('Anaquim: identificação do composto');
-  o.push(new Date().toLocaleDateString('pt-BR'));
-  o.push('');o.push('DADOS INFORMADOS');
-  const d=[];
-  if(x.est)d.push('Estado: '+x.est);
-  if(x.cor){const c=COR.find(k=>k[0]===x.cor);d.push('Cor: '+(c?c[1]:x.cor));}
-  if(x.g)d.push('Grupo de solubilidade: '+sx(SOLN[x.g]));
-  const v=id=>$(id).value.trim();
-  if(v('#icPF'))d.push('PF: '+v('#icPF')+' °C (±'+v('#icTol')+')');
-  if(v('#icPE'))d.push('PE: '+v('#icPE')+' °C (±'+v('#icTol')+')');
-  x.els.forEach(([e,u])=>d.push('Elemento '+e+': '+(u==='sim'?'presente':'ausente')));
-  IDIR.forEach(([k,lab])=>{if(x.ir[k])d.push('IV, '+lab.replace(/ \(.*/,'')+': '+(x.ir[k]==='sim'?'sim':'não'));});
-  if(v('#icIV'))d.push('Bandas de IV (cm⁻¹): '+v('#icIV'));
-  SUBL.forEach(([k,lab])=>{if(x.sub[k])d.push('Subestrutura, '+lab.replace(/ \(.*/,'')+': '+(x.sub[k]==='sim'?'sim':'não'));});
-  if(x.F)d.push('Fórmula: '+x.F);if(x.gdh!=null)d.push('GDH: '+x.gdh);
-  if(x.M!=null)d.push('M: '+x.M);if(v('#icP'))d.push('Picos de MS (m/z): '+v('#icP'));
-  if(x.h!=null)d.push('Sinais de ¹H: '+x.h);if(x.c!=null)d.push('Sinais de ¹³C: '+x.c);
-  if(v('#icHd'))d.push('δ de ¹H (ppm): '+v('#icHd'));
-  o.push(...(d.length?d.map(t=>'- '+t):['- (nenhum)']));
-  if(L.cl.any){o.push('');o.push('CLASSES QUE SOBRAM ('+L.cl.ok.length+' de '+IDCLS.length+')');
-    o.push(L.cl.ok.length?L.cl.ok.map(k=>sx(k.c.n)).join('; '):'nenhuma');}
-  if(L.top.length){o.push('');o.push('COMPOSTOS MAIS COMPATÍVEIS');
-    L.top.forEach((r,i)=>{o.push((i+1)+'. '+r.c.n+' ('+r.c.f+', CAS '+r.c.cas+'): '+pct(r)+'%');
-      const no=r.parts.filter(p=>p.f<0.7).map(p=>p.lab);if(no.length)o.push('   não combina bem: '+no.join(', '));});}
-  o.push('');o.push('A porcentagem compara os compostos do banco do app; não é uma probabilidade real. Confirme com os espectros e com a literatura.');
+  const L=ICLAST;if(!L)return '';
+  const no=icNomeObs(),o=[],linha='────────────────────────';
+  o.push('ANAQUIM · Identificação do composto');
+  if(no.nome)o.push('Análise: '+no.nome);
+  o.push('Data: '+new Date().toLocaleDateString('pt-BR'));
+  o.push(linha);o.push('DADOS INFORMADOS');
+  const G=icDados();
+  if(!G.length)o.push('(nenhum)');
+  G.forEach(g=>{o.push('');o.push(g.t);g.it.forEach(([k,val])=>o.push('  '+k+': '+val));});
+  if(L.cl.any){o.push('');o.push(linha);o.push('CLASSES QUE SOBRAM ('+L.cl.ok.length+' de '+IDCLS.length+')');
+    o.push(L.cl.ok.length?L.cl.ok.map(k=>'  · '+sx(k.c.n)).join('\n'):'  nenhuma');}
+  if(L.top.length){o.push('');o.push(linha);o.push('COMPOSTOS MAIS COMPATÍVEIS');
+    L.top.forEach((r,i)=>{o.push('');o.push((i+1)+'. '+r.c.n+' · '+icPct(r)+'%');
+      o.push('   '+r.c.f+' · CAS '+r.c.cas);
+      const nb=r.parts.filter(p=>p.f<0.7).map(p=>p.lab);if(nb.length)o.push('   Não combina bem: '+nb.join(', '));});}
+  if(no.obs){o.push('');o.push(linha);o.push('OBSERVAÇÕES');o.push(no.obs);}
+  o.push('');o.push(linha);
+  o.push('A porcentagem compara os compostos do banco do app; não é uma probabilidade real. Confirme com os espectros e com a literatura.');
   o.push('Feito no Anaquim: https://anaquim.litteraria.com.br');
   return o.join('\n');
+}
+/* relatório visual: página autônoma, pronta para imprimir ou salvar em PDF */
+function icRelatorio(){
+  const L=ICLAST;if(!L)return '';
+  const no=icNomeObs(),cs=getComputedStyle(document.documentElement);
+  const cor=(cs.getPropertyValue('--keep')||'#1F5FA8').trim(),hoje=new Date().toLocaleDateString('pt-BR');
+  const G=icDados();
+  let b='';
+  b+='<header><div class="mk">Anaquim</div><h1>'+esc(no.nome||'Identificação do composto')+'</h1><p class="sub">'+(no.nome?'Identificação do composto · ':'')+hoje+'</p></header>';
+  b+='<section><h2>Dados informados</h2>';
+  b+=G.length?'<div class="grid">'+G.map(g=>'<div class="card"><h3>'+esc(g.t)+'</h3><dl>'+g.it.map(([k,val])=>'<div><dt>'+esc(k)+'</dt><dd>'+esc(val)+'</dd></div>').join('')+'</dl></div>').join('')+'</div>':'<p class="mut">Nenhum dado informado.</p>';
+  b+='</section>';
+  if(L.cl.any){b+='<section><h2>Classes que sobram <span class="mut">('+L.cl.ok.length+' de '+IDCLS.length+')</span></h2>';
+    b+=L.cl.ok.length?'<div class="pills">'+L.cl.ok.map(k=>'<span class="pill">'+esc(sx(k.c.n))+'</span>').join('')+'</div>':'<p class="mut">Nenhuma classe da lista combina com tudo.</p>';b+='</section>';}
+  if(L.top.length){b+='<section><h2>Compostos mais compatíveis</h2>';
+    L.top.forEach((r,i)=>{
+      const nb=r.parts.filter(p=>p.det&&p.f<0.7).map(p=>'<b>'+esc(p.lab)+':</b> '+esc(p.det.indexOf(p.lab+' ')===0?p.det.slice(p.lab.length+1):p.det)).join(' · ');
+      b+='<article class="res"><div class="rt"><span class="n">'+(i+1)+'</span><div class="nm"><b>'+esc(r.c.n)+'</b><span class="mut">'+fmt(r.c.f)+' · CAS '+esc(r.c.cas)+'</span></div><span class="pc">'+icPct(r)+'%</span></div>'
+        +'<div class="bar"><i style="width:'+Math.max(2,Math.min(100,r.p)).toFixed(1)+'%"></i></div>'
+        +'<div class="cr"><span class="ok">✓ '+r.parts.filter(p=>p.f>=0.7).length+' de '+r.parts.length+' critérios combinam</span>'+r.parts.filter(p=>p.f<0.7).map(p=>'<span class="'+(p.f>=0.2?'md':'no')+'">'+(p.f>=0.2?'~ ':'✗ ')+esc(p.lab)+'</span>').join('')+'</div>'
+        +(nb?'<p class="det">'+nb+'</p>':'')+'</article>';});
+    b+='<p class="leg">✓ combina · ~ combina em parte · ✗ não combina</p></section>';}
+  if(no.obs)b+='<section><h2>Observações</h2><p class="obs">'+esc(no.obs).replace(/\n/g,'<br>')+'</p></section>';
+  b+='<footer><p>A porcentagem compara os compostos do banco do app e não é uma probabilidade real. Se o composto não está na lista, o app mostra só o mais parecido. Confirme com os espectros e com a literatura.</p><p>Feito no Anaquim · anaquim.litteraria.com.br</p></footer>';
+  b+='<button class="imp" onclick="window.print()">Imprimir ou salvar em PDF</button>';
+  const css=':root{--c:'+cor+'}*{box-sizing:border-box}body{margin:0;background:#EEF1F4;color:#15202B;font:15px/1.5 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif}'
+   +'.pg{max-width:780px;margin:0 auto;background:#fff;padding:0 0 28px}'
+   +'header{background:var(--c);color:#fff;padding:26px 28px 22px}.mk{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;opacity:.85;font-weight:600}'
+   +'h1{margin:6px 0 2px;font-size:1.65rem;line-height:1.2}.sub{margin:0;opacity:.9;font-size:.92rem}'
+   +'section{padding:22px 28px 0}h2{font-size:1.05rem;margin:0 0 12px;padding-bottom:6px;border-bottom:2px solid var(--c)}h3{margin:0 0 6px;font-size:.74rem;letter-spacing:.07em;text-transform:uppercase;color:var(--c)}'
+   +'.mut{color:#5B6877;font-weight:400}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}'
+   +'.card{border:1px solid #D9E0E7;border-radius:10px;padding:10px 12px;break-inside:avoid}dl{margin:0}dl div{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px solid #EDF1F5}dl div:last-child{border:0}dt{color:#5B6877}dd{margin:0;font-weight:600;text-align:right}'
+   +'.pills{display:flex;flex-wrap:wrap;gap:6px}.pill{background:#EEF3F8;border:1px solid #D4DEE9;border-radius:99px;padding:3px 11px;font-size:.88rem}'
+   +'.res{border:1px solid #D9E0E7;border-radius:12px;padding:12px 14px;margin:0 0 10px;break-inside:avoid}.rt{display:flex;align-items:center;gap:10px}'
+   +'.n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.9rem}'
+   +'.nm{flex:1;min-width:0}.nm b{display:block;font-size:1.05rem}.nm span{font-size:.86rem}.pc{font-size:1.3rem;font-weight:700;color:var(--c)}'
+   +'.bar{height:8px;border-radius:99px;background:#E4EAF0;margin:9px 0}.bar i{display:block;height:100%;background:var(--c);border-radius:99px}'
+   +'.cr{display:flex;flex-wrap:wrap;gap:5px}.cr span{font-size:.78rem;border-radius:6px;padding:2px 8px;background:#EEF1F4;color:#4B5866}.cr .ok{background:#DDF1E6;color:#17613B}.cr .md{background:#FBF0CF;color:#7A5A00}.cr .no{background:#F7E3DE;color:#9A2F20}'
+   +'.det{font-size:.86rem;color:#5B6877;margin:8px 0 0}.leg{font-size:.8rem;color:#5B6877;margin:4px 0 0}.obs{margin:0;padding:10px 12px;background:#FBF6E4;border-radius:10px}'
+   +'footer{padding:20px 28px 0;font-size:.8rem;color:#5B6877}footer p{margin:0 0 4px}'
+   +'.imp{display:block;margin:20px auto 0;font:inherit;font-weight:600;background:var(--c);color:#fff;border:0;border-radius:10px;padding:11px 20px;cursor:pointer}'
+   +'@media print{body{background:#fff}.pg{max-width:none}.imp{display:none}header{-webkit-print-color-adjust:exact;print-color-adjust:exact}.n,.bar i,.cr span{-webkit-print-color-adjust:exact;print-color-adjust:exact}}';
+  return '<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc((no.nome||'Identificação do composto')+' · Anaquim')+'</title><style>'+css+'</style></head><body><div class="pg">'+b+'</div></body></html>';
 }
 function icMsg(t){const m=$('#icExpMsg');if(m)m.textContent=t;}
 async function icCopiar(){
@@ -356,11 +416,92 @@ async function icCompartilhar(){
   if(navigator.share){try{await navigator.share({title:'Identificação do composto (Anaquim)',text:t});return;}catch(e){if(e&&e.name==='AbortError')return;}}
   icCopiar();icMsg('Este aparelho não abre o menu de compartilhar. O resultado foi copiado.');
 }
+function icBaixarArq(conteudo,tipo,nome){
+  const b=new Blob([conteudo],{type:tipo}),u=URL.createObjectURL(b),a=document.createElement('a');
+  a.href=u;a.download=nome;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500);
+}
 function icBaixar(){
   const t=icTexto();if(!t)return;
-  const b=new Blob([t+'\n'],{type:'text/plain;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');
-  a.href=u;a.download='identificacao-anaquim.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500);
+  icBaixarArq(t+'\n','text/plain;charset=utf-8','identificacao-anaquim.txt');
   icMsg('Arquivo baixado.');
+}
+function icRel(){
+  const h=icRelatorio();if(!h)return;
+  const b=new Blob([h],{type:'text/html;charset=utf-8'}),u=URL.createObjectURL(b),w=window.open(u,'_blank');
+  if(!w){icBaixarArq(h,'text/html;charset=utf-8','relatorio-anaquim.html');icMsg('O navegador bloqueou a janela. Baixei o relatório: abra o arquivo e use Imprimir para gerar o PDF.');}
+  else icMsg('Relatório aberto. Toque em "Imprimir ou salvar em PDF".');
+  setTimeout(()=>URL.revokeObjectURL(u),60000);
+}
+
+/* ---------- Análises salvas (ficam neste aparelho; entram no código de "Salvar e levar o progresso") ---------- */
+const AN_KEY='massas-an';
+function anGet(){const a=LS.get(AN_KEY,[]);return Array.isArray(a)?a:[];}
+function anFmtData(t){try{return new Date(t).toLocaleDateString('pt-BR')+' '+new Date(t).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+function anMsg(t,bad){const m=$('#icSavMsg');if(!m)return;m.textContent=t;m.className='hint fb '+(bad?'bad':'good');}
+function anSalvar(){
+  if(!ICLAST){anMsg('Preencha pelo menos um dado antes de salvar.',true);return;}
+  const f={};IC_CAMPOS.forEach(i=>f[i]=$(i).value);
+  const no=icNomeObs(),L=ICLAST,t=Date.now();
+  const a=anGet();
+  const nome=no.nome||('Análise de '+new Date(t).toLocaleDateString('pt-BR'));
+  a.unshift({id:'a'+t.toString(36)+Math.random().toString(36).slice(2,5),t,n:nome,o:no.obs,st:JSON.parse(JSON.stringify(icSt)),f,
+    top:L.top.slice(0,3).map(r=>({n:r.c.n,p:+r.p.toFixed(1)})),k:L.cl.any?L.cl.ok.length:null});
+  LS.set(AN_KEY,a.slice(0,80));
+  if($('#icNome'))$('#icNome').value='';if($('#icObs'))$('#icObs').value='';
+  anDesenha();anMsg('Análise salva neste aparelho: '+nome+'.');
+  const d=$('#icSaved');if(d)d.open=true;
+}
+function anDesenha(){
+  const a=anGet(),L=$('#icSavL'),n=$('#icSavN');if(!L)return;
+  if(n)n.textContent=a.length;
+  L.innerHTML=a.length?a.map(x=>'<div class="ansv" data-id="'+esc(x.id)+'"><div class="ansh"><b>'+esc(x.n)+'</b><span class="mut">'+esc(anFmtData(x.t))+'</span></div>'
+    +'<p class="mut ansr">'+(x.top&&x.top.length?'Melhor: '+esc(x.top[0].n)+' ('+String(x.top[0].p).replace('.',',')+'%)':(x.k!=null?x.k+' classes sobram':'sem ranking'))+'</p>'
+    +(x.o?'<p class="ansn">'+esc(x.o)+'</p>':'')
+    +'<div class="row"><button class="btn" type="button" data-an="abrir">Abrir</button><button class="btn ghost" type="button" data-an="del">Excluir</button></div></div>').join(''):'<p class="empty">Nenhuma análise salva ainda.</p>';
+}
+function anAbrir(id){
+  const x=anGet().find(k=>k.id===id);if(!x)return;
+  icReset();
+  icSt={est:x.st.est||'',cor:x.st.cor||'',g:x.st.g||'',el:x.st.el||{},ir:x.st.ir||{},sub:x.st.sub||{}};
+  IC_CAMPOS.forEach(i=>{if(x.f&&x.f[i]!=null)$(i).value=x.f[i];});
+  if($('#icNome'))$('#icNome').value=x.n;if($('#icObs'))$('#icObs').value=x.o||'';
+  icDraw();icRun();icSave();
+  anMsg('Análise aberta: '+x.n+'. O resultado foi recalculado com o banco atual do app.');
+  const r=$('#icResT');if(r&&r.scrollIntoView)r.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function anExportar(){
+  const a=anGet();if(!a.length){anMsg('Não há análises salvas para exportar.',true);return;}
+  icBaixarArq(JSON.stringify({anaquim:'analises',v:1,a},null,1),'application/json','analises-anaquim.json');
+  anMsg('Arquivo analises-anaquim.json baixado.');
+}
+function anJuntar(inc){
+  const cur=anGet(),ids=new Set(cur.map(x=>x.id));let n=0;
+  (Array.isArray(inc)?inc:[]).forEach(x=>{if(x&&x.id&&x.st&&x.f&&!ids.has(x.id)){cur.push(x);ids.add(x.id);n++;}});
+  cur.sort((p,q)=>q.t-p.t);LS.set(AN_KEY,cur.slice(0,80));return n;
+}
+function anImportar(file){
+  const r=new FileReader();
+  r.onload=()=>{let o;try{o=JSON.parse(r.result);}catch(e){anMsg('Arquivo inválido.',true);return;}
+    if(!o||o.anaquim!=='analises'){anMsg('Esse arquivo não é de análises do Anaquim.',true);return;}
+    const n=anJuntar(o.a);anDesenha();anMsg(n+' análise'+(n===1?'':'s')+' importada'+(n===1?'':'s')+'. Nada foi apagado.');};
+  r.readAsText(file);
+}
+function anInit(){
+  const P=$('#icSaved');if(!P)return;
+  $('#icSalvar').onclick=anSalvar;$('#icRel').onclick=icRel;
+  $('#icSavExp').onclick=anExportar;
+  $('#icSavImp').onclick=()=>$('#icSavFile').click();
+  $('#icSavFile').onchange=e=>{if(e.target.files[0])anImportar(e.target.files[0]);e.target.value='';};
+  $('#icSavL').addEventListener('click',ev=>{
+    const b=ev.target.closest('[data-an]');if(!b)return;
+    const id=b.closest('.ansv').dataset.id;
+    if(b.dataset.an==='abrir'){anAbrir(id);return;}
+    if(b.dataset.an==='del'){
+      if(b.dataset.ok!=='1'){b.dataset.ok='1';b.textContent='Confirmar exclusão';setTimeout(()=>{if(b.isConnected){b.dataset.ok='';b.textContent='Excluir';}},4000);return;}
+      LS.set(AN_KEY,anGet().filter(k=>k.id!==id));anDesenha();anMsg('Análise excluída.');
+    }
+  });
+  anDesenha();
 }
 /* quais compostos têm um sinal: tolerância própria de cada técnica */
 function icSinRun(){
@@ -396,7 +537,7 @@ function icInit(){
   });
   P.addEventListener('input',icQueue);P.addEventListener('change',e=>{if(e.target.id==='icEx'){if(e.target.value!=='')icFill(+e.target.value);return;}icQueue();});
   $('#icClr').onclick=icClear;
-  $('#icCopy').onclick=icCopiar;$('#icShare').onclick=icCompartilhar;$('#icDown').onclick=icBaixar;
+  $('#icCopy').onclick=icCopiar;$('#icShare').onclick=icCompartilhar;$('#icDown').onclick=icBaixar;anInit();
   $('#icSinT').onchange=icSinRun;$('#icSinV').oninput=icSinRun;
   $('#icSum').onclick=()=>{const r=$('#icResT');if(r)r.scrollIntoView({behavior:'smooth',block:'start'});};
   icRun();

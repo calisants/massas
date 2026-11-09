@@ -1675,6 +1675,7 @@ function pgInit(){
       cur=LS.get(k,null);
       if(k==='massas-stud'||k==='massas-perg'){LS.set(k,Array.from(new Set((cur||[]).concat(inc))));n++;}
       else if(k==='massas-rep'||k==='massas-repq'){const m=cur||{};Object.keys(inc).forEach(q=>{if(!m[q]||inc[q].d>m[q].d)m[q]=inc[q];});LS.set(k,m);n++;}
+      else if(k==='massas-an'){n+=anJuntar(inc);}
       else if(k==='massas-erros'){}
       else if(k.indexOf('massas-nota-')===0){if(!cur)LS.set(k,inc);else if(String(cur).indexOf(String(inc))<0){LS.set(k,cur+'\n— importado: '+inc);n++;}}
       else if(cur===null){LS.set(k,inc);n++;}

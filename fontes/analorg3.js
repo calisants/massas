@@ -23,7 +23,11 @@ function stInit(){
 
 /* ---------- Novidades e aviso de atualização ---------- */
 const NOVID=[
- {v:0,d:'06/11/2026',t:[
+ {v:0,d:'09/11/2026',t:[
+  'Identificar: botão "Salvar análise" (com nome e observações opcionais). As análises salvas aparecem em "Análises salvas", onde dá para abrir de novo, excluir, exportar em .json e importar em outro aparelho. Também entram no "Salvar e levar o progresso".',
+  'Compartilhar: o texto ficou organizado por grupos (aparência, solubilidade, IV, massas, RMN) e com o ranking mais claro. Novo botão "Relatório (PDF)": página com cabeçalho, dados em cartões, classes, ranking com barras e aviso final, pronta para imprimir ou salvar em PDF.',
+ ]},
+ {r:131,d:'06/11/2026',t:[
   'Créditos: "Feito por Camila Silva, aluna de Bacharelado em Química do IFRJ, como material de apoio ao estudo de Análise Orgânica." Fontes, Avisos e Créditos agora são três abas separadas.',
   'Identificar: filtro por subestrutura (anel benzênico, grupos funcionais, halogênio), com Sim ou Não. Nova caixa "Procurar por um único sinal" (IV, ¹H, ¹³C ou m/z). O resultado pode ser copiado, compartilhado ou baixado em .txt.',
   'Favoritos: marque um composto com a estrela na ficha. Os favoritos sobem para o topo da lista e há um filtro "Só favoritos". Ficam guardados neste aparelho e entram no "Salvar progresso".',

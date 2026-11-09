@@ -100,12 +100,31 @@
     <h2 id="icResT">Resultado</h2>
     <div class="icwarn">A porcentagem é a <b>compatibilidade entre os compostos do banco do app</b>, não uma probabilidade real. Se o seu composto não está na lista, o app mostra só o mais parecido.</div>
     <div id="icOut" class="icres" aria-live="polite"></div>
-    <div class="row" id="icExp" hidden>
-      <button class="btn" type="button" id="icCopy">Copiar resultado</button>
-      <button class="btn ghost" type="button" id="icShare">Compartilhar</button>
-      <button class="btn ghost" type="button" id="icDown">Baixar (.txt)</button>
+    <div id="icExp" class="icexp" hidden>
+      <h3>Salvar e compartilhar</h3>
+      <label for="icNome">Nome da análise (opcional)<input type="text" id="icNome" maxlength="60" placeholder="ex.: amostra 3, aula de 12/11" autocomplete="off"></label>
+      <label for="icObs">Observações (opcional)<textarea id="icObs" rows="2" maxlength="400" placeholder="ex.: cheiro adocicado, cristais brancos"></textarea></label>
+      <div class="row">
+        <button class="btn" type="button" id="icSalvar">Salvar análise</button>
+        <button class="btn ghost" type="button" id="icRel">Relatório (PDF)</button>
+      </div>
+      <div class="row">
+        <button class="btn ghost" type="button" id="icShare">Compartilhar</button>
+        <button class="btn ghost" type="button" id="icCopy">Copiar resultado</button>
+        <button class="btn ghost" type="button" id="icDown">Baixar (.txt)</button>
+      </div>
     </div>
     <p class="hint" id="icExpMsg" role="status"></p>
+    <p class="hint" id="icSavMsg" role="status"></p>
+    <details class="sec" id="icSaved"><summary><span>Análises salvas (<span id="icSavN">0</span>)</span></summary>
+      <p class="hint">Ficam guardadas só neste aparelho. Para levar a outro, use Exportar, ou o código de Início &gt; O app &gt; Salvar e levar o progresso.</p>
+      <div id="icSavL"></div>
+      <div class="row">
+        <button class="btn ghost" type="button" id="icSavExp">Exportar todas (.json)</button>
+        <button class="btn ghost" type="button" id="icSavImp">Importar (.json)</button>
+        <input type="file" id="icSavFile" accept="application/json,.json" hidden>
+      </div>
+    </details>
   </section>
 
   <section id="p-rm" role="tabpanel" aria-labelledby="t-sp" hidden>

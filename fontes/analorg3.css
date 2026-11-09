@@ -134,3 +134,16 @@ body.zmopen{overflow:hidden}
 html.altoc{--muted:var(--ink);--line:var(--ink)}
 html.altoc .mut,html.altoc .hint,html.altoc small{color:var(--ink)}
 html.semmov *,html.semmov *::before,html.semmov *::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+
+.icexp{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--sh);padding:12px 14px;margin:12px 0 8px}
+.icexp[hidden]{display:none}
+.icexp h3{margin:0 0 8px;font-size:1.02rem}
+.icexp label{display:block;font-size:.86rem;color:var(--muted);margin:0 0 8px}
+.icexp input[type=text],.icexp textarea{display:block;width:100%;margin-top:3px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+.icexp textarea{resize:vertical;min-height:56px}
+.icexp .row{margin-top:6px}
+.ansv{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:0 0 8px;background:var(--bg)}
+.ansh{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}
+.ansh .mut{font-size:.8rem}
+.ansr{margin:2px 0 6px;font-size:.9rem}
+.ansn{margin:0 0 6px;font-size:.88rem;background:var(--note-soft);border-radius:8px;padding:6px 10px}
