@@ -1,0 +1,474 @@
+{
+"acessado": "10/11/2026",
+"fonte": "PubChem PUG REST (propriedades por CAS)",
+"d": {
+"124-83-4": {
+"cid": 101807,
+"f": "C10H16O4",
+"smi": "C[C@]1(CC[C@@H](C1(C)C)C(=O)O)C(=O)O",
+"t": "Camphoric Acid"
+},
+"560-09-8": {
+"cid": 219463,
+"f": "C10H16O4",
+"smi": "C[C@@]1(CC[C@H](C1(C)C)C(=O)O)C(=O)O",
+"t": "Camphoric acid, (-)-"
+},
+"57-10-3": {
+"cid": 985,
+"f": "C16H32O2",
+"smi": "CCCCCCCCCCCCCCCC(=O)O",
+"t": "Palmitic Acid"
+},
+"5965-83-3": {
+"cid": 2723734,
+"f": "C7H10O8S",
+"smi": "C1=CC(=C(C=C1S(=O)(=O)O)C(=O)O)O.O.O",
+"t": "Sulfosalicylic acid dihydrate"
+},
+"4363-93-3": {
+"cid": 78072,
+"f": "C10H7NO",
+"smi": "C1=CC=C2C(=C1)C(=CC=N2)C=O",
+"t": "4-Quinolinecarboxaldehyde"
+},
+"119-63-1": {
+"cid": 67068,
+"f": "C9H12N2O",
+"smi": "CC(=O)N(C)C1=CC=C(C=C1)N",
+"t": "N-(4-Aminophenyl)-N-methylacetamide"
+},
+"2113-47-5": {
+"cid": 16447,
+"f": "C14H13NO",
+"smi": "CC(=O)NC1=CC=CC=C1C2=CC=CC=C2",
+"t": "2-Acetamidobiphenyl"
+},
+"5429-85-6": {
+"cid": 5354590,
+"f": "C24H39NO",
+"smi": "CCCCCCCC/C=C\\CCCCCCCC(=O)NC1=CC=CC=C1",
+"t": "Oleic Acid Anilide"
+},
+"84-65-1": {
+"cid": 6780,
+"f": "C14H8O2",
+"smi": "C1=CC=C2C(=C1)C(=O)C3=CC=CC=C3C2=O",
+"t": "Anthraquinone"
+},
+"619-75-0": {
+"cid": 69276,
+"f": "C7H5Br2NO2",
+"smi": "C1=CC(=CC=C1C(Br)Br)[N+](=O)[O-]",
+"t": "Benzene, 1-(dibromomethyl)-4-nitro-"
+},
+"629-06-1": {
+"cid": 12371,
+"f": "C7H15Cl",
+"smi": "CCCCCCCCl",
+"t": "1-Chloroheptane"
+},
+"634-90-2": {
+"cid": 12468,
+"f": "C6H2Cl4",
+"smi": "C1=C(C=C(C(=C1Cl)Cl)Cl)Cl",
+"t": "1,2,3,5-Tetrachlorobenzene"
+},
+"1190-22-3": {
+"cid": 14480,
+"f": "C4H8Cl2",
+"smi": "CC(CCCl)Cl",
+"t": "1,3-Dichlorobutane"
+},
+"30273-00-8": {
+"cid": 1268287,
+"f": "C7H7Cl2N",
+"smi": "CC1=CC(=CC(=C1N)Cl)Cl",
+"t": "2,4-Dichloro-6-methylaniline"
+},
+"6627-53-8": {
+"cid": 81110,
+"f": "C7H6ClNO3",
+"smi": "COC1=C(C=CC(=C1)Cl)[N+](=O)[O-]",
+"t": "5-Chloro-2-nitroanisole"
+},
+"108-58-7": {
+"cid": 7942,
+"f": "C10H10O4",
+"smi": "CC(=O)OC1=CC(=CC=C1)OC(=O)C",
+"t": "1,3-Diacetoxybenzene"
+},
+"618-89-3": {
+"cid": 12070,
+"f": "C8H7BrO2",
+"smi": "COC(=O)C1=CC(=CC=C1)Br",
+"t": "Methyl 3-bromobenzoate"
+},
+"112-61-8": {
+"cid": 8201,
+"f": "C19H38O2",
+"smi": "CCCCCCCCCCCCCCCCCC(=O)OC",
+"t": "Methyl Stearate"
+},
+"124-06-1": {
+"cid": 31283,
+"f": "C16H32O2",
+"smi": "CCCCCCCCCCCCCC(=O)OCC",
+"t": "Ethyl Myristate"
+},
+"621-32-9": {
+"cid": 69305,
+"f": "C9H12O",
+"smi": "CCOC1=CC=CC(=C1)C",
+"t": "3-Ethoxytoluene"
+},
+"150-69-6": {
+"cid": 9013,
+"f": "C9H12N2O2",
+"smi": "CCOC1=CC=C(C=C1)NC(=O)N",
+"t": "Dulcin"
+},
+"78146-52-8": {
+"cid": 12215922,
+"f": "C8H8O3",
+"smi": "C1=CC=C(C=C1)C(=O)C=O.O",
+"t": "Glyoxal, phenyl-, hydrate"
+},
+"6099-90-7": {
+"cid": 53233771,
+"f": "C6H8O4",
+"smi": "C1=C(C=C(C=C1O)O)O.O",
+"t": "1,3,5-Benzenetriol, hydrate (1:2)"
+},
+"88-75-5": {
+"cid": 6947,
+"f": "C6H5NO3",
+"smi": "C1=CC=C(C(=C1)[N+](=O)[O-])O",
+"t": "2-Nitrophenol"
+},
+"579-12-4": {
+"cid": 220768,
+"f": "C10H13NO",
+"smi": "CC1=CC(=CC=C1)N(C)C(=O)C",
+"t": "N-Methyl-N-(3-methylphenyl)acetamide"
+},
+"3843-51-4": {
+"cid": 13296099,
+"f": "C15H31NO",
+"smi": "CCCCCCCCCCCCCCC(=O)N",
+"t": "Pentadecanamide"
+},
+"13007-74-4": {
+"cid": 36689902,
+"f": "C4H8N2O4",
+"smi": "[C@H]([C@@H](C(=O)N)O)(C(=O)N)O",
+"t": "Tartaramide, D-"
+},
+"212-876-3": {
+"cid": 70134,
+"f": "C8H9NO2",
+"smi": "C1=CC=C(C=C1)[C@H](C(=O)O)N",
+"t": "Phenylglycine, D-"
+},
+"72-18-4": {
+"cid": 6287,
+"f": "C5H11NO2",
+"smi": "CC(C)[C@@H](C(=O)O)N",
+"t": "L-Valine"
+},
+"407-25-0": {
+"cid": 9845,
+"f": "C4F6O3",
+"smi": "C(=O)(C(F)(F)F)OC(=O)C(F)(F)F",
+"t": "Trifluoroacetic anhydride"
+},
+"902-47-6": {
+"cid": 287440,
+"f": "C14H8N2O7",
+"smi": "C1=CC(=CC=C1C(=O)OC(=O)C2=CC=C(C=C2)[N+](=O)[O-])[N+](=O)[O-]",
+"t": "4-Nitrobenzoic anhydride"
+},
+"35447-68-8": {
+"cid": 118822,
+"f": "C5H9BrO",
+"smi": "CC(C)CC(=O)Br",
+"t": "Butanoyl bromide, 3-methyl-"
+},
+"554-91-6": {
+"cid": 20056559,
+"f": "C12H22O11",
+"smi": "C([C@@H]1[C@H]([C@@H]([C@H]([C@@H](O1)OC[C@H]([C@H]([C@@H]([C@H](C=O)O)O)O)O)O)O)O)O",
+"t": "Gentiobiose"
+},
+"14431-43-7": {
+"cid": 66370,
+"f": "C6H14O7",
+"smi": "C([C@@H]1[C@H]([C@@H]([C@H]([C@H](O1)O)O)O)O)O.O",
+"t": "alpha-D-Glucose monohydrate"
+},
+"6155-35-7": {
+"cid": 20849066,
+"f": "C6H14O6",
+"smi": "C[C@@H]([C@@H]([C@H]([C@H](C=O)O)O)O)O.O",
+"t": "Rhamnose monohydrate"
+},
+"6155-36-8": {
+"cid": 439730,
+"f": "C6H12O5",
+"smi": "C[C@H]1[C@@H]([C@H]([C@H]([C@H](O1)O)O)O)O",
+"t": "beta-L-rhamnose"
+},
+"3458-28-4": {
+"cid": 161658,
+"f": "C6H12O6",
+"smi": "C([C@H]([C@H]([C@@H]([C@@H](C=O)O)O)O)O)O",
+"t": "Demannose"
+},
+"147-81-9": {
+"cid": 854,
+"f": "C5H10O5",
+"smi": "C(C(C(C(C=O)O)O)O)O",
+"t": "DL-Arabinose"
+},
+"5349-37-1": {
+"cid": 111066,
+"f": "C7H14O7",
+"smi": "C([C@H]([C@H]([C@@H]([C@H](C(=O)CO)O)O)O)O)O",
+"t": "D-Gluco-2-heptulose"
+},
+"63-42-3": {
+"cid": 440995,
+"f": "C12H22O11",
+"smi": "C([C@@H]1[C@@H]([C@@H]([C@H]([C@@H](O1)O[C@@H]2[C@H](OC([C@@H]([C@H]2O)O)O)CO)O)O)O)O",
+"t": "(+)-Lactose"
+},
+"1192-62-7": {
+"cid": 14505,
+"f": "C6H6O2",
+"smi": "CC(=O)C1=CC=CO1",
+"t": "2-Acetylfuran"
+},
+"89-74-7": {
+"cid": 6985,
+"f": "C10H12O",
+"smi": "CC1=CC(=C(C=C1)C(=O)C)C",
+"t": "2,4-Dimethylacetophenone"
+},
+"5379-16-8": {
+"cid": 14921,
+"f": "C10H12O",
+"smi": "CC1=CC(=CC(=C1)C(=O)C)C",
+"t": "1-(3,5-Dimethylphenyl)ethan-1-one"
+},
+"695-99-8": {
+"cid": 69671,
+"f": "C6H3ClO2",
+"smi": "C1=CC(=O)C(=CC1=O)Cl",
+"t": "2-Chloro-1,4-benzoquinone"
+},
+"539-88-8": {
+"cid": 10883,
+"f": "C7H12O3",
+"smi": "CCOC(=O)CCC(=O)C",
+"t": "Ethyl levulinate"
+},
+"21884-26-4": {
+"cid": 89084,
+"f": "C8H14O3",
+"smi": "CC(C)OC(=O)CCC(=O)C",
+"t": "Isopropyl levulinate"
+},
+"110-39-4": {
+"cid": 61030,
+"f": "C12H24O2",
+"smi": "CCCCCCCCOC(=O)CCC",
+"t": "Octyl butyrate"
+},
+"589-75-3": {
+"cid": 11517,
+"f": "C12H24O2",
+"smi": "CCCCCCCC(=O)OCCCC",
+"t": "Butyl octanoate"
+},
+"5451-80-9": {
+"cid": 79544,
+"f": "C12H24O2",
+"smi": "CCCCCCCOC(=O)CCCC",
+"t": "Heptyl valerate"
+},
+"7493-82-5": {
+"cid": 61415,
+"f": "C12H24O2",
+"smi": "CCCCCCC(=O)OCCCCC",
+"t": "Amyl heptanoate"
+},
+"6378-65-0": {
+"cid": 22873,
+"f": "C12H24O2",
+"smi": "CCCCCCOC(=O)CCCCC",
+"t": "Hexyl Hexanoate"
+},
+"24724-07-0": {
+"cid": 525065,
+"f": "C12H24O3",
+"smi": "COC(=O)CCCCCCCCCCO",
+"t": "Methyl 11-hydroxyundecanoate"
+},
+"4136-22-5": {
+"cid": 7010050,
+"f": "C18H18O6",
+"smi": "C1=CC=C(C=C1)COC(=O)[C@H]([C@@H](C(=O)OCC2=CC=CC=C2)O)O",
+"t": "(2S,3S)-Dibenzyl 2,3-dihydroxysuccinate"
+},
+"629-79-8": {
+"cid": 69424,
+"f": "C16H31N",
+"smi": "CCCCCCCCCCCCCCCC#N",
+"t": "Hexadecanenitrile"
+},
+"21423-84-7": {
+"cid": 319475,
+"f": "C8H6ClN",
+"smi": "CC1=CC(=C(C=C1)C#N)Cl",
+"t": "2-Chloro-4-methylbenzonitrile"
+},
+"4386-07-6": {
+"cid": 12477122,
+"f": "C7H11NO2",
+"smi": "CCC(CC)(C#N)C(=O)O",
+"t": "2-Cyano-2-ethylbutanoic acid"
+},
+"100-48-1": {
+"cid": 7506,
+"f": "C6H4N2",
+"smi": "C1=CN=CC=C1C#N",
+"t": "4-Cyanopyridine"
+},
+"6575-09-3": {
+"cid": 23053,
+"f": "C8H6ClN",
+"smi": "CC1=C(C(=CC=C1)Cl)C#N",
+"t": "2-Chloro-6-methylbenzonitrile"
+},
+"78222-69-2": {
+"cid": 13450521,
+"f": "C7H3Br2N",
+"smi": "C1=CC(=C(C=C1Br)Br)C#N",
+"t": "2,4-Dibromobenzonitrile"
+},
+"28177-79-9": {
+"cid": 12468686,
+"f": "C7H4N2O3",
+"smi": "C1=CC(=C(C(=C1)[N+](=O)[O-])O)C#N",
+"t": "2-Hydroxy-3-nitrobenzonitrile"
+},
+"2834-91-5": {
+"cid": 94906,
+"f": "C10H9NO",
+"smi": "C1=CC2=C(C(=C1)N)C(=CC=C2)O",
+"t": "8-Aminonaphthol"
+},
+"603-85-0": {
+"cid": 4115495,
+"f": "C6H6N2O3",
+"smi": "C1=CC(=C(C(=C1)O)N)[N+](=O)[O-]",
+"t": "2-Amino-3-Nitrophenol"
+},
+"81903-80-2": {
+"cid": 2758032,
+"f": "C6H3Br2ClO2S",
+"smi": "C1=CC(=C(C=C1S(=O)(=O)Cl)Br)Br",
+"t": "3,4-dibromobenzenesulfonyl Chloride"
+},
+"42413-03-6": {
+"cid": 259744,
+"f": "C7H6Cl2O2S",
+"smi": "CC1=C(C=C(C=C1)S(=O)(=O)Cl)Cl",
+"t": "2-Chloro-p-toluenesulfochloride"
+},
+"62564-49-2": {
+"cid": 12338309,
+"f": "C8H8ClNO4S",
+"smi": "CC1=CC(=C(C(=C1)S(=O)(=O)Cl)C)[N+](=O)[O-]",
+"t": "2,5-Dimethyl-3-nitrobenzene-1-sulfonyl chloride"
+},
+"85-46-1": {
+"cid": 66560,
+"f": "C10H7ClO2S",
+"smi": "C1=CC=C2C(=C1)C=CC=C2S(=O)(=O)Cl",
+"t": "1-Naphthalenesulfonyl chloride"
+},
+"72256-95-2": {
+"cid": 2737366,
+"f": "C6H3Br2ClO2S",
+"smi": "C1=CC(=C(C=C1Br)Br)S(=O)(=O)Cl",
+"t": "2,4-Dibromobenzenesulfonyl chloride"
+},
+"98-74-8": {
+"cid": 7404,
+"f": "C6H4ClNO4S",
+"smi": "C1=CC(=CC=C1[N+](=O)[O-])S(=O)(=O)Cl",
+"t": "4-Nitrobenzenesulfonyl chloride"
+},
+"861090-79-1": {
+"cid": 55280639,
+"f": "C11H9ClO2S",
+"smi": "CC1=CC2=C(C=CC=C2S(=O)(=O)Cl)C=C1",
+"t": "7-Methylnaphthalene-1-sulfonyl chloride"
+},
+"325-09-7": {
+"cid": 14457752,
+"f": "C10H6ClFO2S",
+"smi": "C1=CC2=C(C=CC(=C2)S(=O)(=O)Cl)C=C1F",
+"t": "6-Fluoronaphthalene-2-sulfonyl chloride"
+},
+"112894-45-8": {
+"cid": 8317969,
+"f": "C10H13NO2S",
+"smi": "C1CCC2=C(C1)C=CC(=C2)S(=O)(=O)N",
+"t": "5,6,7,8-Tetrahydronaphthalene-2-sulfonamide"
+},
+"58-90-2": {
+"cid": 6028,
+"f": "C6H2Cl4O",
+"smi": "C1=C(C(=C(C(=C1Cl)Cl)Cl)O)Cl",
+"t": "2,3,4,6-Tetrachlorophenol"
+},
+"496-78-6": {
+"cid": 10335,
+"f": "C9H12O",
+"smi": "CC1=CC(=C(C=C1C)O)C",
+"t": "Pseudocumenol"
+},
+"40466-95-3": {
+"cid": 14597898,
+"f": "C6H3BrN2O5",
+"smi": "C1=C(C=C(C(=C1[N+](=O)[O-])O)[N+](=O)[O-])Br",
+"t": "Phenol, 4-bromo-2,6-dinitro-"
+},
+"616-74-0": {
+"cid": 61158,
+"f": "C6H4N2O6",
+"smi": "C1=C(C(=CC(=C1[N+](=O)[O-])O)O)[N+](=O)[O-]",
+"t": "4,6-Dinitroresorcinol"
+},
+"2050-16-0": {
+"cid": 101245,
+"f": "C12H10N2O2",
+"smi": "C1=CC(=CC=C1N=NC2=CC=C(C=C2)O)O",
+"t": "4,4'-Dihydroxyazobenzene"
+},
+"6192-52-5": {
+"cid": 521998,
+"f": "C7H10O4S",
+"smi": "CC1=CC=C(C=C1)S(=O)(=O)O.O",
+"t": "p-Toluenesulfonic acid monohydrate"
+},
+"625-54-7": {
+"cid": 12256,
+"f": "C5H12O",
+"smi": "CCOC(C)C",
+"t": "Ethyl isopropyl ether"
+}
+}
+}

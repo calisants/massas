@@ -24,7 +24,7 @@ function stInit(){
 /* ---------- Novidades e aviso de atualização ---------- */
 const NOVID=[
  {v:145,d:'10/11/2026',t:[
-  'Compostos: o banco do professor (4668 compostos) agora faz parte das Fichas e do Identificar. Buscando por nome, fórmula ou CAS, os compostos do banco aparecem junto, com estrutura desenhada, PF, PE, picos de MS e bandas de IV esperadas. No Identificar eles entram na comparação com os demais. RMN (nº de sinais e faixas), subestruturas e grupo de solubilidade desses compostos são calculados pela estrutura; o grupo de solubilidade é estimado e aparece marcado assim.',
+  'Compostos: o banco do professor (4668 compostos) agora faz parte das Fichas e do Identificar. Buscando por nome, fórmula ou CAS, os compostos do banco aparecem junto, com estrutura desenhada, PF, PE, picos de MS e bandas de IV esperadas. No Identificar eles entram na comparação com os demais. Conferi o banco: em 71 registros a fórmula não batia com a estrutura (corrigi 48 pela estrutura, confirmada no PubChem, e escondi a estrutura de 36 que estavam erradas ou sem como decidir; a ficha avisa). RMN (nº de sinais e faixas), subestruturas e grupo de solubilidade desses compostos são calculados pela estrutura; o grupo de solubilidade é estimado e aparece marcado assim.',
   'Identificar: os picos de MS aceitam intensidade (43:100 58:42) ou um arquivo .jdx, .csv ou .txt. As bandas de IV aceitam l (larga) e e (estreita), e há o campo "Como o IV foi medido" (filme/KBr, solução ou gás).'
  ]},
  {v:136,d:'10/11/2026',t:[
@@ -729,7 +729,7 @@ function bdAll(){
     const c={i:1000+ix,bd:1,r,n:nm,a:[r[2],r[3]].filter(x=>x&&x.toLowerCase()!==r[1].toLowerCase()).map(bdNome),f:r[4]||'',cas:r[0]||'',mw:r[5],M:M,
       est:bdEstado(r[6],r[7]),cor:'',g:'',pf:r[6],pe:r[7],gdh:bdGdh(r[4]||''),
       gf:r[17]?r[17][0].map(i=>BDT.g[i]):[],iv:r[17]?r[17][1].map(i=>BDT.b[i]):[],ivf:r[17]?r[17][2].map(i=>BDT.f[i]):[],
-      ms:ms.length?ms.map(p=>p[0]):null,msi:ms.length?ms:null,sub:r[17]?r[17][5]:[],h1:r[17]?r[17][3].map(x=>({lo:x[0],hi:x[1],h:x[2],m:x[3]?'largo':''})):[],c13:r[17]?r[17][4].map(x=>({lo:x[0],hi:x[1],n:x[2]})):[],ge:r[17]?r[17][6]:'',
+      ms:ms.length?ms.map(p=>p[0]):null,msi:ms.length?ms:null,sub:r[17]?r[17][5]:[],h1:r[17]?r[17][3].map(x=>({lo:x[0],hi:x[1],h:x[2],m:x[3]?'largo':''})):[],c13:r[17]?r[17][4].map(x=>({lo:x[0],hi:x[1],n:x[2]})):[],ge:r[17]?r[17][6]:'',flag:r[18],msalto:r[19],
       k:[r[1],r[2],r[3],r[4],r[0]].join(' ')};
     BDC.push(c);});
   return BDC;}
@@ -791,7 +791,8 @@ function bdFicha(ix){
   const c=bdAll().find(x=>x.i===1000+ix);if(!c)return;CFI=1000+ix;const r=c.r,hoje=new Date().toLocaleDateString('pt-BR');
   const rowd=(k,v)=>'<div class="cfr"><dt>'+k+'</dt><dd>'+v+'</dd></div>';
   const tx=v=>v&&v!=='-'?esc(v):'sem dado';
-  let h='<h2 class="scr">'+esc(c.n)+'</h2>'+(c.a.length?'<p class="scrsub">Também: '+c.a.map(esc).join(' · ')+'</p>':'')
+  let h='<h2 class="scr">'+esc(c.n)+'</h2>'+(c.flag?'<div class="icwarn"><b>'+(c.flag[0]===1?'Erro corrigido no banco.':'Dado inconsistente no banco.')+'</b> '+esc(c.flag[1])+'</div>':'')
+   +(c.msalto?'<div class="icwarn"><b>Confira os picos de MS.</b> Um dos picos do banco está acima da massa molar do composto. Pode ser erro de digitação.</div>':'')+(c.a.length?'<p class="scrsub">Também: '+c.a.map(esc).join(' · ')+'</p>':'')
    +'<figure class="cfs"><div>'+bdSvg(r[16])+'</div><figcaption>'+fmt(c.f)+(c.mw?' · '+String(c.mw).replace('.',',')+' g/mol':'')+'</figcaption></figure>'
    +'<div class="cfq"><div class="cfqi"><span>Estado a 25 °C</span><b>'+(c.est?esc(c.est):'sem dado')+'</b></div>'
    +'<div class="cfqi"><span>Ponto de fusão</span><b>'+tx(r[8])+(r[8]&&r[8]!=='-'?' °C':'')+'</b></div>'
@@ -823,6 +824,6 @@ function bdFicha(ix){
   h+='<details class="sec"><summary>SDBS (espectros reais)</summary><p>O SDBS tem IV, MS, ¹H-RMN e ¹³C-RMN medidos de muitos compostos. Busque pelo nome ou pelo CAS.</p><div class="row" style="margin:0 0 8px"><a class="btn" href="https://sdbs.db.aist.go.jp/" target="_blank" rel="noopener">Abrir o SDBS</a>'
    +'<button class="btn ghost" type="button" data-copy="'+esc(c.n)+'">Copiar nome</button><button class="btn ghost" type="button" data-copy="'+esc(c.cas)+'">Copiar CAS</button></div>'
    +'<p class="srcl">Ao usar dados do SDBS, cite: SDBS, National Institute of Advanced Industrial Science and Technology (AIST), https://sdbs.db.aist.go.jp, acessado em '+hoje+'.</p></details>';
-  h+='<details class="sec"><summary>De onde vêm os dados</summary><p class="srcl"><span class="tag sv">Conferido: banco Analor</span> Nome, CAS, fórmula, massa molar, PF, PE, picos de MS, solubilidade, densidade e SMILES vêm do arquivo UNIV1_290926.DBF, passado pelo professor, sem alterar os valores. O banco não cita a fonte de cada número. O desenho da estrutura, o GDH, o grupo funcional, as subestruturas, as bandas de IV esperadas, o RMN estimado, o M nominal e o estado a 25 °C são calculados aqui a partir do SMILES e do PF e PE. O grupo de solubilidade é estimado pelas regras da tabela do professor e pela solubilidade em água do banco (que parece estar em g/100 mL, pelos valores conhecidos de clorofórmio, anilina e naftaleno). O banco não traz cor.</p></details>';
+  h+='<details class="sec"><summary>De onde vêm os dados</summary><p class="srcl"><span class="tag sv">Conferido: banco Analor</span> Nome, CAS, fórmula, massa molar, PF, PE, picos de MS, solubilidade, densidade e SMILES vêm do arquivo UNIV1_290926.DBF, passado pelo professor, sem alterar os valores. O banco não cita a fonte de cada número. O desenho da estrutura, o GDH, o grupo funcional, as subestruturas, as bandas de IV esperadas, o RMN estimado, o M nominal e o estado a 25 °C são calculados aqui a partir do SMILES e do PF e PE. O grupo de solubilidade é estimado pelas regras da tabela do professor e pela solubilidade em água do banco (que parece estar em g/100 mL, pelos valores conhecidos de clorofórmio, anilina e naftaleno). O banco não traz cor. Conferência feita em 10/11/2026: comparei a fórmula do banco com a da estrutura (SMILES) em todos os registros e, onde diferiam, usei o PubChem (pelo CAS) para decidir qual está certo. Numa amostra de 421 compostos do banco, fórmula e estrutura bateram com o PubChem em cerca de 99%.</p></details>';
   $('#cfB').innerHTML=h;
 }

@@ -66,25 +66,60 @@ def grupo_sol(m, grupos, sol, nC):
     if oxi or P('[CX3]=[CX3]') or P('C#C'): return 'N'
     if P('c') and not oxi: return 'I'
     return 'I' if not P('[CX3]=[CX3]') else 'N'
+PUB=json.load(open(__import__('os').path.join(__import__('os').path.dirname(__file__) or '.','analor_pubchem.json')))['d']
+def _el(f):
+    el={}
+    for e,n in re.findall(r'([A-Z][a-z]?)(\d*)',f.split('.')[0]): el[e]=el.get(e,0)+(int(n) if n else 1)
+    return el
+def confere(r,m):
+    """Compara a fórmula do banco com a do SMILES. Se diferem, usa o PubChem (pelo CAS) para saber qual dos dois está certo.
+    Devolve [código, texto, fórmula certa]: 1 = fórmula do banco corrigida pela estrutura; 2 = estrutura contradiz a fórmula (estrutura não usada); 3 = não deu para decidir (estrutura não usada)."""
+    from rdkit.Chem import rdMolDescriptors
+    if '.' in r[4] or '.' in r[12] or not r[4]: return None
+    sf=rdMolDescriptors.CalcMolFormula(m)
+    if _el(sf)==_el(r[4]): return None
+    p=PUB.get(r[0])
+    pf=p['f'] if p else None
+    base='A fórmula do banco ('+r[4]+') não bate com a estrutura do banco ('+sf+'). '
+    if pf and _el(pf)==_el(sf): return [1,base+'O PubChem (CAS '+r[0]+') confirma '+pf+'; uso essa fórmula.',sf]
+    if pf and _el(pf)==_el(r[4]): return [2,base+'O PubChem (CAS '+r[0]+') confirma a fórmula, então a estrutura do banco está errada e não é usada aqui.',sf]
+    return [3,base+('O PubChem indica '+pf+', que não bate com nenhuma das duas. ' if pf else 'Não achei esse CAS no PubChem. ')+'Não dá para saber qual está certo, então a estrutura não é usada aqui.',sf]
 def linha(r):
     ms=[[num(r['MS%d'%i]),num(r['IMS%d'%i])] for i in range(1,9)]
-    return [r['CAS'],r['NCOM'],r['NIUP'],r['NINGLES'],r['FMOL'],num(r['PMOL']),valor(r['PFCARAC']) if valor(r['PFCARAC']) is not None else num(r['PF']),valor(r['PECARAC']) if valor(r['PECARAC']) is not None else num(r['PE']),r['PFCARAC'],r['PECARAC'],r['PFDER'],[m for m in ms if m[0]],r['SMILES'],num(r['SOL_H2O']),num(r['DENS_20']),1 if r['NO_IFRJ'] else 0,desenho(r['SMILES'])]
+    return [r['CAS'],r['NCOM'],r['NIUP'],r['NINGLES'],r['FMOL'],num(r['PMOL']),valor(r['PFCARAC']) if valor(r['PFCARAC']) is not None else num(r['PF']),valor(r['PECARAC']) if valor(r['PECARAC']) is not None else num(r['PE']),r['PFCARAC'],r['PECARAC'],r['PFDER'],[m for m in ms if m[0]],r['SMILES'],num(r['SOL_H2O']),(lambda d:d if d is not None and 0.2<d<6 else None)(num(r['DENS_20'])),1 if r['NO_IFRJ'] else 0,desenho(r['SMILES'])]
 if __name__=='__main__':
     sys.path.insert(0,'.')
     import compostos
+    from rdkit.Chem import Descriptors
     from rdkit import Chem
-    L=[linha(r) for r in ler(sys.argv[1])]
+    L=[]; vistos=set()
+    for r0 in ler(sys.argv[1]):
+        k=(r0['CAS'],r0['NCOM'],r0['SMILES'])
+        if r0['CAS'] and k in vistos: continue   # registro repetido idêntico
+        vistos.add(k); L.append(linha(r0))
     BT={};GT={};FT={}
     for r in L:
         m=Chem.MolFromSmiles(r[12]) if r[12] else None
-        if m is None: r.append(None); continue
-        g,b,f=compostos.iv_bands(m)
-        nC=sum(1 for a in m.GetAtoms() if a.GetSymbol()=='C')
-        h1=[[x['lo'],x['hi'],x['h'],1 if 'largo' in str(x.get('m','')) else 0] for x in compostos.nmr_h(m)]
-        c13=[[x['lo'],x['hi'],x['n']] for x in compostos.nmr_c(m)]
-        sub=compostos.subestruturas(m)
-        ge=grupo_sol(m,g,r[13],nC)   # bandas de IV esperadas por grupo funcional, com os ajustes de conjugação etc. (as mesmas do resto do app)
-        r.append([[GT.setdefault(x,len(GT)) for x in g],[BT.setdefault(tuple(x[:5]),len(BT)) for x in b],[FT.setdefault(tuple(x),len(FT)) for x in f]]+[h1,c13,sub,ge])
+        flag=None
+        if m is not None:
+            flag=confere(r,m)
+            if flag and flag[0]==1:
+                r[4]=flag[2]; r[5]=round(Descriptors.MolWt(m),2)
+            if flag and flag[0]>=2:
+                r[16]=None; r[12]=''; m=None
+        msalto=1 if (r[5] and any(p[0]>r[5]+4 for p in r[11])) else 0   # pico de MS acima da massa molar (+4 para isótopos)
+        if m is None:
+            r.append(None)
+        else:
+            g,b,f=compostos.iv_bands(m)   # bandas de IV esperadas por grupo funcional, com os ajustes de conjugação etc. (as mesmas do resto do app)
+            nC=sum(1 for a in m.GetAtoms() if a.GetSymbol()=='C')
+            h1=[[x['lo'],x['hi'],x['h'],1 if 'largo' in str(x.get('m','')) else 0] for x in compostos.nmr_h(m)]
+            c13=[[x['lo'],x['hi'],x['n']] for x in compostos.nmr_c(m)]
+            sub=compostos.subestruturas(m)
+            ge=grupo_sol(m,g,r[13],nC)
+            r.append([[GT.setdefault(x,len(GT)) for x in g],[BT.setdefault(tuple(x[:5]),len(BT)) for x in b],[FT.setdefault(tuple(x),len(FT)) for x in f]]+[h1,c13,sub,ge])
+        r.append(flag[:2] if flag else None)   # r[18]: aviso de inconsistência do banco
+        r.append(msalto)                        # r[19]
     tab={'b':list(BT),'g':list(GT),'f':list(FT)}
     json.dump({'t':tab,'r':L},open('analor_bd.json','w',encoding='utf-8'),ensure_ascii=False,separators=(',',':'))
     print(len(L),'compostos',len(BT),'bandas distintas')
