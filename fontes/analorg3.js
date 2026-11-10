@@ -24,7 +24,7 @@ function stInit(){
 /* ---------- Novidades e aviso de atualização ---------- */
 const NOVID=[
  {v:145,d:'10/11/2026',t:[
-  'Compostos: o banco do professor (4668 compostos) agora faz parte das Fichas e do Identificar. Buscando por nome, fórmula ou CAS, os compostos do banco aparecem junto, com estrutura desenhada, PF, PE, picos de MS e bandas de IV esperadas. No Identificar eles entram na comparação com os demais.',
+  'Compostos: o banco do professor (4668 compostos) agora faz parte das Fichas e do Identificar. Buscando por nome, fórmula ou CAS, os compostos do banco aparecem junto, com estrutura desenhada, PF, PE, picos de MS e bandas de IV esperadas. No Identificar eles entram na comparação com os demais. RMN (nº de sinais e faixas), subestruturas e grupo de solubilidade desses compostos são calculados pela estrutura; o grupo de solubilidade é estimado e aparece marcado assim.',
   'Identificar: os picos de MS aceitam intensidade (43:100 58:42) ou um arquivo .jdx, .csv ou .txt. As bandas de IV aceitam l (larga) e e (estreita), e há o campo "Como o IV foi medido" (filme/KBr, solução ou gás).'
  ]},
  {v:136,d:'10/11/2026',t:[
@@ -729,7 +729,7 @@ function bdAll(){
     const c={i:1000+ix,bd:1,r,n:nm,a:[r[2],r[3]].filter(x=>x&&x.toLowerCase()!==r[1].toLowerCase()).map(bdNome),f:r[4]||'',cas:r[0]||'',mw:r[5],M:M,
       est:bdEstado(r[6],r[7]),cor:'',g:'',pf:r[6],pe:r[7],gdh:bdGdh(r[4]||''),
       gf:r[17]?r[17][0].map(i=>BDT.g[i]):[],iv:r[17]?r[17][1].map(i=>BDT.b[i]):[],ivf:r[17]?r[17][2].map(i=>BDT.f[i]):[],
-      ms:ms.length?ms.map(p=>p[0]):null,msi:ms.length?ms:null,sub:[],h1:[],c13:[],
+      ms:ms.length?ms.map(p=>p[0]):null,msi:ms.length?ms:null,sub:r[17]?r[17][5]:[],h1:r[17]?r[17][3].map(x=>({lo:x[0],hi:x[1],h:x[2],m:x[3]?'largo':''})):[],c13:r[17]?r[17][4].map(x=>({lo:x[0],hi:x[1],n:x[2]})):[],ge:r[17]?r[17][6]:'',
       k:[r[1],r[2],r[3],r[4],r[0]].join(' ')};
     BDC.push(c);});
   return BDC;}
@@ -798,10 +798,12 @@ function bdFicha(ix){
    +'<div class="cfqi"><span>Ponto de ebulição</span><b>'+tx(r[9])+(r[9]&&r[9]!=='-'?' °C':'')+'</b></div></div>'
    +'<dl class="cfd">'
    +rowd('Grupo funcional',esc(c.gf.join(', ')||'sem grupo funcional reconhecido'))
+   +(c.ge?rowd('Grupo de solubilidade (estimado)','<span class="gl2">'+SOLNM[c.ge]+'</span> '+esc(gTxt(c.ge))+' <span class="tag sm">estimado</span>'):'')
+   +(c.sub.length?rowd('Subestruturas',esc(c.sub.map(k=>{const q=SUBL.find(x=>x[0]===k);return q?q[1].replace(/ \(.*/,''):k;}).join(', '))):'')
    +(c.gdh!=null?rowd('GDH','<b>'+c.gdh+'</b> <span class="mut">(anéis + ligações π)</span>'):'')
    +(c.M?rowd('M nominal','<b>'+c.M+'</b>'):'')
    +rowd('CAS','<span class="mono">'+esc(c.cas||'sem dado')+'</span>')
-   +(r[13]!==null?rowd('Solubilidade em água',r[13]+' g/L'):'')+(r[14]!==null?rowd('Densidade',r[14]+' g/mL a 20 °C'):'')
+   +(r[13]!==null?rowd('Solubilidade em água',r[13]+' g/100 mL'):'')+(r[14]!==null?rowd('Densidade',r[14]+' g/mL a 20 °C'):'')
    +(r[10]?rowd('Derivados (PF °C)',esc(r[10])):'')+'</dl>';
   const iv=c.iv.map((b,k)=>b.concat([k])).filter(b=>b[4]).sort((a,b)=>Math.max(b[0],b[1])-Math.max(a[0],a[1]));
   h+='<details class="sec" open><summary>Infravermelho: bandas esperadas</summary>'
@@ -814,9 +816,13 @@ function bdFicha(ix){
   else h+='<p class="empty">Sem picos de MS neste banco.</p>';
   if(nCl(c.f))h+='<p class="srcl">Contém Cl: aparece M+2 (isótopo ³⁷Cl). Com 1 Cl, M : M+2 é cerca de 3 : 1.</p>';
   h+='</details>';
+  if(c.h1.length||c.c13.length){const fr=x=>String(x).replace('.',',');
+    h+='<details class="sec"><summary>RMN de ¹H e ¹³C (estimado)</summary><p class="hint">Número de sinais e faixas de deslocamento saem da estrutura (regras de tabela). Não é espectro medido.</p>'
+     +(c.h1.length?'<h4 style="margin:10px 0 4px">¹H: '+c.h1.length+(c.h1.length>1?' sinais':' sinal')+'</h4><div class="tbl"><table class="obt nostk"><thead><tr><th>δ (ppm)</th><th>H</th></tr></thead><tbody>'+c.h1.slice().sort((a,b)=>b.hi-a.hi).map(x=>'<tr><td class="n">'+fr(x.lo)+'–'+fr(x.hi)+(x.m?' (largo)':'')+'</td><td>'+x.h+'</td></tr>').join('')+'</tbody></table></div>':'')
+     +(c.c13.length?'<h4 style="margin:10px 0 4px">¹³C: '+c.c13.length+(c.c13.length>1?' sinais':' sinal')+'</h4><div class="tbl"><table class="obt nostk"><thead><tr><th>δ (ppm)</th><th>C</th></tr></thead><tbody>'+c.c13.slice().sort((a,b)=>b.hi-a.hi).map(x=>'<tr><td class="n">'+x.lo+'–'+x.hi+'</td><td>'+x.n+'</td></tr>').join('')+'</tbody></table></div>':'')+'</details>';}
   h+='<details class="sec"><summary>SDBS (espectros reais)</summary><p>O SDBS tem IV, MS, ¹H-RMN e ¹³C-RMN medidos de muitos compostos. Busque pelo nome ou pelo CAS.</p><div class="row" style="margin:0 0 8px"><a class="btn" href="https://sdbs.db.aist.go.jp/" target="_blank" rel="noopener">Abrir o SDBS</a>'
    +'<button class="btn ghost" type="button" data-copy="'+esc(c.n)+'">Copiar nome</button><button class="btn ghost" type="button" data-copy="'+esc(c.cas)+'">Copiar CAS</button></div>'
    +'<p class="srcl">Ao usar dados do SDBS, cite: SDBS, National Institute of Advanced Industrial Science and Technology (AIST), https://sdbs.db.aist.go.jp, acessado em '+hoje+'.</p></details>';
-  h+='<details class="sec"><summary>De onde vêm os dados</summary><p class="srcl"><span class="tag sv">Conferido: banco Analor</span> Nome, CAS, fórmula, massa molar, PF, PE, picos de MS, solubilidade, densidade e SMILES vêm do arquivo UNIV1_290926.DBF, passado pelo professor, sem alterar os valores. O banco não cita a fonte de cada número. O desenho da estrutura, o GDH, o grupo funcional, as bandas de IV esperadas, o M nominal e o estado a 25 °C são calculados aqui a partir do SMILES e do PF e PE.</p></details>';
+  h+='<details class="sec"><summary>De onde vêm os dados</summary><p class="srcl"><span class="tag sv">Conferido: banco Analor</span> Nome, CAS, fórmula, massa molar, PF, PE, picos de MS, solubilidade, densidade e SMILES vêm do arquivo UNIV1_290926.DBF, passado pelo professor, sem alterar os valores. O banco não cita a fonte de cada número. O desenho da estrutura, o GDH, o grupo funcional, as subestruturas, as bandas de IV esperadas, o RMN estimado, o M nominal e o estado a 25 °C são calculados aqui a partir do SMILES e do PF e PE. O grupo de solubilidade é estimado pelas regras da tabela do professor e pela solubilidade em água do banco (que parece estar em g/100 mL, pelos valores conhecidos de clorofórmio, anilina e naftaleno). O banco não traz cor.</p></details>';
   $('#cfB').innerHTML=h;
 }

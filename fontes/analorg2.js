@@ -198,13 +198,13 @@ function icScore(c,x){
   const add=(k,lab,f,det)=>{parts.push({k,lab,f,det:det||''});w*=f;};
   if(x.est)add('est','estado',c.est?(c.est.indexOf(x.est)===0?1:0.05):0.4,c.est||'sem dado');
   if(x.cor){if(!c.cor)add('cor','cor',0.4,'sem dado');else{const [m,p]=corFam(c.cor);add('cor','cor',m.has(x.cor)?1:p.has(x.cor)?0.5:0.12,c.cor);}}
-  if(x.g)add('g','solubilidade',c.g?(c.g===x.g?1:0.04):0.4,c.g?'grupo '+SOLNM[c.g]:'sem dado');
+  if(x.g)add('g','solubilidade',c.g?(c.g===x.g?1:0.04):c.ge?(c.ge===x.g?1:0.15):0.4,c.g?'grupo '+SOLNM[c.g]:c.ge?'grupo '+SOLNM[c.ge]+' (estimado)':'sem dado');
   if(x.pf)add('pf','PF',c.pf==null?(c.bd?0.2:0.05):gauss(c.pf-x.pf.v,x.pf.t),'PF '+tC(c.pf));
   if(x.pe)add('pe','PE',c.pe==null?(c.bd?0.2:0.08):gauss(c.pe-x.pe.v,x.pe.t),'PE '+tC(c.pe));
   if(x.els.length){c._el=c._el||elCount(c.f);}
   x.els.forEach(([e,v])=>{const has=!!(c._el&&c._el[e]);add('el','elemento '+e,(v==='sim')===has?1:0.03,has?'tem '+e:'sem '+e);});
   IDIR.forEach(([k,lab])=>{const u=x.ir[k];if(!u)return;const has=cIr(c,k);add('irf','IV: '+lab.replace(/ \(.*/,''),(u==='sim')===has?1:0.05,has?'tem essa banda':'não tem essa banda');});
-  SUBL.forEach(([k,lab])=>{const u=x.sub[k];if(!u)return;if(c.bd){add('sub',lab.replace(/ \(.*/,''),0.5,'sem dado');return;}const has=(c.sub||[]).indexOf(k)>=0;add('sub',lab.replace(/ \(.*/,''),(u==='sim')===has?1:0.04,has?'tem':'não tem');});
+  SUBL.forEach(([k,lab])=>{const u=x.sub[k];if(!u)return;if(c.bd&&!c.h1.length){add('sub',lab.replace(/ \(.*/,''),0.5,'sem dado');return;}const has=(c.sub||[]).indexOf(k)>=0;add('sub',lab.replace(/ \(.*/,''),(u==='sim')===has?1:0.04,has?'tem':'não tem');});
   if(x.F){const a=elCount(x.F),b=c._el||(c._el=elCount(c.f));const ks=new Set([...Object.keys(a),...Object.keys(b)]);const ok=[...ks].every(k=>(a[k]||0)===(b[k]||0));add('F','fórmula',ok?1:0.02,c.f);}
   if(x.gdh!=null)add('gdh','GDH',c.gdh==null?0.4:(c.gdh===x.gdh?1:0.05),c.gdh==null?'sem dado':'GDH '+c.gdh);
   if(x.gf)add('gf','grupo funcional',c.gf.indexOf(x.gf)>=0?1:0.04,c.gf.join(', ')||'sem grupo funcional');
