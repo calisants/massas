@@ -24,7 +24,7 @@ function stInit(){
 /* ---------- Novidades e aviso de atualização ---------- */
 const NOVID=[
  {v:145,d:'10/11/2026',t:[
-  'Compostos: o banco do professor (4668 compostos) agora faz parte das Fichas e do Identificar. Buscando por nome, fórmula ou CAS, os compostos do banco aparecem junto, com estrutura desenhada, PF, PE, picos de MS e bandas de IV esperadas. No Identificar eles entram na comparação com os demais. Conferi o banco: em 71 registros a fórmula não batia com a estrutura (corrigi 48 pela estrutura, confirmada no PubChem, e escondi a estrutura de 36 que estavam erradas ou sem como decidir; a ficha avisa). RMN (nº de sinais e faixas), subestruturas e grupo de solubilidade desses compostos são calculados pela estrutura; o grupo de solubilidade é estimado e aparece marcado assim.',
+  'Compostos: o banco do professor (4668 compostos) agora faz parte das Fichas e do Identificar. Buscando por nome, fórmula ou CAS, os compostos do banco aparecem junto, com estrutura desenhada, PF, PE, picos de MS e bandas de IV esperadas. No Identificar eles entram na comparação com os demais. Conferi o banco: em 84 registros a fórmula não batia com a estrutura (corrigi 48 pela estrutura, confirmada no PubChem, e escondi a estrutura de 36 que estavam erradas ou sem como decidir; a ficha avisa). RMN (nº de sinais e faixas), subestruturas e grupo de solubilidade desses compostos são calculados pela estrutura; o grupo de solubilidade é estimado e aparece marcado assim.',
   'Identificar: os picos de MS aceitam intensidade (43:100 58:42) ou um arquivo .jdx, .csv ou .txt. As bandas de IV aceitam l (larga) e e (estreita), e há o campo "Como o IV foi medido" (filme/KBr, solução ou gás).'
  ]},
  {v:136,d:'10/11/2026',t:[
