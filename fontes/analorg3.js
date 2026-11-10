@@ -23,6 +23,9 @@ function stInit(){
 
 /* ---------- Novidades e aviso de atualização ---------- */
 const NOVID=[
+ {v:136,d:'10/11/2026',t:[
+  'Ensaios: nova tela "Análise funcional" com os procedimentos completos para nitrocomposto (hidróxido ferroso; zinco, CaCl2 e nitroprussiato), ácido carboxílico (iodeto-iodato, hidroxamato férrico, resorcinol) e cloro orgânico (dicromato e papel de Villier; AgNO3 em etanol; NaI em acetona; Lassaigne). Cada ensaio traz reagente, passos, cor do positivo, interferências e a fonte conferida.',
+ ]},
  {v:0,d:'09/11/2026',t:[
   'Identificar: botão "Salvar análise" (com nome e observações opcionais). As análises salvas aparecem em "Análises salvas", onde dá para abrir de novo, excluir, exportar em .json e importar em outro aparelho. Também entram no "Salvar e levar o progresso".',
   'Compartilhar: o texto ficou organizado por grupos (aparência, solubilidade, IV, massas, RMN) e com o ranking mais claro. Novo botão "Relatório (PDF)": página com cabeçalho, dados em cartões, classes, ranking com barras e aviso final, pronta para imprimir ou salvar em PDF.',
