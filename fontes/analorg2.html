@@ -33,6 +33,7 @@
     <h2 class="scr">Identificar o Composto</h2>
     <p class="scrsub">Marque o que você mediu. O que ficar em &ldquo;Não sei&rdquo; não entra na conta. O app mostra as classes que sobram e os compostos do banco mais compatíveis.</p>
     <div class="chipbar rseg msub" role="group" aria-label="Compostos"><button class="chip" type="button" data-go="p-cp" aria-pressed="false">Fichas</button><button class="chip" type="button" data-go="p-ic" aria-pressed="false">Identificar</button><button class="chip" type="button" data-go="p-es" aria-pressed="false">Espectro novo</button></div>
+    <label class="icnome" for="icNome">Nome da amostra<input type="text" id="icNome" maxlength="60" placeholder="ex.: amostra 3, composto desconhecido A" autocomplete="off"></label>
     <button class="icsum" type="button" id="icSum" aria-live="polite">Marque pelo menos um dado.</button>
     <div class="row" style="margin-bottom:6px">
       <button class="btn ghost" type="button" id="icClr">Limpar</button>
@@ -102,7 +103,6 @@
     <div id="icOut" class="icres" aria-live="polite"></div>
     <div id="icExp" class="icexp" hidden>
       <h3>Salvar e compartilhar</h3>
-      <label for="icNome">Nome da análise (opcional)<input type="text" id="icNome" maxlength="60" placeholder="ex.: amostra 3, aula de 12/11" autocomplete="off"></label>
       <label for="icObs">Observações (opcional)<textarea id="icObs" rows="2" maxlength="400" placeholder="ex.: cheiro adocicado, cristais brancos"></textarea></label>
       <div class="row">
         <button class="btn" type="button" id="icSalvar">Salvar análise</button>

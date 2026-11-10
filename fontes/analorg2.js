@@ -145,7 +145,7 @@ const elCount=f=>{const m={};String(f).replace(/([A-Z][a-z]?)(\d*)/g,(a,e,n)=>{m
 const corFam=s=>{s=String(s||'').toLowerCase();const k=s.indexOf('('),main=k<0?s:s.slice(0,k),par=k<0?'':s.slice(k);
   const f=t=>{const r=new Set();if(/incolor|branc/.test(t))r.add('inc');if(/amarel/.test(t))r.add('amarelo');if(/laranj/.test(t))r.add('laranja');if(/verm|ros/.test(t))r.add('vermelho');if(/marrom|castanh/.test(t))r.add('marrom');if(/verde/.test(t))r.add('verde');if(/azul/.test(t))r.add('azul');if(/viole|roxo|purpur/.test(t))r.add('violeta');return r;};
   return [f(main),f(par)];};
-const IC_CAMPOS=['#icPF','#icPE','#icTol','#icIV','#icM','#icP','#icH','#icC','#icHd','#icF','#icGDH','#icGF'];
+const IC_CAMPOS=['#icNome','#icPF','#icPE','#icTol','#icIV','#icM','#icP','#icH','#icC','#icHd','#icF','#icGDH','#icGF'];
 let icSt={est:'',cor:'',g:'',el:{},ir:{},sub:{}};
 const sx=h=>String(h).replace(/<[^>]*>/g,'');
 
@@ -293,7 +293,7 @@ function icRun(){setTimeout(()=>{if(typeof icBadges==="function")icBadges();},0)
   $('#icSum').innerHTML=(cl.any?'<b>'+cl.ok.length+'</b> de '+IDCLS.length+' classes':'<b>'+used+'</b> critério'+(used>1?'s':''))+sum+' <span class="mut">· ver resultado ↓</span>';
   fontesRecolher($('#icOut'));
 }
-function icClear(){icReset();if($('#icNome'))$('#icNome').value='';if($('#icObs'))$('#icObs').value='';icDraw();ICLAST=null;icExpShow();$('#icOut').innerHTML='<p class="empty">Marque pelo menos um dado acima.</p>';$('#icSum').textContent='Marque pelo menos um dado.';$('#icBandOut').innerHTML='';icSave();}
+function icClear(){icReset();if($('#icObs'))$('#icObs').value='';icDraw();ICLAST=null;icExpShow();$('#icOut').innerHTML='<p class="empty">Marque pelo menos um dado acima.</p>';$('#icSum').textContent='Marque pelo menos um dado.';$('#icBandOut').innerHTML='';icSave();}
 function icFill(i){
   const c=COMP[i];icReset();
   icSt.est=c.est.indexOf('líquido')===0?'líquido':'sólido';icSt.g=c.g;
@@ -344,7 +344,7 @@ function icTexto(){
   const L=ICLAST;if(!L)return '';
   const no=icNomeObs(),o=[],linha='────────────────────────';
   o.push('ANAQUIM · Identificação do composto');
-  if(no.nome)o.push('Análise: '+no.nome);
+  if(no.nome)o.push('Amostra: '+no.nome);
   o.push('Data: '+new Date().toLocaleDateString('pt-BR'));
   o.push(linha);o.push('DADOS INFORMADOS');
   const G=icDados();
@@ -369,7 +369,7 @@ function icRelatorio(){
   const cor=(cs.getPropertyValue('--keep')||'#1F5FA8').trim(),hoje=new Date().toLocaleDateString('pt-BR');
   const G=icDados();
   let b='';
-  b+='<header><div class="mk">Anaquim</div><h1>'+esc(no.nome||'Identificação do composto')+'</h1><p class="sub">'+(no.nome?'Identificação do composto · ':'')+hoje+'</p></header>';
+  b+='<header><div class="mk">Anaquim · Identificação do composto</div>'+(no.nome?'<div class="am">Amostra</div><h1>'+esc(no.nome)+'</h1>':'<h1>Identificação do composto</h1>')+'<p class="sub">'+hoje+'</p></header>';
   b+='<section><h2>Dados informados</h2>';
   b+=G.length?'<div class="grid">'+G.map(g=>'<div class="card"><h3>'+esc(g.t)+'</h3><dl>'+g.it.map(([k,val])=>'<div><dt>'+esc(k)+'</dt><dd>'+esc(val)+'</dd></div>').join('')+'</dl></div>').join('')+'</div>':'<p class="mut">Nenhum dado informado.</p>';
   b+='</section>';
@@ -388,8 +388,8 @@ function icRelatorio(){
   b+='<button class="imp" onclick="window.print()">Imprimir ou salvar em PDF</button>';
   const css=':root{--c:'+cor+'}*{box-sizing:border-box}body{margin:0;background:#EEF1F4;color:#15202B;font:15px/1.5 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif}'
    +'.pg{max-width:780px;margin:0 auto;background:#fff;padding:0 0 28px}'
-   +'header{background:var(--c);color:#fff;padding:26px 28px 22px}.mk{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;opacity:.85;font-weight:600}'
-   +'h1{margin:6px 0 2px;font-size:1.65rem;line-height:1.2}.sub{margin:0;opacity:.9;font-size:.92rem}'
+   +'header{background:var(--c);color:#fff;padding:26px 28px 22px}.am{margin-top:12px;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;opacity:.8}.mk{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;opacity:.85;font-weight:600}'
+   +'h1{margin:2px 0 4px;font-size:1.65rem;line-height:1.2}.sub{margin:0;opacity:.9;font-size:.92rem}'
    +'section{padding:22px 28px 0}h2{font-size:1.05rem;margin:0 0 12px;padding-bottom:6px;border-bottom:2px solid var(--c)}h3{margin:0 0 6px;font-size:.74rem;letter-spacing:.07em;text-transform:uppercase;color:var(--c)}'
    +'.mut{color:#5B6877;font-weight:400}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}'
    +'.card{border:1px solid #D9E0E7;border-radius:10px;padding:10px 12px;break-inside:avoid}dl{margin:0}dl div{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px solid #EDF1F5;min-width:0}dl div:last-child{border:0}dt{color:#5B6877}dd{margin:0;font-weight:600;text-align:right;min-width:0;overflow-wrap:anywhere}dt{flex:none;max-width:45%}'
@@ -448,7 +448,6 @@ function anSalvar(){
   a.unshift({id:'a'+t.toString(36)+Math.random().toString(36).slice(2,5),t,n:nome,o:no.obs,st:JSON.parse(JSON.stringify(icSt)),f,
     top:L.top.slice(0,3).map(r=>({n:r.c.n,p:+r.p.toFixed(1)})),k:L.cl.any?L.cl.ok.length:null});
   LS.set(AN_KEY,a.slice(0,80));
-  if($('#icNome'))$('#icNome').value='';if($('#icObs'))$('#icObs').value='';
   anDesenha();anMsg('Análise salva neste aparelho: '+nome+'.');
   const d=$('#icSaved');if(d)d.open=true;
 }
@@ -465,7 +464,7 @@ function anAbrir(id){
   icReset();
   icSt={est:x.st.est||'',cor:x.st.cor||'',g:x.st.g||'',el:x.st.el||{},ir:x.st.ir||{},sub:x.st.sub||{}};
   IC_CAMPOS.forEach(i=>{if(x.f&&x.f[i]!=null)$(i).value=x.f[i];});
-  if($('#icNome'))$('#icNome').value=x.n;if($('#icObs'))$('#icObs').value=x.o||'';
+  if($('#icNome')&&!$('#icNome').value)$('#icNome').value=x.n;if($('#icObs'))$('#icObs').value=x.o||'';
   icDraw();icRun();icSave();
   anMsg('Análise aberta: '+x.n+'. O resultado foi recalculado com o banco atual do app.');
   const r=$('#icResT');if(r&&r.scrollIntoView)r.scrollIntoView({behavior:'smooth',block:'start'});

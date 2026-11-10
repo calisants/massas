@@ -147,3 +147,5 @@ html.semmov *,html.semmov *::before,html.semmov *::after{transition:none!importa
 .ansh .mut{font-size:.8rem}
 .ansr{margin:2px 0 6px;font-size:.9rem}
 .ansn{margin:0 0 6px;font-size:.88rem;background:var(--note-soft);border-radius:8px;padding:6px 10px}
+.icnome{display:block;font-size:.86rem;color:var(--muted);margin:0 0 10px}
+.icnome input{display:block;width:100%;margin-top:3px;font:inherit;font-size:1rem;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
