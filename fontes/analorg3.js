@@ -23,6 +23,10 @@ function stInit(){
 
 /* ---------- Novidades e aviso de atualização ---------- */
 const NOVID=[
+ {v:145,d:'10/11/2026',t:[
+  'Compostos: o banco do professor (4668 compostos) agora faz parte das Fichas e do Identificar. Buscando por nome, fórmula ou CAS, os compostos do banco aparecem junto, com estrutura desenhada, PF, PE, picos de MS e bandas de IV esperadas. No Identificar eles entram na comparação com os demais.',
+  'Identificar: os picos de MS aceitam intensidade (43:100 58:42) ou um arquivo .jdx, .csv ou .txt. As bandas de IV aceitam l (larga) e e (estreita), e há o campo "Como o IV foi medido" (filme/KBr, solução ou gás).'
+ ]},
  {v:136,d:'10/11/2026',t:[
   'Ensaios: nova tela "Análise funcional" com os procedimentos completos para nitrocomposto (hidróxido ferroso; zinco, CaCl2 e nitroprussiato), ácido carboxílico (iodeto-iodato, hidroxamato férrico, resorcinol, ácido tiobarbitúrico para oxálico) e cloro orgânico (dicromato e papel de Villier; AgNO3 em etanol; NaI em acetona; Lassaigne). Cada ensaio traz reagente, passos, cor do positivo, interferências e a fonte conferida.',
  ]},
@@ -706,16 +710,31 @@ function zoomOpen(btn){
   init();
 })();
 
-/* ---------- Banco Analor (DBF do professor) ---------- */
-let BD=null;
-let BDT={b:[],g:[],f:[]};
-function bdLoad(){if(BD)return BD;try{const o=JSON.parse(BDJSON);BD=o.r;BDT=o.t}catch(e){BD=[]}
-  BD.forEach(r=>{r.k=(r[1]+' '+r[2]+' '+r[3]+' '+r[0]+' '+r[4]).toLowerCase();r.m=new Map(r[11].map(p=>[p[0],p[1]]))});return BD;}
-function bdInit(){
-  ['bdQ','bdP','bdM','bdI','bdMeio','bdF1','bdF2','bdE1','bdE2'].forEach(i=>{const e=$('#'+i);if(e)e.addEventListener('input',bdDraw);});
-  const f=$('#bdFile');if(f)f.addEventListener('change',()=>{const a=f.files[0];if(!a)return;const rd=new FileReader();
-    rd.onload=()=>{const p=bdParseSpec(String(rd.result));$('#bdP').value=p.map(x=>x[0]+':'+x[1]).join(' ');if(!p.length)$('#bdInfo').textContent='Não achei pares m/z e intensidade nesse arquivo.';else bdDraw();};rd.readAsText(a);});
-}
+/* ---------- Banco Analor (DBF do professor), dentro de Compostos ---------- */
+let BD=null,BDT={b:[],g:[],f:[]},BDC=null;
+const BDMASS={C:12,H:1,N:14,O:16,S:32,P:31,F:19,Cl:35,Br:79,I:127,Si:28,B:11,Se:80};
+function bdLoad(){if(BD)return BD;try{const o=JSON.parse(BDJSON);BD=o.r;BDT=o.t}catch(e){BD=[]}return BD;}
+/* "ACETONA" -> "Acetona"; mantém prefixos curtos (N, o-, p-) como estão */
+function bdNome(s){s=String(s||'').trim();s=s.replace(/[A-ZÀ-Ý]{2,}/g,m=>m.toLowerCase());return s.charAt(0).toUpperCase()+s.slice(1);}
+function bdNominal(f,mw){const el=elCount(f);let m=0;for(const e in el){if(BDMASS[e]===undefined)return mw?Math.round(mw):null;m+=BDMASS[e]*el[e];}return m||(mw?Math.round(mw):null);}
+function bdGdh(f){const e=elCount(f);for(const k in e)if(!['C','H','N','F','Cl','Br','I','O','S'].includes(k))return null;
+  const g=(2*(e.C||0)+2+(e.N||0)-(e.H||0)-(e.F||0)-(e.Cl||0)-(e.Br||0)-(e.I||0))/2;return g>=0&&Number.isInteger(g)?g:null;}
+/* estado a 25 °C pelo PF e PE do banco (não é dado do banco: é calculado) */
+function bdEstado(pf,pe){if(pf!==null&&pf>25)return 'sólido';if(pf!==null&&pe!==null)return pe>25?'líquido':'gás';return '';}
+/* compostos do banco no mesmo formato dos de COMP (os que já estão em COMP, pelo CAS, ficam só em COMP) */
+function bdAll(){
+  if(BDC)return BDC;const D=bdLoad(),cas=new Set(COMP.map(c=>c.cas));BDC=[];
+  D.forEach((r,ix)=>{if(r[0]&&cas.has(r[0]))return;
+    const ms=r[11],nm=bdNome(r[1]),M=bdNominal(r[4],r[5]);
+    const c={i:1000+ix,bd:1,r,n:nm,a:[r[2],r[3]].filter(x=>x&&x.toLowerCase()!==r[1].toLowerCase()).map(bdNome),f:r[4]||'',cas:r[0]||'',mw:r[5],M:M,
+      est:bdEstado(r[6],r[7]),cor:'',g:'',pf:r[6],pe:r[7],gdh:bdGdh(r[4]||''),
+      gf:r[17]?r[17][0].map(i=>BDT.g[i]):[],iv:r[17]?r[17][1].map(i=>BDT.b[i]):[],ivf:r[17]?r[17][2].map(i=>BDT.f[i]):[],
+      ms:ms.length?ms.map(p=>p[0]):null,msi:ms.length?ms:null,sub:[],h1:[],c13:[],
+      k:[r[1],r[2],r[3],r[4],r[0]].join(' ')};
+    BDC.push(c);});
+  return BDC;}
+/* "m/z:intensidade" ou só "m/z"; devolve [[m/z,intensidade|null]] */
+function bdPicos(s){return(String(s).match(/\d+(?::\d+(?:\.\d+)?)?/g)||[]).map(t=>{const a=t.split(':');return[Number(a[0]),a[1]===undefined?null:Number(a[1])];});}
 /* lê JCAMP-DX (PEAK TABLE / XYDATA simples), CSV ou texto com pares; devolve até 12 picos [m/z inteiro, % da base] */
 function bdParseSpec(tx){
   const pts=[];let on=false,jd=/##(PEAK TABLE|XYPOINTS|XYDATA|DATA TABLE)/i.test(tx);
@@ -723,78 +742,32 @@ function bdParseSpec(tx){
     if(/^##/.test(l)){on=/^##(PEAK TABLE|XYPOINTS|XYDATA|DATA TABLE)/i.test(l);return;}
     if(jd&&!on)return;
     const n=(l.replace(/[;,\t]+/g,' ').match(/-?\d+(?:\.\d+)?/g)||[]).map(Number);
-    if(jd&&n.length>2&&/\(X\+\+/.test(tx)===false&&n.length%2===0){for(let i=0;i<n.length;i+=2)pts.push([n[i],n[i+1]]);}
-    else if(n.length===2)pts.push([n[0],n[1]]);
-    else if(n.length>2&&n.length%2===0&&!jd)for(let i=0;i<n.length;i+=2)pts.push([n[i],n[i+1]]);
+    if(n.length>=2&&n.length%2===0)for(let i=0;i<n.length;i+=2)pts.push([n[i],n[i+1]]);
   });
   if(!pts.length)return[];
   const bins=new Map();pts.forEach(p=>{const m=Math.round(p[0]);if(m>0&&p[1]>0)bins.set(m,Math.max(bins.get(m)||0,p[1]));});
   const mx=Math.max(...bins.values());
   return[...bins].map(x=>[x[0],Math.round(x[1]/mx*100)]).filter(x=>x[1]>=3).sort((a,b)=>b[1]-a[1]).slice(0,12).sort((a,b)=>a[0]-b[0]);
 }
-/* "43 58 15" ou "43:100 58:42": devolve Map m/z -> intensidade (null se não informada) */
-function bdQuery(s){const m=new Map();(s.match(/\d+(?::\d+(?:\.\d+)?)?/g)||[]).forEach(t=>{const a=t.split(':');m.set(Number(a[0]),a[1]===undefined?null:Number(a[1]));});
-  const mx=Math.max(0,...[...m.values()].filter(v=>v!==null));if(mx>0)m.forEach((v,k)=>{if(v!==null)m.set(k,v/mx*100);});return m;}
-/* Compatibilidade. As intensidades variam de aparelho para aparelho e com a energia de ionização, então a posição dos picos pesa
-   bem mais que a intensidade; o íon molecular pode ser fraco ou nem aparecer, por isso o M só bonifica ou penaliza de leve. */
-function bdScore(r,Q,M){
-  let tot=0,got=0,hit=[],miss=[];
-  r[11].forEach(p=>{const w=0.3+0.7*p[1]/100;tot+=w;
-    if(Q.has(p[0])){const qi=Q.get(p[0]);let f=1;if(qi!==null&&p[1]>0){const ra=qi/p[1];if(ra<0.3||ra>3.3)f=0.75;}got+=w*f;hit.push(p[0]);}else miss.push(p[0]);});
-  if(!tot)return null;
-  let sc=got/tot;
-  const hasI=[...Q.values()].some(v=>v!==null);
-  if(hasI){const strong=[...Q].filter(x=>x[1]!==null&&x[1]>=30);if(strong.length){const un=strong.filter(x=>!r.m.has(x[0])).length;sc-=0.15*un/strong.length;}
-    const bq=[...Q].sort((a,b)=>(b[1]||0)-(a[1]||0))[0][0];const top=r[11].slice(0,3).map(p=>p[0]);if(top.includes(bq))sc+=0.08;}
-  if(M){const d=Math.abs(Math.round(r[5]||0)-M);sc+=d===0?0.15:-0.25;if(d===0&&!hit.includes(M)&&!r.m.has(M)){/* M ausente no banco: sem ajuste extra */}}
-  return{s:Math.max(0,Math.min(1,sc)),hit,miss,n:hit.length};
-}
-function bdIsoHint(Q){const o=[];const ks=[...Q.keys()].sort((a,b)=>b-a).slice(0,8);
-  ks.forEach(k=>{const a=Q.get(k),b=Q.get(k+2);if(a&&b){const ra=a/b;if(ra>=2.5&&ra<=4)o.push('m/z '+k+' e '+(k+2)+' em proporção perto de 3:1 (um Cl)');else if(ra>=0.8&&ra<=1.25)o.push('m/z '+k+' e '+(k+2)+' em proporção perto de 1:1 (um Br)');}});
-  return o.slice(0,2).join('; ');}
-/* IV: bandas esperadas (do grupo funcional, já com conjugação etc.) contra as bandas que você leu.
-   O meio da medida muda a posição: solução diluída mostra O–H e N–H livres (finos, mais altos) e C=O de ácido monomérico mais alto;
-   gás sobe o C=O. Esses deslocamentos por meio são regra geral de livro-texto, eu não os conferi em fonte nesta sessão. */
-/* "3300l" = banda larga, "2250e" = banda estreita; sem letra, não se sabe */
-function bdIvQuery(s){return(s.match(/\d{3,4}(?:\.\d+)?[lLeE]?/g)||[]).map(t=>({v:parseFloat(t),w:/[lL]$/.test(t)?'l':/[eE]$/.test(t)?'e':''})).filter(x=>x.v>=400&&x.v<=4000);}
-function bdBands(r){return r[17]?r[17][1].map(i=>{const b=BDT.b[i];return{lo:Math.min(b[0],b[1]),hi:Math.max(b[0],b[1]),t:b[2],k:b[4],l:/larga/.test(b[3])}}):[];}
-function bdScoreIV(r,Qi,meio){
-  const B=bdBands(r);if(!B.length)return null;let tot=0,got=0,keyHit=0;const hit=[],miss=[];
-  const covers=(b,ob)=>{const o=ob.v;if(ob.w==='l'&&!b.l)return false;if(ob.w==='e'&&b.l)return false;let lo=b.lo,hi=b.hi,tol=15;
+/* IV: "3300l" = banda larga, "2250e" = banda estreita; sem letra, não se sabe */
+function bdIvQuery(s){return(String(s).match(/\d{3,4}(?:\.\d+)?[lLeE]?/g)||[]).map(t=>({v:parseFloat(t),w:/[lL]$/.test(t)?'l':/[eE]$/.test(t)?'e':''})).filter(x=>x.v>=400&&x.v<=4000);}
+/* Bandas esperadas (do grupo funcional, já com conjugação etc.) contra as bandas lidas.
+   O meio muda a posição: solução diluída mostra O–H e N–H livres (finos, mais altos) e C=O de ácido monomérico mais alto; gás sobe o C=O.
+   Esses deslocamentos por meio são regra geral de livro-texto; eu não os conferi em fonte nesta sessão. */
+function bdScoreIV(c,Qi,meio){
+  const B=c.iv.map(b=>({lo:Math.min(b[0],b[1]),hi:Math.max(b[0],b[1]),t:b[2],k:b[4],l:/larga/.test(b[3])}));
+  if(!B.length)return{rec:1,prec:1,miss:[],un:[],note:'sem bandas esperadas'};
+  const covers=(b,ob)=>{const o=ob.v;if(ob.w==='l'&&!b.l)return false;if(ob.w==='e'&&b.l)return false;let lo=b.lo,hi=b.hi,tol=20;
     if(/^[ON]–H/.test(b.t)){tol=30;if(meio==='sol'||meio==='gas')hi=b.t[0]==='O'?3680:3520;}
-    if(/^C=O/.test(b.t)){if(meio==='gas')hi+=35;else if(meio==='sol'&&/ácido|COOH/.test(b.t+r[1]))hi+=15;}
+    if(/^C=O/.test(b.t)){if(meio==='gas')hi+=35;else if(meio==='sol'&&/ácido/.test(b.t+c.n+c.gf.join(' ')))hi+=15;}
     return o>=lo-tol&&o<=hi+tol;};
+  const used=new Set(),miss=[];let keys=0,hit=0;
   /* cada banda lida explica só uma banda esperada; as bandas-chave escolhem primeiro e pegam a mais perto do centro da faixa */
-  const used=new Set();
-  const cen=b=>(b.lo+b.hi)/2;
-  B.slice().sort((x,y)=>y.k-x.k).forEach(b=>{const w=b.k?1:0.1;if(b.k)tot+=1;
-    let best=-1,bd=1e9;Qi.forEach((o,ix)=>{if(used.has(ix)||!covers(b,o))return;const d=Math.abs(o.v-cen(b))/100;if(d<bd){bd=d;best=ix;}});
-    if(best>=0){used.add(best);got+=b.k?1-0.2*Math.min(bd,1):0.05;if(b.k)keyHit++;hit.push(b.t);}else if(b.k)miss.push(b.lo+'–'+b.hi+' '+b.t);});
-  const hi=Qi.filter(o=>o.v>1500);let un=0;hi.forEach(o=>{if(!B.some(b=>covers(b,o)))un++;});
-  let sc=Math.min(1,got/tot)-(hi.length?0.3*un/hi.length:0);
-  return{s:Math.max(0,Math.min(1,sc)),hit,miss,n:keyHit};
-}
-function bdDraw(){
-  const out=$('#bdOut');if(!out)return;
-  const D=bdLoad(),q=$('#bdQ').value.trim().toLowerCase(),Q=bdQuery($('#bdP').value),usePk=Q.size>0,Qi=bdIvQuery($('#bdI').value),useIv=Qi.length>0,meio=$('#bdMeio').value;
-  const nv=id=>{const v=$('#'+id).value;return v===''?null:Number(v)};
-  const f1=nv('bdF1'),f2=nv('bdF2'),e1=nv('bdE1'),e2=nv('bdE2'),M=nv('bdM');
-  const fo=q.replace(/\s/g,'');
-  $('#bdIso').textContent=usePk&&bdIsoHint(Q)?'Dica do seu espectro: '+bdIsoHint(Q)+'.':'';
-  if(!(q||usePk||useIv||f1!==null||f2!==null||e1!==null||e2!==null)){out.innerHTML='';$('#bdInfo').textContent='Preencha pelo menos um campo.';return;}
-  const L=[];
-  for(const r of D){
-    if(q&&!r.k.includes(q)&&!r.k.replace(/\s/g,'').includes(fo))continue;
-    if((f1!==null||f2!==null)&&(r[6]===null||(f1!==null&&r[6]<f1)||(f2!==null&&r[6]>f2)))continue;
-    if((e1!==null||e2!==null)&&(r[7]===null||(e1!==null&&r[7]<e1)||(e2!==null&&r[7]>e2)))continue;
-    let sm=null,si=null,t=[];
-    if(usePk){sm=bdScore(r,Q,M);if(!sm||sm.n<Math.min(2,Q.size)||sm.s<0.15)continue;t.push(sm.s);}
-    if(useIv){si=bdScoreIV(r,Qi,meio);if(!si||si.n<1||si.s<0.2)continue;t.push(si.s);}
-    L.push([t.length?t.reduce((a,b)=>a+b,0)/t.length:0,r,sm,si]);
-  }
-  L.sort((a,b)=>b[0]-a[0]||a[1][1].localeCompare(b[1][1],'pt-BR'));
-  $('#bdInfo').textContent=L.length+' composto'+(L.length===1?'':'s')+(L.length>30?' (mostrando os 30 primeiros)':'');
-  out.innerHTML=L.slice(0,30).map(x=>bdCard(x[1],x[2],x[3],x[0],usePk&&useIv)).join('');
+  B.filter(b=>b.k).forEach(b=>{keys++;let best=-1,bd=1e9;
+    Qi.forEach((o,ix)=>{if(used.has(ix)||!covers(b,o))return;const d=Math.abs(o.v-(b.lo+b.hi)/2)/100;if(d<bd){bd=d;best=ix;}});
+    if(best>=0){used.add(best);hit++;}else miss.push(b.t.split(' (')[0]+' ('+b.hi+'–'+b.lo+')');});
+  const hi=Qi.filter(o=>o.v>1500),un=hi.filter(o=>!B.some(b=>covers(b,o))).map(o=>o.v);
+  return{rec:keys?hit/keys:1,prec:hi.length?1-un.length/hi.length:1,miss,un};
 }
 function bdSvg(e){
   if(!e)return'';const at=e[0],bd=e[1],W=230,H=150,P=14;
@@ -813,27 +786,37 @@ function bdSvg(e){
     s+='<text x="'+X(a).toFixed(1)+'" y="'+(Y(a)+4).toFixed(1)+'" text-anchor="middle">'+t+'</text>';}});
   return s+'</svg>';
 }
-function bdCard(r,sc,si,tot,both){
-  const pk=sc?sc.hit:[],pf=r[8]&&r[8]!=='-'?esc(r[8]):'sem dado',pe=r[9]&&r[9]!=='-'?esc(r[9]):'sem dado';
-  const ms=r[11].length?r[11].map(p=>'<span class="'+(pk.includes(p[0])?'bdh':'')+'">'+p[0]+' <i>('+p[1]+'%)</i></span>').join(' · '):'sem dado';
-  const nm=r[2]&&r[2]!==r[1]?'<div class="mut sm">IUPAC: '+esc(r[2])+'</div>':'';
-  const en=r[3]?'<div class="mut sm">'+esc(r[3])+'</div>':'';
-  const bar=(lab,v)=>'<div class="bdp"><b>'+Math.round(v*100)+'%</b> '+lab+'<span class="bdbar"><i style="width:'+Math.round(v*100)+'%"></i></span></div>';
-  let cp='';
-  if(both)cp+=bar('de compatibilidade no total',tot);
-  if(sc){cp+=bar('de compatibilidade (massas)',sc.s)+'<p class="sm">Bateram: '+(sc.hit.join(', ')||'nenhum')+(sc.miss.length?'. Do banco e ausentes no seu espectro: '+sc.miss.join(', ')+'.':'.')+'</p>';}
-  if(si){cp+=bar('de compatibilidade (IV)',si.s)+(si.miss.length?'<p class="sm">Banda esperada que você não leu: '+esc(si.miss.slice(0,3).join('; '))+'.</p>':'');}
-  const g=r[17]?r[17][0].map(i=>BDT.g[i]):[];
-  const B=r[17]?r[17][1].map(i=>BDT.b[i]).filter(b=>b[4]):[];
-  const F=r[17]?r[17][2].map(i=>BDT.f[i]):[];
-  const iv=B.length?'<details class="sec"><summary>Bandas de IV esperadas'+(g.length?' · '+esc(g.join(', ')):'')+'</summary><div class="tbl"><table class="obt nostk"><thead><tr><th>cm⁻¹</th><th>O que é</th></tr></thead><tbody>'
-    +B.map(b=>'<tr><td class="n">'+Math.min(b[0],b[1])+'–'+Math.max(b[0],b[1])+'</td><td>'+esc(b[2])+'</td></tr>').join('')+'</tbody></table></div>'
-    +(F.length?'<dl class="gl">'+F.map(f=>'<div><dt>'+esc(f[0])+'</dt><dd>'+esc(f[1])+'</dd></div>').join('')+'</dl>':'')
-    +'<p class="sm mut">Calculadas pelo grupo funcional da estrutura, não medidas neste composto. Só as bandas-chave estão listadas.</p></details>':'';
-  return '<div class="el bdc"><h3>'+esc(r[1])+(r[15]?' <span class="tag sv">no IFRJ</span>':'')+'</h3>'+nm+en+cp
-   +'<div class="bdfig">'+bdSvg(r[16])+'</div>'
-   +'<p class="sm">CAS '+esc(r[0]||'sem dado')+' · '+fmt(r[4]||'')+(r[5]?' · M = '+r[5]+' g/mol':'')+'</p>'
-   +'<p class="sm">PF '+pf+' °C · PE '+pe+' °C'+(r[13]!==null?' · solub. em água '+r[13]+' g/L':'')+(r[14]!==null?' · d = '+r[14]:'')+'</p>'
-   +'<p class="sm">Picos de MS (m/z, intensidade): '+ms+'</p>'
-   +(r[10]?'<p class="sm">Derivados (PF °C): '+esc(r[10])+'</p>':'')+iv+'</div>';
+/* ficha de um composto do banco (mesma tela p-cf dos outros) */
+function bdFicha(ix){
+  const c=bdAll().find(x=>x.i===1000+ix);if(!c)return;CFI=1000+ix;const r=c.r,hoje=new Date().toLocaleDateString('pt-BR');
+  const rowd=(k,v)=>'<div class="cfr"><dt>'+k+'</dt><dd>'+v+'</dd></div>';
+  const tx=v=>v&&v!=='-'?esc(v):'sem dado';
+  let h='<h2 class="scr">'+esc(c.n)+'</h2>'+(c.a.length?'<p class="scrsub">Também: '+c.a.map(esc).join(' · ')+'</p>':'')
+   +'<figure class="cfs"><div>'+bdSvg(r[16])+'</div><figcaption>'+fmt(c.f)+(c.mw?' · '+String(c.mw).replace('.',',')+' g/mol':'')+'</figcaption></figure>'
+   +'<div class="cfq"><div class="cfqi"><span>Estado a 25 °C</span><b>'+(c.est?esc(c.est):'sem dado')+'</b></div>'
+   +'<div class="cfqi"><span>Ponto de fusão</span><b>'+tx(r[8])+(r[8]&&r[8]!=='-'?' °C':'')+'</b></div>'
+   +'<div class="cfqi"><span>Ponto de ebulição</span><b>'+tx(r[9])+(r[9]&&r[9]!=='-'?' °C':'')+'</b></div></div>'
+   +'<dl class="cfd">'
+   +rowd('Grupo funcional',esc(c.gf.join(', ')||'sem grupo funcional reconhecido'))
+   +(c.gdh!=null?rowd('GDH','<b>'+c.gdh+'</b> <span class="mut">(anéis + ligações π)</span>'):'')
+   +(c.M?rowd('M nominal','<b>'+c.M+'</b>'):'')
+   +rowd('CAS','<span class="mono">'+esc(c.cas||'sem dado')+'</span>')
+   +(r[13]!==null?rowd('Solubilidade em água',r[13]+' g/L'):'')+(r[14]!==null?rowd('Densidade',r[14]+' g/mL a 20 °C'):'')
+   +(r[10]?rowd('Derivados (PF °C)',esc(r[10])):'')+'</dl>';
+  const iv=c.iv.map((b,k)=>b.concat([k])).filter(b=>b[4]).sort((a,b)=>Math.max(b[0],b[1])-Math.max(a[0],a[1]));
+  h+='<details class="sec" open><summary>Infravermelho: bandas esperadas</summary>'
+   +(iv.length?'<div class="tbl"><table class="obt nostk"><thead><tr><th>cm⁻¹</th><th>O que é</th></tr></thead><tbody>'+iv.map(b=>'<tr><td class="n">'+Math.min(b[0],b[1])+'–'+Math.max(b[0],b[1])+'</td><td>'+esc(b[2])+'</td></tr>').join('')+'</tbody></table></div>':'<p class="empty">Sem bandas esperadas para este composto.</p>')
+   +'<p class="srcl">Faixas esperadas pelo grupo funcional da estrutura, não o espectro medido deste composto.</p>'
+   +(c.ivf.length?'<h3 style="margin:12px 0 4px">O que pode deslocar as bandas</h3><ul class="fatl">'+c.ivf.map(f=>'<li><b>'+esc(f[0])+'.</b> '+esc(f[1])+'</li>').join('')+'</ul>':'')+'</details>';
+  h+='<details class="sec"><summary>Espectrometria de massas</summary>'+(c.M?'<p>M nominal = <b>'+c.M+'</b> ('+(c.M%2?'ímpar: número ímpar de N':'par: zero ou número par de N')+').</p>':'');
+  if(c.msi){const cc=Object.assign({},c,{M:Math.max(c.M||0,...c.ms)});
+    h+='<div class="nmrwrap">'+msSpec(cc)+'<button class="zbtn" type="button" data-zoom>Ampliar</button></div><p>'+c.msi.map(p=>'<span class="pk">'+p[0]+' <small>'+p[1]+'%</small></span>').join('')+'</p>';}
+  else h+='<p class="empty">Sem picos de MS neste banco.</p>';
+  if(nCl(c.f))h+='<p class="srcl">Contém Cl: aparece M+2 (isótopo ³⁷Cl). Com 1 Cl, M : M+2 é cerca de 3 : 1.</p>';
+  h+='</details>';
+  h+='<details class="sec"><summary>SDBS (espectros reais)</summary><p>O SDBS tem IV, MS, ¹H-RMN e ¹³C-RMN medidos de muitos compostos. Busque pelo nome ou pelo CAS.</p><div class="row" style="margin:0 0 8px"><a class="btn" href="https://sdbs.db.aist.go.jp/" target="_blank" rel="noopener">Abrir o SDBS</a>'
+   +'<button class="btn ghost" type="button" data-copy="'+esc(c.n)+'">Copiar nome</button><button class="btn ghost" type="button" data-copy="'+esc(c.cas)+'">Copiar CAS</button></div>'
+   +'<p class="srcl">Ao usar dados do SDBS, cite: SDBS, National Institute of Advanced Industrial Science and Technology (AIST), https://sdbs.db.aist.go.jp, acessado em '+hoje+'.</p></details>';
+  h+='<details class="sec"><summary>De onde vêm os dados</summary><p class="srcl"><span class="tag sv">Conferido: banco Analor</span> Nome, CAS, fórmula, massa molar, PF, PE, picos de MS, solubilidade, densidade e SMILES vêm do arquivo UNIV1_290926.DBF, passado pelo professor, sem alterar os valores. O banco não cita a fonte de cada número. O desenho da estrutura, o GDH, o grupo funcional, as bandas de IV esperadas, o M nominal e o estado a 25 °C são calculados aqui a partir do SMILES e do PF e PE.</p></details>';
+  $('#cfB').innerHTML=h;
 }

@@ -17,7 +17,7 @@ with sync_playwright() as p:
     pg.fill('#icPE','56');pg.wait_for_timeout(400)
     t=pg.inner_text('#icOut')
     chk('classes aparecem (cetona entre elas)','Cetona' in t)
-    chk('ranking de compostos aparece','Compostos do banco' in t and 'acetona' in t)
+    chk('ranking de compostos aparece','Compostos mais compatíveis' in t and 'acetona' in t)
     chk('PE em faixa aceita',pg.evaluate("(()=>{document.getElementById('icPE').value='55–57';return icInputs().pe.v===56})()"))
     # exemplo completo: cada composto deve se identificar em primeiro lugar
     n=pg.evaluate("COMP.length");falhas=[]

@@ -49,6 +49,8 @@ Abra o endereço acima. Android: menu do Chrome, "Instalar app". iPhone: Safari,
 
 
 ## Banco Analor
-A tela Ensaios > Banco busca no arquivo UNIV1_290926.DBF (banco do professor, 4668 compostos). `fontes/analor_bd.py` converte o DBF (cp1252) em `fontes/analor_bd.json`, que o `build3.py` embute no app. Os valores não foram alterados e o banco não cita a fonte de cada número.
-O banco também desenha a estrutura (coordenadas 2D do RDKit, guardadas no JSON e desenhadas em SVG no app) e ranqueia compostos por picos de MS digitados ou importados (.jdx, .csv, .txt). O banco só traz picos de massas; não tem bandas de IV nem RMN.
-O Banco também busca por bandas de IV: `analor_bd.py` calcula, pelo SMILES, as bandas esperadas com `compostos.iv_bands` (as mesmas do resto do app) e o app compara com as bandas digitadas (l = larga, e = estreita) e com o meio da medida. O deslocamento por meio (solução, gás) é regra geral de livro-texto, sem fonte conferida nesta sessão.
+O banco do professor (UNIV1_290926.DBF, 4668 compostos) vive dentro de Compostos, não numa tela à parte. `fontes/analor_bd.py` converte o DBF (cp1252) em `fontes/analor_bd.json` (precisa de RDKit): dados do banco, coordenadas 2D da estrutura e as bandas de IV esperadas, calculadas pelo SMILES com `compostos.iv_bands`. O `build3.py` embute o JSON no app. No app:
+- Fichas: buscando por nome, fórmula ou CAS, os compostos do banco aparecem junto, com ficha própria (os que já existem em COMP, pelo CAS, ficam só em COMP).
+- Identificar: os compostos do banco entram na comparação (estado a 25 °C calculado pelo PF e PE, PF, PE, fórmula, GDH, grupo funcional, M nominal, picos de MS, bandas de IV). Dado que o banco não tem (cor, grupo de solubilidade, RMN, subestruturas) conta como neutro.
+- Os picos de MS aceitam `m/z:intensidade` e a importação de .jdx, .csv ou .txt. As bandas de IV aceitam `l` (larga) e `e` (estreita) e o meio da medida (filme/KBr, solução, gás). O deslocamento por meio é regra geral de livro-texto, sem fonte conferida nesta sessão.
+O banco só traz picos de massas; não tem bandas de IV nem RMN, e não cita a fonte de cada número.

@@ -27,8 +27,12 @@ function cpInit(){
 function cpDraw(){
   const q=norm2($('#cpQ').value),e=$('#cpE').value,g=$('#cpG').value;
   const l=COMP.filter(c=>(!q||[c.n,...c.a,c.f,c.cas].some(x=>norm2(x).includes(q)))&&(!e||c.est.indexOf(e)===0)&&(!g||c.g===g)&&(!CPFAV||favHas(c))).sort((a,b)=>(favHas(b)-favHas(a))||a.n.localeCompare(b.n,'pt'));
-  $('#cpN').textContent=l.length+' de '+COMP.length+' compostos';
-  $('#cpL').innerHTML=l.length?l.map(c=>'<button class="cpc" type="button" data-cf="'+c.i+'"><span class="thumb">'+c.s+'</span><span><b>'+esc(c.n)+'</b>'+(favHas(c)?' <span class="favst" role="img" aria-label="favorito">★</span>':'')+'<span class="m">'+fmt(c.f)+' · '+SOLNM[c.g]+'</span><span class="m">'+esc(c.est)+(c.pf!=null?' · PF '+tC(c.pf):'')+(c.pe!=null?' · PE '+tC(c.pe):'')+'</span></span></button>').join(''):'<p class="empty">'+(CPFAV&&!favGet().length?'Nenhum favorito ainda. Abra uma ficha e toque em Favoritar.':'Nenhum composto com esse filtro.')+'</p>';
+  /* os compostos do banco do professor só entram quando há busca por texto (são 4 mil: sem busca, só os do app) */
+  let lb=[];if(q.length>=2&&!g&&!CPFAV){lb=bdAll().filter(c=>norm2(c.k).includes(q)&&(!e||c.est.indexOf(e)===0)).sort((a,b)=>a.n.localeCompare(b.n,'pt'));}
+  const nb=lb.length;lb=lb.slice(0,60);
+  $('#cpN').textContent=l.length+' de '+COMP.length+' compostos do app'+(q.length>=2&&!g&&!CPFAV?' + '+nb+' do banco Analor'+(nb>60?' (mostrando 60)':''):'');
+  const bcard=c=>'<button class="cpc" type="button" data-cf="'+c.i+'"><span class="thumb">'+bdSvg(c.r[16])+'</span><span><b>'+esc(c.n)+'</b> <span class="tag sv">banco</span><span class="m">'+fmt(c.f)+(c.mw?' · '+String(c.mw).replace('.',',')+' g/mol':'')+'</span><span class="m">'+esc(c.est||'')+(c.pf!=null?(c.est?' · ':'')+'PF '+tC(c.pf):'')+(c.pe!=null?' · PE '+tC(c.pe):'')+'</span></span></button>';
+  $('#cpL').innerHTML=(l.length||lb.length)?l.map(c=>'<button class="cpc" type="button" data-cf="'+c.i+'"><span class="thumb">'+c.s+'</span><span><b>'+esc(c.n)+'</b>'+(favHas(c)?' <span class="favst" role="img" aria-label="favorito">★</span>':'')+'<span class="m">'+fmt(c.f)+' · '+SOLNM[c.g]+'</span><span class="m">'+esc(c.est)+(c.pf!=null?' · PF '+tC(c.pf):'')+(c.pe!=null?' · PE '+tC(c.pe):'')+'</span></span></button>').join('')+lb.map(bcard).join(''):'<p class="empty">'+(CPFAV&&!favGet().length?'Nenhum favorito ainda. Abra uma ficha e toque em Favoritar.':'Nenhum composto com esse filtro.')+'</p>';
 }
 document.addEventListener('click',ev=>{const fb=ev.target.closest('#favBtn');if(fb&&CFI!=null){favToggle(COMP[CFI]);fb.outerHTML=favBtnHtml(COMP[CFI]);const nb=$('#favBtn');if(nb)nb.focus();cpDraw();return;}
   const b=ev.target.closest('[data-cf]');if(b){cfDraw(+b.dataset.cf);go('p-cf');}
@@ -77,7 +81,8 @@ function msSpec(c){
     bars+='<g class="hpk"'+d+'><rect class="hit" x="'+(X(p[0])-6).toFixed(1)+'" y="'+T+'" width="12" height="'+(H-T-B)+'"/><line class="mb" x1="'+x+'" x2="'+x+'" y1="'+Y(0)+'" y2="'+y+'"/>'+(p[1]>=12||a?'<text class="mt" x="'+x+'" y="'+(y-3)+'" text-anchor="middle">'+p[0]+'</text>':'')+'</g>';});
   return '<svg class="nmrspec" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Espectro de massas de '+esc(c.n)+'">'+g+'<line class="ax" x1="'+L+'" y1="'+Y(0)+'" x2="'+(W-R)+'" y2="'+Y(0)+'"/>'+bars+'<text class="tl" x="'+(W/2)+'" y="'+(H-0)+'" text-anchor="middle">m/z · eixo vertical: intensidade relativa (%)</text></svg>';
 }
-function cfDraw(i){
+function cfDraw(i){if(i>=1000)return bdFicha(i-1000);return cfDrawComp(i);}
+function cfDrawComp(i){
   CFI=i;const c=COMP[i],hoje=new Date().toLocaleDateString('pt-BR');
   const sd=c.sdbs||(c.ex&&typeof INTS!=='undefined'&&INTS[c.ex]?INTS[c.ex].sdbs:null);
   let h='<h2 class="scr">'+esc(c.n)+'</h2>'+(c.a.length?'<p class="scrsub">Também: '+c.a.map(esc).join(', ')+'</p>':'')+'<div class="row" style="margin:0 0 8px">'+favBtnHtml(c)+'</div>';
@@ -145,7 +150,7 @@ const elCount=f=>{const m={};String(f).replace(/([A-Z][a-z]?)(\d*)/g,(a,e,n)=>{m
 const corFam=s=>{s=String(s||'').toLowerCase();const k=s.indexOf('('),main=k<0?s:s.slice(0,k),par=k<0?'':s.slice(k);
   const f=t=>{const r=new Set();if(/incolor|branc/.test(t))r.add('inc');if(/amarel/.test(t))r.add('amarelo');if(/laranj/.test(t))r.add('laranja');if(/verm|ros/.test(t))r.add('vermelho');if(/marrom|castanh/.test(t))r.add('marrom');if(/verde/.test(t))r.add('verde');if(/azul/.test(t))r.add('azul');if(/viole|roxo|purpur/.test(t))r.add('violeta');return r;};
   return [f(main),f(par)];};
-const IC_CAMPOS=['#icNome','#icPF','#icPE','#icTol','#icIV','#icM','#icP','#icH','#icC','#icHd','#icF','#icGDH','#icGF'];
+const IC_CAMPOS=['#icNome','#icPF','#icPE','#icTol','#icIV','#icMeio','#icM','#icP','#icH','#icC','#icHd','#icF','#icGDH','#icGF'];
 let icSt={est:'',cor:'',g:'',el:{},ir:{},sub:{}};
 const sx=h=>String(h).replace(/<[^>]*>/g,'');
 
@@ -185,43 +190,40 @@ function icInputs(){
   return {est:icSt.est,cor:icSt.cor,g:icSt.g,F:v('#icF').replace(/\s+/g,''),gdh:num('#icGDH'),gf:v('#icGF'),
     els:ELORD.map(e=>[e,icSt.el[e]]).filter(e=>e[1]),ir:icSt.ir,sub:icSt.sub||{},
     pf:icRange('#icPF',tol),pe:icRange('#icPE',tol),
-    iv:numsInt(v('#icIV')),M:num('#icM'),pk:numsInt(v('#icP')),h:num('#icH'),c:num('#icC'),hd:nums(v('#icHd'))};
+    iv:numsInt(v('#icIV')),ivq:bdIvQuery(v('#icIV')),meio:$('#icMeio').value,M:num('#icM'),pk:bdPicos(v('#icP')).map(p=>p[0]),pki:bdPicos(v('#icP')),h:num('#icH'),c:num('#icC'),hd:nums(v('#icHd'))};
 }
 const gauss=(d,t)=>Math.max(0.02,Math.exp(-0.5*Math.pow(d/t,2)));
 function icScore(c,x){
   const parts=[];let w=1;
   const add=(k,lab,f,det)=>{parts.push({k,lab,f,det:det||''});w*=f;};
-  if(x.est)add('est','estado',c.est.indexOf(x.est)===0?1:0.05,c.est);
-  if(x.cor){const [m,p]=corFam(c.cor);add('cor','cor',m.has(x.cor)?1:p.has(x.cor)?0.5:0.12,c.cor);}
-  if(x.g)add('g','solubilidade',c.g===x.g?1:0.04,'grupo '+SOLNM[c.g]);
-  if(x.pf)add('pf','PF',c.pf==null?0.05:gauss(c.pf-x.pf.v,x.pf.t),'PF '+tC(c.pf));
-  if(x.pe)add('pe','PE',c.pe==null?0.08:gauss(c.pe-x.pe.v,x.pe.t),'PE '+tC(c.pe));
+  if(x.est)add('est','estado',c.est?(c.est.indexOf(x.est)===0?1:0.05):0.4,c.est||'sem dado');
+  if(x.cor){if(!c.cor)add('cor','cor',0.4,'sem dado');else{const [m,p]=corFam(c.cor);add('cor','cor',m.has(x.cor)?1:p.has(x.cor)?0.5:0.12,c.cor);}}
+  if(x.g)add('g','solubilidade',c.g?(c.g===x.g?1:0.04):0.4,c.g?'grupo '+SOLNM[c.g]:'sem dado');
+  if(x.pf)add('pf','PF',c.pf==null?(c.bd?0.2:0.05):gauss(c.pf-x.pf.v,x.pf.t),'PF '+tC(c.pf));
+  if(x.pe)add('pe','PE',c.pe==null?(c.bd?0.2:0.08):gauss(c.pe-x.pe.v,x.pe.t),'PE '+tC(c.pe));
   if(x.els.length){c._el=c._el||elCount(c.f);}
   x.els.forEach(([e,v])=>{const has=!!(c._el&&c._el[e]);add('el','elemento '+e,(v==='sim')===has?1:0.03,has?'tem '+e:'sem '+e);});
   IDIR.forEach(([k,lab])=>{const u=x.ir[k];if(!u)return;const has=cIr(c,k);add('irf','IV: '+lab.replace(/ \(.*/,''),(u==='sim')===has?1:0.05,has?'tem essa banda':'não tem essa banda');});
-  SUBL.forEach(([k,lab])=>{const u=x.sub[k];if(!u)return;const has=(c.sub||[]).indexOf(k)>=0;add('sub',lab.replace(/ \(.*/,''),(u==='sim')===has?1:0.04,has?'tem':'não tem');});
+  SUBL.forEach(([k,lab])=>{const u=x.sub[k];if(!u)return;if(c.bd){add('sub',lab.replace(/ \(.*/,''),0.5,'sem dado');return;}const has=(c.sub||[]).indexOf(k)>=0;add('sub',lab.replace(/ \(.*/,''),(u==='sim')===has?1:0.04,has?'tem':'não tem');});
   if(x.F){const a=elCount(x.F),b=c._el||(c._el=elCount(c.f));const ks=new Set([...Object.keys(a),...Object.keys(b)]);const ok=[...ks].every(k=>(a[k]||0)===(b[k]||0));add('F','fórmula',ok?1:0.02,c.f);}
-  if(x.gdh!=null)add('gdh','GDH',c.gdh===x.gdh?1:0.05,'GDH '+c.gdh);
+  if(x.gdh!=null)add('gdh','GDH',c.gdh==null?0.4:(c.gdh===x.gdh?1:0.05),c.gdh==null?'sem dado':'GDH '+c.gdh);
   if(x.gf)add('gf','grupo funcional',c.gf.indexOf(x.gf)>=0?1:0.04,c.gf.join(', ')||'sem grupo funcional');
-  if(x.iv.length){
-    const keys=c.iv.filter(b=>b[4]),all=c.iv;
-    const hit=b=>{const r=ivr(b);return x.iv.some(v=>v>=r[0]-20&&v<=r[1]+20);};
-    const rec=keys.length?keys.filter(hit).length/keys.length:1;
-    const func=x.iv.filter(v=>v>1500),un=func.filter(v=>!all.some(b=>{const r=ivr(b);return v>=r[0]-20&&v<=r[1]+20;}));
-    const prec=func.length?1-un.length/func.length:1;
-    const miss=keys.filter(b=>!hit(b)).map(b=>b[2].split(' (')[0]+' ('+ivr(b)[0]+'–'+ivr(b)[1]+')');
-    add('iv','IV',(0.12+0.88*rec)*(0.03+0.97*prec*prec),(un.length?'sem explicação: '+un.join(', ')+'. ':'')+(miss.length?'faltou: '+miss.join('; '):'bandas-chave presentes'));
+  if(x.ivq.length){
+    const q=bdScoreIV(c,x.ivq,x.meio);
+    add('iv','IV',(0.12+0.88*q.rec)*(0.03+0.97*q.prec*q.prec),(q.un.length?'sem explicação: '+q.un.join(', ')+'. ':'')+(q.miss.length?'faltou: '+q.miss.join('; '):'bandas-chave presentes'));
   }
-  if(x.M!=null){const d=Math.abs(c.M-x.M);add('M','M',d===0?1:(d===1?0.1:0.02),'M = '+c.M);}
+  if(x.M!=null){if(c.M==null)add('M','M',0.4,'sem dado');else{const d=Math.abs(c.M-x.M);add('M','M',d===0?1:(d===1?0.1:0.02),'M = '+c.M);}}
   if(x.pk.length){
     if(c.ms){const ref=c.ms.filter(p=>p!==c.M),ok=p=>ref.some(r=>Math.abs(r-p)<=0.5);
-      const rec=ref.length?ref.filter(r=>x.pk.some(p=>Math.abs(r-p)<=0.5)).length/ref.length:1,prec=x.pk.filter(ok).length/x.pk.length;
+      /* com a intensidade do banco, o pico base pesa mais que o de 5%: as intensidades mudam com o aparelho, então o peso é suave */
+      const wt=r=>{const q=c.msi&&c.msi.find(p=>p[0]===r);return q?0.3+0.7*q[1]/100:1;};
+      const rw=ref.reduce((a,r)=>a+wt(r),0),rec=ref.length?ref.filter(r=>x.pk.some(p=>Math.abs(r-p)<=0.5)).reduce((a,r)=>a+wt(r),0)/rw:1,prec=x.pk.filter(ok).length/x.pk.length;
       add('ms','picos de MS',0.05+0.95*(0.5*rec+0.5*prec),'picos do banco: '+ref.join(', '));}
     else add('ms','picos de MS',0.4,'sem picos cadastrados (neutro)');
   }
-  if(x.h!=null){const n=c.h1.length,ne=c.h1.filter(s=>/largo/.test(s.m)).length;const d=Math.min(Math.abs(n-x.h),Math.abs(n-ne-x.h));add('h','nº de sinais de ¹H',Math.pow(0.25,d),n+' sinais');}
-  if(x.c!=null){const d=Math.abs(c.c13.length-x.c);add('c','nº de sinais de ¹³C',Math.pow(0.25,d),c.c13.length+' sinais');}
-  if(x.hd.length){const ok=x.hd.filter(d=>c.h1.some(s=>d>=s.lo-0.3&&d<=s.hi+0.3)).length/x.hd.length;add('hd','δ de ¹H',0.1+0.9*ok,Math.round(ok*100)+'% dos δ dentro das faixas');}
+  if(x.h!=null&&!c.h1.length)add('h','nº de sinais de ¹H',0.5,'sem dado');else if(x.h!=null){const n=c.h1.length,ne=c.h1.filter(s=>/largo/.test(s.m)).length;const d=Math.min(Math.abs(n-x.h),Math.abs(n-ne-x.h));add('h','nº de sinais de ¹H',Math.pow(0.25,d),n+' sinais');}
+  if(x.c!=null&&!c.c13.length)add('c','nº de sinais de ¹³C',0.5,'sem dado');else if(x.c!=null){const d=Math.abs(c.c13.length-x.c);add('c','nº de sinais de ¹³C',Math.pow(0.25,d),c.c13.length+' sinais');}
+  if(x.hd.length&&!c.h1.length)add('hd','δ de ¹H',0.5,'sem dado');else if(x.hd.length){const ok=x.hd.filter(d=>c.h1.some(s=>d>=s.lo-0.3&&d<=s.hi+0.3)).length/x.hd.length;add('hd','δ de ¹H',0.1+0.9*ok,Math.round(ok*100)+'% dos δ dentro das faixas');}
   return {w,parts};
 }
 /* quais classes de composto sobram (grupo de solubilidade, elementos e bandas de IV marcados) */
@@ -258,7 +260,7 @@ function icBands(){
 function icRun(){setTimeout(()=>{if(typeof icBadges==="function")icBadges();},0);
   icBands();
   const x=icInputs(),cl=icClasses();
-  const res=COMP.map(c=>({c,...icScore(c,x)}));
+  const ALL=COMP.concat(bdAll());const res=ALL.map(c=>({c,...icScore(c,x)}));
   const used=res[0].parts.length;
   let h='',sum='';
   if(!used&&!cl.any){ICLAST=null;icExpShow();$('#icOut').innerHTML='<p class="empty">Marque pelo menos um dado acima.</p>';$('#icSum').textContent='Marque pelo menos um dado.';return;}
@@ -272,8 +274,8 @@ function icRun(){setTimeout(()=>{if(typeof icBadges==="function")icBadges();},0)
   }
   h+='</details>';
   /* 2. compostos */
-  h+='<details class="sec" open><summary>Compostos do banco mais compatíveis</summary>';
-  if(!used)h+='<p class="empty">Preencha estado, cor, PF, PE, elementos, IV (Sim/Não ou números) ou os dados da seção 6 para comparar com os '+COMP.length+' compostos.</p>';
+  h+='<details class="sec" open><summary>Compostos mais compatíveis</summary>';
+  if(!used)h+='<p class="empty">Preencha estado, cor, PF, PE, elementos, IV (Sim/Não ou números) ou os dados da seção 6 para comparar com os '+(COMP.length+bdAll().length)+' compostos.</p>';
   else{
     const tot=res.reduce((a,r)=>a+r.w,0)||1;res.forEach(r=>r.p=r.w/tot*100);
     res.sort((a,b)=>b.w-a.w);
@@ -284,7 +286,7 @@ function icRun(){setTimeout(()=>{if(typeof icBadges==="function")icBadges();},0)
     h+=top.map(r=>'<div class="icr"><div class="top"><b><button class="back" style="margin:0;font-size:1rem" type="button" data-cf="'+r.c.i+'">'+esc(r.c.n)+'</button> <span class="mono" style="font-weight:400;color:var(--muted)">'+fmt(r.c.f)+'</span></b><span class="pct">'+(r.p>=10?r.p.toFixed(0):r.p.toFixed(1)).replace('.',',')+'%</span></div><div class="bar"><i style="width:'+Math.min(100,r.p).toFixed(1)+'%"></i></div>'
       +'<div class="cr">'+r.parts.map(p=>'<span class="'+(p.f>=0.7?'ok':p.f>=0.2?'md':'no')+'">'+(p.f>=0.7?'✓ ':p.f>=0.2?'~ ':'✗ ')+esc(p.lab)+'</span>').join('')+'</div>'
       +'<p class="det">'+r.parts.filter(p=>p.det&&p.f<0.7).map(p=>'<b>'+esc(p.lab)+':</b> '+esc(p.det)).join(' · ')+'</p></div>').join('');
-    h+='<p class="hint">Base: '+COMP.length+' compostos do app. ✓ combina, ~ combina em parte, ✗ não combina.</p><p class="srcl">'+srcTag(false,'Sem fonte conferida')+' Estado, cor e grupo de solubilidade do banco podem estar um pouco diferentes da sua tabela. PF e PE com a etiqueta Conferido vêm do PubChem.</p>';
+    h+='<p class="hint">Base: '+COMP.length+' compostos do app e '+bdAll().length+' do banco Analor. ✓ combina, ~ combina em parte, ✗ não combina.</p><p class="srcl">'+srcTag(false,'Sem fonte conferida')+' Estado, cor e grupo de solubilidade do banco podem estar um pouco diferentes da sua tabela. PF e PE com a etiqueta Conferido vêm do PubChem.</p>';
     sum=' · melhor composto: '+esc(res[0].c.n)+' ('+(res[0].p>=10?res[0].p.toFixed(0):res[0].p.toFixed(1)).replace('.',',')+'%)';
   }
   h+='</details>';
@@ -510,7 +512,7 @@ function icSinRun(){
   const n=nums(raw);if(!n.length){o.innerHTML='';return;}
   const v=n[0],tol={iv:20,h:0.3,c:5,ms:0.5}[t];
   const hit=[];
-  COMP.forEach(c=>{
+  COMP.concat(bdAll()).forEach(c=>{
     let d=null;
     if(t==='iv'){const b=c.iv.find(b=>{const r=ivr(b);return v>=r[0]-tol&&v<=r[1]+tol;});if(b)d=b[2].split(' (')[0]+(b[4]?' (banda-chave)':'');}
     else if(t==='h'){const s=c.h1.find(s=>v>=s.lo-tol&&v<=s.hi+tol);if(s)d=s.t+', '+s.lo+' a '+s.hi+' ppm';}
@@ -519,7 +521,7 @@ function icSinRun(){
     if(d)hit.push([c,d]);
   });
   const un={iv:' cm⁻¹ (±20)',h:' ppm (±0,3)',c:' ppm (±5)',ms:' (±0,5)'}[t];
-  o.innerHTML='<p class="hint"><b>'+hit.length+'</b> de '+COMP.length+' compostos com sinal em '+String(v).replace('.',',')+un+'.</p>'
+  o.innerHTML='<p class="hint"><b>'+hit.length+'</b> de '+(COMP.length+bdAll().length)+' compostos com sinal em '+String(v).replace('.',',')+un+'.</p>'
     +hit.slice(0,40).map(([c,d])=>'<p style="margin:4px 0"><button class="back" style="margin:0" type="button" data-cf="'+c.i+'">'+esc(c.n)+'</button> <span class="hint">'+esc(d)+'</span></p>').join('')
     +(hit.length>40?'<p class="hint">Mostrando 40. Acrescente outros dados na conta acima para afunilar.</p>':'')
     +'<p class="hint">As faixas são as esperadas pelo grupo funcional, não o espectro medido. Vários grupos caem na mesma região.</p>';
@@ -535,7 +537,7 @@ function icInit(){
     const t=ev.target.closest('[data-tk]');
     if(t){const m=icSt[t.dataset.tk];if(t.dataset.tv)m[t.dataset.ti]=t.dataset.tv;else delete m[t.dataset.ti];icDraw();const e=P.querySelector('[data-tk="'+t.dataset.tk+'"][data-ti="'+t.dataset.ti+'"][data-tv="'+t.dataset.tv+'"]');if(e)e.focus({preventScroll:true});icRun();icSave();}
   });
-  P.addEventListener('input',icQueue);P.addEventListener('change',e=>{if(e.target.id==='icEx'){if(e.target.value!=='')icFill(+e.target.value);return;}icQueue();});
+  P.addEventListener('input',icQueue);P.addEventListener('change',e=>{if(e.target.id==='icFile'){const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{const p=bdParseSpec(String(rd.result));$('#icP').value=p.map(q=>q[0]+':'+q[1]).join(' ');icQueue();};rd.readAsText(f);return;}if(e.target.id==='icEx'){if(e.target.value!=='')icFill(+e.target.value);return;}icQueue();});
   $('#icClr').onclick=icClear;
   $('#icCopy').onclick=icCopiar;$('#icShare').onclick=icCompartilhar;$('#icDown').onclick=icBaixar;anInit();
   $('#icSinT').onchange=icSinRun;$('#icSinV').oninput=icSinRun;
