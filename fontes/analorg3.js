@@ -709,35 +709,94 @@ function zoomOpen(btn){
 /* ---------- Banco Analor (DBF do professor) ---------- */
 let BD=null;
 function bdLoad(){if(BD)return BD;try{BD=JSON.parse(BDJSON)}catch(e){BD=[]}
-  BD.forEach(r=>{r.k=(r[1]+' '+r[2]+' '+r[3]+' '+r[0]+' '+r[4]).toLowerCase();r.m=new Map(r[11].map((p,i)=>[p[0],i]))});return BD;}
+  BD.forEach(r=>{r.k=(r[1]+' '+r[2]+' '+r[3]+' '+r[0]+' '+r[4]).toLowerCase();r.m=new Map(r[11].map(p=>[p[0],p[1]]))});return BD;}
 function bdInit(){
-  ['bdQ','bdP','bdF1','bdF2','bdE1','bdE2'].forEach(i=>{const e=$('#'+i);if(e)e.addEventListener('input',bdDraw);});
+  ['bdQ','bdP','bdM','bdF1','bdF2','bdE1','bdE2'].forEach(i=>{const e=$('#'+i);if(e)e.addEventListener('input',bdDraw);});
+  const f=$('#bdFile');if(f)f.addEventListener('change',()=>{const a=f.files[0];if(!a)return;const rd=new FileReader();
+    rd.onload=()=>{const p=bdParseSpec(String(rd.result));$('#bdP').value=p.map(x=>x[0]+':'+x[1]).join(' ');if(!p.length)$('#bdInfo').textContent='Não achei pares m/z e intensidade nesse arquivo.';else bdDraw();};rd.readAsText(a);});
 }
+/* lê JCAMP-DX (PEAK TABLE / XYDATA simples), CSV ou texto com pares; devolve até 12 picos [m/z inteiro, % da base] */
+function bdParseSpec(tx){
+  const pts=[];let on=false,jd=/##(PEAK TABLE|XYPOINTS|XYDATA|DATA TABLE)/i.test(tx);
+  tx.split(/\r?\n/).forEach(l=>{
+    if(/^##/.test(l)){on=/^##(PEAK TABLE|XYPOINTS|XYDATA|DATA TABLE)/i.test(l);return;}
+    if(jd&&!on)return;
+    const n=(l.replace(/[;,\t]+/g,' ').match(/-?\d+(?:\.\d+)?/g)||[]).map(Number);
+    if(jd&&n.length>2&&/\(X\+\+/.test(tx)===false&&n.length%2===0){for(let i=0;i<n.length;i+=2)pts.push([n[i],n[i+1]]);}
+    else if(n.length===2)pts.push([n[0],n[1]]);
+    else if(n.length>2&&n.length%2===0&&!jd)for(let i=0;i<n.length;i+=2)pts.push([n[i],n[i+1]]);
+  });
+  if(!pts.length)return[];
+  const bins=new Map();pts.forEach(p=>{const m=Math.round(p[0]);if(m>0&&p[1]>0)bins.set(m,Math.max(bins.get(m)||0,p[1]));});
+  const mx=Math.max(...bins.values());
+  return[...bins].map(x=>[x[0],Math.round(x[1]/mx*100)]).filter(x=>x[1]>=3).sort((a,b)=>b[1]-a[1]).slice(0,12).sort((a,b)=>a[0]-b[0]);
+}
+/* "43 58 15" ou "43:100 58:42": devolve Map m/z -> intensidade (null se não informada) */
+function bdQuery(s){const m=new Map();(s.match(/\d+(?::\d+(?:\.\d+)?)?/g)||[]).forEach(t=>{const a=t.split(':');m.set(Number(a[0]),a[1]===undefined?null:Number(a[1]));});
+  const mx=Math.max(0,...[...m.values()].filter(v=>v!==null));if(mx>0)m.forEach((v,k)=>{if(v!==null)m.set(k,v/mx*100);});return m;}
+/* Compatibilidade. As intensidades variam de aparelho para aparelho e com a energia de ionização, então a posição dos picos pesa
+   bem mais que a intensidade; o íon molecular pode ser fraco ou nem aparecer, por isso o M só bonifica ou penaliza de leve. */
+function bdScore(r,Q,M){
+  let tot=0,got=0,hit=[],miss=[];
+  r[11].forEach(p=>{const w=0.3+0.7*p[1]/100;tot+=w;
+    if(Q.has(p[0])){const qi=Q.get(p[0]);let f=1;if(qi!==null&&p[1]>0){const ra=qi/p[1];if(ra<0.3||ra>3.3)f=0.75;}got+=w*f;hit.push(p[0]);}else miss.push(p[0]);});
+  if(!tot)return null;
+  let sc=got/tot;
+  const hasI=[...Q.values()].some(v=>v!==null);
+  if(hasI){const strong=[...Q].filter(x=>x[1]!==null&&x[1]>=30);if(strong.length){const un=strong.filter(x=>!r.m.has(x[0])).length;sc-=0.15*un/strong.length;}
+    const bq=[...Q].sort((a,b)=>(b[1]||0)-(a[1]||0))[0][0];const top=r[11].slice(0,3).map(p=>p[0]);if(top.includes(bq))sc+=0.08;}
+  if(M){const d=Math.abs(Math.round(r[5]||0)-M);sc+=d===0?0.15:-0.25;if(d===0&&!hit.includes(M)&&!r.m.has(M)){/* M ausente no banco: sem ajuste extra */}}
+  return{s:Math.max(0,Math.min(1,sc)),hit,miss,n:hit.length};
+}
+function bdIsoHint(Q){const o=[];const ks=[...Q.keys()].sort((a,b)=>b-a).slice(0,8);
+  ks.forEach(k=>{const a=Q.get(k),b=Q.get(k+2);if(a&&b){const ra=a/b;if(ra>=2.5&&ra<=4)o.push('m/z '+k+' e '+(k+2)+' em proporção perto de 3:1 (um Cl)');else if(ra>=0.8&&ra<=1.25)o.push('m/z '+k+' e '+(k+2)+' em proporção perto de 1:1 (um Br)');}});
+  return o.slice(0,2).join('; ');}
 function bdDraw(){
   const out=$('#bdOut');if(!out)return;
-  const D=bdLoad(),q=$('#bdQ').value.trim().toLowerCase(),pk=($('#bdP').value.match(/\d+/g)||[]).map(Number);
+  const D=bdLoad(),q=$('#bdQ').value.trim().toLowerCase(),Q=bdQuery($('#bdP').value),usePk=Q.size>0;
   const nv=id=>{const v=$('#'+id).value;return v===''?null:Number(v)};
-  const f1=nv('bdF1'),f2=nv('bdF2'),e1=nv('bdE1'),e2=nv('bdE2');
+  const f1=nv('bdF1'),f2=nv('bdF2'),e1=nv('bdE1'),e2=nv('bdE2'),M=nv('bdM');
   const fo=q.replace(/\s/g,'');
-  if(!(q||pk.length||f1!==null||f2!==null||e1!==null||e2!==null)){out.innerHTML='';$('#bdInfo').textContent='Preencha pelo menos um campo.';return;}
+  $('#bdIso').textContent=usePk&&bdIsoHint(Q)?'Dica do seu espectro: '+bdIsoHint(Q)+'.':'';
+  if(!(q||usePk||f1!==null||f2!==null||e1!==null||e2!==null)){out.innerHTML='';$('#bdInfo').textContent='Preencha pelo menos um campo.';return;}
   const L=[];
   for(const r of D){
     if(q&&!r.k.includes(q)&&!r.k.replace(/\s/g,'').includes(fo))continue;
     if((f1!==null||f2!==null)&&(r[6]===null||(f1!==null&&r[6]<f1)||(f2!==null&&r[6]>f2)))continue;
     if((e1!==null||e2!==null)&&(r[7]===null||(e1!==null&&r[7]<e1)||(e2!==null&&r[7]>e2)))continue;
-    let s=0;if(pk.length){for(const m of pk){const i=r.m.get(m);if(i!==undefined)s+=i<3?3:i<5?2:1;}if(!s)continue;}
-    L.push([s,r]);
+    let sc=null;if(usePk){sc=bdScore(r,Q,M);if(!sc||sc.n<Math.min(2,Q.size)||sc.s<0.15)continue;}
+    L.push([sc?sc.s:0,r,sc]);
   }
   L.sort((a,b)=>b[0]-a[0]||a[1][1].localeCompare(b[1][1],'pt-BR'));
-  $('#bdInfo').textContent=L.length+' composto'+(L.length===1?'':'s')+(L.length>40?' (mostrando os 40 primeiros)':'');
-  out.innerHTML=L.slice(0,40).map(x=>bdCard(x[1],pk)).join('');
+  $('#bdInfo').textContent=L.length+' composto'+(L.length===1?'':'s')+(L.length>30?' (mostrando os 30 primeiros)':'');
+  out.innerHTML=L.slice(0,30).map(x=>bdCard(x[1],x[2],usePk)).join('');
 }
-function bdCard(r,pk){
-  const pf=r[8]&&r[8]!=='-'?esc(r[8]):'sem dado',pe=r[9]&&r[9]!=='-'?esc(r[9]):'sem dado';
+function bdSvg(e){
+  if(!e)return'';const at=e[0],bd=e[1],W=230,H=150,P=14;
+  let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;at.forEach(a=>{x0=Math.min(x0,a[1]);x1=Math.max(x1,a[1]);y0=Math.min(y0,a[2]);y1=Math.max(y1,a[2]);});
+  const sc=Math.min((W-2*P)/Math.max(x1-x0,1),(H-2*P)/Math.max(y1-y0,1),3),ox=(W-(x1-x0)*sc)/2-x0*sc,oy=(H-(y1-y0)*sc)/2-y0*sc;
+  const X=a=>a[1]*sc+ox,Y=a=>a[2]*sc+oy,lab=a=>a[0]!==0;
+  let s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Estrutura" class="bdsv">';
+  bd.forEach(b=>{const A=at[b[0]],B=at[b[1]];let ax=X(A),ay=Y(A),bx=X(B),by=Y(B);const dx=bx-ax,dy=by-ay,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,cut=7;
+    if(lab(A)){ax+=ux*cut;ay+=uy*cut;}if(lab(B)){bx-=ux*cut;by-=uy*cut;}
+    const nx=-uy*2.6,ny=ux*2.6,o=b[2],ln=(p,q,r,t)=>'<line x1="'+p.toFixed(1)+'" y1="'+q.toFixed(1)+'" x2="'+r.toFixed(1)+'" y2="'+t.toFixed(1)+'"/>';
+    if(o===2)s+=ln(ax+nx,ay+ny,bx+nx,by+ny)+ln(ax-nx,ay-ny,bx-nx,by-ny);
+    else if(o===3)s+=ln(ax,ay,bx,by)+ln(ax+nx*1.5,ay+ny*1.5,bx+nx*1.5,by+ny*1.5)+ln(ax-nx*1.5,ay-ny*1.5,bx-nx*1.5,by-ny*1.5);
+    else s+=ln(ax,ay,bx,by);});
+  at.forEach(a=>{if(lab(a)||a[4]){let t=a[0]||'C';if(a[3]>0)t+='H'+(a[3]>1?'<tspan dy="3" font-size="7">'+a[3]+'</tspan>':'');
+    if(a[4])t+='<tspan dy="-5" font-size="7">'+(a[4]>0?'+':'−')+'</tspan>';
+    s+='<text x="'+X(a).toFixed(1)+'" y="'+(Y(a)+4).toFixed(1)+'" text-anchor="middle">'+t+'</text>';}});
+  return s+'</svg>';
+}
+function bdCard(r,sc,usePk){
+  const pk=sc?sc.hit:[],pf=r[8]&&r[8]!=='-'?esc(r[8]):'sem dado',pe=r[9]&&r[9]!=='-'?esc(r[9]):'sem dado';
   const ms=r[11].length?r[11].map(p=>'<span class="'+(pk.includes(p[0])?'bdh':'')+'">'+p[0]+' <i>('+p[1]+'%)</i></span>').join(' · '):'sem dado';
   const nm=r[2]&&r[2]!==r[1]?'<div class="mut sm">IUPAC: '+esc(r[2])+'</div>':'';
   const en=r[3]?'<div class="mut sm">'+esc(r[3])+'</div>':'';
-  return '<div class="el bdc"><h3>'+esc(r[1])+(r[15]?' <span class="tag sv">no IFRJ</span>':'')+'</h3>'+nm+en
+  const cp=sc?'<div class="bdp"><b>'+Math.round(sc.s*100)+'%</b> de compatibilidade<span class="bdbar"><i style="width:'+Math.round(sc.s*100)+'%"></i></span></div>'
+    +'<p class="sm">Bateram: '+(sc.hit.join(', ')||'nenhum')+(sc.miss.length?'. Do banco e ausentes no seu espectro: '+sc.miss.join(', ')+'.':'.')+'</p>':'';
+  return '<div class="el bdc"><h3>'+esc(r[1])+(r[15]?' <span class="tag sv">no IFRJ</span>':'')+'</h3>'+nm+en+cp
+   +'<div class="bdfig">'+bdSvg(r[16])+'</div>'
    +'<p class="sm">CAS '+esc(r[0]||'sem dado')+' · '+fmt(r[4]||'')+(r[5]?' · M = '+r[5]+' g/mol':'')+'</p>'
    +'<p class="sm">PF '+pf+' °C · PE '+pe+' °C'+(r[13]!==null?' · solub. em água '+r[13]+' g/L':'')+(r[14]!==null?' · d = '+r[14]:'')+'</p>'
    +'<p class="sm">Picos de MS (m/z, intensidade): '+ms+'</p>'

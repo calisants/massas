@@ -19,9 +19,22 @@ def num(t):
 def valor(t):
     t=t.replace(',','.')
     return num(t) if re.fullmatch(r'-?\d+(\.\d+)?',t) else None
+def desenho(smi):
+    """Coordenadas 2D calculadas pelo RDKit (1 unidade = 0,1 do comprimento de ligação); o app desenha o SVG."""
+    from rdkit import Chem, RDLogger
+    from rdkit.Chem import rdDepictor
+    RDLogger.DisableLog('rdApp.*')
+    m=Chem.MolFromSmiles(smi) if smi else None
+    if not m or m.GetNumAtoms()>80: return None
+    rdDepictor.SetPreferCoordGen(True); rdDepictor.Compute2DCoords(m); Chem.Kekulize(m,clearAromaticFlags=True)
+    c=m.GetConformer(); at=[]
+    for a in m.GetAtoms():
+        p=c.GetAtomPosition(a.GetIdx()); e=a.GetSymbol()
+        at.append([0 if e=='C' and a.GetFormalCharge()==0 else e,round(p.x*10),round(p.y*10),a.GetTotalNumHs() if e!='C' else 0,a.GetFormalCharge()])
+    return [at,[[b.GetBeginAtomIdx(),b.GetEndAtomIdx(),int(b.GetBondTypeAsDouble())] for b in m.GetBonds()]]
 def linha(r):
     ms=[[num(r['MS%d'%i]),num(r['IMS%d'%i])] for i in range(1,9)]
-    return [r['CAS'],r['NCOM'],r['NIUP'],r['NINGLES'],r['FMOL'],num(r['PMOL']),valor(r['PFCARAC']) if valor(r['PFCARAC']) is not None else num(r['PF']),valor(r['PECARAC']) if valor(r['PECARAC']) is not None else num(r['PE']),r['PFCARAC'],r['PECARAC'],r['PFDER'],[m for m in ms if m[0]],r['SMILES'],num(r['SOL_H2O']),num(r['DENS_20']),1 if r['NO_IFRJ'] else 0]
+    return [r['CAS'],r['NCOM'],r['NIUP'],r['NINGLES'],r['FMOL'],num(r['PMOL']),valor(r['PFCARAC']) if valor(r['PFCARAC']) is not None else num(r['PF']),valor(r['PECARAC']) if valor(r['PECARAC']) is not None else num(r['PE']),r['PFCARAC'],r['PECARAC'],r['PFDER'],[m for m in ms if m[0]],r['SMILES'],num(r['SOL_H2O']),num(r['DENS_20']),1 if r['NO_IFRJ'] else 0,desenho(r['SMILES'])]
 if __name__=='__main__':
     L=[linha(r) for r in ler(sys.argv[1])]
     json.dump(L,open('analor_bd.json','w',encoding='utf-8'),ensure_ascii=False,separators=(',',':'))
