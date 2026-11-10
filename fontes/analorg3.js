@@ -705,3 +705,41 @@ function zoomOpen(btn){
   }
   init();
 })();
+
+/* ---------- Banco Analor (DBF do professor) ---------- */
+let BD=null;
+function bdLoad(){if(BD)return BD;try{BD=JSON.parse(BDJSON)}catch(e){BD=[]}
+  BD.forEach(r=>{r.k=(r[1]+' '+r[2]+' '+r[3]+' '+r[0]+' '+r[4]).toLowerCase();r.m=new Map(r[11].map((p,i)=>[p[0],i]))});return BD;}
+function bdInit(){
+  ['bdQ','bdP','bdF1','bdF2','bdE1','bdE2'].forEach(i=>{const e=$('#'+i);if(e)e.addEventListener('input',bdDraw);});
+}
+function bdDraw(){
+  const out=$('#bdOut');if(!out)return;
+  const D=bdLoad(),q=$('#bdQ').value.trim().toLowerCase(),pk=($('#bdP').value.match(/\d+/g)||[]).map(Number);
+  const nv=id=>{const v=$('#'+id).value;return v===''?null:Number(v)};
+  const f1=nv('bdF1'),f2=nv('bdF2'),e1=nv('bdE1'),e2=nv('bdE2');
+  const fo=q.replace(/\s/g,'');
+  if(!(q||pk.length||f1!==null||f2!==null||e1!==null||e2!==null)){out.innerHTML='';$('#bdInfo').textContent='Preencha pelo menos um campo.';return;}
+  const L=[];
+  for(const r of D){
+    if(q&&!r.k.includes(q)&&!r.k.replace(/\s/g,'').includes(fo))continue;
+    if((f1!==null||f2!==null)&&(r[6]===null||(f1!==null&&r[6]<f1)||(f2!==null&&r[6]>f2)))continue;
+    if((e1!==null||e2!==null)&&(r[7]===null||(e1!==null&&r[7]<e1)||(e2!==null&&r[7]>e2)))continue;
+    let s=0;if(pk.length){for(const m of pk){const i=r.m.get(m);if(i!==undefined)s+=i<3?3:i<5?2:1;}if(!s)continue;}
+    L.push([s,r]);
+  }
+  L.sort((a,b)=>b[0]-a[0]||a[1][1].localeCompare(b[1][1],'pt-BR'));
+  $('#bdInfo').textContent=L.length+' composto'+(L.length===1?'':'s')+(L.length>40?' (mostrando os 40 primeiros)':'');
+  out.innerHTML=L.slice(0,40).map(x=>bdCard(x[1],pk)).join('');
+}
+function bdCard(r,pk){
+  const pf=r[8]&&r[8]!=='-'?esc(r[8]):'sem dado',pe=r[9]&&r[9]!=='-'?esc(r[9]):'sem dado';
+  const ms=r[11].length?r[11].map(p=>'<span class="'+(pk.includes(p[0])?'bdh':'')+'">'+p[0]+' <i>('+p[1]+'%)</i></span>').join(' · '):'sem dado';
+  const nm=r[2]&&r[2]!==r[1]?'<div class="mut sm">IUPAC: '+esc(r[2])+'</div>':'';
+  const en=r[3]?'<div class="mut sm">'+esc(r[3])+'</div>':'';
+  return '<div class="el bdc"><h3>'+esc(r[1])+(r[15]?' <span class="tag sv">no IFRJ</span>':'')+'</h3>'+nm+en
+   +'<p class="sm">CAS '+esc(r[0]||'sem dado')+' · '+fmt(r[4]||'')+(r[5]?' · M = '+r[5]+' g/mol':'')+'</p>'
+   +'<p class="sm">PF '+pf+' °C · PE '+pe+' °C'+(r[13]!==null?' · solub. em água '+r[13]+' g/L':'')+(r[14]!==null?' · d = '+r[14]:'')+'</p>'
+   +'<p class="sm">Picos de MS (m/z, intensidade): '+ms+'</p>'
+   +(r[10]?'<p class="sm">Derivados (PF °C): '+esc(r[10])+'</p>':'')+'</div>';
+}

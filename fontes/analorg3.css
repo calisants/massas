@@ -149,3 +149,10 @@ html.semmov *,html.semmov *::before,html.semmov *::after{transition:none!importa
 .ansn{margin:0 0 6px;font-size:.88rem;background:var(--note-soft);border-radius:8px;padding:6px 10px}
 .icnome{display:block;font-size:.86rem;color:var(--muted);margin:0 0 10px}
 .icnome input{display:block;width:100%;margin-top:3px;font:inherit;font-size:1rem;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+
+.bdr{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.bdc{margin:10px 0;padding:10px 12px;border:1px solid var(--line);border-radius:10px}
+.bdc h3{margin:0 0 2px}
+.bdc p{margin:4px 0}
+.bdh{background:var(--keep-soft);border-radius:4px;padding:0 3px}
+.bdc i{font-style:normal;color:var(--muted)}

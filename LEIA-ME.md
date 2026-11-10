@@ -46,3 +46,7 @@ Abra o endereço acima. Android: menu do Chrome, "Instalar app". iPhone: Safari,
 `template.html` (página), `build_app.py` e `build3.py` (exercícios e estruturas em SVG com RDKit), `why.py` e `rearr.py` (explicações), `svgmodels.py` (modelos com setas) e `empacotar.py`. Os scripts antigos já aplicados ficam só no histórico do Git.
 
 - **Fragmentos de MS propostos:** `fontes/msfrag.py` gera, para os compostos com MS do SDBS, a estrutura de cada íon (clivagem α, benzílica, McLafferty, perda de CO ou de alceno), conferindo a massa nominal com o pico. É proposta por regras, não mecanismo medido; os picos sem regra simples aparecem como "sem proposta".
+
+
+## Banco Analor
+A tela Ensaios > Banco busca no arquivo UNIV1_290926.DBF (banco do professor, 4668 compostos). `fontes/analor_bd.py` converte o DBF (cp1252) em `fontes/analor_bd.json`, que o `build3.py` embute no app. Os valores não foram alterados e o banco não cita a fonte de cada número.
