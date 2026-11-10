@@ -51,3 +51,4 @@ Abra o endereço acima. Android: menu do Chrome, "Instalar app". iPhone: Safari,
 ## Banco Analor
 A tela Ensaios > Banco busca no arquivo UNIV1_290926.DBF (banco do professor, 4668 compostos). `fontes/analor_bd.py` converte o DBF (cp1252) em `fontes/analor_bd.json`, que o `build3.py` embute no app. Os valores não foram alterados e o banco não cita a fonte de cada número.
 O banco também desenha a estrutura (coordenadas 2D do RDKit, guardadas no JSON e desenhadas em SVG no app) e ranqueia compostos por picos de MS digitados ou importados (.jdx, .csv, .txt). O banco só traz picos de massas; não tem bandas de IV nem RMN.
+O Banco também busca por bandas de IV: `analor_bd.py` calcula, pelo SMILES, as bandas esperadas com `compostos.iv_bands` (as mesmas do resto do app) e o app compara com as bandas digitadas (l = larga, e = estreita) e com o meio da medida. O deslocamento por meio (solução, gás) é regra geral de livro-texto, sem fonte conferida nesta sessão.

@@ -36,6 +36,16 @@ def linha(r):
     ms=[[num(r['MS%d'%i]),num(r['IMS%d'%i])] for i in range(1,9)]
     return [r['CAS'],r['NCOM'],r['NIUP'],r['NINGLES'],r['FMOL'],num(r['PMOL']),valor(r['PFCARAC']) if valor(r['PFCARAC']) is not None else num(r['PF']),valor(r['PECARAC']) if valor(r['PECARAC']) is not None else num(r['PE']),r['PFCARAC'],r['PECARAC'],r['PFDER'],[m for m in ms if m[0]],r['SMILES'],num(r['SOL_H2O']),num(r['DENS_20']),1 if r['NO_IFRJ'] else 0,desenho(r['SMILES'])]
 if __name__=='__main__':
+    sys.path.insert(0,'.')
+    import compostos
+    from rdkit import Chem
     L=[linha(r) for r in ler(sys.argv[1])]
-    json.dump(L,open('analor_bd.json','w',encoding='utf-8'),ensure_ascii=False,separators=(',',':'))
-    print(len(L),'compostos')
+    BT={};GT={};FT={}
+    for r in L:
+        m=Chem.MolFromSmiles(r[12]) if r[12] else None
+        if m is None: r.append(None); continue
+        g,b,f=compostos.iv_bands(m)   # bandas de IV esperadas por grupo funcional, com os ajustes de conjugação etc. (as mesmas do resto do app)
+        r.append([[GT.setdefault(x,len(GT)) for x in g],[BT.setdefault(tuple(x[:5]),len(BT)) for x in b],[FT.setdefault(tuple(x),len(FT)) for x in f]])
+    tab={'b':list(BT),'g':list(GT),'f':list(FT)}
+    json.dump({'t':tab,'r':L},open('analor_bd.json','w',encoding='utf-8'),ensure_ascii=False,separators=(',',':'))
+    print(len(L),'compostos',len(BT),'bandas distintas')

@@ -708,10 +708,11 @@ function zoomOpen(btn){
 
 /* ---------- Banco Analor (DBF do professor) ---------- */
 let BD=null;
-function bdLoad(){if(BD)return BD;try{BD=JSON.parse(BDJSON)}catch(e){BD=[]}
+let BDT={b:[],g:[],f:[]};
+function bdLoad(){if(BD)return BD;try{const o=JSON.parse(BDJSON);BD=o.r;BDT=o.t}catch(e){BD=[]}
   BD.forEach(r=>{r.k=(r[1]+' '+r[2]+' '+r[3]+' '+r[0]+' '+r[4]).toLowerCase();r.m=new Map(r[11].map(p=>[p[0],p[1]]))});return BD;}
 function bdInit(){
-  ['bdQ','bdP','bdM','bdF1','bdF2','bdE1','bdE2'].forEach(i=>{const e=$('#'+i);if(e)e.addEventListener('input',bdDraw);});
+  ['bdQ','bdP','bdM','bdI','bdMeio','bdF1','bdF2','bdE1','bdE2'].forEach(i=>{const e=$('#'+i);if(e)e.addEventListener('input',bdDraw);});
   const f=$('#bdFile');if(f)f.addEventListener('change',()=>{const a=f.files[0];if(!a)return;const rd=new FileReader();
     rd.onload=()=>{const p=bdParseSpec(String(rd.result));$('#bdP').value=p.map(x=>x[0]+':'+x[1]).join(' ');if(!p.length)$('#bdInfo').textContent='Não achei pares m/z e intensidade nesse arquivo.';else bdDraw();};rd.readAsText(a);});
 }
@@ -751,25 +752,49 @@ function bdScore(r,Q,M){
 function bdIsoHint(Q){const o=[];const ks=[...Q.keys()].sort((a,b)=>b-a).slice(0,8);
   ks.forEach(k=>{const a=Q.get(k),b=Q.get(k+2);if(a&&b){const ra=a/b;if(ra>=2.5&&ra<=4)o.push('m/z '+k+' e '+(k+2)+' em proporção perto de 3:1 (um Cl)');else if(ra>=0.8&&ra<=1.25)o.push('m/z '+k+' e '+(k+2)+' em proporção perto de 1:1 (um Br)');}});
   return o.slice(0,2).join('; ');}
+/* IV: bandas esperadas (do grupo funcional, já com conjugação etc.) contra as bandas que você leu.
+   O meio da medida muda a posição: solução diluída mostra O–H e N–H livres (finos, mais altos) e C=O de ácido monomérico mais alto;
+   gás sobe o C=O. Esses deslocamentos por meio são regra geral de livro-texto, eu não os conferi em fonte nesta sessão. */
+/* "3300l" = banda larga, "2250e" = banda estreita; sem letra, não se sabe */
+function bdIvQuery(s){return(s.match(/\d{3,4}(?:\.\d+)?[lLeE]?/g)||[]).map(t=>({v:parseFloat(t),w:/[lL]$/.test(t)?'l':/[eE]$/.test(t)?'e':''})).filter(x=>x.v>=400&&x.v<=4000);}
+function bdBands(r){return r[17]?r[17][1].map(i=>{const b=BDT.b[i];return{lo:Math.min(b[0],b[1]),hi:Math.max(b[0],b[1]),t:b[2],k:b[4],l:/larga/.test(b[3])}}):[];}
+function bdScoreIV(r,Qi,meio){
+  const B=bdBands(r);if(!B.length)return null;let tot=0,got=0,keyHit=0;const hit=[],miss=[];
+  const covers=(b,ob)=>{const o=ob.v;if(ob.w==='l'&&!b.l)return false;if(ob.w==='e'&&b.l)return false;let lo=b.lo,hi=b.hi,tol=15;
+    if(/^[ON]–H/.test(b.t)){tol=30;if(meio==='sol'||meio==='gas')hi=b.t[0]==='O'?3680:3520;}
+    if(/^C=O/.test(b.t)){if(meio==='gas')hi+=35;else if(meio==='sol'&&/ácido|COOH/.test(b.t+r[1]))hi+=15;}
+    return o>=lo-tol&&o<=hi+tol;};
+  /* cada banda lida explica só uma banda esperada; as bandas-chave escolhem primeiro e pegam a mais perto do centro da faixa */
+  const used=new Set();
+  const cen=b=>(b.lo+b.hi)/2;
+  B.slice().sort((x,y)=>y.k-x.k).forEach(b=>{const w=b.k?1:0.1;if(b.k)tot+=1;
+    let best=-1,bd=1e9;Qi.forEach((o,ix)=>{if(used.has(ix)||!covers(b,o))return;const d=Math.abs(o.v-cen(b))/100;if(d<bd){bd=d;best=ix;}});
+    if(best>=0){used.add(best);got+=b.k?1-0.2*Math.min(bd,1):0.05;if(b.k)keyHit++;hit.push(b.t);}else if(b.k)miss.push(b.lo+'–'+b.hi+' '+b.t);});
+  const hi=Qi.filter(o=>o.v>1500);let un=0;hi.forEach(o=>{if(!B.some(b=>covers(b,o)))un++;});
+  let sc=Math.min(1,got/tot)-(hi.length?0.3*un/hi.length:0);
+  return{s:Math.max(0,Math.min(1,sc)),hit,miss,n:keyHit};
+}
 function bdDraw(){
   const out=$('#bdOut');if(!out)return;
-  const D=bdLoad(),q=$('#bdQ').value.trim().toLowerCase(),Q=bdQuery($('#bdP').value),usePk=Q.size>0;
+  const D=bdLoad(),q=$('#bdQ').value.trim().toLowerCase(),Q=bdQuery($('#bdP').value),usePk=Q.size>0,Qi=bdIvQuery($('#bdI').value),useIv=Qi.length>0,meio=$('#bdMeio').value;
   const nv=id=>{const v=$('#'+id).value;return v===''?null:Number(v)};
   const f1=nv('bdF1'),f2=nv('bdF2'),e1=nv('bdE1'),e2=nv('bdE2'),M=nv('bdM');
   const fo=q.replace(/\s/g,'');
   $('#bdIso').textContent=usePk&&bdIsoHint(Q)?'Dica do seu espectro: '+bdIsoHint(Q)+'.':'';
-  if(!(q||usePk||f1!==null||f2!==null||e1!==null||e2!==null)){out.innerHTML='';$('#bdInfo').textContent='Preencha pelo menos um campo.';return;}
+  if(!(q||usePk||useIv||f1!==null||f2!==null||e1!==null||e2!==null)){out.innerHTML='';$('#bdInfo').textContent='Preencha pelo menos um campo.';return;}
   const L=[];
   for(const r of D){
     if(q&&!r.k.includes(q)&&!r.k.replace(/\s/g,'').includes(fo))continue;
     if((f1!==null||f2!==null)&&(r[6]===null||(f1!==null&&r[6]<f1)||(f2!==null&&r[6]>f2)))continue;
     if((e1!==null||e2!==null)&&(r[7]===null||(e1!==null&&r[7]<e1)||(e2!==null&&r[7]>e2)))continue;
-    let sc=null;if(usePk){sc=bdScore(r,Q,M);if(!sc||sc.n<Math.min(2,Q.size)||sc.s<0.15)continue;}
-    L.push([sc?sc.s:0,r,sc]);
+    let sm=null,si=null,t=[];
+    if(usePk){sm=bdScore(r,Q,M);if(!sm||sm.n<Math.min(2,Q.size)||sm.s<0.15)continue;t.push(sm.s);}
+    if(useIv){si=bdScoreIV(r,Qi,meio);if(!si||si.n<1||si.s<0.2)continue;t.push(si.s);}
+    L.push([t.length?t.reduce((a,b)=>a+b,0)/t.length:0,r,sm,si]);
   }
   L.sort((a,b)=>b[0]-a[0]||a[1][1].localeCompare(b[1][1],'pt-BR'));
   $('#bdInfo').textContent=L.length+' composto'+(L.length===1?'':'s')+(L.length>30?' (mostrando os 30 primeiros)':'');
-  out.innerHTML=L.slice(0,30).map(x=>bdCard(x[1],x[2],usePk)).join('');
+  out.innerHTML=L.slice(0,30).map(x=>bdCard(x[1],x[2],x[3],x[0],usePk&&useIv)).join('');
 }
 function bdSvg(e){
   if(!e)return'';const at=e[0],bd=e[1],W=230,H=150,P=14;
@@ -788,17 +813,27 @@ function bdSvg(e){
     s+='<text x="'+X(a).toFixed(1)+'" y="'+(Y(a)+4).toFixed(1)+'" text-anchor="middle">'+t+'</text>';}});
   return s+'</svg>';
 }
-function bdCard(r,sc,usePk){
+function bdCard(r,sc,si,tot,both){
   const pk=sc?sc.hit:[],pf=r[8]&&r[8]!=='-'?esc(r[8]):'sem dado',pe=r[9]&&r[9]!=='-'?esc(r[9]):'sem dado';
   const ms=r[11].length?r[11].map(p=>'<span class="'+(pk.includes(p[0])?'bdh':'')+'">'+p[0]+' <i>('+p[1]+'%)</i></span>').join(' · '):'sem dado';
   const nm=r[2]&&r[2]!==r[1]?'<div class="mut sm">IUPAC: '+esc(r[2])+'</div>':'';
   const en=r[3]?'<div class="mut sm">'+esc(r[3])+'</div>':'';
-  const cp=sc?'<div class="bdp"><b>'+Math.round(sc.s*100)+'%</b> de compatibilidade<span class="bdbar"><i style="width:'+Math.round(sc.s*100)+'%"></i></span></div>'
-    +'<p class="sm">Bateram: '+(sc.hit.join(', ')||'nenhum')+(sc.miss.length?'. Do banco e ausentes no seu espectro: '+sc.miss.join(', ')+'.':'.')+'</p>':'';
+  const bar=(lab,v)=>'<div class="bdp"><b>'+Math.round(v*100)+'%</b> '+lab+'<span class="bdbar"><i style="width:'+Math.round(v*100)+'%"></i></span></div>';
+  let cp='';
+  if(both)cp+=bar('de compatibilidade no total',tot);
+  if(sc){cp+=bar('de compatibilidade (massas)',sc.s)+'<p class="sm">Bateram: '+(sc.hit.join(', ')||'nenhum')+(sc.miss.length?'. Do banco e ausentes no seu espectro: '+sc.miss.join(', ')+'.':'.')+'</p>';}
+  if(si){cp+=bar('de compatibilidade (IV)',si.s)+(si.miss.length?'<p class="sm">Banda esperada que você não leu: '+esc(si.miss.slice(0,3).join('; '))+'.</p>':'');}
+  const g=r[17]?r[17][0].map(i=>BDT.g[i]):[];
+  const B=r[17]?r[17][1].map(i=>BDT.b[i]).filter(b=>b[4]):[];
+  const F=r[17]?r[17][2].map(i=>BDT.f[i]):[];
+  const iv=B.length?'<details class="sec"><summary>Bandas de IV esperadas'+(g.length?' · '+esc(g.join(', ')):'')+'</summary><div class="tbl"><table class="obt nostk"><thead><tr><th>cm⁻¹</th><th>O que é</th></tr></thead><tbody>'
+    +B.map(b=>'<tr><td class="n">'+Math.min(b[0],b[1])+'–'+Math.max(b[0],b[1])+'</td><td>'+esc(b[2])+'</td></tr>').join('')+'</tbody></table></div>'
+    +(F.length?'<dl class="gl">'+F.map(f=>'<div><dt>'+esc(f[0])+'</dt><dd>'+esc(f[1])+'</dd></div>').join('')+'</dl>':'')
+    +'<p class="sm mut">Calculadas pelo grupo funcional da estrutura, não medidas neste composto. Só as bandas-chave estão listadas.</p></details>':'';
   return '<div class="el bdc"><h3>'+esc(r[1])+(r[15]?' <span class="tag sv">no IFRJ</span>':'')+'</h3>'+nm+en+cp
    +'<div class="bdfig">'+bdSvg(r[16])+'</div>'
    +'<p class="sm">CAS '+esc(r[0]||'sem dado')+' · '+fmt(r[4]||'')+(r[5]?' · M = '+r[5]+' g/mol':'')+'</p>'
    +'<p class="sm">PF '+pf+' °C · PE '+pe+' °C'+(r[13]!==null?' · solub. em água '+r[13]+' g/L':'')+(r[14]!==null?' · d = '+r[14]:'')+'</p>'
    +'<p class="sm">Picos de MS (m/z, intensidade): '+ms+'</p>'
-   +(r[10]?'<p class="sm">Derivados (PF °C): '+esc(r[10])+'</p>':'')+'</div>';
+   +(r[10]?'<p class="sm">Derivados (PF °C): '+esc(r[10])+'</p>':'')+iv+'</div>';
 }

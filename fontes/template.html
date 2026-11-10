@@ -643,6 +643,10 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <label class="icnome" for="bdQ">Nome, CAS ou fórmula<input type="search" id="bdQ" placeholder="ex.: acetona, 67-64-1, C3H6O" autocomplete="off"></label>
     <label class="icnome" for="bdP">Picos de massas (m/z)<input type="text" id="bdP" inputmode="numeric" placeholder="ex.: 43 58 15 ou 43:100 58:42 15:14" autocomplete="off"></label>
     <p class="hint">Se souber a intensidade, escreva <b>m/z:intensidade</b>. Sem intensidade, vale só a posição dos picos.</p>
+    <label class="icnome" for="bdI">Bandas de IV lidas (cm⁻¹)<input type="text" id="bdI" inputmode="numeric" placeholder="ex.: 3300l 2950 1715" autocomplete="off"></label>
+    <p class="hint">Marque <b>l</b> depois do número se a banda é larga (3300l) e <b>e</b> se é estreita (2250e). Isso separa, por exemplo, o O–H de ácido (muito largo) do C–H.</p>
+    <label class="icnome" for="bdMeio">Como o IV foi medido<select id="bdMeio"><option value="">Filme líquido ou pastilha de KBr</option><option value="sol">Solução diluída (CCl₄, CHCl₃)</option><option value="gas">Fase gasosa</option></select></label>
+    <p class="hint">O meio muda as bandas: em solução diluída o O–H e o N–H livres ficam finos e mais altos, e em gás o C=O sobe. A busca já leva isso em conta.</p>
     <label class="icnome" for="bdM">Massa molar M, se você souber (opcional)<input type="number" id="bdM" inputmode="numeric" placeholder="ex.: 58"></label>
     <label class="icnome" for="bdFile">Ou importe um espectro (.jdx, .csv ou .txt com pares m/z e intensidade)<input type="file" id="bdFile" accept=".jdx,.dx,.csv,.txt,.tsv"></label>
     <p class="hint" id="bdIso"></p>
