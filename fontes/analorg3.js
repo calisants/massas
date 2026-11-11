@@ -762,8 +762,8 @@ function bdFicha(ix){
   const c=bdAll().find(x=>x.i===1000+ix);if(!c)return;CFI=1000+ix;const r=c.r,hoje=new Date().toLocaleDateString('pt-BR');
   const rowd=(k,v)=>'<div class="cfr"><dt>'+k+'</dt><dd>'+v+'</dd></div>';
   const tx=v=>v&&v!=='-'?esc(v):'sem dado';
-  let h='<h2 class="scr">'+esc(c.n)+'</h2>'+(c.flag?'<div class="icwarn"><b>'+(BDFT[c.flag[0]]||'Confira este dado.')+'</b> '+esc(c.flag[1])+'</div>':'')+(c.corr?'<div class="icwarn"><b>Dados corrigidos no banco.</b><ul class="fatl">'+c.corr.map(x=>'<li>'+esc(x[0])+': o banco traz '+String(x[1]).replace('.',',')+' e uso '+String(x[2]).replace('.',',')+' ('+esc(x[3])+').</li>').join('')+'</ul></div>':'')
-   +(c.msalto?'<div class="icwarn"><b>Confira os picos de MS.</b> Um dos picos do banco está acima da massa molar do composto. Pode ser erro de digitação.</div>':'')+(c.a.length?'<p class="scrsub">Também: '+c.a.map(esc).join(' · ')+'</p>':'')
+  let h='<h2 class="scr">'+esc(c.n)+'</h2>'+''
+   +(c.a.length?'<p class="scrsub">Também: '+c.a.map(esc).join(' · ')+'</p>':'')
    +'<figure class="cfs"><div>'+bdSvg(r[16])+'</div><figcaption>'+fmt(c.f)+(c.mw?' · '+String(c.mw).replace('.',',')+' g/mol':'')+'</figcaption></figure>'
    +'<div class="cfq"><div class="cfqi"><span>Estado a 25 °C</span><b>'+(c.est?esc(c.est):'sem dado')+'</b></div>'
    +'<div class="cfqi"><span>Ponto de fusão</span><b>'+tx(r[8])+(r[8]&&r[8]!=='-'?' °C':'')+'</b></div>'
