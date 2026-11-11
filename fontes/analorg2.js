@@ -207,16 +207,16 @@ function icInputs(){
 const gauss=(d,t)=>Math.max(0.02,Math.exp(-0.5*Math.pow(d/t,2)));
 function icScore(c,x){
   const parts=[];let w=1;
-  const add=(k,lab,f,det)=>{parts.push({k,lab,f,det:det||''});w*=f;};
+  const add=(k,lab,f,det,u)=>{parts.push({k,lab,f,det:det||'',u:u||''});w*=f;};
   if(x.est)add('est','estado',c.est?(c.est.indexOf(x.est)===0?1:0.05):0.4,c.est||'sem dado');
   if(x.cor){if(!c.cor)add('cor','cor',0.4,'sem dado');else{const [m,p]=corFam(c.cor);add('cor','cor',m.has(x.cor)?1:p.has(x.cor)?0.5:0.12,c.cor);}}
   if(x.g)add('g','solubilidade',c.g?(c.g===x.g?1:0.04):c.ge?(c.ge===x.g?1:0.15):0.4,c.g?'grupo '+SOLNM[c.g]:c.ge?'grupo '+SOLNM[c.ge]+' (estimado)':'sem dado');
   if(x.pf)add('pf','PF',c.pf==null?(c.bd?0.2:0.05):gauss(c.pf-x.pf.v,x.pf.t),'PF '+tC(c.pf));
   if(x.pe)add('pe','PE',c.pe==null?(c.bd?0.2:0.08):gauss(c.pe-x.pe.v,x.pe.t),'PE '+tC(c.pe));
   if(x.els.length){c._el=c._el||elCount(c.f);}
-  x.els.forEach(([e,v])=>{const has=!!(c._el&&c._el[e]);add('el','elemento '+e,(v==='sim')===has?1:0.03,has?'tem '+e:'sem '+e);});
-  IDIR.forEach(([k,lab])=>{const u=x.ir[k];if(!u)return;const has=cIr(c,k);add('irf','IV: '+lab.replace(/ \(.*/,''),(u==='sim')===has?1:0.05,has?'tem essa banda':'não tem essa banda');});
-  SUBL.forEach(([k,lab])=>{const u=x.sub[k];if(!u)return;if(c.bd&&!c.h1.length){add('sub',lab.replace(/ \(.*/,''),0.5,'sem dado');return;}const has=(c.sub||[]).indexOf(k)>=0;add('sub',lab.replace(/ \(.*/,''),(u==='sim')===has?1:0.04,has?'tem':'não tem');});
+  x.els.forEach(([e,v])=>{const has=!!(c._el&&c._el[e]);add('el',(has?'com ':'sem ')+e,(v==='sim')===has?1:0.03,has?'tem '+e:'sem '+e,v==='sim'?'sim':'não');});
+  IDIR.forEach(([k,lab])=>{const u=x.ir[k];if(!u)return;const has=cIr(c,k);add('irf','IV: '+(has?'tem ':'sem ')+lab.replace(/ \(.*/,''),(u==='sim')===has?1:0.05,has?'tem essa banda':'não tem essa banda',u==='sim'?'sim':'não');});
+  SUBL.forEach(([k,lab])=>{const u=x.sub[k];if(!u)return;if(c.bd&&!c.h1.length){add('sub',lab.replace(/ \(.*/,'')+' (sem dado)',0.5,'sem dado');return;}const has=(c.sub||[]).indexOf(k)>=0;add('sub',(has?'tem ':'sem ')+lab.replace(/ \(.*/,''),(u==='sim')===has?1:0.04,has?'tem':'não tem',u==='sim'?'sim':'não');});
   if(x.F){const a=elCount(x.F),b=c._el||(c._el=elCount(c.f));const ks=new Set([...Object.keys(a),...Object.keys(b)]);const ok=[...ks].every(k=>(a[k]||0)===(b[k]||0));add('F','fórmula',ok?1:0.02,c.f);}
   if(x.gdh!=null)add('gdh','GDH',c.gdh==null?0.4:(c.gdh===x.gdh?1:0.05),c.gdh==null?'sem dado':'GDH '+c.gdh);
   if(x.gf)add('gf','grupo funcional',c.gf.indexOf(x.gf)>=0?1:0.04,c.gf.join(', ')||'sem grupo funcional');
@@ -269,6 +269,7 @@ function icBands(){
     return '<p class="hint" style="margin:6px 0"><b>'+x+' cm⁻¹</b>: '+(nm.length?esc(nm.slice(0,5).join('; '))+(nm.length>5?'; ...':''):'nada na tabela do app')+'</p>';}).join('')
    +'<p class="hint">As faixas se sobrepõem. Use isso como pista e confirme com a outra banda indicada na aba IV.</p>';
 }
+function icBate(r){return r.parts.filter(p=>p.f>=0.7).length;}
 function icRun(){setTimeout(()=>{if(typeof icBadges==="function")icBadges();},0);
   icBands();
   const x=icInputs(),cl=icClasses();
@@ -294,12 +295,20 @@ function icRun(){setTimeout(()=>{if(typeof icBadges==="function")icBadges();},0)
     const top=res.slice(0,5).filter((r,i)=>i<3||r.p>=1);
     if(used<3)h+='<div class="icwarn">Só '+used+' critério'+(used>1?'s':'')+' preenchido'+(used>1?'s':'')+': vários compostos ficam parecidos. Acrescente IV, PE ou RMN para separar.</div>';
     if(res[0].w<0.05)h+='<div class="icwarn">Nenhum composto do banco combina bem com todos os dados. O seu pode não estar na lista; os de baixo são só os mais parecidos.</div>';
-    else if(res.length>1&&res[0].p<2*res[1].p)h+='<div class="icwarn">O primeiro e o segundo estão próximos. Falta um dado que os separe (veja o que difere nas linhas abaixo).</div>';
-    h+=top.map(r=>'<div class="icr"><div class="top"><b><button class="back" style="margin:0;font-size:1rem" type="button" data-cf="'+r.c.i+'">'+esc(r.c.n)+'</button> <span class="mono" style="font-weight:400;color:var(--muted)">'+fmt(r.c.f)+'</span></b><span class="pct">'+(r.p>=10?r.p.toFixed(0):r.p.toFixed(1)).replace('.',',')+'%</span></div><div class="bar"><i style="width:'+Math.min(100,r.p).toFixed(1)+'%"></i></div>'
-      +'<div class="cr">'+r.parts.map(p=>'<span class="'+(p.f>=0.7?'ok':p.f>=0.2?'md':'no')+'">'+(p.f>=0.7?'✓ ':p.f>=0.2?'~ ':'✗ ')+esc(p.lab)+'</span>').join('')+'</div>'
+    else{const emp=res.filter(r=>r.w>=res[0].w*0.9).length;
+      if(emp>1){
+        const falta=[[!x.est,'estado'],[!x.cor,'cor'],[!x.g,'solubilidade'],[!x.pf,'PF'],[!x.pe,'PE'],[x.M==null,'massa molar (M)'],[!x.ivq.length,'bandas de IV (números)'],[x.h==null,'nº de sinais de ¹H'],[x.c==null,'nº de sinais de ¹³C']].filter(a=>a[0]).map(a=>a[1]);
+        const T=res.slice(0,3).map(r=>r.c);
+        const lin=[['Estado',!x.est,c=>c.est],['Cor',!x.cor,c=>c.cor],['PF',!x.pf,c=>c.pf==null?null:tC(c.pf)],['PE',!x.pe,c=>c.pe==null?null:tC(c.pe)],['M',x.M==null,c=>c.M]]
+          .map(L=>{if(!L[1])return '';const v=T.map(c=>{const y=L[2](c);return y==null||y===''?'sem dado':String(y);});return new Set(v).size>1?'<tr><th scope="row">'+L[0]+'</th>'+v.map(y=>'<td>'+esc(y)+'</td>').join('')+'</tr>':'';}).join('');
+        h+='<div class="icwarn"><b>'+(emp>=50?'Mais de 50':emp)+' compostos batem igualmente com o que você marcou.</b> Os dados informados não separam eles, então a posição na lista não quer dizer muito. '+(falta.length?'Ainda não informados: '+falta.slice(0,5).join(', ')+'.':'')
+          +(lin?' Entre os três primeiros, estes dados são diferentes:</div><div class="tbl"><table class="obt nostk"><thead><tr><th></th>'+T.map(c=>'<th>'+esc(c.n)+'</th>').join('')+'</tr></thead><tbody>'+lin+'</tbody></table></div>':'</div>');
+      }}
+    h+=top.map(r=>'<div class="icr"><div class="top"><b><button class="back" style="margin:0;font-size:1rem" type="button" data-cf="'+r.c.i+'">'+esc(r.c.n)+'</button> <span class="mono" style="font-weight:400;color:var(--muted)">'+fmt(r.c.f)+'</span></b><span class="pct">'+icBate(r)+' de '+r.parts.length+'<small> batem</small></span></div><div class="bar"><i style="width:'+(r.parts.length?icBate(r)/r.parts.length*100:0).toFixed(0)+'%"></i></div>'
+      +'<div class="cr">'+r.parts.map(p=>'<span class="'+(p.f>=0.7?'ok':p.f>=0.2?'md':'no')+'">'+(p.f>=0.7?'✓ ':p.f>=0.2?'~ ':'✗ ')+esc(p.lab)+(p.f<0.2&&p.u?' (você marcou '+p.u+')':'')+'</span>').join('')+'</div>'
       +'<p class="det">'+r.parts.filter(p=>p.det&&p.f<0.7).map(p=>'<b>'+esc(p.lab)+':</b> '+esc(p.det)).join(' · ')+'</p></div>').join('');
-    h+='<p class="hint">Base: '+COMP.length+' compostos do app e '+bdAll().length+' do banco Analor. ✓ combina, ~ combina em parte, ✗ não combina.</p><p class="srcl">'+srcTag(false,'Sem fonte conferida')+' Estado, cor e grupo de solubilidade do banco podem estar um pouco diferentes da sua tabela. PF e PE com a etiqueta Conferido vêm do PubChem.</p>';
-    sum=' · melhor composto: '+esc(res[0].c.n)+' ('+(res[0].p>=10?res[0].p.toFixed(0):res[0].p.toFixed(1)).replace('.',',')+'%)';
+    h+='<p class="hint">Base: '+COMP.length+' compostos do app e '+bdAll().length+' do banco Analor. Cada etiqueta diz o que o composto tem (por exemplo, "sem N" é um composto sem nitrogênio). ✓ bate com o que você marcou, ~ bate em parte ou sem dado, ✗ não bate.</p><p class="srcl">'+srcTag(false,'Sem fonte conferida')+' Estado, cor e grupo de solubilidade do banco podem estar um pouco diferentes da sua tabela. PF e PE com a etiqueta Conferido vêm do PubChem.</p>';
+    sum=' · primeiro: '+esc(res[0].c.n)+' ('+icBate(res[0])+' de '+res[0].parts.length+' batem)';
   }
   h+='</details>';
   $('#icOut').innerHTML=h;
