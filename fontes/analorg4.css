@@ -27,5 +27,7 @@ details.fonte[open]>summary::before{content:"▾"}
 #p-rm .chipbar.rseg{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding:2px 16px 8px;scrollbar-width:none}
 #p-rm .chipbar.rseg::-webkit-scrollbar{display:none}
 #p-rm .chipbar.rseg .chip{flex:none;white-space:nowrap}
-.icr .pct small{font-size:.65em;font-weight:400;color:var(--muted)}
+.icr .pct{text-align:right}.icr .pct small{display:block;font-size:.6em;font-weight:400;color:var(--muted)}
 .icwarn+.tbl th{letter-spacing:0;text-transform:none;word-break:normal;overflow-wrap:normal;font-size:.85rem;white-space:normal}
+.icr .pct{display:inline-flex;flex-direction:column;align-items:flex-end;line-height:1.15}
+.icr .pct small{display:block;font-size:.6em;margin-top:2px}

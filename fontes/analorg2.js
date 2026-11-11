@@ -304,11 +304,11 @@ function icRun(){setTimeout(()=>{if(typeof icBadges==="function")icBadges();},0)
         h+='<div class="icwarn"><b>'+(emp>=50?'Mais de 50':emp)+' compostos batem igualmente com o que você marcou.</b> Os dados informados não separam eles, então a posição na lista não quer dizer muito. '+(falta.length?'Ainda não informados: '+falta.slice(0,5).join(', ')+'.':'')
           +(lin?' Entre os três primeiros, estes dados são diferentes:</div><div class="tbl"><table class="obt nostk"><thead><tr><th></th>'+T.map(c=>'<th>'+esc(c.n)+'</th>').join('')+'</tr></thead><tbody>'+lin+'</tbody></table></div>':'</div>');
       }}
-    h+=top.map(r=>'<div class="icr"><div class="top"><b><button class="back" style="margin:0;font-size:1rem" type="button" data-cf="'+r.c.i+'">'+esc(r.c.n)+'</button> <span class="mono" style="font-weight:400;color:var(--muted)">'+fmt(r.c.f)+'</span></b><span class="pct">'+icBate(r)+' de '+r.parts.length+'<small> batem</small></span></div><div class="bar"><i style="width:'+(r.parts.length?icBate(r)/r.parts.length*100:0).toFixed(0)+'%"></i></div>'
+    h+=top.map(r=>'<div class="icr"><div class="top"><b><button class="back" style="margin:0;font-size:1rem" type="button" data-cf="'+r.c.i+'">'+esc(r.c.n)+'</button> <span class="mono" style="font-weight:400;color:var(--muted)">'+fmt(r.c.f)+'</span></b><span class="pct">'+(r.p>=10?r.p.toFixed(0):r.p.toFixed(1)).replace('.',',')+'%<small>'+icBate(r)+' de '+r.parts.length+' batem</small></span></div><div class="bar"><i style="width:'+Math.min(100,r.p).toFixed(1)+'%"></i></div>'
       +'<div class="cr">'+r.parts.map(p=>'<span class="'+(p.f>=0.7?'ok':p.f>=0.2?'md':'no')+'">'+(p.f>=0.7?'✓ ':p.f>=0.2?'~ ':'✗ ')+esc(p.lab)+(p.f<0.2&&p.u?' (você marcou '+p.u+')':'')+'</span>').join('')+'</div>'
       +'<p class="det">'+r.parts.filter(p=>p.det&&p.f<0.7).map(p=>'<b>'+esc(p.lab)+':</b> '+esc(p.det)).join(' · ')+'</p></div>').join('');
     h+='<p class="hint">Base: '+COMP.length+' compostos do app e '+bdAll().length+' do banco Analor. Cada etiqueta diz o que o composto tem (por exemplo, "sem N" é um composto sem nitrogênio). ✓ bate com o que você marcou, ~ bate em parte ou sem dado, ✗ não bate.</p><p class="srcl">'+srcTag(false,'Sem fonte conferida')+' Estado, cor e grupo de solubilidade do banco podem estar um pouco diferentes da sua tabela. PF e PE com a etiqueta Conferido vêm do PubChem.</p>';
-    sum=' · primeiro: '+esc(res[0].c.n)+' ('+icBate(res[0])+' de '+res[0].parts.length+' batem)';
+    sum=' · primeiro: '+esc(res[0].c.n)+' ('+(res[0].p>=10?res[0].p.toFixed(0):res[0].p.toFixed(1)).replace('.',',')+'%, '+icBate(res[0])+' de '+res[0].parts.length+' batem)';
   }
   h+='</details>';
   $('#icOut').innerHTML=h;
