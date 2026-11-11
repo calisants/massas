@@ -12,3 +12,11 @@
 .fuc .steps2 li{margin:4px 0}
 .fusug{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 6px}
 .fuhl{outline:2px solid var(--keep);outline-offset:2px}
+/* barra de seções dos Ensaios: uma linha só, rola de lado */
+.chipbar.msub{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding:2px 16px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chipbar.msub::-webkit-scrollbar{display:none}
+.chipbar.msub .chip{flex:none;white-space:nowrap}
+/* "Fonte" recolhida: texto discreto em vez de caixa vazia */
+details.fonte{border:0;background:none;padding:0;box-shadow:none}
+details.fonte>summary::before{content:"▸";font-size:.8em}
+details.fonte[open]>summary::before{content:"▾"}

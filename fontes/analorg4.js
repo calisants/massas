@@ -272,3 +272,7 @@ document.addEventListener('click',e=>{
   const b=e.target.closest&&e.target.closest('[data-fuid],[data-fug]');if(!b)return;
   if(b.dataset.fuid!=null){const i=+b.dataset.fuid;fuGo(FUN[i].g,i);}else fuGo(b.dataset.fug);
 });
+
+/* a barra de seções acompanha a tela aberta: o chip ativo fica visível */
+(function(){const o=new MutationObserver(()=>{const b=document.querySelector('.chipbar.msub:not([hidden]) .chip[aria-pressed="true"]');if(b&&b.scrollIntoView)try{const bar=b.parentNode;bar.scrollLeft=b.offsetLeft-16;}catch(e){}});
+ document.addEventListener('DOMContentLoaded',()=>document.querySelectorAll('.chipbar.msub .chip').forEach(c=>o.observe(c,{attributes:true,attributeFilter:['aria-pressed']})));})();

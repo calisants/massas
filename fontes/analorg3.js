@@ -56,7 +56,7 @@ function rvDraw(){
   const due=Object.keys(r).filter(k=>r[k].d<=now).sort((a,b)=>r[a].d-r[b].d).slice(0,Math.max(0,REV_MAX-revFeitas()));
   RVMODE=false;
   if(!due.length){
-    box.innerHTML='<p class="empty">'+(revFeitas()>=REV_MAX&&repqDue()>0?'Você já revisou '+REV_MAX+' hoje. O resto fica para amanhã, para não pesar.':'Nenhuma pergunta vencida hoje.')+' Há '+total+' guardada'+(total===1?'':'s')+'.</p>';
+    box.innerHTML='<p class="empty">'+(revFeitas()>=REV_MAX&&repqDue()>0?'Você já revisou '+REV_MAX+' hoje. O resto fica para amanhã, para não pesar.':'Nenhuma pergunta vencida hoje.')+' Há '+total+' guardada'+(total===1?'':'s')+'.</p>'+(total===0?'<p class="sm">As perguntas que você errar nos treinos (Solubilidade, Elementar, RMN, IV e Massas) aparecem aqui para refazer.</p>':'');
     return;
   }
   RVMODE=true;
