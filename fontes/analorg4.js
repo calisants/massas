@@ -644,7 +644,7 @@ document.addEventListener('change',async e=>{
 
 /* ---- avisos de erro e sugestões: vão para a aba "Sugestões de Mudanças" da planilha "Avisos do Claude" ---- */
 /* Endereço do script publicado (Apps Script, termina em /exec). Vazio = o aviso fica só neste aparelho e pode ser copiado/compartilhado. */
-const AV_URL='';
+const AV_URL='https://script.google.com/macros/s/AKfycbyQ2cNjylQc8PJNTiExj7RnzCAlKA_7qQn-5WA1lr7QVsdTCfnaljm7vugiOZKjLws/exec';
 function avLista(){try{return JSON.parse(localStorage.getItem('anaquim_avisos')||'[]');}catch(e){return[];}}
 function avGuarda(l){try{localStorage.setItem('anaquim_avisos',JSON.stringify(l.slice(-50)));}catch(e){}}
 function avDesenha(){const b=document.getElementById('avL');if(!b)return;const l=avLista();
