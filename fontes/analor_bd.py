@@ -104,6 +104,26 @@ def aplicar(r,c):
     r[12]=smi; r[16]=desenho(smi); r[4]=c['f']; r[5]=c['mw']
     if est=='preenchida': return [3,'O banco não traz a estrutura deste composto. Usei a de '+_fontes(c)+' (CID '+str(c.get('cid'))+' no PubChem).']
     return [2,'A estrutura do banco não bate com '+_fontes(c)+'. Usei a estrutura do PubChem (CID '+str(c.get('cid'))+'), que bate com o nome e com a fórmula '+c['f']+'.'+(' A fórmula do banco ('+fa+') também foi corrigida.' if c.get('f_banco') else '')]
+
+_COR_EN=[('incolor',r'colou?rless'),('branco',r'white'),('amarelo',r'yellow'),('laranja',r'orange'),('vermelho',r'\b(?:red|pink|scarlet)'),('marrom',r'brown|\btan\b'),('verde',r'green'),('azul',r'blue'),('violeta',r'violet|purple'),('preto',r'black|dark gr[ae]y')]
+def cor_pt(cid):
+    """Cor a partir do campo Color/Form do PubChem (ref_cache/cor.json). Fica a cor que aparece em metade ou mais das descrições que citam cor; 4 ou mais cores = ambíguo, sem dado."""
+    import re,os
+    global _COR
+    if '_COR' not in globals():
+        _COR=json.load(open('ref_cache/cor.json')) if os.path.exists('ref_cache/cor.json') else {}
+    inf=_COR.get(str(cid)) or []
+    ent=[];fontes=[]
+    for t,f in inf:
+        t0=re.split(r'\b(?:turn|turns|becomes|darken|darkens|on exposure|when exposed|changes to)\b',t.lower())[0]
+        fam={n for n,rx in _COR_EN if re.search(rx,t0)}
+        if fam:ent.append(fam);fontes.append(f)
+    if not ent:return None
+    cont={n:sum(1 for e in ent if n in e) for n,_ in _COR_EN}
+    fam=[n for n,_ in _COR_EN if cont[n]*2>=len(ent)]
+    if not fam or len(fam)>3:return None
+    if 'incolor' in fam and 'branco' in fam:fam.remove('branco')
+    return [' ou '.join(fam),sorted(set(x for x in fontes if x))[:2],inf[0][0][:80]]
 def linha(r):
     ms=[[num(r['MS%d'%i]),num(r['IMS%d'%i])] for i in range(1,9)]
     return [r['CAS'],r['NCOM'],r['NIUP'],r['NINGLES'],r['FMOL'],num(r['PMOL']),valor(r['PFCARAC']) if valor(r['PFCARAC']) is not None else num(r['PF']),valor(r['PECARAC']) if valor(r['PECARAC']) is not None else num(r['PE']),r['PFCARAC'],r['PECARAC'],r['PFDER'],[m for m in ms if m[0]],r['SMILES'],num(r['SOL_H2O']),(lambda d:d if d is not None and 0.2<d<6 else None)(num(r['DENS_20'])),1 if r['NO_IFRJ'] else 0,desenho(r['SMILES'])]
@@ -118,6 +138,7 @@ if __name__=='__main__':
         if r0['CAS'] and k in vistos: continue   # registro repetido idêntico
         vistos.add(k); L.append(linha(r0))
     BT={};GT={};FT={}
+    ESCOLHA=json.load(open('ref_cache/escolha.json'))
     for ix,r in enumerate(L):
         c=CONF.get(ix); flag=None; corr=[]
         if c:
@@ -147,6 +168,7 @@ if __name__=='__main__':
         r.append(msalto)                        # r[19]
         r.append(corr or None)                  # r[20]: dados numéricos corrigidos [campo, antes, depois, fonte]
         r.append(0 if cas_valido(r[0]) else 1)  # r[21]: 1 = o identificador não é um CAS (nem o dígito verificador fecha)
+        r.append(cor_pt(ESCOLHA.get(str(ix))))   # r[22]: [cor em português, fontes, texto original do PubChem] ou None
     tab={'b':list(BT),'g':list(GT),'f':list(FT)}
     json.dump({'t':tab,'r':L},open('analor_bd.json','w',encoding='utf-8'),ensure_ascii=False,separators=(',',':'))
     print(len(L),'compostos',len(BT),'bandas distintas')

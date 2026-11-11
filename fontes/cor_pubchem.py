@@ -9,7 +9,7 @@ def walk(sec,acc):
         if s.get('TOCHeading')=='Color/Form':
             for i in s.get('Information',[]):
                 t=''.join(x.get('String','') for x in i.get('Value',{}).get('StringWithMarkup',[]))
-                if t:acc.append([t,i.get('Reference','')])
+                if t:acc.append([t,i.get('ReferenceNumber')])
         walk(s.get('Section',[]),acc) if s.get('Section') else None
 ref={}
 def one(c):
@@ -25,11 +25,15 @@ def one(c):
             time.sleep(2)
         except Exception:time.sleep(2)
     time.sleep(0.05)
-n=0
+def salva():
+    for _ in range(20):
+        try:
+            snap=dict(res);json.dump(snap,open(OUT+'.tmp','w'));os.replace(OUT+'.tmp',OUT);return
+        except RuntimeError:time.sleep(0.2)
 with ThreadPoolExecutor(12) as ex:
     futs=[ex.submit(one,c) for c in cids]
     for i,f in enumerate(futs):
         f.result()
         if i%200==0:
-            json.dump(res,open(OUT,'w'));print(i,len(res),flush=True)
-json.dump(res,open(OUT,'w'));print('fim',len(res))
+            salva();print(i,len(res),flush=True)
+salva();print('fim',len(res))
