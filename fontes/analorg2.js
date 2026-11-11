@@ -269,6 +269,35 @@ function icBands(){
     return '<p class="hint" style="margin:6px 0"><b>'+x+' cm⁻¹</b>: '+(nm.length?esc(nm.slice(0,5).join('; '))+(nm.length>5?'; ...':''):'nada na tabela do app')+'</p>';}).join('')
    +'<p class="hint">As faixas se sobrepõem. Use isso como pista e confirme com a outra banda indicada na aba IV.</p>';
 }
+
+/* Qual dado, ainda não informado, mais separa os candidatos empatados? Divide o grupo por cada característica e escolhe as que deixam menos compostos por resposta. */
+function icSepara(cands,x){
+  const N=cands.length,F=[];
+  const cat=(id,rot,get,apply,txt)=>{const m=new Map();cands.forEach(c=>{const v=get(c);if(v==null||v==='')return;m.set(v,(m.get(v)||0)+1);});
+    const tot=[...m.values()].reduce((a,b)=>a+b,0);if(m.size<2||tot<N*0.5)return;
+    const exp=[...m.values()].reduce((a,b)=>a+b*b,0)/tot;F.push({id,rot,m:[...m.entries()],exp,apply,txt:txt||(v=>v)});};
+  if(!x.est)cat('est','Estado a 25 °C',c=>c.est?String(c.est).split(' ')[0]:null,v=>['est',v]);
+  if(!x.g)cat('g','Grupo de solubilidade',c=>c.g||c.ge||null,v=>['g',v],v=>SOLNM[v]||v);
+  if(!x.pf)cat('pf','Ponto de fusão',c=>c.pf==null?null:(c.pf<25?'abaixo de 25 °C':c.pf<80?'25 a 80 °C':c.pf<150?'80 a 150 °C':'acima de 150 °C'),null);
+  if(!x.pe)cat('pe','Ponto de ebulição',c=>c.pe==null?null:(c.pe<80?'abaixo de 80 °C':c.pe<150?'80 a 150 °C':c.pe<220?'150 a 220 °C':'acima de 220 °C'),null);
+  ELORD.forEach(e=>{if(icSt.el[e])return;const lab=ELS.find(a=>a[0]===e)[1].replace(/<[^>]*>/g,'');cat('el'+e,'Tem '+lab+'?',c=>{c._el=c._el||elCount(c.f);return c._el[e]?'sim':'nao';},v=>['el',e,v],v=>v==='sim'?'Sim':'Não');});
+  IDIR.forEach(a=>{if(icSt.ir[a[0]])return;cat('ir'+a[0],'IV: banda de '+a[1].replace(/ \(.*/,''),c=>cIr(c,a[0])?'sim':'nao',v=>['ir',a[0],v],v=>v==='sim'?'Sim':'Não');});
+  SUBL.forEach(a=>{if(icSt.sub[a[0]])return;cat('sub'+a[0],'Tem '+a[1].replace(/ \(.*/,'').toLowerCase()+'?',c=>{if(c.bd&&!c.h1.length)return null;return (c.sub||[]).indexOf(a[0])>=0?'sim':'nao';},v=>['sub',a[0],v],v=>v==='sim'?'Sim':'Não');});
+  F.sort((a,b)=>a.exp-b.exp);
+  return F.slice(0,3);
+}
+function icSeparaHtml(F,N){
+  if(!F.length)return '';
+  return '<h3 style="margin:10px 0 4px">Qual dado separa melhor</h3><p class="sm">Entre '+(N>=600?'os primeiros 600':'os '+N)+' candidatos, estes dados ainda não informados dividem mais o grupo. Toque numa resposta para aplicá-la.</p>'
+   +F.map(f=>'<div class="sepq"><b>'+esc(f.rot)+'</b><div class="sepa">'+f.m.sort((a,b)=>b[1]-a[1]).map(([v,n])=>{
+      const t=esc(f.txt(v))+' <small>('+n+')</small>';
+      return f.apply?'<button type="button" class="chip" data-sep="'+encodeURIComponent(JSON.stringify(f.apply(v)))+'">'+t+'</button>':'<span class="chip seph">'+t+'</span>';}).join('')+'</div></div>').join('')
+   +'<p class="sm">Entre parênteses: quantos candidatos ficam com essa resposta. O melhor dado deixa poucos de cada lado.</p>';
+}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-sep]');if(!b)return;
+  const a=JSON.parse(decodeURIComponent(b.dataset.sep));
+  if(a.length===2)icSt[a[0]]=a[1];else icSt[a[0]][a[1]]=a[2];
+  icDraw();icRun();icSave();});
 function icBate(r){return r.parts.filter(p=>p.f>=0.7).length;}
 function icRun(){setTimeout(()=>{if(typeof icBadges==="function")icBadges();},0);
   icBands();
@@ -302,7 +331,8 @@ function icRun(){setTimeout(()=>{if(typeof icBadges==="function")icBadges();},0)
         const lin=[['Estado',!x.est,c=>c.est],['Cor',!x.cor,c=>c.cor],['PF',!x.pf,c=>c.pf==null?null:tC(c.pf)],['PE',!x.pe,c=>c.pe==null?null:tC(c.pe)],['M',x.M==null,c=>c.M]]
           .map(L=>{if(!L[1])return '';const v=T.map(c=>{const y=L[2](c);return y==null||y===''?'sem dado':String(y);});return new Set(v).size>1?'<tr><th scope="row">'+L[0]+'</th>'+v.map(y=>'<td>'+esc(y)+'</td>').join('')+'</tr>':'';}).join('');
         h+='<div class="icwarn"><b>'+(emp>=50?'Mais de 50':emp)+' compostos batem igualmente com o que você marcou.</b> Os dados informados não separam eles, então a posição na lista não quer dizer muito. '+(falta.length?'Ainda não informados: '+falta.slice(0,5).join(', ')+'.':'')
-          +(lin?' Entre os três primeiros, estes dados são diferentes:</div><div class="tbl"><table class="obt nostk"><thead><tr><th></th>'+T.map(c=>'<th>'+esc(c.n)+'</th>').join('')+'</tr></thead><tbody>'+lin+'</tbody></table></div>':'</div>');
+          +'</div>'+icSeparaHtml(icSepara(res.filter(r=>r.w>=res[0].w*0.9).slice(0,600).map(r=>r.c),x),Math.min(emp,600))
+          +(lin?'<p class="sm" style="margin-top:8px">Os três primeiros diferem em:</p><div class="tbl"><table class="obt nostk"><thead><tr><th></th>'+T.map(c=>'<th>'+esc(c.n)+'</th>').join('')+'</tr></thead><tbody>'+lin+'</tbody></table></div>':'');
       }}
     h+=top.map(r=>'<div class="icr"><div class="top"><b><button class="back" style="margin:0;font-size:1rem" type="button" data-cf="'+r.c.i+'">'+esc(r.c.n)+'</button> <span class="mono" style="font-weight:400;color:var(--muted)">'+fmt(r.c.f)+'</span></b><span class="pct">'+(r.p>=10?r.p.toFixed(0):r.p.toFixed(1)).replace('.',',')+'%<small>'+icBate(r)+' de '+r.parts.length+' batem</small></span></div><div class="bar"><i style="width:'+Math.min(100,r.p).toFixed(1)+'%"></i></div>'
       +'<div class="cr">'+r.parts.map(p=>'<span class="'+(p.f>=0.7?'ok':p.f>=0.2?'md':'no')+'">'+(p.f>=0.7?'✓ ':p.f>=0.2?'~ ':'✗ ')+esc(p.lab)+(p.f<0.2&&p.u?' (você marcou '+p.u+')':'')+'</span>').join('')+'</div>'

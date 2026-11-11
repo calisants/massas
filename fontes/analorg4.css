@@ -31,3 +31,7 @@ details.fonte[open]>summary::before{content:"▾"}
 .icwarn+.tbl th{letter-spacing:0;text-transform:none;word-break:normal;overflow-wrap:normal;font-size:.85rem;white-space:normal}
 .icr .pct{display:inline-flex;flex-direction:column;align-items:flex-end;line-height:1.15}
 .icr .pct small{display:block;font-size:.6em;margin-top:2px}
+.sepq{margin:8px 0}
+.sepa{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.sepa .chip small{color:var(--muted)}
+.sepa .seph{cursor:default}
