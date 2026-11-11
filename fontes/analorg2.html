@@ -69,6 +69,7 @@
     <details class="sec icsec"><summary>5. Infravermelho <span class="bdg" data-b="5"></span></summary>
     <div id="icIrR"></div>
     <label for="icIV">Outras bandas que você viu (cm⁻¹, separadas por vírgula ou espaço)<input class="f-p" type="text" id="icIV" placeholder="ex.: 3300l, 2960, 1715" autocomplete="off"></label>
+    <label for="icIVFile">Ou importe um espectro de IV (.jdx, .csv ou .txt com número de onda e intensidade)<input type="file" id="icIVFile" accept=".jdx,.dx,.csv,.txt,text/plain"></label><p class="hint" id="icIVMsg" aria-live="polite">O app procura os picos e preenche o campo acima. Funciona com transmitância ou absorbância.</p>
     <p class="hint">Marque <b>l</b> depois do número se a banda é larga (3300l) e <b>e</b> se é estreita (2250e). Isso separa, por exemplo, o O–H de ácido (muito largo) do C–H.</p>
     <label for="icMeio">Como o IV foi medido<select id="icMeio"><option value="">Filme líquido ou pastilha de KBr</option><option value="sol">Solução diluída (CCl₄, CHCl₃)</option><option value="gas">Fase gasosa</option></select></label>
     <p class="hint">O meio muda as bandas: em solução diluída o O–H e o N–H livres ficam finos e mais altos, e em gás o C=O sobe. A comparação já leva isso em conta.</p>

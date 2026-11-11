@@ -276,3 +276,58 @@ document.addEventListener('click',e=>{
 /* a barra de seções acompanha a tela aberta: o chip ativo fica visível */
 (function(){const o=new MutationObserver(()=>{const b=document.querySelector('.chipbar.msub:not([hidden]) .chip[aria-pressed="true"]');if(b&&b.scrollIntoView)try{const bar=b.parentNode;bar.scrollLeft=b.offsetLeft-16;}catch(e){}});
  document.addEventListener('DOMContentLoaded',()=>document.querySelectorAll('.chipbar.msub .chip').forEach(c=>o.observe(c,{attributes:true,attributeFilter:['aria-pressed']})));})();
+
+/* ---- importar espectro de IV (.jdx/.dx/.csv/.txt): acha as bandas e preenche o campo de números ---- */
+function ivParseSpec(tx){
+  const L=tx.split(/\r?\n/),H={};let xs=[],ys=[],mode='';
+  L.forEach(l=>{const m=l.match(/^##\s*([^=]+?)\s*=\s*(.*)$/);if(m){H[m[1].toUpperCase().replace(/[\s_-]/g,'')]=m[2];mode=/^(XYDATA|PEAKTABLE|XYPOINTS|DATATABLE)/i.test(m[1].replace(/[\s_-]/g,''))?m[1].replace(/[\s_-]/g,'').toUpperCase():'';return;}
+    if(!mode&&/##/.test(tx))return;
+    const n=(l.replace(/[;,\t]+/g,' ').match(/-?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?/g)||[]).map(Number);
+    if(!n.length)return;
+    if(mode==='XYDATA'){const xf=+(H.XFACTOR||1);if(!(xs._fx!==undefined))xs._fx=1;ys.push(...n.slice(1).map(v=>v*(+(H.YFACTOR||1))));if(xs._first===undefined)xs._first=n[0]*xf;}
+    else if(n.length>=2&&n.length%2===0){for(let i=0;i<n.length;i+=2){xs.push(n[i]);ys.push(n[i+1]);}}
+    else if(!/##/.test(tx)&&n.length===2){xs.push(n[0]);ys.push(n[1]);}
+  });
+  if(mode==='XYDATA'||(H.XYDATA&&!xs.length)){
+    const fx=+(H.FIRSTX),lx=+(H.LASTX),nn=ys.length;if(!isFinite(fx)||!isFinite(lx)||nn<10)return null;
+    const xf=+(H.XFACTOR||1),d=(lx-fx)/(nn-1);xs=ys.map((_,i)=>fx+i*d);
+  }
+  if(xs.length<10||xs.length!==ys.length)return null;
+  const o=xs.map((x,i)=>[x,ys[i]]).filter(p=>isFinite(p[0])&&isFinite(p[1])).sort((a,b)=>a[0]-b[0]);
+  if(o.length<10)return null;
+  const yv=o.map(p=>p[1]),mn=Math.min(...yv),mx=Math.max(...yv),md=yv.slice().sort((a,b)=>a-b)[yv.length>>1];
+  const un=String(H.YUNITS||'').toUpperCase();
+  const T=/TRANSM|%T/.test(un)?true:/ABSORB/.test(un)?false:md>(mn+mx)/2;
+  let s=o.map(p=>T?mx-p[1]:p[1]-mn);const sm=Math.max(...s)||1;s=s.map(v=>v/sm);
+  const X=o.map(p=>p[0]),n=X.length;
+  /* suaviza com média de 5 pontos */
+  const z=s.map((_,i)=>{let a=0,c=0;for(let k=-2;k<=2;k++){if(s[i+k]!==undefined){a+=s[i+k];c++;}}return a/c;});
+  const win=(i,r)=>{let a=i,b=i;while(a>0&&X[i]-X[a-1]<=r)a--;while(b<n-1&&X[b+1]-X[i]<=r)b++;return[a,b];};
+  const P=[];
+  for(let i=1;i<n-1;i++){
+    if(X[i]<650||X[i]>4000)continue;
+    const [a,b]=win(i,6);let top=true;for(let k=a;k<=b;k++)if(z[k]>z[i]){top=false;break;}
+    if(!top||z[i]<=z[i-1]&&z[i]<=z[i+1])continue;
+    const [c,d]=win(i,60);let base=1;for(let k=c;k<=d;k++)base=Math.min(base,z[k]);
+    const prom=z[i]-base;if(z[i]<0.10||prom<0.07)continue;
+    /* largura na meia altura acima da base local */
+    const [e,f]=win(i,250);let lo=base;for(let k=e;k<=f;k++)lo=Math.min(lo,z[k]);
+    const half=lo+(z[i]-lo)/2;let l=i,r=i;while(l>0&&z[l]>half)l--;while(r<n-1&&z[r]>half)r++;
+    P.push({v:Math.round(X[i]),h:z[i],w:X[r]-X[l]});}
+  P.sort((p,q)=>q.h-p.h);const out=[];
+  P.forEach(p=>{if(out.length<20&&!out.some(q=>Math.abs(q.v-p.v)<10))out.push(p);});
+  out.sort((p,q)=>q.v-p.v);
+  return {T,n,peaks:out};
+}
+document.addEventListener('change',e=>{
+  if(!e.target||e.target.id!=='icIVFile')return;
+  const f=e.target.files[0];if(!f)return;const out=document.getElementById('icIVMsg');
+  const rd=new FileReader();rd.onload=()=>{
+    const r=ivParseSpec(String(rd.result));
+    if(!r||!r.peaks.length){out.textContent='Não consegui ler bandas neste arquivo. Use .jdx ou .csv com duas colunas (número de onda e intensidade). Para uma imagem ou PDF, digite os números acima.';return;}
+    const campo=document.getElementById('icIV');
+    campo.value=r.peaks.map(p=>p.v+(p.w>=110&&p.v>2400?'l':'')).join(' ');
+    campo.dispatchEvent(new Event('input',{bubbles:true}));
+    out.textContent='Li '+r.peaks.length+' bandas ('+(r.T?'espectro em transmitância':'espectro em absorbância')+', '+r.n+' pontos). Confira a lista no campo acima e apague as que não forem bandas de verdade. Só marquei "l" nas bandas muito largas acima de 2400 cm⁻¹; "e" você mesmo decide.';
+  };rd.readAsText(f);
+});
