@@ -752,3 +752,20 @@ function bdFicha(ix){
   h+='<details class="sec"><summary>De onde vêm os dados</summary><p class="srcl"><span class="tag sv">Conferido: banco Analor</span> Nome, CAS, fórmula, massa molar, PF, PE, picos de MS, solubilidade, densidade e SMILES vêm do arquivo UNIV1_290926.DBF, passado pelo professor, sem alterar os valores. O banco não cita a fonte de cada número. O desenho da estrutura, o GDH, o grupo funcional, as subestruturas, as bandas de IV esperadas, o RMN estimado, o M nominal e o estado a 25 °C são calculados aqui a partir do SMILES e do PF e PE. O grupo de solubilidade é estimado pelas regras da tabela do professor e pela solubilidade em água do banco (que parece estar em g/100 mL, pelos valores conhecidos de clorofórmio, anilina e naftaleno). O banco não traz cor. Conferência feita em 10/11/2026: comparei a fórmula do banco com a da estrutura (SMILES) em todos os registros e, onde diferiam, usei o PubChem (pelo CAS) para decidir qual está certo. Numa amostra de 421 compostos do banco, fórmula e estrutura bateram com o PubChem em cerca de 99%.</p></details>';
   $('#cfB').innerHTML=h;
 }
+
+/* ---------- Atalhos dentro da ficha: IV, MS, RMN, SDBS ---------- */
+(function(){
+  const box=document.getElementById('cfB');if(!box)return;
+  const CURTO=[['Infravermelho','IV'],['Espectrometria','Massas'],['RMN','RMN'],['SDBS','SDBS'],['De onde','Fontes']];
+  function monta(){
+    if(box.querySelector('.cfnav'))return;
+    const ds=[...box.querySelectorAll('details.sec')].filter(d=>d.parentElement===box||d.parentElement.hasAttribute('data-hlscope')||true);
+    const itens=[];ds.forEach(d=>{const s=d.querySelector('summary');if(!s)return;const t=s.textContent;const m=CURTO.find(x=>t.indexOf(x[0])===0);if(m)itens.push([m[1],d]);});
+    if(itens.length<2)return;
+    const nav=document.createElement('div');nav.className='chipbar cfnav';nav.setAttribute('role','group');nav.setAttribute('aria-label','Ir para uma seção da ficha');
+    itens.forEach(([n,d])=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=n;
+      b.onclick=()=>{d.open=true;d.scrollIntoView({behavior:'smooth',block:'start'});};nav.appendChild(b);});
+    const primeiro=itens[0][1];primeiro.parentNode.insertBefore(nav,primeiro);
+  }
+  new MutationObserver(monta).observe(box,{childList:true});
+})();

@@ -160,6 +160,10 @@ html.semmov *,html.semmov *::before,html.semmov *::after{transition:none!importa
 .bdp{margin:6px 0 2px;font-size:.92rem}.bdbar{display:block;height:6px;border-radius:3px;background:var(--line);margin-top:3px}.bdbar i{display:block;height:100%;border-radius:3px;background:var(--keep)}
 .cpc .thumb .bdsv{max-width:none;width:100%;height:auto}
 .cph{grid-column:1/-1;margin:10px 0 0;font-size:1rem}
-.cpa{flex-wrap:wrap;margin:6px 0}
-.cpa .chip{min-width:34px;padding:5px 8px;text-align:center}
+.cpa{flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x proximity;margin:6px -16px;padding:2px 16px 8px;gap:4px;scrollbar-width:thin;position:sticky;top:0;z-index:5;background:var(--bg)}
+.cpa .chip{flex:0 0 auto;min-width:36px;min-height:38px;padding:4px 8px;text-align:center;scroll-snap-align:start}
+.cpq{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cpq #cpQ{grid-column:1/-1}.cpq select{width:100%}.cpq #cpF{grid-column:1/-1}
 .cpy{padding:2px 10px;min-height:32px;margin-left:6px}
+.cfnav{position:sticky;top:0;z-index:5;background:var(--bg);margin:8px -16px;padding:6px 16px;overflow-x:auto;flex-wrap:nowrap;gap:6px}
+.cfnav .chip{flex:0 0 auto;min-height:38px}
