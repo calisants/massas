@@ -224,6 +224,14 @@ function icScore(c,x){
     const q=bdScoreIV(c,x.ivq,x.meio);
     add('iv','IV',(0.12+0.88*q.rec)*(0.03+0.97*q.prec*q.prec),(q.un.length?'sem explicação: '+q.un.join(', ')+'. ':'')+(q.miss.length?'faltou: '+q.miss.join('; '):'bandas-chave presentes'));
   }
+  if(x.ivq.length){
+    /* overtones e combinações: bandas fracas que o composto deveria mostrar; ausência pesa pouco porque costumam sumir */
+    const otr=(c.ot||[]).map(o=>{const m=String(o[1]).match(/(\d{3,4})\D+(\d{3,4})/);return m?{t:String(o[0]).replace(/ \(.*/,''),lo:Math.min(+m[1],+m[2]),hi:Math.max(+m[1],+m[2])}:null;}).filter(Boolean);
+    if(otr.length){
+      const vis=otr.filter(r=>x.ivq.some(b=>b.v>=r.lo-20&&b.v<=r.hi+20));
+      add('ot','IV: overtones',0.7+0.3*vis.length/otr.length,'esperado: '+otr.map(r=>r.t+' ('+r.hi+'–'+r.lo+')').join('; ')+(vis.length?'. Visto em: '+vis.map(r=>r.t).join(', '):'. Nenhuma banda sua cai nessa faixa'),vis.length?'sim':'não');
+    }
+  }
   if(x.M!=null){if(c.M==null)add('M','M',0.4,'sem dado');else{const d=Math.abs(c.M-x.M);add('M','M',d===0?1:(d===1?0.1:0.02),'M = '+c.M);}}
   if(x.pk.length){
     if(c.ms){const ref=c.ms.filter(p=>p!==c.M),ok=p=>ref.some(r=>Math.abs(r-p)<=0.5);
@@ -565,7 +573,7 @@ function icSinRun(){
   const hit=[];
   COMP.concat(bdAll()).forEach(c=>{
     let d=null;
-    if(t==='iv'){const b=c.iv.find(b=>{const r=ivr(b);return v>=r[0]-tol&&v<=r[1]+tol;});if(b)d=b[2].split(' (')[0]+(b[4]?' (banda-chave)':'');}
+    if(t==='iv'){const b=c.iv.find(b=>{const r=ivr(b);return v>=r[0]-tol&&v<=r[1]+tol;});if(b)d=b[2].split(' (')[0]+(b[4]?' (banda-chave)':'');else{const o=(c.ot||[]).find(o=>{const m=String(o[1]).match(/(\d{3,4})\D+(\d{3,4})/);return m&&v>=Math.min(+m[1],+m[2])-tol&&v<=Math.max(+m[1],+m[2])+tol;});if(o)d='overtone: '+String(o[0]).replace(/ \(.*/,'');}}
     else if(t==='h'){const s=c.h1.find(s=>v>=s.lo-tol&&v<=s.hi+tol);if(s)d=s.t+', '+s.lo+' a '+s.hi+' ppm';}
     else if(t==='c'){const s=c.c13.find(s=>v>=s.lo-tol&&v<=s.hi+tol);if(s)d=s.t+', '+s.lo+' a '+s.hi+' ppm';}
     else if(c.ms&&c.ms.some(p=>Math.abs(p-v)<=tol))d=(c.ms.indexOf(v)===0||Math.round(v)===c.M)?'íon molecular':'pico no espectro do banco';
