@@ -20,3 +20,10 @@
 details.fonte{border:0;background:none;padding:0;box-shadow:none}
 details.fonte>summary::before{content:"▸";font-size:.8em}
 details.fonte[open]>summary::before{content:"▾"}
+/* IV: quatro abas cabem em uma linha */
+.chipbar.ivseg{flex-wrap:nowrap;gap:4px}
+.chipbar.ivseg .chip{flex:1 1 auto;padding-inline:6px;white-space:nowrap;text-align:center;font-size:.9rem}
+/* RMN: oito abas rolam de lado */
+#p-rm .chipbar.rseg{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding:2px 16px 8px;scrollbar-width:none}
+#p-rm .chipbar.rseg::-webkit-scrollbar{display:none}
+#p-rm .chipbar.rseg .chip{flex:none;white-space:nowrap}
