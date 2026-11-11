@@ -469,6 +469,7 @@ function drawIV(){
     +'<b>O desenho é simulado, não é o medido.</b> Cada banda é posta no meio da faixa da tabela, com a intensidade típica. Os números dos círculos são os da tabela abaixo. No espectro real, conjugação, ligação de H e o meio da medida deslocam as bandas.'+(sd?' Nº SDBS: <b>'+sd+'</b>.':'')+'</p>';
   h+='<div class="tbl"><table class="obt nostk cmp cmp-iv"><thead><tr><th>#</th><th>cm⁻¹</th><th>O que é</th></tr></thead><tbody>'+bs.map((b,i)=>'<tr'+(b.at&&b.at.length?' class="hlr" data-at="'+b.at.join(',')+'" data-hk="b'+(i+1)+'" data-tx="'+ea('Banda '+(i+1)+': '+b.t+' · '+(b.hi===b.lo?'~'+b.hi:b.lo+'–'+b.hi)+' cm⁻¹')+'"':'')+'><td><b>'+(i+1)+'</b></td><td class="n">'+(b.hi===b.lo?'~'+b.hi:b.lo+'–'+b.hi)+'</td><td>'+esc(b.t)+'<div class="mut sm">'+esc(ivIw(b.i))+' · '+esc(IVSRC[b.s]||b.s)+'</div></td></tr>').join('')+'</tbody></table></div>';
   if(c.ivf&&c.ivf.length)h+='<h3 style="margin:14px 0 4px">O que desloca as bandas deste composto</h3><dl class="gl">'+c.ivf.map(f=>'<div><dt>'+esc(f[0])+'</dt><dd>'+esc(f[1])+'</dd></div>').join('')+'</dl>';
+  h+=(c.ot&&c.ot.length)?'<h3 style="margin:14px 0 4px">Overtones, combinações e ressonância de Fermi</h3><dl class="gl">'+c.ot.map(o=>'<div><dt>'+esc(o[0])+' ('+esc(o[1])+' cm⁻¹)</dt><dd>'+esc(o[2])+' Fonte: '+esc(o[3])+'.</dd></div>').join('')+'</dl>':'<p class="sm">Overtones diagnósticos: nenhum esperado para este composto.</p>';
   if(e&&e.disc.length)h+='<details class="sec"><summary>Como a disciplina atribui</summary><div class="tbl"><table class="obt"><thead><tr><th>Banda (cm⁻¹)</th><th>O que é</th></tr></thead><tbody>'+e.disc.map(r=>'<tr><td class="n">'+r[0]+'</td><td>'+esc(r[1])+'</td></tr>').join('')+'</tbody></table></div></details>';
   h+='<p class="hint" style="margin-top:12px"><button class="btn ghost" type="button" data-cf="'+c.i+'">Abrir a ficha de '+esc(c.n)+'</button></p>';
   box.innerHTML=h;
@@ -717,6 +718,7 @@ function bdLoad(){if(BD)return BD;try{const o=JSON.parse(BDJSON);BD=o.r;BDT=o.t}
 /* "ACETONA" -> "Acetona"; mantém prefixos curtos (N, o-, p-) como estão */
 let BDEN=null;
 function bdEn(cas,fallback){if(!BDEN){BDEN={};bdLoad().forEach(r=>{if(r[0]&&r[3]&&!BDEN[r[0]])BDEN[r[0]]=bdNome(r[3]);});}return (cas&&BDEN[cas])||fallback||'';}
+const BDFT={1:'Fórmula corrigida.',2:'Estrutura corrigida.',3:'Estrutura preenchida.',5:'Confira o nome e o CAS.'};
 function bdNome(s){s=String(s||'').trim();s=s.replace(/[A-ZÀ-Ý]{2,}/g,m=>m.toLowerCase());return s.charAt(0).toUpperCase()+s.slice(1);}
 function bdNominal(f,mw){const el=elCount(f);let m=0;for(const e in el){if(BDMASS[e]===undefined)return mw?Math.round(mw):null;m+=BDMASS[e]*el[e];}return m||(mw?Math.round(mw):null);}
 function bdGdh(f){const e=elCount(f);for(const k in e)if(!['C','H','N','F','Cl','Br','I','O','S'].includes(k))return null;
@@ -730,8 +732,8 @@ function bdAll(){
     const ms=r[11],nm=bdNome(r[1]),M=bdNominal(r[4],r[5]);
     const c={i:1000+ix,bd:1,r,n:nm,a:[r[2],r[3]].filter(x=>x&&x.toLowerCase()!==r[1].toLowerCase()).map(bdNome),f:r[4]||'',cas:r[0]||'',mw:r[5],M:M,
       est:bdEstado(r[6],r[7]),cor:'',g:'',pf:r[6],pe:r[7],gdh:bdGdh(r[4]||''),
-      gf:r[17]?r[17][0].map(i=>BDT.g[i]):[],iv:r[17]?r[17][1].map(i=>BDT.b[i]):[],ivf:r[17]?r[17][2].map(i=>BDT.f[i]):[],
-      ms:ms.length?ms.map(p=>p[0]):null,msi:ms.length?ms:null,sub:r[17]?r[17][5]:[],h1:r[17]?r[17][3].map(x=>({lo:x[0],hi:x[1],h:x[2],m:x[3]?'largo':''})):[],c13:r[17]?r[17][4].map(x=>({lo:x[0],hi:x[1],n:x[2]})):[],ge:r[17]?r[17][6]:'',flag:r[18],msalto:r[19],
+      gf:r[17]?r[17][0].map(i=>BDT.g[i]):[],iv:r[17]?r[17][1].map(i=>BDT.b[i]):[],ivf:r[17]?r[17][2].map(i=>BDT.f[i]):[],ot:(r[17]&&r[17][7])||[],
+      ms:ms.length?ms.map(p=>p[0]):null,msi:ms.length?ms:null,sub:r[17]?r[17][5]:[],h1:r[17]?r[17][3].map(x=>({lo:x[0],hi:x[1],h:x[2],m:x[3]?'largo':''})):[],c13:r[17]?r[17][4].map(x=>({lo:x[0],hi:x[1],n:x[2]})):[],ge:r[17]?r[17][6]:'',flag:r[18],msalto:r[19],corr:r[20],casx:r[21],
       k:[r[1],r[2],r[3],r[4],r[0]].join(' ')};
     BDC.push(c);});
   return BDC;}
@@ -793,7 +795,7 @@ function bdFicha(ix){
   const c=bdAll().find(x=>x.i===1000+ix);if(!c)return;CFI=1000+ix;const r=c.r,hoje=new Date().toLocaleDateString('pt-BR');
   const rowd=(k,v)=>'<div class="cfr"><dt>'+k+'</dt><dd>'+v+'</dd></div>';
   const tx=v=>v&&v!=='-'?esc(v):'sem dado';
-  let h='<h2 class="scr">'+esc(c.n)+'</h2>'+(c.flag?'<div class="icwarn"><b>'+(c.flag[0]===1?'Erro corrigido no banco.':'Dado inconsistente no banco.')+'</b> '+esc(c.flag[1])+'</div>':'')
+  let h='<h2 class="scr">'+esc(c.n)+'</h2>'+(c.flag?'<div class="icwarn"><b>'+(BDFT[c.flag[0]]||'Confira este dado.')+'</b> '+esc(c.flag[1])+'</div>':'')+(c.corr?'<div class="icwarn"><b>Dados corrigidos no banco.</b><ul class="fatl">'+c.corr.map(x=>'<li>'+esc(x[0])+': o banco traz '+String(x[1]).replace('.',',')+' e uso '+String(x[2]).replace('.',',')+' ('+esc(x[3])+').</li>').join('')+'</ul></div>':'')
    +(c.msalto?'<div class="icwarn"><b>Confira os picos de MS.</b> Um dos picos do banco está acima da massa molar do composto. Pode ser erro de digitação.</div>':'')+(c.a.length?'<p class="scrsub">Também: '+c.a.map(esc).join(' · ')+'</p>':'')
    +'<figure class="cfs"><div>'+bdSvg(r[16])+'</div><figcaption>'+fmt(c.f)+(c.mw?' · '+String(c.mw).replace('.',',')+' g/mol':'')+'</figcaption></figure>'
    +'<div class="cfq"><div class="cfqi"><span>Estado a 25 °C</span><b>'+(c.est?esc(c.est):'sem dado')+'</b></div>'
@@ -806,14 +808,15 @@ function bdFicha(ix){
    +(c.gdh!=null?rowd('GDH','<b>'+c.gdh+'</b> <span class="mut">(anéis + ligações π)</span>'):'')
    +(c.M?rowd('M nominal','<b>'+c.M+'</b>'):'')
    +(bdEn(c.cas,bdNome(r[3]))?rowd('Nome em inglês','<span class="mono">'+esc(bdEn(c.cas,bdNome(r[3])))+'</span> <button class="btn ghost cpy" type="button" data-copy="'+esc(bdEn(c.cas,bdNome(r[3])))+'">Copiar</button>'):'')
-   +rowd('CAS','<span class="mono">'+esc(c.cas||'sem dado')+'</span>')
-   +(r[13]!==null?rowd('Solubilidade em água',r[13]+' g/100 mL'):'')+(r[14]!==null?rowd('Densidade',r[14]+' g/mL a 20 °C'):'')
+   +rowd(c.casx?'Identificador':'CAS','<span class="mono">'+esc(c.cas||'sem dado')+'</span>'+(c.casx&&c.cas?' <span class="mut">(não é um CAS válido; o CAS deste composto não foi encontrado)</span>':''))
+   +(r[13]!==null?rowd('Solubilidade em água',r[13]+' g/100 mL a 25 °C'):'')+(r[14]!==null?rowd('Densidade',r[14]+' g/mL a 20 °C'):'')
    +(r[10]?rowd('Derivados (PF °C)',esc(r[10])):'')+'</dl>';
   const iv=c.iv.map((b,k)=>b.concat([k])).filter(b=>b[4]).sort((a,b)=>Math.max(b[0],b[1])-Math.max(a[0],a[1]));
   h+='<details class="sec" open><summary>Infravermelho: bandas esperadas</summary>'
    +(iv.length?'<div class="tbl"><table class="obt nostk"><thead><tr><th>cm⁻¹</th><th>O que é</th></tr></thead><tbody>'+iv.map(b=>'<tr><td class="n">'+Math.min(b[0],b[1])+'–'+Math.max(b[0],b[1])+'</td><td>'+esc(b[2])+'</td></tr>').join('')+'</tbody></table></div>':'<p class="empty">Sem bandas esperadas para este composto.</p>')
    +'<p class="srcl">Faixas esperadas pelo grupo funcional da estrutura, não o espectro medido deste composto.</p>'
-   +(c.ivf.length?'<h3 style="margin:12px 0 4px">O que pode deslocar as bandas</h3><ul class="fatl">'+c.ivf.map(f=>'<li><b>'+esc(f[0])+'.</b> '+esc(f[1])+'</li>').join('')+'</ul>':'')+'</details>';
+   +(c.ivf.length?'<h3 style="margin:12px 0 4px">O que pode deslocar as bandas</h3><ul class="fatl">'+c.ivf.map(f=>'<li><b>'+esc(f[0])+'.</b> '+esc(f[1])+'</li>').join('')+'</ul>':'')
+   +((c.ot.length)?'<h3 style="margin:12px 0 4px">Overtones, combinações e ressonância de Fermi</h3><ul class="fatl">'+c.ot.map(o=>'<li><b>'+esc(o[0])+' ('+esc(o[1])+' cm⁻¹).</b> '+esc(o[2])+' <i>Fonte: '+esc(o[3])+'.</i></li>').join('')+'</ul>':'<p class="sm" style="margin:10px 0 0">Overtones diagnósticos: nenhum esperado para este composto.</p>')+'</details>';
   h+='<details class="sec"><summary>Espectrometria de massas</summary>'+(c.M?'<p>M nominal = <b>'+c.M+'</b> ('+(c.M%2?'ímpar: número ímpar de N':'par: zero ou número par de N')+').</p>':'');
   if(c.msi){const cc=Object.assign({},c,{M:Math.max(c.M||0,...c.ms)});
     h+='<div class="nmrwrap">'+msSpec(cc)+'<button class="zbtn" type="button" data-zoom>Ampliar</button></div><p>'+c.msi.map(p=>'<span class="pk">'+p[0]+' <small>'+p[1]+'%</small></span>').join('')+'</p>';}
@@ -825,7 +828,7 @@ function bdFicha(ix){
      +(c.h1.length?'<h4 style="margin:10px 0 4px">¹H: '+c.h1.length+(c.h1.length>1?' sinais':' sinal')+'</h4><div class="tbl"><table class="obt nostk"><thead><tr><th>δ (ppm)</th><th>H</th></tr></thead><tbody>'+c.h1.slice().sort((a,b)=>b.hi-a.hi).map(x=>'<tr><td class="n">'+fr(x.lo)+'–'+fr(x.hi)+(x.m?' (largo)':'')+'</td><td>'+x.h+'</td></tr>').join('')+'</tbody></table></div>':'')
      +(c.c13.length?'<h4 style="margin:10px 0 4px">¹³C: '+c.c13.length+(c.c13.length>1?' sinais':' sinal')+'</h4><div class="tbl"><table class="obt nostk"><thead><tr><th>δ (ppm)</th><th>C</th></tr></thead><tbody>'+c.c13.slice().sort((a,b)=>b.hi-a.hi).map(x=>'<tr><td class="n">'+x.lo+'–'+x.hi+'</td><td>'+x.n+'</td></tr>').join('')+'</tbody></table></div>':'')+'</details>';}
   h+='<details class="sec"><summary>SDBS (espectros reais)</summary><p>O SDBS tem IV, MS, ¹H-RMN e ¹³C-RMN medidos de muitos compostos. Busque pelo nome ou pelo CAS.</p><div class="row" style="margin:0 0 8px"><a class="btn" href="https://sdbs.db.aist.go.jp/" target="_blank" rel="noopener">Abrir o SDBS</a>'
-   +'<button class="btn ghost" type="button" data-copy="'+esc(bdEn(c.cas,bdNome(r[3]))||c.n)+'">Copiar nome em inglês</button><button class="btn ghost" type="button" data-copy="'+esc(c.cas)+'">Copiar CAS</button></div>'
+   +'<button class="btn ghost" type="button" data-copy="'+esc(bdEn(c.cas,bdNome(r[3]))||c.n)+'">Copiar nome em inglês</button>'+(c.casx?'':'<button class="btn ghost" type="button" data-copy="'+esc(c.cas)+'">Copiar CAS</button>')+'</div>'
    +'<p class="srcl">Ao usar dados do SDBS, cite: SDBS, National Institute of Advanced Industrial Science and Technology (AIST), https://sdbs.db.aist.go.jp, acessado em '+hoje+'.</p></details>';
   h+='<details class="sec"><summary>De onde vêm os dados</summary><p class="srcl"><span class="tag sv">Conferido: banco Analor</span> Nome, CAS, fórmula, massa molar, PF, PE, picos de MS, solubilidade, densidade e SMILES vêm do arquivo UNIV1_290926.DBF, passado pelo professor, sem alterar os valores. O banco não cita a fonte de cada número. O desenho da estrutura, o GDH, o grupo funcional, as subestruturas, as bandas de IV esperadas, o RMN estimado, o M nominal e o estado a 25 °C são calculados aqui a partir do SMILES e do PF e PE. O grupo de solubilidade é estimado pelas regras da tabela do professor e pela solubilidade em água do banco (que parece estar em g/100 mL, pelos valores conhecidos de clorofórmio, anilina e naftaleno). O banco não traz cor. Conferência feita em 10/11/2026: comparei a fórmula do banco com a da estrutura (SMILES) em todos os registros e, onde diferiam, usei o PubChem (pelo CAS) para decidir qual está certo. Numa amostra de 421 compostos do banco, fórmula e estrutura bateram com o PubChem em cerca de 99%.</p></details>';
   $('#cfB').innerHTML=h;

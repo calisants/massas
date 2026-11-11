@@ -62,6 +62,20 @@ def cids_de_nome(nome):
     if r.status_code != 200: return []
     return r.json().get('IdentifierList', {}).get('CID', [])[:6]
 
+def cactus(q):
+    """SMILES do NCI CACTUS (resolvedor independente do PubChem) para um nome ou CAS; '' se não achar."""
+    from urllib.parse import quote
+    for t in range(2):
+        try:
+            r = S.get('https://cactus.nci.nih.gov/chemical/structure/' + quote(q, safe='') + '/smiles', timeout=15)
+        except Exception:
+            continue
+        if r.status_code == 404: return ''
+        if r.status_code == 200:
+            x = r.text.strip().split('\n')[0].strip()
+            return '' if (not x or '<' in x) else x
+    return None
+
 def props(cids):
     d = load('props'); todo = sorted({str(c) for c in cids} - set(d)); print('props a buscar:', len(todo), flush=True)
     lotes = [todo[i:i + 100] for i in range(0, len(todo), 100)]

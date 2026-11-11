@@ -6,6 +6,7 @@ mais 1 voto para quem bate com a fórmula do banco e 1 para quem bate com a mass
 import json, os, re, sys
 H = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, H)
 import analor_ref as R
+import analor_bd as A
 from rdkit import Chem, RDLogger
 from rdkit.Chem import rdMolDescriptors, Descriptors
 from rdkit.Chem.inchi import MolToInchi
@@ -29,56 +30,107 @@ def elem(f):
         for e, n in re.findall(r'([A-Z][a-z]?)(\d*)', parte): t[e] = t.get(e, 0) + k * (int(n) if n else 1)
     return t
 
-def estrutura(L):
-    dc = R.load('cas'); P = R.load('props'); dn = R.load('nomes')
-    D = []; esc = {}
-    for i, r in enumerate(L):
-        pmol = R.A.num(r['PMOL']); fdb = r['FMOL']; mdb = mol(r['SMILES'])
-        cand = {}   # camada -> {votos, fontes, smiles, cids}
-        def add(key, v, fonte, smi=None, cid=None):
-            c = cand.setdefault(key, {'v': 0, 'fontes': [], 'smi': {}, 'cids': []})
-            if fonte not in c['fontes']: c['v'] += v; c['fontes'].append(fonte)
-            if smi: c['smi'].setdefault('db' if cid is None else str(cid), smi)
-            if cid is not None and cid not in c['cids']: c['cids'].append(cid)
-        if mdb: add(camada(mdb), 2, 'banco', r['SMILES'])
-        for cid in dc.get(r['CAS'], []):
+_CACHE = {k: R.load(k) for k in ('cas', 'props', 'nomes')}
+def pontuar(r, CX=None):
+    """Votação entre as estruturas candidatas de um registro. Devolve (ranking, candidatos)."""
+    dc, P, dn = _CACHE['cas'], _CACHE['props'], _CACHE['nomes']
+    pmol = A.num(r['PMOL']); fdb = r['FMOL']; mdb = mol(r['SMILES']); cand = {}
+    nome = (r['NCOM'] + ' ' + r['NINGLES']).upper()
+    def add(m, smi, parte, v, cid=None, ident=None):
+        c = cand.setdefault(camada(m), {'p': {}, 'smi': {}, 'cids': [], 'm': m})
+        c['p'][parte] = v; c['smi'].setdefault(ident or ('db' if cid is None else str(cid)), smi)
+        if cid is not None and cid not in c['cids']: c['cids'].append(cid)
+    if mdb: add(mdb, r['SMILES'], 'smiles', 1)
+    for cid in dc.get(r['CAS'], []):
+        p = P.get(str(cid)); m = mol(p['smi']) if p else None
+        if m: add(m, p['smi'], 'cas', 1, cid)
+    for k, parte, v in (('NINGLES', 'nome_en', 1.5), ('NIUP', 'nome_iupac', 0.5)):
+        for cid in dn.get(r[k], []) if r[k] else []:
             p = P.get(str(cid)); m = mol(p['smi']) if p else None
-            if m: add(camada(m), 2, 'cas', p['smi'], cid)
-        for k, fonte in (('NINGLES', 'nome_en'), ('NIUP', 'nome_iupac')):
-            for cid in dn.get(r[k], []) if r[k] else []:
-                p = P.get(str(cid)); m = mol(p['smi']) if p else None
-                if m: add(camada(m), 1, fonte, p['smi'], cid)
-        for key, c in cand.items():
-            smi = next(iter(c['smi'].values())); m = mol(smi)
-            c['f'] = rdMolDescriptors.CalcMolFormula(m); c['mw'] = Descriptors.MolWt(m)
-            c['b'] = 0
-            if fdb and elem(c['f']) == elem(fdb): c['b'] += 1
-            if pmol and abs(c['mw'] - pmol) <= 0.35: c['b'] += 1
-            c['tot'] = c['v'] + c['b']
-        rank = sorted(cand.items(), key=lambda kv: -kv[1]['tot'])
+            if m: add(m, p['smi'], parte, v, cid)
+    if CX:
+        for k, parte, v in (('NINGLES', 'cx_nome', 1.5), ('CAS', 'cx_cas', 1)):
+            smi = CX.get(r[k]) if r[k] else None; m = mol(smi) if smi else None
+            if m: add(m, smi, parte, v, ident=parte)
+    hidr = bool(re.search(r'HIDRAT|IDRATO|IDRATAD|HYDRAT', nome)); anid = bool(re.search(r'ANIDR|ANHYDR', nome))
+    for c in cand.values():
+        m = c['m']; c['f'] = rdMolDescriptors.CalcMolFormula(m); c['mw'] = Descriptors.MolWt(m)
+        if fdb and elem(c['f']) == elem(fdb): c['p']['formula'] = 1
+        if pmol and abs(c['mw'] - pmol) <= 0.35: c['p']['mw'] = 1
+        agua = '.O' in Chem.MolToSmiles(m) or Chem.MolToSmiles(m).startswith('O.') or Chem.MolToSmiles(m) == 'O'
+        if (hidr and agua) or (anid and not agua and (hidr or True) and not hidr): c['p']['hidrato'] = 1
+        c['tot'] = sum(c['p'].values())
+    return sorted(cand.items(), key=lambda kv: -kv[1]['tot']), cand
+
+COM_ESTEREO = re.compile(r'\b(D|L|DL|CIS|TRANS|R|S)\b|\(\+\)|\(-\)|[(][RS][)]', re.I)
+def escolhe_cid(c, r, mdb):
+    cids = c['cids']
+    if not cids: return None
+    if mdb is not None:
+        for ci in cids:
+            if inchi_est(mol(c['smi'][str(ci)])) == inchi_est(mdb): return ci
+    if COM_ESTEREO.search(r['NCOM'] + ' ' + r['NINGLES']):
+        for ci in cids:
+            if re.search(r'[@/\\]', c['smi'][str(ci)]): return ci
+    return cids[0]
+
+def dc_cas(cas):
+    """Nome e fórmula (PubChem) do que o CAS do banco aponta, para avisar quando o CAS é de outro composto."""
+    P = _CACHE['props']; v = _CACHE['cas'].get(cas, [])
+    return [P[str(v[0])].get('t'), P[str(v[0])].get('f')] if v and str(v[0]) in P else None
+
+def cand_all(r, CX):
+    return [c for _, c in pontuar(r, CX)[0]]
+
+def estrutura(L):
+    CX = R.load('cactus'); D = []; esc = {}
+    pre = [pontuar(r) for r in L]
+    duvida = []
+    for k, (rank, cand) in enumerate(pre):
+        r = L[k]
+        ok = rank and 'smiles' in rank[0][1]['p'] and rank[0][1]['tot'] - (rank[1][1]['tot'] if len(rank) > 1 else 0) >= 2 and 'formula' in rank[0][1]['p']
+        if not ok: duvida.append(k)
+    print('registros em dúvida (consulta ao CACTUS):', len(duvida), flush=True)
+    consultas = sorted({L[k][c] for k in duvida for c in ('NINGLES', 'CAS') if L[k][c] and (c == 'NINGLES' or R.CAS_OK.match(L[k][c]))})
+    CX = R.pool(consultas, R.cactus, 'cactus', workers=8)
+    for i, r in enumerate(L):
+        rank, cand = pontuar(r, CX if i in duvida else None)
+        pmol = A.num(r['PMOL']); fdb = r['FMOL']; mdb = mol(r['SMILES'])
         d = {'i': i, 'cas': r['CAS']}
         if not rank: d.update(est='sem_dado'); D.append(d); continue
-        top = rank[0]; seg = rank[1][1]['tot'] if len(rank) > 1 else 0
-        c = top[1]
-        d['fontes'] = c['fontes']; d['votos'] = c['tot']; d['concorrente'] = rank[1][1]['f'] if len(rank) > 1 else None
-        if c['tot'] - seg < 1:
-            d.update(est='indeciso'); D.append(d); continue
-        # estrutura final: a do banco se ela ganhou; senão a do PubChem (isomérica)
-        if 'banco' in c['fontes']:
-            smi = c['smi']['db']; cid = None
-            # escolhe, entre os CIDs desta camada, o que tem a mesma estereoquímica do banco (se houver)
-            for ci in c['cids']:
-                if inchi_est(mol(c['smi'][str(ci)])) == inchi_est(mdb): cid = ci; break
-            if cid is None and c['cids']: cid = c['cids'][0]
-            d['est'] = 'banco_ok' if elem(c['f']) == elem(fdb or c['f']) else 'formula'
-            d['estereo_igual'] = bool(cid is not None and inchi_est(mol(c['smi'][str(cid)])) == inchi_est(mdb))
+        top = rank[0][1]; seg = rank[1][1]['tot'] if len(rank) > 1 else 0
+        d['partes'] = top['p']; d['votos'] = round(top['tot'], 1); d['concorrente'] = rank[1][1]['f'] if len(rank) > 1 else None
+        nome_ev = lambda c: sum(v for k, v in c['p'].items() if k in ('nome_en', 'nome_iupac', 'cx_nome'))
+        cas_ev = lambda c: sum(v for k, v in c['p'].items() if k in ('cas', 'cx_cas'))
+        if top['tot'] - seg < 0.5 and len(rank) > 1 and rank[1][1]['tot'] == top['tot'] and elem(top['f']) == elem(rank[1][1]['f']):
+            a, b = top, rank[1][1]
+            if (nome_ev(b), cas_ev(b)) > (nome_ev(a), cas_ev(a)): top = b
+            if (nome_ev(b), cas_ev(b)) != (nome_ev(a), cas_ev(a)): seg = -1   # desempate: nome pesa mais que CAS, mesma fórmula
+        if top['tot'] - seg < 0.5 and seg != -1:
+            d.update(est='indeciso', f_cand=[top['f'], rank[1][1]['f']], smi_cand=[next(iter(top['smi'].values())), next(iter(rank[1][1]['smi'].values()))]); D.append(d); continue
+        if 'smiles' not in top['p'] and mdb is not None and fdb:
+            fs = rdMolDescriptors.CalcMolFormula(mdb); mws = Descriptors.MolWt(mdb)
+            if elem(fs) == elem(fdb) and pmol and abs(mws - pmol) <= 0.35 and elem(top['f']) != elem(fdb):
+                # fórmula, massa e SMILES do banco concordam entre si; só nome/CAS apontam outra coisa: mantém a estrutura e avisa
+                dbc = next((c for c in cand_all(r, CX if i in duvida else None) if 'smiles' in c['p']), None)
+                if dbc is not None:
+                    d['aviso_id'] = [(dc_cas(r['CAS']) or [top['smi'] and '', top['f']])[0] or '', top['f']]
+                    top = dbc
+        if 'smiles' in top['p']:
+            smi = top['smi']['db']; cid = escolhe_cid(top, r, mdb)
+            d['est'] = 'banco_ok' if (not fdb or elem(top['f']) == elem(fdb)) else 'formula'
+            d['estereo_igual'] = bool(cid is not None and inchi_est(mol(top['smi'][str(cid)])) == inchi_est(mdb))
         else:
-            cid = c['cids'][0]; smi = c['smi'][str(cid)]
-            d['est'] = 'troca'; d['estereo_igual'] = True
-        d.update(smi=smi, f=c['f'], mw=round(c['mw'], 2), cid=cid)
-        if pmol is not None and abs(c['mw'] - pmol) > 0.35: d['mw_banco'] = pmol
-        if d['est'] == 'formula' or (d['est'] == 'troca' and fdb and elem(c['f']) != elem(fdb)): d['f_banco'] = fdb
-        D.append(d); esc[str(i)] = cid
+            cid = escolhe_cid(top, r, None)
+            smi = top['smi'][str(cid)] if cid is not None else next(iter(top['smi'].values()))
+            d['est'] = 'troca' if mdb is not None else 'preenchida'; d['estereo_igual'] = cid is not None
+        d.update(smi=smi, f=top['f'], mw=round(top['mw'], 2), cid=cid)
+        if 'cas' not in top['p'] and r['CAS'] and dc_cas(r['CAS']):
+            d['cas_alt'] = dc_cas(r['CAS'])
+        if pmol is not None and abs(top['mw'] - pmol) > 0.35: d['mw_banco'] = pmol
+        if fdb and elem(top['f']) != elem(fdb): d['f_banco'] = fdb
+        D.append(d)
+        if cid is not None: esc[str(i)] = cid
     return D, esc
 
 def resumo(D):
@@ -146,7 +198,7 @@ def experimentais(L, D):
         liberado = d.get('estereo_igual') or not tem_estereo(d['smi'])
         for chave, rotulo, campo, ebul in (('Melting Point', 'pf', 'PF', False), ('Boiling Point', 'pe', 'PE', True)):
             refs = temps(e.get(chave, []), ebul)
-            txt = r[campo + 'CARAC']; dbv = R.A.valor(txt) if R.A.valor(txt) is not None else R.A.num(r[campo])
+            txt = r[campo + 'CARAC']; dbv = A.valor(txt) if A.valor(txt) is not None else A.num(r[campo])
             s = stat.setdefault(rotulo, {'comparaveis': 0, 'ate5': 0, 'diverge': 0, 'sem_ref': 0, 'estereo': 0})
             if dbv is None or not isinstance(dbv, (int, float)): continue
             if not refs: s['sem_ref'] += 1; continue
@@ -159,7 +211,7 @@ def experimentais(L, D):
             d.setdefault('exp', {})[rotulo] = {'banco': dbv, 'ref': ref, 'n': len(g), 'de': len(refs), 'fontes': sorted({f for v, f in refs if abs(v - ref) <= 3})[:4]}
             cand.append((d['i'], rotulo))
         dens_refs = densidades(e.get('Density', []))
-        dd = R.A.num(r['DENS_20'])
+        dd = A.num(r['DENS_20'])
         if dens_refs and dd and liberado:
             g = grupo([v for v, _ in dens_refs], lambda v: v * 0.02)
             if len(g) >= 3 and len(g) / len(dens_refs) >= 0.7:
@@ -183,11 +235,26 @@ def experimentais(L, D):
         else: x['acao'] = 'mantem'                                                 # fontes em conflito
     return stat
 
+FONTE = {'cas': 'o CAS no PubChem', 'cx_cas': 'o CAS no NCI CACTUS', 'nome_en': 'o nome em inglês no PubChem', 'cx_nome': 'o nome em inglês no NCI CACTUS', 'nome_iupac': 'o nome IUPAC no PubChem'}
+def exportar(L, D):
+    """Grava analor_conf.json: só o que a conferência mudou ou avisou (o analor_bd.py aplica isto ao gerar o banco)."""
+    out = []
+    for d in D:
+        c = {k: d[k] for k in ('i', 'cas', 'est', 'smi', 'f', 'mw', 'f_banco', 'mw_banco', 'cid', 'aviso_id', 'exp') if k in d}
+        c['fontes'] = [FONTE[k] for k in d.get('partes', {}) if k in FONTE]
+        if d['est'] == 'banco_ok' and not any(k in c for k in ('mw_banco', 'aviso_id', 'exp')): continue
+        if d['est'] == 'banco_ok': c.pop('smi', None)
+        out.append(c)
+    json.dump({'data': '11/11/2026', 'r': out}, open(os.path.join(H, 'analor_conf.json'), 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+    print('analor_conf.json:', len(out), 'registros')
+
 if __name__ == '__main__':
     L = R.registros(sys.argv[2])
     if sys.argv[1] == 'estrutura':
         D, esc = estrutura(L); resumo(D)
         R.save('decisao', D); R.save('escolha', esc)
+    elif sys.argv[1] == 'exportar':
+        exportar(L, R.load('decisao'))
     elif sys.argv[1] == 'exp':
         D = R.load('decisao'); stat = experimentais(L, D); print(json.dumps(stat, indent=1))
         from collections import Counter

@@ -246,6 +246,44 @@ def ring_pattern(m):
         return None
     return None
 
+_OT_ALD = _p("[CX3H1](=O)[#6]"); _OT_CET = _p("[#6][CX3](=O)[#6]"); _OT_CO = _p("[CX3]=[OX1]")
+S_BENZ = "Smith, The Benzene Fingers, Spectroscopy, 2016"
+S_ALD = "Smith, The C=O Bond, parte II: aldeídos, Spectroscopy"
+S_CET = "quimicaorganica.org, espectro IV de cetonas"
+def overtones(m):
+    """Overtones, combinações e ressonância de Fermi esperados, por grupo. Cada item: [tipo, faixa em cm⁻¹, o que é, fonte]. Lista vazia = nada que sirva de diagnóstico."""
+    out = []
+    aneis = [r for r in m.GetRingInfo().AtomRings() if len(r) == 6 and all(m.GetAtomWithIdx(i).GetSymbol() == 'C' and m.GetAtomWithIdx(i).GetIsAromatic() for i in r)]
+    if aneis:
+        iso = []
+        for ring in aneis:
+            at = [m.GetAtomWithIdx(i) for i in ring]
+            if any(sum(1 for n in a.GetNeighbors() if n.GetIsAromatic()) != 2 for a in at): continue
+            iso.append([k for k, a in enumerate(at) if a.GetTotalNumHs() == 0])
+        if not iso:
+            out.append(["Combinação e harmônico do anel", "2000–1650", "Anel fundido (naftaleno e semelhantes): não achei padrão tabelado para esta região.", S_BENZ])
+        else:
+            subs = iso[0]; n = len(subs); pad = None
+            if n == 1: pad = ("anel monossubstituído", "4 picos fracos, bem separados")
+            elif n == 2:
+                d = min((subs[0] - subs[1]) % 6, (subs[1] - subs[0]) % 6)
+                pad = {1: ("anel orto-dissubstituído", "4 picos fracos, juntos"), 2: ("anel meta-dissubstituído", "3 picos fracos"), 3: ("anel para-dissubstituído", "2 picos fracos")}[d]
+            elif n == 3:
+                g = sorted([subs[1] - subs[0], subs[2] - subs[1], 6 - (subs[2] - subs[0])])
+                pad = {(1, 1, 4): ("anel 1,2,3-trissubstituído", "4 picos fracos, bem separados"), (1, 2, 3): ("anel 1,2,4-trissubstituído", "2 picos fracos, bem separados"), (2, 2, 2): ("anel 1,3,5-trissubstituído", "2 picos fracos, juntos")}.get(tuple(g))
+            if pad:
+                out.append(["Combinação e harmônico do anel", "2000–1650", pad[0][0].upper() + pad[0][1:] + ": " + pad[1] + ". São as chamadas benzene fingers: o número, o espaçamento e a altura dos picos ajudam a confirmar o padrão de substituição, junto com a C–H fora do plano (900–650).", S_BENZ])
+            else:
+                out.append(["Combinação e harmônico do anel", "2000–1650", "Anel com " + str(n) + " substituintes: não achei padrão tabelado para esta região.", S_BENZ])
+            if len(iso) > 1: out[-1][2] += " Há mais de um anel isolado; os padrões se somam."
+    if m.HasSubstructMatch(_OT_ALD):
+        out.append(["Ressonância de Fermi (harmônico)", "2850–2700", "Aldeído: aparecem duas bandas de C–H do aldeído, perto de 2820 e 2720. A banda de estiramento C–H interage com o harmônico da deformação C–H do aldeído (fundamental em ~1390). Nem todo aldeído mostra as duas, mas a de ~2720 é a mais útil porque fica livre dos C–H alifáticos.", S_ALD])
+    if m.HasSubstructMatch(_OT_CET):
+        out.append(["Harmônico do C=O (2 × ν)", "3500–3350", "Cetona: banda fraca na região de O–H e N–H. É o dobro da frequência do C=O, não é um grupo O–H. Serve para não ser enganado por uma banda fraquinha acima de 3300 num composto sem O–H.", S_CET])
+    elif m.HasSubstructMatch(_OT_CO):
+        out.append(["Harmônico do C=O (2 × ν)", "~3400–3500", "Composto com C=O: o dobro da frequência do C=O cai perto de 3400–3500, fraco. Faixa estimada pelo dobro da banda do C=O; não achei faixa tabelada para este tipo de carbonila.", "estimado, sem fonte tabelada"])
+    return out
+
 def iv_bands(m):
     out = []; grupos = []
     for pat, lab, bands in IVP:
@@ -688,7 +726,7 @@ def build_comp(svgfn, EXD):
         grupos, bands, ivf = iv_bands(m)
         d = dict(i=i, n=nome, a=alts, f=f, mw=round(Descriptors.MolWt(m), 2), M=M, smi=smi, s=svgfn(smi, 170, 120),
                  cas=cas, est=est, cor=cor, pf=pf, pe=pe, g=g, ex=exn, obs=obs, gdh=gdh(m),
-                 gf=grupos, iv=[list(b) for b in bands], ivf=[list(x) for x in ivf], h1=nmr_h(m), c13=nmr_c(m), sub=subestruturas(m))
+                 gf=grupos, iv=[list(b) for b in bands], ivf=[list(x) for x in ivf], ot=overtones(m), h1=nmr_h(m), c13=nmr_c(m), sub=subestruturas(m))
         d["sn"] = svg_numerado(m, d["c13"]); d["si"] = _hl_svg(m, 300, 200, 40); d["ivat"] = [iv_atoms(m, b[2]) for b in bands]; liga_h_c(m, d["h1"], d["c13"])
         if exn:
             e = exm[exn]; assert e["M"] == M or True

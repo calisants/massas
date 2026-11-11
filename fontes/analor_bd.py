@@ -66,24 +66,33 @@ def grupo_sol(m, grupos, sol, nC):
     if oxi or P('[CX3]=[CX3]') or P('C#C'): return 'N'
     if P('c') and not oxi: return 'I'
     return 'I' if not P('[CX3]=[CX3]') else 'N'
-PUB=json.load(open(__import__('os').path.join(__import__('os').path.dirname(__file__) or '.','analor_pubchem.json')))['d']
-def _el(f):
-    el={}
-    for e,n in re.findall(r'([A-Z][a-z]?)(\d*)',f.split('.')[0]): el[e]=el.get(e,0)+(int(n) if n else 1)
-    return el
-def confere(r,m):
-    """Compara a fórmula do banco com a do SMILES. Se diferem, usa o PubChem (pelo CAS) para saber qual dos dois está certo.
-    Devolve [código, texto, fórmula certa]: 1 = fórmula do banco corrigida pela estrutura; 2 = estrutura contradiz a fórmula (estrutura não usada); 3 = não deu para decidir (estrutura não usada)."""
-    from rdkit.Chem import rdMolDescriptors
-    if '.' in r[4] or '.' in r[12] or not r[4]: return None
-    sf=rdMolDescriptors.CalcMolFormula(m)
-    if _el(sf)==_el(r[4]): return None
-    p=PUB.get(r[0])
-    pf=p['f'] if p else None
-    base='A fórmula do banco ('+r[4]+') não bate com a estrutura do banco ('+sf+'). '
-    if pf and _el(pf)==_el(sf): return [1,base+'O PubChem (CAS '+r[0]+') confirma '+pf+'; uso essa fórmula.',sf]
-    if pf and _el(pf)==_el(r[4]): return [2,base+'O PubChem (CAS '+r[0]+') confirma a fórmula, então a estrutura do banco está errada e não é usada aqui.',sf]
-    return [3,base+('O PubChem indica '+pf+', que não bate com nenhuma das duas. ' if pf else 'Não achei esse CAS no PubChem. ')+'Não dá para saber qual está certo, então a estrutura não é usada aqui.',sf]
+CONF={}
+_p=__import__('os').path.join(__import__('os').path.dirname(__file__) or '.','analor_conf.json')
+if __import__('os').path.exists(_p): CONF={c['i']:c for c in json.load(open(_p,encoding='utf-8'))['r']}
+def cas_valido(c):
+    """CAS com formato e dígito verificador certos."""
+    if not re.fullmatch(r'\d{2,7}-\d\d-\d',c or ''): return False
+    d=c.replace('-',''); return sum(int(x)*(i+1) for i,x in enumerate(reversed(d[:-1])))%10==int(d[-1])
+def _fontes(c):
+    f=c.get('fontes') or []
+    return ' e '.join(f) if f else 'as fontes consultadas'
+def aplicar(r,c):
+    """Aplica a conferência (analor_conf.json, feita contra PubChem e NCI CACTUS) a uma linha. Devolve [código, texto] ou None.
+    1 = fórmula corrigida; 2 = estrutura trocada; 3 = estrutura que faltava, preenchida; 5 = nome/CAS apontam para outro composto."""
+    from rdkit import Chem
+    from rdkit.Chem import Descriptors
+    est=c['est']
+    if est=='banco_ok':
+        if 'aviso_id' in c:
+            return [5,'O nome e o CAS do banco apontam para '+c['aviso_id'][0]+' ('+c['aviso_id'][1]+'), mas a fórmula, a massa e a estrutura do banco são de outro composto. Mantive a estrutura do banco. Confira com o professor qual dos dois vale.']
+        return None
+    if est=='formula':
+        antes=r[4]; r[4]=c['f']; r[5]=c['mw']
+        return [1,'A fórmula do banco ('+antes+') não bate com a estrutura ('+c['f']+'). A estrutura está certa, conferida com '+_fontes(c)+'. Uso a fórmula da estrutura.']
+    smi=c['smi']; antes=r[12]; fa=r[4]
+    r[12]=smi; r[16]=desenho(smi); r[4]=c['f']; r[5]=c['mw']
+    if est=='preenchida': return [3,'O banco não traz a estrutura deste composto. Usei a de '+_fontes(c)+' (CID '+str(c.get('cid'))+' no PubChem).']
+    return [2,'A estrutura do banco não bate com '+_fontes(c)+'. Usei a estrutura do PubChem (CID '+str(c.get('cid'))+'), que bate com o nome e com a fórmula '+c['f']+'.'+(' A fórmula do banco ('+fa+') também foi corrigida.' if c.get('f_banco') else '')]
 def linha(r):
     ms=[[num(r['MS%d'%i]),num(r['IMS%d'%i])] for i in range(1,9)]
     return [r['CAS'],r['NCOM'],r['NIUP'],r['NINGLES'],r['FMOL'],num(r['PMOL']),valor(r['PFCARAC']) if valor(r['PFCARAC']) is not None else num(r['PF']),valor(r['PECARAC']) if valor(r['PECARAC']) is not None else num(r['PE']),r['PFCARAC'],r['PECARAC'],r['PFDER'],[m for m in ms if m[0]],r['SMILES'],num(r['SOL_H2O']),(lambda d:d if d is not None and 0.2<d<6 else None)(num(r['DENS_20'])),1 if r['NO_IFRJ'] else 0,desenho(r['SMILES'])]
@@ -98,15 +107,20 @@ if __name__=='__main__':
         if r0['CAS'] and k in vistos: continue   # registro repetido idêntico
         vistos.add(k); L.append(linha(r0))
     BT={};GT={};FT={}
-    for r in L:
+    for ix,r in enumerate(L):
+        c=CONF.get(ix); flag=None; corr=[]
+        if c:
+            assert c['cas']==r[0],(ix,c['cas'],r[0])
+            if 'mw_banco' in c and c['est']=='banco_ok': r[5]=c['mw']
+            if c['est']!='banco_ok' or 'aviso_id' in c: flag=aplicar(r,c)
+            if 'mw_banco' in c: corr.append(['Massa molar',c['mw_banco'],c['mw'],'recalculada pela fórmula'])
+            for k,(nome,i1,i2) in {'pf':('Ponto de fusão',6,8),'pe':('Ponto de ebulição',7,9),'dens':('Densidade',14,None)}.items():
+                x=(c.get('exp') or {}).get(k)
+                if x and x.get('acao')=='corrige':
+                    r[i1]=x['ref']
+                    if i2: r[i2]=str(x['ref']).rstrip('0').rstrip('.') if '.' in str(x['ref']) else str(x['ref'])
+                    corr.append([nome,x['banco'],x['ref'],'PubChem: '+str(x['n'])+' de '+str(x['de'])+' valores concordam'+('; NIST confirma' if x.get('nist') is not None and abs(x['nist']-x['ref'])<=6 else '')])
         m=Chem.MolFromSmiles(r[12]) if r[12] else None
-        flag=None
-        if m is not None:
-            flag=confere(r,m)
-            if flag and flag[0]==1:
-                r[4]=flag[2]; r[5]=round(Descriptors.MolWt(m),2)
-            if flag and flag[0]>=2:
-                r[16]=None; r[12]=''; m=None
         msalto=1 if (r[5] and any(p[0]>r[5]+4 for p in r[11])) else 0   # pico de MS acima da massa molar (+4 para isótopos)
         if m is None:
             r.append(None)
@@ -117,9 +131,11 @@ if __name__=='__main__':
             c13=[[x['lo'],x['hi'],x['n']] for x in compostos.nmr_c(m)]
             sub=compostos.subestruturas(m)
             ge=grupo_sol(m,g,r[13],nC)
-            r.append([[GT.setdefault(x,len(GT)) for x in g],[BT.setdefault(tuple(x[:5]),len(BT)) for x in b],[FT.setdefault(tuple(x),len(FT)) for x in f]]+[h1,c13,sub,ge])
-        r.append(flag[:2] if flag else None)   # r[18]: aviso de inconsistência do banco
+            r.append([[GT.setdefault(x,len(GT)) for x in g],[BT.setdefault(tuple(x[:5]),len(BT)) for x in b],[FT.setdefault(tuple(x),len(FT)) for x in f]]+[h1,c13,sub,ge,compostos.overtones(m)])
+        r.append(flag)                          # r[18]: [código, texto] da conferência
         r.append(msalto)                        # r[19]
+        r.append(corr or None)                  # r[20]: dados numéricos corrigidos [campo, antes, depois, fonte]
+        r.append(0 if cas_valido(r[0]) else 1)  # r[21]: 1 = o identificador não é um CAS (nem o dígito verificador fecha)
     tab={'b':list(BT),'g':list(GT),'f':list(FT)}
     json.dump({'t':tab,'r':L},open('analor_bd.json','w',encoding='utf-8'),ensure_ascii=False,separators=(',',':'))
     print(len(L),'compostos',len(BT),'bandas distintas')
