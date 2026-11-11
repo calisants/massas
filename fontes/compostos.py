@@ -250,6 +250,8 @@ _OT_ALD = _p("[CX3H1](=O)[#6]"); _OT_CET = _p("[#6][CX3](=O)[#6]"); _OT_CO = _p(
 S_BENZ = "Smith, The Benzene Fingers, Spectroscopy, 2016"
 S_ALD = "Smith, The C=O Bond, parte II: aldeídos, Spectroscopy"
 S_CET = "quimicaorganica.org, espectro IV de cetonas"
+S_AMP = "Smith, Organic Chemistry, espectroscopia de aminas (LibreTexts)"
+_OT_AMP = _p("[NX3;H2;!$(N[C,S]=[O,S])][#6]")
 def overtones(m):
     """Overtones, combinações e ressonância de Fermi esperados, por grupo. Cada item: [tipo, faixa em cm⁻¹, o que é, fonte]. Lista vazia = nada que sirva de diagnóstico."""
     out = []
@@ -282,6 +284,8 @@ def overtones(m):
         out.append(["Harmônico do C=O (2 × ν)", "3500–3350", "Cetona: banda fraca na região de O–H e N–H. É o dobro da frequência do C=O, não é um grupo O–H. Serve para não ser enganado por uma banda fraquinha acima de 3300 num composto sem O–H.", S_CET])
     elif m.HasSubstructMatch(_OT_CO):
         out.append(["Harmônico do C=O (2 × ν)", "~3400–3500", "Composto com C=O: o dobro da frequência do C=O cai perto de 3400–3500, fraco. Faixa estimada pelo dobro da banda do C=O; não achei faixa tabelada para este tipo de carbonila.", "estimado, sem fonte tabelada"])
+    if m.HasSubstructMatch(_OT_AMP):
+        out.append(["Ressonância de Fermi (harmônico)", "3250–3150", "Amina primária: banda fraca perto de 3200, ao lado das duas bandas de N–H. Vem da interação do harmônico da deformação N–H (~1600) com o estiramento N–H simétrico. Não é outro grupo.", S_AMP])
     return out
 
 def iv_bands(m):

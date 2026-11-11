@@ -732,6 +732,7 @@ function bdScoreIV(c,Qi,meio){
     if(/^[ON]–H/.test(b.t)){tol=30;if(meio==='sol'||meio==='gas')hi=b.t[0]==='O'?3680:3520;}
     if(/^C=O/.test(b.t)){if(meio==='gas')hi+=35;else if(meio==='sol'&&/ácido/.test(b.t+c.n+c.gf.join(' ')))hi+=15;}
     return o>=lo-tol&&o<=hi+tol;};
+  (c.ot||[]).forEach(o=>{const m=String(o[1]).match(/(\d{3,4})\D+(\d{3,4})/);if(m)B.push({lo:Math.min(+m[1],+m[2]),hi:Math.max(+m[1],+m[2]),t:'overtone',k:false,l:false});});
   const used=new Set(),miss=[];let keys=0,hit=0;
   /* cada banda lida explica só uma banda esperada; as bandas-chave escolhem primeiro e pegam a mais perto do centro da faixa */
   B.filter(b=>b.k).forEach(b=>{keys++;let best=-1,bd=1e9;
