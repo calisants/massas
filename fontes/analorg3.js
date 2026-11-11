@@ -799,6 +799,7 @@ function bdFicha(ix){
    +'<div class="cfqi"><span>Ponto de ebulição</span><b>'+tx(r[9])+(r[9]&&r[9]!=='-'?' °C':'')+'</b></div></div>'
    +'<dl class="cfd">'
    +rowd('Grupo funcional',esc(c.gf.join(', ')||'sem grupo funcional reconhecido'))
+   +(ringTxt(c)?rowd('Anel aromático',esc(ringTxt(c))+' <span class="mut">(vale para o anel benzênico isolado; vê-se nos overtones, 2000–1650 cm⁻¹)</span>'):'')
    +(c.ge?rowd('Grupo de solubilidade (estimado)','<span class="gl2">'+SOLNM[c.ge]+'</span> '+esc(gTxt(c.ge))+' <span class="tag sm">estimado</span>'):'')
    +(c.sub.length?rowd('Subestruturas',esc(c.sub.map(k=>{const q=SUBL.find(x=>x[0]===k);return q?q[1].replace(/ \(.*/,''):k;}).join(', '))):'')
    +(c.gdh!=null?rowd('GDH','<b>'+c.gdh+'</b> <span class="mut">(anéis + ligações π)</span>'):'')

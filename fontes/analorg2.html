@@ -1,12 +1,13 @@
   <!-- ===== Analorg v2 ===== -->
   <section id="p-cp" role="tabpanel" aria-labelledby="t-cp" hidden>
     <h2 class="scr">Compostos</h2>
-    <p class="scrsub">110 compostos do app e mais de 4 mil do banco Analor. Busque por nome, fórmula ou CAS.</p>
+    <p class="scrsub">Mais de 100 compostos do app e mais de 4 mil do banco Analor. Busque por nome, fórmula ou CAS.</p>
     <div class="chipbar rseg msub" role="group" aria-label="Compostos"><button class="chip" type="button" data-go="p-cp" aria-pressed="false">Fichas</button><button class="chip" type="button" data-go="p-ic" aria-pressed="false">Identificar</button><button class="chip" type="button" data-go="p-es" aria-pressed="false">Espectro novo</button></div>
     <div class="cpq">
       <input type="search" id="cpQ" placeholder="Nome, fórmula ou CAS" aria-label="Buscar composto" autocomplete="off">
       <label>Estado<select id="cpE"><option value="">Todos</option><option value="líquido">Líquido</option><option value="sólido">Sólido</option></select></label>
       <label>Solubilidade<select id="cpG"><option value="">Todos</option></select></label>
+      <label>Anel aromático<select id="cpR"><option value="">Todos</option><option value="mono">Monossubstituído</option><option value="orto">Orto (1,2)</option><option value="meta">Meta (1,3)</option><option value="para">Para (1,4)</option><option value="t123">1,2,3-tri</option><option value="t124">1,2,4-tri</option><option value="t135">1,3,5-tri</option><option value="nenhum">Sem anel benzênico</option></select></label>
       <button class="chip" type="button" id="cpF" aria-pressed="false" aria-label="Mostrar só favoritos">★ Favoritos</button>
     </div>
     <p class="hint" id="cpN"></p>

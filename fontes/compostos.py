@@ -119,6 +119,15 @@ RAW = [
  ("cânfora", [], "CC1(C)C2CCC1(C)C(=O)C2", "76-22-2", "sólido", "branco", 176, 204, "N", None, "sublima; cheiro característico"),
  ("ácido 5-formilsalicílico", ["ácido formilsalicílico", "ácido 5-formil-2-hidroxibenzoico", "5-formilsalicylic acid"], "O=Cc1ccc(O)c(c1)C(=O)O", "616-76-2", "sólido", "branco a amarelo", 250, None, "A1", None, "decompõe na fusão (PF 250 °C com decomposição, TCI e Sigma-Aldrich); aldeído, fenol e ácido carboxílico na mesma molécula"),
  ("1-nitroso-2-naftol", ["1-nitroso-2-naphthol", "1-nitrosonaftalen-2-ol", "α-nitroso-β-naftol"], "Oc1ccc2ccccc2c1N=O", "131-91-9", "sólido", "laranja a marrom (TCI); amarelo-amarronzado (Wikipedia)", 107, None, "A2", None, "PF 106 a 110 °C (TCI); fenol com grupo nitroso; forma quelatos coloridos com Fe(II) e Co(II); tautomeria nitroso/oxima"),
+ ("m-xileno", ["1,3-dimetilbenzeno", "meta-xileno"], "Cc1cccc(C)c1", "108-38-3", "líquido", "incolor", None, 139, "I", None, "meta-dissubstituído; PF não consta no banco Analor; grupo de solubilidade previsto pela regra (hidrocarboneto), não medido"),
+ ("m-cresol", ["3-metilfenol", "meta-cresol"], "Cc1cccc(O)c1", "108-39-4", "líquido", "incolor ou amarelo", 9, 203, "A2", None, "meta-dissubstituído; PF perto da temperatura ambiente; dados do banco Analor"),
+ ("resorcinol", ["benzeno-1,3-diol", "1,3-di-hidroxibenzeno"], "Oc1cccc(O)c1", "108-46-3", "sólido", "branco", 110, None, "S1", None, "meta-dissubstituído; PE não consta no banco Analor; grupo previsto pela regra (muito solúvel em água), não medido"),
+ ("m-nitroanilina", ["3-nitroanilina", "meta-nitroanilina"], "Nc1cccc(c1)[N+]([O-])=O", "99-09-2", "sólido", "amarelo", 114, 306, "MN", None, "meta-dissubstituído; base muito fraca; grupo previsto por analogia com a 4-nitroanilina"),
+ ("ácido 3-nitrobenzoico", ["ácido m-nitrobenzoico"], "OC(=O)c1cccc(c1)[N+]([O-])=O", "121-92-6", "sólido", "branco ou amarelo", 141, None, "A1", None, "meta-dissubstituído; dados do banco Analor"),
+ ("m-toluidina", ["3-metilanilina", "meta-toluidina"], "Cc1cccc(N)c1", "108-44-1", "líquido", "incolor ou amarelo", None, 203, "B", None, "meta-dissubstituído; PF não consta no banco Analor; grupo previsto por analogia com a anilina"),
+ ("1,3-dinitrobenzeno", ["m-dinitrobenzeno"], "O=[N+]([O-])c1cccc(c1)[N+]([O-])=O", "99-65-0", "sólido", "amarelo", 90, 297, "N", None, "meta-dissubstituído; tóxico; grupo previsto por analogia com o nitrobenzeno"),
+ ("m-diclorobenzeno", ["1,3-diclorobenzeno"], "Clc1cccc(Cl)c1", "541-73-1", "líquido", "incolor", -24, 173, "I", None, "meta-dissubstituído; grupo previsto por analogia com o clorobenzeno"),
+ ("ácido isoftálico", ["ácido benzeno-1,3-dicarboxílico"], "OC(=O)c1cccc(c1)C(O)=O", "121-91-5", "sólido", "incolor", 348, None, "A1", None, "meta-dissubstituído; PE não consta no banco Analor; grupo previsto pela regra de ácido carboxílico"),
 ]
 
 # Picos de MS (EI, 70 eV) escritos à mão a partir de espectros comuns. Os dos exercícios 1 a 12 vêm do EX (lousa/SDBS) e não passam por aqui.

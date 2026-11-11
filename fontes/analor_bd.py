@@ -139,6 +139,7 @@ if __name__=='__main__':
         vistos.add(k); L.append(linha(r0))
     BT={};GT={};FT={}
     ESCOLHA=json.load(open('ref_cache/escolha.json'))
+    CASFIX=json.load(open('cas_corrigido.json',encoding='utf-8'))
     for ix,r in enumerate(L):
         c=CONF.get(ix); flag=None; corr=[]
         if c:
@@ -152,6 +153,10 @@ if __name__=='__main__':
                     r[i1]=x['ref']
                     if i2: r[i2]=str(x['ref']).rstrip('0').rstrip('.') if '.' in str(x['ref']) else str(x['ref'])
                     corr.append([nome,x['banco'],x['ref'],'PubChem: '+str(x['n'])+' de '+str(x['de'])+' valores concordam'+('; NIST confirma' if x.get('nist') is not None and abs(x['nist']-x['ref'])<=6 else '')])
+        if str(ix) in CASFIX:
+            o,n,fonte=CASFIX[str(ix)]
+            assert o==r[0],(ix,o,r[0])
+            r[0]=n; corr.append(['CAS',o or '(vazio)',n,fonte])
         m=Chem.MolFromSmiles(r[12]) if r[12] else None
         msalto=1 if (r[5] and any(p[0]>r[5]+4 for p in r[11])) else 0   # pico de MS acima da massa molar (+4 para isótopos)
         if m is None:

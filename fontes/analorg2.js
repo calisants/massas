@@ -20,7 +20,7 @@ function cpInit(){
   const byName=[...COMP].sort((a,b)=>a.n.localeCompare(b.n,'pt'));
   byName.forEach(c=>{[sel,ex].forEach(s=>{const o=document.createElement('option');o.value=c.i;o.textContent=c.n;s.appendChild(o);});});
   $('#cpF').addEventListener('click',()=>{CPFAV=!CPFAV;$('#cpF').setAttribute('aria-pressed',CPFAV?'true':'false');cpDraw();});
-  $('#cpQ').addEventListener('input',cpDraw);['#cpE','#cpG'].forEach(id=>$(id).addEventListener('change',cpDraw));
+  $('#cpQ').addEventListener('input',cpDraw);['#cpE','#cpG','#cpR'].forEach(id=>$(id).addEventListener('change',cpDraw));
   sel.onchange=rmDraw;
   cpDraw();rmDraw();
 }
@@ -34,15 +34,15 @@ function cpLetras(){const box=$('#cpA');if(!box||box.dataset.ok)return;box.datas
   $('#cpMore').addEventListener('click',()=>{BDN+=60;cpDraw({mais:1});});}
 function cpDraw(opt){
   cpLetras();if(!(opt&&opt.mais))BDN=60;
-  const q=norm2($('#cpQ').value),e=$('#cpE').value,g=$('#cpG').value;
-  const l=COMP.filter(c=>(!q||[c.n,...c.a,c.f,c.cas].some(x=>norm2(x).includes(q)))&&(!e||c.est.indexOf(e)===0)&&(!g||c.g===g)&&(!CPFAV||favHas(c))&&(!BDLET||bdLetra(c.n)===BDLET)).sort((a,b)=>(favHas(b)-favHas(a))||a.n.localeCompare(b.n,'pt'));
+  const q=norm2($('#cpQ').value),e=$('#cpE').value,g=$('#cpG').value,rg=$('#cpR').value;
+  const l=COMP.filter(c=>(!q||[c.n,...c.a,c.f,c.cas].some(x=>norm2(x).includes(q)))&&(!e||c.est.indexOf(e)===0)&&(!g||c.g===g)&&(!rg||ringPat(c)===rg)&&(!CPFAV||favHas(c))&&(!BDLET||bdLetra(c.n)===BDLET)).sort((a,b)=>(favHas(b)-favHas(a))||a.n.localeCompare(b.n,'pt'));
   /* banco do professor: aparece sem precisar buscar, por letra e em páginas de 60 (favoritos e a letra "todas" só valem para os do app) */
-  let lb=[];if(!CPFAV){lb=bdAll().filter(c=>(!q||norm2(c.k).includes(q))&&(!e||c.est.indexOf(e)===0)&&(!g||c.ge===g)&&(!BDLET||bdLetra(c.n)===BDLET)).sort((a,b)=>bdChave(a.n).localeCompare(bdChave(b.n),'pt'));}
+  let lb=[];if(!CPFAV){lb=bdAll().filter(c=>(!q||norm2(c.k).includes(q))&&(!e||c.est.indexOf(e)===0)&&(!g||c.ge===g)&&(!rg||ringPat(c)===rg)&&(!BDLET||bdLetra(c.n)===BDLET)).sort((a,b)=>bdChave(a.n).localeCompare(bdChave(b.n),'pt'));}
   const nb=lb.length;lb=lb.slice(0,BDN);
   $('#cpN').textContent=l.length+' do app'+(!CPFAV?' + '+nb+' do banco Analor'+(nb>BDN?' (mostrando '+BDN+')':'')+(g?'. No banco, o grupo é estimado.':''):'');
   const mb=$('#cpMore');mb.hidden=!(nb>BDN);mb.textContent='Mostrar mais '+Math.min(60,nb-BDN)+' (restam '+(nb-BDN)+')';
-  const bcard=c=>'<button class="cpc" type="button" data-cf="'+c.i+'"><span class="thumb">'+bdSvg(c.r[16])+'</span><span><b>'+esc(c.n)+'</b> <span class="tag sv">banco</span>'+'<span class="m">'+fmt(c.f)+(c.mw?' · '+String(c.mw).replace('.',',')+' g/mol':'')+'</span><span class="m">'+esc(c.est||'')+(c.pf!=null?(c.est?' · ':'')+'PF '+tC(c.pf):'')+(c.pe!=null?' · PE '+tC(c.pe):'')+'</span></span></button>';
-  $('#cpL').innerHTML=(l.length||lb.length)?l.map(c=>'<button class="cpc" type="button" data-cf="'+c.i+'"><span class="thumb">'+c.s+'</span><span><b>'+esc(c.n)+'</b>'+(favHas(c)?' <span class="favst" role="img" aria-label="favorito">★</span>':'')+'<span class="m">'+fmt(c.f)+' · '+SOLNM[c.g]+'</span><span class="m">'+esc(c.est)+(c.pf!=null?' · PF '+tC(c.pf):'')+(c.pe!=null?' · PE '+tC(c.pe):'')+'</span></span></button>').join('')+(lb.length?'<h3 class="cph">Banco Analor</h3>'+lb.map(bcard).join(''):''):'<p class="empty">'+(CPFAV&&!favGet().length?'Nenhum favorito ainda. Abra uma ficha e toque em Favoritar.':'Nenhum composto com esse filtro.')+'</p>';
+  const bcard=c=>'<button class="cpc" type="button" data-cf="'+c.i+'"><span class="thumb">'+bdSvg(c.r[16])+'</span><span><b>'+esc(c.n)+'</b>'+ringTag(c)+' <span class="tag sv">banco</span>'+'<span class="m">'+fmt(c.f)+(c.mw?' · '+String(c.mw).replace('.',',')+' g/mol':'')+'</span><span class="m">'+esc(c.est||'')+(c.pf!=null?(c.est?' · ':'')+'PF '+tC(c.pf):'')+(c.pe!=null?' · PE '+tC(c.pe):'')+'</span></span></button>';
+  $('#cpL').innerHTML=(l.length||lb.length)?l.map(c=>'<button class="cpc" type="button" data-cf="'+c.i+'"><span class="thumb">'+c.s+'</span><span><b>'+esc(c.n)+'</b>'+ringTag(c)+(favHas(c)?' <span class="favst" role="img" aria-label="favorito">★</span>':'')+'<span class="m">'+fmt(c.f)+' · '+SOLNM[c.g]+'</span><span class="m">'+esc(c.est)+(c.pf!=null?' · PF '+tC(c.pf):'')+(c.pe!=null?' · PE '+tC(c.pe):'')+'</span></span></button>').join('')+(lb.length?'<h3 class="cph">Banco Analor</h3>'+lb.map(bcard).join(''):''):'<p class="empty">'+(CPFAV&&!favGet().length?'Nenhum favorito ainda. Abra uma ficha e toque em Favoritar.':'Nenhum composto com esse filtro.')+'</p>';
 }
 document.addEventListener('click',ev=>{const fb=ev.target.closest('#favBtn');if(fb&&CFI!=null){favToggle(COMP[CFI]);fb.outerHTML=favBtnHtml(COMP[CFI]);const nb=$('#favBtn');if(nb)nb.focus();cpDraw();return;}
   const b=ev.target.closest('[data-cf]');if(b){cfDraw(+b.dataset.cf);go('p-cf');}
@@ -106,6 +106,7 @@ function cfDrawComp(i){
    +'<dl class="cfd">'
    +rowd('Grupo de solubilidade','<span class="gl2">'+SOLNM[c.g]+'</span> '+esc(gTxt(c.g)))
    +rowd('Grupo funcional',esc(c.gf.join(', ')||'hidrocarboneto sem grupo funcional'))
+   +(ringTxt(c)?rowd('Anel aromático',esc(ringTxt(c))+' <span class="mut">(vale para o anel benzênico isolado; vê-se nos overtones, 2000–1650 cm⁻¹)</span>'):'')
    +rowd('GDH','<b>'+c.gdh+'</b> <span class="mut">(anéis + ligações π)</span>')
    +rowd('M do íon molecular','<b>'+c.M+'</b>')
    +(bdEn(c.cas)?rowd('Nome em inglês','<span class="mono">'+esc(bdEn(c.cas))+'</span> <button class="btn ghost cpy" type="button" data-copy="'+esc(bdEn(c.cas))+'">Copiar</button>'):'')
@@ -175,6 +176,9 @@ function ringPat(c){
   if(/^Anel 1,2,3/.test(t))return 't123';if(/^Anel 1,2,4/.test(t))return 't124';if(/^Anel 1,3,5/.test(t))return 't135';
   return 'outro';
 }
+const RINGC={mono:'mono',orto:'orto',meta:'meta',para:'para',t123:'1,2,3',t124:'1,2,4',t135:'1,3,5'};
+function ringTxt(c){const o=(c.ot||[]).find(o=>/^Combinação e harmônico/.test(o[0]));return o?String(o[2]).split(':')[0].replace(/^Anel /,'Anel '):'';}
+function ringTag(c){const p=ringPat(c);return RINGC[p]?' <span class="tag sm" title="'+esc(ringTxt(c))+'">'+RINGC[p]+'</span>':'';}
 function otTem(c,k){
   const o=c.ot||[];
   if(k==='ald')return o.some(a=>/2850.2700/.test(a[1]));
