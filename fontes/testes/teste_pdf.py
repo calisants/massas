@@ -15,6 +15,12 @@ try:
     for alvo in (3384,1500,1275,878,690):
         assert any(abs(x-alvo)<=15 for x in v),('IV sem banda perto de',alvo,v)
     print('ok  IV em PDF: bandas',len(v))
+    pg.set_input_files('#icIVFile',aqui+'/fixtures/iv_rotulos_girados.pdf')
+    pg.wait_for_function("document.querySelector('#icIVMsg').textContent.indexOf('Lendo')<0",timeout=60000)
+    v=sorted([int(x) for x in pg.input_value('#icIV').split()],reverse=True)
+    esperado=[3298,3052,1599,1581,1518,1458,1387,1363,1270,1240,1148,1084,1044,1015,790,766]
+    assert v==esperado,('rótulos escritos lidos errado',v)
+    print('ok  IV com rótulos escritos na vertical: 16 de 16 números exatos')
     pg.set_input_files('#icFile',aqui+'/fixtures/sdbs_anilina_ms.pdf')
     pg.wait_for_function("document.querySelector('#icMsMsg').textContent.indexOf('Lendo')<0",timeout=60000)
     m=dict(tuple(int(y) for y in t.split(':')) for t in pg.input_value('#icP').split())

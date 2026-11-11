@@ -401,7 +401,7 @@ document.addEventListener('input',ev=>{if(ev.target.id==='ivQ')drawIVChips();});
 function icBadges(){
   const v=id=>{const e=$('#'+id);return e&&String(e.value).trim()!==''?1:0;};
   const n=Object.values(icSt.el||{}).filter(Boolean).length,ir=Object.values(icSt.ir||{}).filter(Boolean).length+v('icIV');
-  const c={1:(icSt.est?1:0)+(icSt.cor?1:0),2:icSt.g?1:0,3:v('icPF')+v('icPE'),4:n,5:ir,7:Object.values(icSt.sub||{}).filter(Boolean).length,6:['icF','icGDH','icGF','icM','icP','icH','icC','icHd'].reduce((a,k)=>a+v(k),0)};
+  const c={1:(icSt.est?1:0)+(icSt.cor?1:0),2:icSt.g?1:0,3:v('icPF')+v('icPE'),4:n,5:ir+(icSt.ring?1:0)+Object.values(icSt.ot||{}).filter(Boolean).length,7:Object.values(icSt.sub||{}).filter(Boolean).length,6:['icF','icGDH','icGF','icM','icP','icH','icC','icHd'].reduce((a,k)=>a+v(k),0)};
   document.querySelectorAll('#p-ic .bdg').forEach(b=>{const k=+b.dataset.b;b.textContent=c[k]?c[k]+(c[k]>1?' marcados':' marcado'):'';});
 }
 document.addEventListener('click',ev=>{if(typeof CUR!=='undefined'&&CUR==='p-ic')setTimeout(icBadges,120);});

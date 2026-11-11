@@ -349,9 +349,13 @@ async function pdfLer(f){
   await pg.render({canvasContext:cx,viewport:vp}).promise;return{canvas:cv};
 }
 function pdfMascaraD(d,W,H){
-  const M=new Uint8Array(W*H),B=new Uint8Array(W*H);
-  for(let i=0;i<W*H;i++){const g=(d[i*4]+d[i*4+1]+d[i*4+2])/3;M[i]=g<140?1:0;B[i]=g<128?1:0;}
-  return{M,B,W,H};
+  /* M/B: escuro (curva e texto). K: preto sem cor (texto e linhas). C: azul (curva de impressões coloridas). G: tinta 0 a 255 do preto */
+  const M=new Uint8Array(W*H),B=new Uint8Array(W*H),K=new Uint8Array(W*H),C=new Uint8Array(W*H),G=new Uint8Array(W*H);
+  for(let i=0;i<W*H;i++){const r=d[i*4],g=d[i*4+1],b=d[i*4+2],gr=(r+g+b)/3,sat=Math.max(r,g,b)-Math.min(r,g,b);
+    M[i]=gr<140?1:0;B[i]=gr<128?1:0;
+    if(sat<70){K[i]=gr<175?1:0;G[i]=Math.max(0,255-gr);}
+    C[i]=(b>r+70&&b>g+40&&gr<200)?1:0;}
+  return{M,B,K,C,G,W,H};
 }
 function pdfMascara(r){
   if(r.nat)return pdfMascaraD(r.nat.data,r.nat.W,r.nat.H);
@@ -453,11 +457,104 @@ function pdfTabelaIR(I,fr){
     if(/^\d{3,4}$/.test(s)&&+s>=400&&+s<=4000)out.push(+s);});
   return out;
 }
+/* ---- IV com os números dos picos escritos na vertical (rótulos girados 90°, fonte lisa de tela) ----
+   Aqui os números são lidos de verdade: cada dígito é recortado, desvirado e comparado com modelos de dígitos. */
+const PDF_ROT_Q={"3":["466411523622212621012620035610024520001441211342522533666514","244200544511312622102622024612035522001443211343533531555511","234310444520320531000531013630024531000443210344432542455521","356410332531110541001642035632012543110343321442455531233310","246530242451110351001451025641012442110243331243355541133320"],"2":["467621431542110344000343001532014420134200342100642211776652","134320354541230243000243000342012431124310253100463221565553","244311454531310441000341001431013420135200342100653321665541","366520432541110342000341001531124312243113442112765431343321"],"9":["357520542441521342531353454563244453011353211453432541367520","134310454431531343521354543454244553001352211452443541355420","134310354531441342430243453454245454000243120352343441255520","244210455421421432420443543554344554000343211542443531356410"],"8":["257631352451451342351341244431244431431242430243442353267641","256520453441541341541341343430344430431341421242531352466641","134320254541451342351342243441244431341242430244452453255541","146530353441351342351341243441244431341242430243441353366641","134311454531541341541341343430244431431342421243543452355530","134420255541351342351341243441244431441242430244453452255531","256520443441541341441441245420442332421245531354455541233310"],"0":["234310443531520431420342420243420243420242420342432532344421","134420353441440242430133430134430134430133440242352441245431","245531352341440242430134430134430134440133440242254541133320","355520432531420342420243420242420243420343530443444531233310","234310443530520431420342420243420243420245420344442531345420","355520432531420341420242420242420242420342531431444530233310","134320444530531341430242420143420143420243531342442441245420"],"5":["344421564431541001553310565531331352000243211242443442355422","344421554421531002553312555532321442000242210342432531455420","566631542211531101554311555531331442110343110344421443466521","344420554421530000543310555530321442000242210342432531455420","476641552221541100554310564541331352110243110244431343466531","376642362221351110475531463452121243110144231242355541133310"],"1":["013101346201446301125201014202014201014200014201014202013201","124201456301346301014201014202014201014200014201014202014201","013410246520135510003510003510003510003510003510003510003410","013101346201446301125201014202014201014200014201014202013201","012200246410246510014410004410003410003411003412003411003300","124200456300346300014200014201014202014203014204014201014200","012100346201446301125200014200014200014200014201014202013201","124200456301235201014200014200014200014200014202014201012101","013100346201446301125200014200014200014200014201014202013203","124201456301235201014200014200014200014200014201014203012102","113100346200446300125200014200014200014200014200014200013200","013200246300347310015310015310015311015313015313015311004200","124200456301235302015202014202014202014202014202014201012100","113100346201446302125202014202014202014202014202014201013200","124200456301235302014202014202014202014202014202014201012100","114310346510125410003410003411003410003410003411003411002200"],"4":["002420015620136621144521343421432521534631556752123532002421","002420014630035531144431343431432432655653334542002430001210","001320003530025630135530243430432430544542555653112431001320","002430014641025641135431243441442441555662334552001331000220","001320003530025630145530243430432431544543555654112431001320","001220003541015641135541244441342441543552455663112441001330"],"7":["244442244553000242000341001330003410013310024200034100022000","344442344552001341001331002321003401013301034101043000121000","444431444542001423001413013312014200024100143101142001121001","666651333541112422001412002412013312014202024202133102143102"],"6":["146520453331641111531000555420553452531243541343355541123310","146520453431541321530112420012443212555532542543431354420343","146520454431552221541110530000543310555531543452531352531243"]};
+const PDF_ROT={};for(const k in PDF_ROT_Q)PDF_ROT[k]=PDF_ROT_Q[k].map(q=>[...q].map(c=>+c/9));let PDF_ROT_MAX=3;
+function pdfMoldFina(I){
+  /* eixo esquerdo: maior linha vertical FINA (borda grossa escura da imagem não conta); a linha de baixo parte dele */
+  const {K,W,H}=I;let bb=null;
+  for(let x=6;x<W-6;x++){let y=0;while(y<H){if(K[y*W+x]){const s0=y;while(y<H&&K[y*W+x])y++;const len=y-s0,ym=(s0+y)>>1;
+      if(len>=100&&!K[ym*W+x-4]&&!K[ym*W+x+4]&&(!bb||len>bb.len))bb={len,x,yt:s0,yb:y-1};}else y++;}}
+  if(!bb)return null;
+  let best=null;
+  for(let y=Math.max(0,bb.yb-3);y<=Math.min(H-1,bb.yb+3);y++){let a=bb.x,b=bb.x;while(a>0&&K[y*W+a-1])a--;while(b<W-1&&K[y*W+b+1])b++;
+    if(!best||b-a>best.b-best.a)best={a,b,y};}
+  if(!best||best.b-best.a<250)return null;
+  const fr={xl:bb.x,yt:bb.yt,yb:best.y,xr:best.b,ticks:[]};
+  /* marcas pequenas logo abaixo do eixo: 4000, 3000, 2000, 1000 */
+  const xs=[];for(let x=fr.xl;x<=fr.xr;x++)if(K[(fr.yb+2)*W+x]&&K[(fr.yb+3)*W+x]&&K[(fr.yb+4)*W+x])xs.push(x);
+  let g=[];xs.forEach((x,i)=>{if(i&&x-xs[i-1]>2){fr.ticks.push(g.reduce((p,q)=>p+q,0)/g.length);g=[];}g.push(x);});if(g.length)fr.ticks.push(g.reduce((p,q)=>p+q,0)/g.length);
+  return fr;
+}
+function pdfRotGlifos(I,fr){
+  /* devolve um item por rótulo, da esquerda para a direita: {x0,x1,yb,gl:[{v:vetor 6x10 + proporção}]}, dígitos de baixo para cima.
+     Os dígitos ficam encostados, então o rótulo é dividido em partes iguais (os dígitos têm a mesma largura na fonte). */
+  const {K,G,W}=I,s=(fr.xr-fr.xl)/680,z0=fr.yb-Math.round(36*s),z1=fr.yb-Math.max(1,Math.round(2*s));
+  const col=[];for(let x=fr.xl+2;x<fr.xr-3;x++){let n=0;for(let y=z0;y<=z1;y++)n+=K[y*W+x];col.push([x,n]);}
+  const cl=[];let cur=null;col.forEach(([x,n])=>{if(n>0){if(!cur)cur={a:x,b:x};cur.b=x;}else if(cur){cl.push(cur);cur=null;}});if(cur)cl.push(cur);
+  const C=[];
+  cl.forEach(c=>{
+    const wd=c.b-c.a+1;if(wd<Math.round(5*s)||wd>Math.round(16*s))return;
+    let rb=-1;for(let y=z1;y>=z0&&rb<0;y--)for(let x=c.a;x<=c.b;x++)if(K[y*W+x]){rb=y;break;}
+    if(rb<0)return;
+    let rt=rb,gap=0;for(let y=rb-1;y>=z0;y--){let n=0;for(let x=c.a;x<=c.b;x++)n+=K[y*W+x];if(n){rt=y;gap=0;}else if(++gap>5)break;}
+    C.push({a:c.a,b:c.b,rt,rb,wd});});
+  if(C.length<3)return[];
+  const Ls=C.map(c=>c.rb-c.rt+1).sort((p,q)=>p-q),mx=Ls[Ls.length-1],g4=Ls.filter(l=>l>=0.8*mx),A=g4[g4.length>>1]/4,out=[];
+  C.forEach(c=>{
+    const Ly=c.rb-c.rt+1,N=Math.round((Ly+2)/A);if(N<3||N>4)return;
+    const gl=[],a=A;
+    for(let i=0;i<N;i++){
+      const yb=c.rb+1-i*a,v=[];
+      for(let j=0;j<10;j++)for(let k=0;k<6;k++){ /* desvira: modelo da esquerda para a direita = de baixo para cima; de cima para baixo = da esquerda para a direita */
+        const y0=yb-(k+1)*a/6,y1=yb-k*a/6,x0=c.a+j*c.wd/10,x1=c.a+(j+1)*c.wd/10;let t=0,n=0;
+        for(let y=Math.floor(y0);y<Math.ceil(y1);y++)for(let x=Math.floor(x0);x<Math.ceil(x1);x++){
+          const ov=(Math.min(y+1,y1)-Math.max(y,y0))*(Math.min(x+1,x1)-Math.max(x,x0));if(ov>0){t+=ov*G[y*W+x]/255;n+=ov;}}
+        v.push(n?t/n:0);}
+      gl.push({v});}
+    out.push({x0:c.a,x1:c.b,yb:c.rb,gl});});
+  return out;
+}
+function pdfRotClasse(v){
+  let best=null;
+  for(const k in PDF_ROT)PDF_ROT[k].forEach(t=>{let d=0;for(let i=0;i<v.length;i++){const e=v[i]-t[i];d+=e*e;}if(!best||d<best.d)best={k,d};});
+  return best&&best.d<=PDF_ROT_MAX?best.k:'?';
+}
+function pdfRotTop(v){
+  const m=[];for(const k in PDF_ROT){let d=1e9;PDF_ROT[k].forEach(t=>{let e2=0;for(let i=0;i<v.length;i++){const e=v[i]-t[i];e2+=e*e;}if(e2<d)d=e2;});m.push([k,d]);}
+  m.sort((p,q)=>p[1]-q[1]);return m.slice(0,2);
+}
+function pdfIVRot(I){
+  const fr=pdfMoldFina(I);if(!fr)return null;
+  const L=pdfRotGlifos(I,fr);if(L.length<3)return null;
+  const bots=L.map(l=>l.yb).sort((a,b)=>a-b);if(bots[bots.length-1]-bots[0]>3)return null; /* os números ficam alinhados na base */
+  const t=fr.ticks,W=I.W,xv=v=>t[0]+(4000-v)/1000*(t[1]-t[0]);
+  /* vales da curva azul: servem para escolher entre dígitos parecidos (6 e 8, 0 e 8) */
+  const low=[];let temC=false;
+  if(t.length>=2)for(let x=fr.xl+2;x<fr.xr-2;x++){let lo=-1;for(let y=fr.yt;y<fr.yb-45;y++)if(I.C[y*W+x]){lo=y;temC=true;}low[x]=lo;}
+  const vale=v=>{if(!temC)return{dm:0,x:-1};const xp=xv(v);let dm=99,vx=-1;
+    for(let x=Math.max(fr.xl+6,Math.round(xp)-8);x<=Math.min(fr.xr-6,Math.round(xp)+8);x++){
+      if(low[x]<0)continue;let ok=true;for(let j=-2;j<=2;j++)if(low[x+j]>low[x]){ok=false;break;}
+      if(ok&&Math.abs(x-xp)<dm){dm=Math.abs(x-xp);vx=x;}}
+    return{dm,x:vx};};
+  /* 1ª passada: melhor dígito de cada posição. 2ª: quem não tem vale próprio troca por um dígito parecido que tenha */
+  const R=L.map(l=>{
+    const tp=l.gl.map(g=>pdfRotTop(g.v));let C=[{s:'',d:0}];
+    tp.forEach(([m1,m2])=>{const nc=[];C.forEach(c=>{nc.push({s:c.s+m1[0],d:c.d+m1[1]});if(m1[1]<PDF_ROT_MAX&&m2[1]<1.8*m1[1]+0.15&&C.length<5)nc.push({s:c.s+m2[0],d:c.d+m2[1]});});C=nc;});
+    C=C.filter(c=>/^\d{3,4}$/.test(c.s)&&+c.s>=400&&+c.s<=4000&&c.d<PDF_ROT_MAX*c.s.length);
+    C.forEach(c=>{const q=vale(+c.s);c.dm=q.dm;c.vx=q.x;});C.sort((p,q)=>p.d-q.d);return{C,e:C[0]||null,ok:false};});
+  const dono=new Map();
+  R.forEach((r,i)=>{if(r.e&&r.e.dm<=2.5){const o=dono.get(r.e.vx);if(o===undefined||R[o].e.dm>r.e.dm)dono.set(r.e.vx,i);}});
+  R.forEach((r,i)=>{if(r.e&&r.e.dm<=2.5&&dono.get(r.e.vx)===i)r.ok=true;});
+  R.forEach(r=>{if(!r.ok&&r.C.length>1){const alt=r.C.find(c=>c.dm<=2.5&&!dono.has(c.vx));if(alt){r.e=alt;dono.set(alt.vx,-1);r.ok=true;}}});
+  const out=[];let falhas=0;
+  R.forEach(r=>{
+    if(!r.e){falhas++;return;}
+    const v=+r.e.s;let h=0.5;
+    if(temC){const xp=Math.round(xv(v));let lo=-1;for(let x=xp-3;x<=xp+3;x++)if(low[x]>lo)lo=low[x];
+      if(lo>0)h=Math.min(1,Math.max(0.05,(lo-fr.yt)/(fr.yb-fr.yt)));}
+    out.push({v,h,w:0,forte:h>=0.35});});
+  if(out.length<3)return null;
+  out.sort((a,b)=>b.v-a.v);return{peaks:out,falhas};
+}
 const PDF_ERR='Não consegui ler este PDF. O app lê PDF com texto (pares de números) e impressões de espectro do SDBS. Para outro tipo de imagem, digite os números.';
 async function pdfIVArquivo(f){
   const r=await pdfLer(f);
   if(r.texto){const p=ivParseSpec(r.texto);return p&&p.peaks.length?{peaks:p.peaks,msg:'Li '+p.peaks.length+' bandas do texto do PDF'}:null;}
-  const I=pdfMascara(r),fr=pdfMoldura(I);if(!fr)return null;
+  const I=pdfMascara(r),rot=pdfIVRot(I);
+  if(rot)return{peaks:rot.peaks,msg:'Li '+rot.peaks.length+' números escritos no espectro (rótulos dos picos)'+(rot.falhas?'. '+rot.falhas+' rótulo(s) eu não consegui ler: digite à mão':'')+'. Confira a lista no campo acima, principalmente 6, 8 e 0, que se parecem. Não marquei largura (l/e)'};
+  const fr=pdfMoldura(I);if(!fr)return null;
   const guia=pdfTabelaIR(I,fr),pk=pdfIV(I,fr,guia);
   return pk.length>=3?{peaks:pk,msg:'Li '+pk.length+' bandas da imagem do espectro (impressão do SDBS)'+(guia.length?', usando a tabela de picos escrita ('+guia.length+' linhas lidas) como guia':'')+'. A posição vem da curva. Não marquei largura (l/e): a imagem não dá isso com segurança'}:null;
 }

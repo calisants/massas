@@ -163,7 +163,25 @@ const corFam=s=>{s=String(s||'').toLowerCase();const k=s.indexOf('('),main=k<0?s
   const f=t=>{const r=new Set();if(/incolor|branc/.test(t))r.add('inc');if(/amarel/.test(t))r.add('amarelo');if(/laranj/.test(t))r.add('laranja');if(/verm|ros/.test(t))r.add('vermelho');if(/marrom|castanh/.test(t))r.add('marrom');if(/verde/.test(t))r.add('verde');if(/azul/.test(t))r.add('azul');if(/viole|roxo|purpur/.test(t))r.add('violeta');if(/preto|negro|cinza|escur/.test(t))r.add('preto');return r;};
   return [f(main),f(par)];};
 const IC_CAMPOS=['#icNome','#icPF','#icPE','#icTol','#icIV','#icMeio','#icM','#icP','#icH','#icC','#icHd','#icF','#icGDH','#icGF'];
-let icSt={est:'',cor:'',g:'',el:{},ir:{},sub:{}};
+/* Overtones: quem interpreta é o usuário. O padrão do anel (2000–1650) vem do texto dos overtones de cada composto */
+const RING=[['','Anel: não sei'],['mono','Monossubstituído'],['orto','Orto (1,2)'],['meta','Meta (1,3)'],['para','Para (1,4)'],['t123','1,2,3-tri'],['t124','1,2,4-tri'],['t135','1,3,5-tri'],['nenhum','Sem anel benzênico']];
+const OTL=[['ald','Duas bandas fracas do C–H de aldeído, perto de 2820 e 2720 (Fermi)'],['co','Banda fraca em 3500–3350 sem ser O–H (dobro do C=O)'],['am','Banda de amina primária perto de 3200 (Fermi)']];
+const ringLab=k=>(RING.find(r=>r[0]===k)||[0,k])[1];
+function ringPat(c){
+  if(c.bd&&!c.h1.length)return null;
+  const o=(c.ot||[]).find(o=>/^Combinação e harmônico/.test(o[0]));if(!o)return 'nenhum';
+  const t=String(o[2]);
+  if(/^Anel monossubst/.test(t))return 'mono';if(/^Anel orto/.test(t))return 'orto';if(/^Anel meta/.test(t))return 'meta';if(/^Anel para/.test(t))return 'para';
+  if(/^Anel 1,2,3/.test(t))return 't123';if(/^Anel 1,2,4/.test(t))return 't124';if(/^Anel 1,3,5/.test(t))return 't135';
+  return 'outro';
+}
+function otTem(c,k){
+  const o=c.ot||[];
+  if(k==='ald')return o.some(a=>/2850.2700/.test(a[1]));
+  if(k==='co')return o.some(a=>/^Harmônico do C=O/.test(a[0]));
+  return o.some(a=>/3250.3150/.test(a[1]));
+}
+let icSt={est:'',cor:'',g:'',el:{},ir:{},sub:{},ring:'',ot:{}};
 const sx=h=>String(h).replace(/<[^>]*>/g,'');
 
 function icChips(key,opts){
@@ -180,13 +198,15 @@ function icDraw(){
   $('#icElR').innerHTML=ELORD.map(k=>icTri('el',k,ELS.find(e=>e[0]===k)[1])).join('');
   $('#icIrR').innerHTML=IDIR.map(x=>icTri('ir',x[0],x[1])).join('');
   $('#icSubR').innerHTML=SUBL.map(x=>icTri('sub',x[0],x[1])).join('');
+  $('#icRingC').innerHTML=icChips('ring',RING);
+  $('#icOtR').innerHTML=OTL.map(x=>icTri('ot',x[0],x[1])).join('');
 }
-function icReset(){icSt={est:'',cor:'',g:'',el:{},ir:{},sub:{}};IC_CAMPOS.forEach(i=>$(i).value='');$('#icTol').value='5';$('#icEx').value='';}
+function icReset(){icSt={est:'',cor:'',g:'',el:{},ir:{},sub:{},ring:'',ot:{}};IC_CAMPOS.forEach(i=>$(i).value='');$('#icTol').value='5';$('#icEx').value='';}
 let icTm;
 function icQueue(){clearTimeout(icTm);icTm=setTimeout(()=>{icRun();icSave();},160);}
 function icSave(){const f={};IC_CAMPOS.forEach(i=>f[i]=$(i).value);LS.set('massas-ic',{st:icSt,f:f});}
 function icLoad(){const d=LS.get('massas-ic',null);if(!d||!d.st)return;
-  icSt={est:d.st.est||'',cor:d.st.cor||'',g:d.st.g||'',el:d.st.el||{},ir:d.st.ir||{},sub:d.st.sub||{}};
+  icSt={est:d.st.est||'',cor:d.st.cor||'',g:d.st.g||'',el:d.st.el||{},ir:d.st.ir||{},sub:d.st.sub||{},ring:d.st.ring||'',ot:d.st.ot||{}};
   IC_CAMPOS.forEach(i=>{if(d.f&&d.f[i]!=null)$(i).value=d.f[i];});}
 function icRange(id,tol){
   let s=$(id).value.trim().replace(/[–—]|\s+a\s+/g,'|').replace(/,/g,'.');if(!s)return null;
@@ -200,7 +220,7 @@ function icInputs(){
   const num=id=>{const x=parseFloat(v(id).replace(',','.'));return isFinite(x)?x:null;};
   const tol=+v('#icTol')||5;
   return {est:icSt.est,cor:icSt.cor,g:icSt.g,F:v('#icF').replace(/\s+/g,''),gdh:num('#icGDH'),gf:v('#icGF'),
-    els:ELORD.map(e=>[e,icSt.el[e]]).filter(e=>e[1]),ir:icSt.ir,sub:icSt.sub||{},
+    els:ELORD.map(e=>[e,icSt.el[e]]).filter(e=>e[1]),ir:icSt.ir,sub:icSt.sub||{},ring:icSt.ring||'',ot:icSt.ot||{},
     pf:icRange('#icPF',tol),pe:icRange('#icPE',tol),
     iv:numsInt(v('#icIV')),ivq:bdIvQuery(v('#icIV')),meio:$('#icMeio').value,M:num('#icM'),pk:bdPicos(v('#icP')).map(p=>p[0]),pki:bdPicos(v('#icP')),h:num('#icH'),c:num('#icC'),hd:nums(v('#icHd'))};
 }
@@ -224,14 +244,12 @@ function icScore(c,x){
     const q=bdScoreIV(c,x.ivq,x.meio);
     add('iv','IV',(0.12+0.88*q.rec)*(0.03+0.97*q.prec*q.prec),(q.un.length?'sem explicação: '+q.un.join(', ')+'. ':'')+(q.miss.length?'faltou: '+q.miss.join('; '):'bandas-chave presentes'));
   }
-  if(x.ivq.length){
-    /* overtones e combinações: bandas fracas que o composto deveria mostrar; ausência pesa pouco porque costumam sumir */
-    const otr=(c.ot||[]).map(o=>{const m=String(o[1]).match(/(\d{3,4})\D+(\d{3,4})/);return m?{t:String(o[0]).replace(/ \(.*/,''),lo:Math.min(+m[1],+m[2]),hi:Math.max(+m[1],+m[2])}:null;}).filter(Boolean);
-    if(otr.length){
-      const vis=otr.filter(r=>x.ivq.some(b=>b.v>=r.lo-20&&b.v<=r.hi+20));
-      add('ot','IV: overtones',0.7+0.3*vis.length/otr.length,'esperado: '+otr.map(r=>r.t+' ('+r.hi+'–'+r.lo+')').join('; ')+(vis.length?'. Visto em: '+vis.map(r=>r.t).join(', '):'. Nenhuma banda sua cai nessa faixa'),vis.length?'sim':'não');
-    }
-  }
+  if(x.ring){
+    const p=ringPat(c);
+    if(p===null)add('ot','Overtones: anel (sem dado)',0.5,'sem dado');
+    else if(p==='outro')add('ot','Overtones: anel',0.5,'anel fundido ou com 4 ou mais substituintes: sem padrão tabelado');
+    else add('ot','Overtones: '+(p===x.ring?'anel '+ringLab(p).toLowerCase():'anel não é '+ringLab(x.ring).toLowerCase()),p===x.ring?1:0.04,p==='nenhum'?'sem anel benzênico isolado':'padrão do composto: '+ringLab(p).toLowerCase(),'sim');}
+  OTL.forEach(([k,lab])=>{const u=x.ot[k];if(!u)return;if(c.bd&&!c.h1.length){add('ot','Overtones (sem dado)',0.5,'sem dado');return;}const has=otTem(c,k);add('ot','Overtones: '+(has?'tem ':'sem ')+lab.replace(/ \(.*/,'').replace(/^Duas bandas fracas do /,'bandas do '),(u==='sim')===has?1:0.04,has?'tem':'não tem',u==='sim'?'sim':'não');});
   if(x.M!=null){if(c.M==null)add('M','M',0.4,'sem dado');else{const d=Math.abs(c.M-x.M);add('M','M',d===0?1:(d===1?0.1:0.02),'M = '+c.M);}}
   if(x.pk.length){
     if(c.ms){const ref=c.ms.filter(p=>p!==c.M),ok=p=>ref.some(r=>Math.abs(r-p)<=0.5);
@@ -362,6 +380,7 @@ function icFill(i){
   const ce=elCount(c.f);['O','N','S','Cl','Br','I'].forEach(e=>{icSt.el[e]=ce[e]?'sim':'nao';});
   IDIR.forEach(([k])=>{icSt.ir[k]=cIr(c,k)?'sim':'nao';});
   SUBL.forEach(([k])=>{icSt.sub[k]=(c.sub||[]).indexOf(k)>=0?'sim':'nao';});
+  {const rp=ringPat(c);icSt.ring=rp&&rp!=='outro'?rp:'';OTL.forEach(([k])=>{icSt.ot[k]=otTem(c,k)?'sim':'nao';});}
   if(c.pf!=null&&c.est.indexOf('sólido')===0)$('#icPF').value=c.pf;
   if(c.pe!=null&&c.est.indexOf('líquido')===0)$('#icPE').value=c.pe;
   $('#icIV').value=c.iv.filter(b=>b[4]).map(b=>Math.round((b[0]+b[1])/2)).join(', ');
@@ -392,6 +411,8 @@ function icDados(){
   add('Infravermelho',iv);
   const sb=[];SUBL.forEach(([k,lab])=>{if(x.sub[k])sb.push([lab.replace(/ \(.*/,''),x.sub[k]==='sim'?'sim':'não']);});
   add('Subestrutura',sb);
+  const ov=[];if(x.ring)ov.push(['Anel aromático',ringLab(x.ring)]);OTL.forEach(([k,lab])=>{if(x.ot[k])ov.push([lab.replace(/ \(.*/,''),x.ot[k]==='sim'?'sim':'não']);});
+  add('Overtones',ov);
   const ms=[];if(x.F)ms.push(['Fórmula',x.F]);if(x.gdh!=null)ms.push(['GDH',String(x.gdh)]);
   if(x.M!=null)ms.push(['M',String(x.M)]);if(v('#icP'))ms.push(['Picos de MS (m/z)',lista(v('#icP'))]);
   add('Fórmula e massas',ms);
@@ -523,7 +544,7 @@ function anDesenha(){
 function anAbrir(id){
   const x=anGet().find(k=>k.id===id);if(!x)return;
   icReset();
-  icSt={est:x.st.est||'',cor:x.st.cor||'',g:x.st.g||'',el:x.st.el||{},ir:x.st.ir||{},sub:x.st.sub||{}};
+  icSt={est:x.st.est||'',cor:x.st.cor||'',g:x.st.g||'',el:x.st.el||{},ir:x.st.ir||{},sub:x.st.sub||{},ring:x.st.ring||'',ot:x.st.ot||{}};
   IC_CAMPOS.forEach(i=>{if(x.f&&x.f[i]!=null)$(i).value=x.f[i];});
   if($('#icNome')&&!$('#icNome').value)$('#icNome').value=x.n;if($('#icObs'))$('#icObs').value=x.o||'';
   icDraw();icRun();icSave();

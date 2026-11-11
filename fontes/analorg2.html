@@ -71,7 +71,10 @@
     <label for="icIV">Outras bandas que você viu (cm⁻¹, separadas por vírgula ou espaço)<input class="f-p" type="text" id="icIV" placeholder="ex.: 3300l, 2960, 1715" autocomplete="off"></label>
     <label for="icIVFile">Ou importe um espectro de IV (.pdf, .jdx, .csv ou .txt)<input type="file" id="icIVFile" accept=".pdf,.jdx,.dx,.csv,.txt,application/pdf,text/plain"></label><p class="hint" id="icIVMsg" aria-live="polite">O app procura os picos e preenche o campo acima. Funciona com transmitância ou absorbância.</p>
     <p class="hint">Marque <b>l</b> depois do número se a banda é larga (3300l) e <b>e</b> se é estreita (2250e). Isso separa, por exemplo, o O–H de ácido (muito largo) do C–H.</p>
-    <p class="hint">Overtones e combinações também contam: se você viu bandas fracas entre 2000 e 1650 cm⁻¹ (padrão do anel aromático) ou perto de 3200 (aminas primárias), digite-as. O app compara com os overtones esperados de cada composto.</p>
+    <h3 style="margin:14px 0 4px">Overtones e combinações</h3>
+    <p class="hint">Você interpreta e o app confere. Olhe a região de 2000 a 1650 cm⁻¹ (picos fracos, os “dedos do benzeno”) e diga como o anel está substituído. O app compara com o padrão de cada composto. Deixe em “não sei” o que não deu para ver.</p>
+    <div class="chips" id="icRingC" role="group" aria-label="Padrão de substituição do anel aromático"></div>
+    <div id="icOtR"></div>
     <label for="icMeio">Como o IV foi medido<select id="icMeio"><option value="">Filme líquido ou pastilha de KBr</option><option value="sol">Solução diluída (CCl₄, CHCl₃)</option><option value="gas">Fase gasosa</option></select></label>
     <p class="hint">O meio muda as bandas: em solução diluída o O–H e o N–H livres ficam finos e mais altos, e em gás o C=O sobe. A comparação já leva isso em conta.</p>
     <div id="icBandOut"></div>
