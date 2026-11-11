@@ -21,87 +21,7 @@ function stInit(){
   stDraw();
 }
 
-/* ---------- Novidades e aviso de atualização ---------- */
-const NOVID=[
- {v:145,d:'10/11/2026',t:[
-  'Compostos: o banco do professor (4668 compostos) agora faz parte das Fichas e do Identificar. Buscando por nome, fórmula ou CAS, os compostos do banco aparecem junto, com estrutura desenhada, PF, PE, picos de MS e bandas de IV esperadas. No Identificar eles entram na comparação com os demais. Conferi o banco: em 84 registros a fórmula não batia com a estrutura (corrigi 48 pela estrutura, confirmada no PubChem, e escondi a estrutura de 36 que estavam erradas ou sem como decidir; a ficha avisa). RMN (nº de sinais e faixas), subestruturas e grupo de solubilidade desses compostos são calculados pela estrutura; o grupo de solubilidade é estimado e aparece marcado assim.',
-  'Identificar: os picos de MS aceitam intensidade (43:100 58:42) ou um arquivo .jdx, .csv ou .txt. As bandas de IV aceitam l (larga) e e (estreita), e há o campo "Como o IV foi medido" (filme/KBr, solução ou gás).'
- ]},
- {v:136,d:'10/11/2026',t:[
-  'Ensaios: nova tela "Análise funcional" com os procedimentos completos para nitrocomposto (hidróxido ferroso; zinco, CaCl2 e nitroprussiato), ácido carboxílico (iodeto-iodato, hidroxamato férrico, resorcinol, ácido tiobarbitúrico para oxálico) e cloro orgânico (dicromato e papel de Villier; AgNO3 em etanol; NaI em acetona; Lassaigne). Cada ensaio traz reagente, passos, cor do positivo, interferências e a fonte conferida.',
- ]},
- {v:0,d:'09/11/2026',t:[
-  'Identificar: botão "Salvar análise" (com nome e observações opcionais). As análises salvas aparecem em "Análises salvas", onde dá para abrir de novo, excluir, exportar em .json e importar em outro aparelho. Também entram no "Salvar e levar o progresso".',
-  'Compartilhar: o texto ficou organizado por grupos (aparência, solubilidade, IV, massas, RMN) e com o ranking mais claro. Novo botão "Relatório (PDF)": página com cabeçalho, dados em cartões, classes, ranking com barras e aviso final, pronta para imprimir ou salvar em PDF.',
- ]},
- {r:131,d:'06/11/2026',t:[
-  'Créditos: "Feito por Camila Silva, aluna de Bacharelado em Química do IFRJ, como material de apoio ao estudo de Análise Orgânica." Fontes, Avisos e Créditos agora são três abas separadas.',
-  'Identificar: filtro por subestrutura (anel benzênico, grupos funcionais, halogênio), com Sim ou Não. Nova caixa "Procurar por um único sinal" (IV, ¹H, ¹³C ou m/z). O resultado pode ser copiado, compartilhado ou baixado em .txt.',
-  'Favoritos: marque um composto com a estrela na ficha. Os favoritos sobem para o topo da lista e há um filtro "Só favoritos". Ficam guardados neste aparelho e entram no "Salvar progresso".',
-  'Uso sem internet: Ajustes mostra o que está guardado, o espaço usado, a versão e se há uma atualização. Uma faixa avisa quando o aparelho fica sem conexão.',
-  'Acessibilidade: zoom com dois dedos liberado por padrão; tamanho da letra (normal, grande, muito grande), alto contraste e reduzir animações em Ajustes; leitor de tela anuncia a tela nova; regiões da página marcadas; figuras sem descrição não atrapalham mais a leitura.',
- ]},
- {r:130,d:'06/11/2026',t:[
-  'O app agora se chama Anaquim (antes Analorg).',
-  'Botão voltar: o voltar do celular agora volta uma tela dentro do app, em vez de sair. Fechar uma ampliação (mecanismo ou espectro) também é pelo voltar. Cada tela e cada ficha de composto tem endereço próprio (a ficha usa #/cf/ seguido do CAS), que dá para copiar e mandar.',
-  'Fontes e avisos: nova seção de créditos.'
- ]},
- {r:129,d:'04/11/2026',t:[
-  'Novo composto: ácido 5-formilsalicílico (SDBS 23378), com MS, IV (pasta em Nujol, conferido em parte), ¹³C (8 sinais) e ¹H (4 de 5 sinais, o do ácido saiu cortado no print) medidos. O IV agora também mostra a banda do C=O de aldeído aromático em compostos com mais de uma carbonila. Nos fragmentos de MS, a perda de água seguida de CO (como no ácido salicílico) aparece em texto, sem estrutura desenhada.',
-  'MS: a ficha de 70 compostos agora traz "Fragmentos propostos": a estrutura do íon de cada pico, o que ele perdeu e a regra (clivagem α, benzílica, McLafferty, perda de CO). É proposta por regras, com a massa conferida contra o pico do SDBS; não é o mecanismo medido. Os picos que nenhuma regra simples explica ficam listados como sem proposta.',
-  'Abas: Início, Compostos, Ensaios e Espectros. Em Espectros ficam IV, Massas e RMN, e o antigo "Mais" foi para o Início. As páginas de cada assunto têm o mesmo layout: título, resumo e uma faixa de seções, como na aba RMN.',
-  'RMN: nova aba com os quatro passos num espectro real (acetato de etila, SDBS), régua do deslocamento, laboratório de acoplamento, calculadoras de Hz e ppm, integração e GDH, macetes e dois problemas resolvidos.',
-  'Toque num pico, banda ou sinal (IV, massas e RMN) e o trecho da molécula fica colorido. Os espectros simulados ganharam o botão Ampliar, e a estrutura do IV ficou do mesmo tamanho da do RMN e centralizada.',
-  'RMN de 13C: 70 compostos conferidos na tabela de ppm do SDBS. O valor medido aparece na ficha. Corrigi faixas de tabela que não incluíam o valor real.',
-  'RMN de 1H: 66 compostos mostram o δ medido nos prints do SDBS. Corrigi faixas que não incluíam o valor real (clorofórmio, DMSO, DMF, formiatos, salicilatos, enonas e outras).',
-  'Compostos: a ficha não mostra mais os números dos carbonos. Os números ficam só na aba RMN.',
-  'Fontes: ficaram discretas, num item "Fonte" recolhido. Saíram o aviso dos exercícios 1 a 12 e as etiquetas repetidas.',
-  'Aviso de atualização: passou a mostrar a nota da versão em uso.'
- ]},
- {v:97,r:'86 a 97',d:'04/11/2026',t:[
-  'IV: as bandas de 73 compostos foram conferidas na tabela de picos dos prints do SDBS. Corrigi as faixas de álcool, fenol, ácido, amina, amida, anidrido, éster aromático, vinila, furano e haletos.',
-  'Massas: os picos de 75 compostos foram conferidos nos prints do SDBS (a leitura é visual, erro de cerca de 3 pontos de intensidade).',
-  'RMN de 13C: 31 compostos conferidos na tabela de ppm do SDBS. Corrigi o CH₃ ligado a S (DMSO) e o CH₃ ao lado de nitrila.',
-  'Compostos: a estrutura da ficha mostra os carbonos numerados. Cada sinal de 1H diz a qual carbono pertence, e os carbonos do anel dizem orto, meta ou para.',
-  'Orgânica Básica: a tabela de grupos funcionais mostra a estrutura de cada grupo, com o grupo em destaque.',
-  'Limpeza: apaguei arquivos soltos do app e do GitHub.'
- ]},
- {v:85,d:'04/11/2026',t:[
-  'IV: dá para escolher qualquer um dos 110 compostos (com busca). Cada um mostra um espectro simulado, parecido com o do SDBS, e a tabela de bandas numerada. Os 15 primeiros compostos e têm as bandas-chave conferidas.',
-  'Guia do IV: mais de 55 linhas novas (isocianatos, tiocianatos, amidas, alcenos por substituição, epóxidos, grupos com P, Si, S e outros). Cada linha diz a fonte.',
-  'Cada composto ganhou mais bandas no IV: C–O por tipo de álcool, deformações de CH₃ e CH₂, haletos, sulfonas, anidridos e outros grupos.',
-    'Ensaios: as tabelas ficaram legíveis no celular (palavras não são mais cortadas).',
-  'Identificar: seções que abrem e fecham, com a contagem do que você marcou, e linhas mais baixas.',
-  'Cor: Astronomia voltou. Início: a caixa Hoje saiu (Revisar tem atalho no Início). Avisos para o professor saíram.'
- ]},
- {v:83,d:'04/11/2026',t:[
-  'Identificar: as duas telas viraram uma só, com o layout de Ensaios e todos os campos. Mostra as classes que sobram e os compostos mais compatíveis.',
-    'Início > Ajustes: zoom com os dedos (desligado por padrão) e treinos sem pistas (opcional).',
-  'Início > Revisar: pergunta errada nos quizzes volta em 1, 3 e 7 dias.',
-  'O app lembra a tela e o que você digitou quando você sai e volta.',
-  'Fontes ficam recolhidas, com a etiqueta visível. Cada bloco diz de onde vem o dado.',
-  'Cores: ficaram 5 (Azul, Grafite, Roxo, Química e Orgânica).',
-  'RMN: espectros de 1H e 13C simulados para cada composto, com sinais numerados e integração opcional. Não são os medidos (esses estão no SDBS).',
-  'IV: o botão Treinar voltou (estava sem acesso).'
- ]}
-];
 const VNUM=parseInt(String(VERSAO).replace(/^v/,''),10)||0;
-function nvDraw(){
-  LS.set('massas-visto',VNUM);nvBanner();
-  $('#nvList').innerHTML=NOVID.map(n=>'<div class="rule"><h3>v'+(n.r||(n.v||VNUM))+' <span class="mut" style="font-weight:400">· '+esc(n.d)+'</span></h3><ul class="nvl">'+n.t.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>').join('');
-}
-function nvBanner(){
-  let b=$('#nvBanner');
-  const visto=LS.get('massas-visto',null);
-  const mostrar=visto!==null&&visto<VNUM;
-  if(!mostrar){if(b)b.hidden=true;return;}
-  if(!b){b=document.createElement('div');b.id='nvBanner';b.className='nvb';b.setAttribute('role','status');
-    b.innerHTML='<span>O Anaquim foi atualizado para <b id="nvV"></b>. Leia as novidades.</span><span class="nvbb"><button type="button" class="btn" id="nvLer">Ler</button><button type="button" class="btn ghost" id="nvOk">Já li</button></span>';
-    const w=document.querySelector('.wrap');w.insertBefore(b,w.children[1]||null);
-    $('#nvLer').onclick=()=>go('p-nv');
-    $('#nvOk').onclick=()=>{LS.set('massas-visto',VNUM);b.hidden=true;};}
-  $('#nvV').textContent='v'+VNUM;b.hidden=false;
-}
 /* Quando o app mudar de endereço, preencha NOVO_ENDERECO (ex.: 'https://anaquim.seudominio.com.br/'). Quem abrir o endereço antigo vê o aviso. */
 const NOVO_ENDERECO='';
 function endBanner(){
@@ -113,8 +33,7 @@ function endBanner(){
   const w=document.querySelector('.wrap');w.insertBefore(b,w.children[1]||null);
 }
 function nvInit(){
-  if(LS.get('massas-visto',null)===null)LS.set('massas-visto',window.PRIMEIRA===false?0:VNUM);
-  nvBanner();endBanner();offBar();
+  endBanner();offBar();
 }
 
 /* ---------- Revisão espaçada das perguntas dos quizzes (1, 3 e 7 dias) ---------- */

@@ -309,7 +309,6 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <h2 class="mh">O app</h2>
     <div class="menu">
       <button class="mi" type="button" data-go="p-st"><b>Ajustes</b><span>Cor do app, zoom e treinos sem pistas.</span></button>
-      <button class="mi" type="button" data-go="p-nv"><b>Novidades</b><span>O que mudou em cada atualização.</span></button>
       <a class="mi" id="mSug" href="#" target="_blank" rel="noopener" hidden><b>Enviar sugestão ou erro</b><span>Abre o formulário. As respostas vão para uma planilha.</span></a>
       <button class="mi" type="button" data-go="p-pg"><b>Salvar e levar o progresso</b><span>Gere um código para passar o que você estudou para outro aparelho.</span></button>
       <button class="mi" type="button" data-go="p-fo"><b>Fontes, avisos e créditos</b><span>De onde vêm as tabelas e o que ainda precisa de conferência.</span></button>
@@ -805,12 +804,6 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <p class="hint" id="offMsg" role="status"></p>
   </section>
 
-  <section id="p-nv" role="region" aria-label="Novidades" hidden>
-    <button class="back" type="button" data-go="p-in">← Início</button>
-    <h2 class="scr">Novidades</h2>
-    <p class="scrsub">O que mudou em cada atualização, em poucas linhas.</p>
-    <div id="nvList"></div>
-  </section>
 
   <section id="p-rv" role="region" aria-label="Revisar" hidden>
     <button class="back" type="button" data-go="p-in">← Início</button>
@@ -2159,8 +2152,8 @@ function ecInit(){
   miniQuiz('#ecQuiz',bank,'Pergunta');
 }
 
-const SCR=['p-ec','p-pb','p-cs','p-in','p-en','p-pf','p-so','p-el','p-fu','p-an','p-tr','p-tb','p-iv','p-sp','p-ca','p-aj','p-fo','p-pq','p-sl','p-co','p-es','p-pg','p-cp','p-cf','p-ic','p-rm','p-ob','p-st','p-nv','p-rv'];
-const OWN={'p-ec':'t-en','p-pb':'t-en','p-cs':'t-en','p-pf':'t-en','p-so':'t-en','p-el':'t-en','p-fu':'t-en','p-tr':'t-sp','p-tb':'t-sp','p-an':'t-sp','p-ca':'t-sp','p-aj':'t-sp','p-pq':'t-sp','p-sl':'t-sp','p-iv':'t-sp','p-rm':'t-sp','p-cf':'t-cp','p-ic':'t-cp','p-es':'t-cp','p-ob':'t-in','p-fo':'t-in','p-co':'t-in','p-pg':'t-in','p-st':'t-in','p-nv':'t-in','p-rv':'t-in'};
+const SCR=['p-ec','p-pb','p-cs','p-in','p-en','p-pf','p-so','p-el','p-fu','p-an','p-tr','p-tb','p-iv','p-sp','p-ca','p-aj','p-fo','p-pq','p-sl','p-co','p-es','p-pg','p-cp','p-cf','p-ic','p-rm','p-ob','p-st','p-rv'];
+const OWN={'p-ec':'t-en','p-pb':'t-en','p-cs':'t-en','p-pf':'t-en','p-so':'t-en','p-el':'t-en','p-fu':'t-en','p-tr':'t-sp','p-tb':'t-sp','p-an':'t-sp','p-ca':'t-sp','p-aj':'t-sp','p-pq':'t-sp','p-sl':'t-sp','p-iv':'t-sp','p-rm':'t-sp','p-cf':'t-cp','p-ic':'t-cp','p-es':'t-cp','p-ob':'t-in','p-fo':'t-in','p-co':'t-in','p-pg':'t-in','p-st':'t-in','p-rv':'t-in'};
 const NAV=['t-in','t-cp','t-en','t-sp'];
 function drawSl(){const b=$('#slBody');if(!b||b.dataset.ok||typeof SLD==='undefined')return;b.dataset.ok='1';
   b.innerHTML=SLD.map((s,i)=>'<div class="rule"><h3>'+esc(s[0])+'</h3><p>'+esc(s[1])+'</p><figure class="mech"><button type="button" class="mechb" data-sl="'+i+'"><img src="'+s[2]+'" alt="Slide do professor: '+esc(s[0])+'"></button></figure></div>').join('');
@@ -2177,7 +2170,6 @@ function go(id,fromPop){
   if(id==='p-cs')csDraw();
   if(id==='p-in')drawHoje();
   if(id==='p-rv')rvDraw();
-  if(id==='p-nv')nvDraw();
   if(id==='p-st')stDraw();
   if(id==='p-ec')ecDraw();
   if(id==='p-tr')trInit();

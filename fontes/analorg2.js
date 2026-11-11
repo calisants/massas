@@ -25,18 +25,19 @@ function cpInit(){
   cpDraw();rmDraw();
 }
 let BDLET='',BDN=60;
-const bdLetra=n=>{const c=norm2(n).charAt(0).toUpperCase();return c>='A'&&c<='Z'?c:'#';};
+const bdChave=n=>{let s=String(n||'').trim(),p;do{p=s;s=s.replace(/^(\([^)]*\)|\[[^\]]*\]|[0-9,'’′\s]+|(?:n|o|m|p|l|d|dl|rac|cis|trans|sec|terc|tert|e|z|r|s)(?=-))-?/i,'');}while(s!==p&&s);return s||String(n||'');};
+const bdLetra=n=>{const c=norm2(bdChave(n)).charAt(0).toUpperCase();return c>='A'&&c<='Z'?c:'#';};
 function cpLetras(){const box=$('#cpA');if(!box||box.dataset.ok)return;box.dataset.ok=1;
   box.innerHTML=['#'].concat('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')).map(l=>'<button class="chip" type="button" data-let="'+l+'" aria-pressed="false">'+l+'</button>').join('');
   box.addEventListener('click',ev=>{const b=ev.target.closest('[data-let]');if(!b)return;BDLET=BDLET===b.dataset.let?'':b.dataset.let;
-    box.querySelectorAll('[data-let]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.let===BDLET?'true':'false'));cpDraw();});
+    box.querySelectorAll('[data-let]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.let===BDLET?'true':'false'));cpDraw();const l0=$('#cpL');if(l0)l0.scrollIntoView({block:'start'});});
   $('#cpMore').addEventListener('click',()=>{BDN+=60;cpDraw({mais:1});});}
 function cpDraw(opt){
   cpLetras();if(!(opt&&opt.mais))BDN=60;
   const q=norm2($('#cpQ').value),e=$('#cpE').value,g=$('#cpG').value;
-  const l=COMP.filter(c=>(!q||[c.n,...c.a,c.f,c.cas].some(x=>norm2(x).includes(q)))&&(!e||c.est.indexOf(e)===0)&&(!g||c.g===g)&&(!CPFAV||favHas(c))).sort((a,b)=>(favHas(b)-favHas(a))||a.n.localeCompare(b.n,'pt'));
+  const l=COMP.filter(c=>(!q||[c.n,...c.a,c.f,c.cas].some(x=>norm2(x).includes(q)))&&(!e||c.est.indexOf(e)===0)&&(!g||c.g===g)&&(!CPFAV||favHas(c))&&(!BDLET||bdLetra(c.n)===BDLET)).sort((a,b)=>(favHas(b)-favHas(a))||a.n.localeCompare(b.n,'pt'));
   /* banco do professor: aparece sem precisar buscar, por letra e em páginas de 60 (favoritos e a letra "todas" só valem para os do app) */
-  let lb=[];if(!CPFAV){lb=bdAll().filter(c=>(!q||norm2(c.k).includes(q))&&(!e||c.est.indexOf(e)===0)&&(!g||c.ge===g)&&(!BDLET||bdLetra(c.n)===BDLET)).sort((a,b)=>a.n.localeCompare(b.n,'pt'));}
+  let lb=[];if(!CPFAV){lb=bdAll().filter(c=>(!q||norm2(c.k).includes(q))&&(!e||c.est.indexOf(e)===0)&&(!g||c.ge===g)&&(!BDLET||bdLetra(c.n)===BDLET)).sort((a,b)=>bdChave(a.n).localeCompare(bdChave(b.n),'pt'));}
   const nb=lb.length;lb=lb.slice(0,BDN);
   $('#cpN').textContent=l.length+' de '+COMP.length+' compostos do app'+(!CPFAV?' + '+nb+' do banco Analor'+(nb>BDN?' (mostrando '+BDN+')':'')+(g?'. No banco, o grupo é estimado.':''):'');
   const mb=$('#cpMore');mb.hidden=!(nb>BDN);mb.textContent='Mostrar mais '+Math.min(60,nb-BDN)+' (restam '+(nb-BDN)+')';

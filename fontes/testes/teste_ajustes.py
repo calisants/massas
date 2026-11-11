@@ -39,11 +39,7 @@ with sync_playwright() as p:
     # exporta/importa progresso mantém repq
     pg.evaluate("go('p-pg')");pg.click('#pgGen');code=pg.input_value('#pgTxt')
     chk('código de progresso leva o repq',len(code)>20)
-    # aviso de atualização para quem já tinha o app
-    pg.evaluate("localStorage.setItem('massas-visto','1')");pg.reload();pg.wait_for_timeout(400)
-    chk('aviso de atualização aparece',pg.evaluate("!!document.getElementById('nvBanner')&&!document.getElementById('nvBanner').hidden"))
-    pg.click('#nvLer');chk('abre as novidades',pg.evaluate("!document.getElementById('p-nv').hidden"))
-    pg.evaluate("go('p-in')");chk('aviso some depois de ler',pg.evaluate("document.getElementById('nvBanner').hidden"))
+    chk('sem aviso de atualização',pg.evaluate("!document.getElementById('nvBanner')"))
     # fontes recolhidas
     pg.evaluate("cfDraw(0);go('p-cf')");pg.wait_for_timeout(300)
     chk('fontes da ficha recolhidas',pg.evaluate("document.querySelectorAll('#cfB details.fonte').length")>=1)
@@ -53,7 +49,7 @@ with sync_playwright() as p:
     # menus
     chk('Início sem ferramentas de massas',pg.evaluate("go('p-in'),document.getElementById('p-in').innerText.indexOf('Calculadora')<0"))
     chk('Massas com ferramentas de massas',pg.evaluate("go('p-ca'),document.getElementById('p-ca').innerText.indexOf('Calculadora')>=0"))
-    for sc in ['p-in','p-en','p-sp','p-ic','p-st','p-nv','p-rv','p-co','p-fo','p-cf','p-cp','p-ob','p-rm','p-iv']:
+    for sc in ['p-in','p-en','p-sp','p-ic','p-st','p-rv','p-co','p-fo','p-cf','p-cp','p-ob','p-rm','p-iv']:
         pg.evaluate(f"go('{sc}')");w=pg.evaluate("document.documentElement.scrollWidth")
         if w>360:chk('sem estouro em '+sc+' ('+str(w)+')',False)
 print('erros de página:',errs)
