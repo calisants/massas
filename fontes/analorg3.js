@@ -603,11 +603,58 @@ function zoomOpen(btn){
   function macDraw(){const o=$('#rmMac');if(!o||o.dataset.ok)return;o.dataset.ok='1';
     o.innerHTML=MAC.map(m=>'<div class="rule rmtip"><div class="rmtipt"><h3>'+m[0]+'</h3>'+(m[1]?'<div class="rmmini">'+mini(m[1])+'</div>':'')+'</div><p>'+m[2]+'</p></div>').join('')
       +'<p class="srcl">Regras de bolso de livro-texto, sem fonte conferida. Os δ citados de compostos (2-butanona, acetato de etila, anisol, salicilato de metila) vêm dos prints do SDBS enviados. Regras não substituem os quatro passos.</p>';}
+
+  /* ---- Treinar: perguntas de RMN geradas dos compostos do app ---- */
+  const MULT={'s':0,'d':1,'t':2,'q':3,'quinteto':4,'sexteto':5,'septeto':6};
+  const MNOME={0:'singleto',1:'dupleto',2:'tripleto',3:'quarteto',4:'quinteto',5:'sexteto',6:'septeto'};
+  let TQ='todas',TS={ok:0,n:0},TCUR=null;
+  const pick=a=>a[Math.floor(Math.random()*a.length)];
+  const mix=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
+  function trnMake(){
+    const tipos=TQ==='todas'?['h','c','m','q']:[TQ];let t=pick(tipos),tent=0;
+    while(tent++<40){
+      const c=pick(COMP.filter(x=>x.h1&&x.h1.length&&x.c13&&x.c13.length&&(t==='c'||t==='m'||!x.h1.some(y=>/arom/i.test(y.t)))));
+      if(t==='h'||t==='c'){
+        const real=t==='h'?c.h1.length:c.c13.length;
+        let op=[real];[real-1,real+1,real+2,real-2,real+3].forEach(v=>{if(v>=1&&op.indexOf(v)<0&&op.length<4)op.push(v);});
+        const ex=t==='h'?'Cada sinal é um grupo de H equivalentes: '+c.h1.map(x=>x.t+' ('+x.h+' H)').join('; ')+'.':'Cada sinal é um tipo de C: '+c.c13.map(x=>x.t+(x.n>1?' ('+x.n+' C)':'')).join('; ')+'.';
+        return{t:t,c:c,q:'Quantos sinais de '+(t==='h'?'¹H':'¹³C')+' tem '+c.n+'?',op:mix(op).map(v=>({k:String(v),v:String(v)})),ok:String(real),ex:ex+' Total: '+real+'.'};
+      }
+      if(t==='m'){
+        const un=c.h1.filter(x=>MULT[x.m]!==undefined&&c.h1.filter(y=>y.t===x.t).length===1);if(!un.length)continue;
+        const x=pick(un),real=MULT[x.m];let op=[real];mix([0,1,2,3,4,5,6]).forEach(v=>{if(op.length<4&&op.indexOf(v)<0)op.push(v);});
+        return{t:t,c:c,q:'No '+c.n+', como aparece o sinal de '+x.t+' ('+x.h+' H)?',op:mix(op).map(v=>({k:String(v),v:MNOME[v]})),ok:String(real),ex:'Regra n+1: o sinal aparece como '+MNOME[real]+', então o grupo tem '+real+' H vizinho'+(real===1?'':'s')+' (n = '+real+', n+1 = '+(real+1)+').'};
+      }
+      if(t==='q'){
+        const mesmo=COMP.filter(y=>y!==c&&y.h1&&y.h1.length===c.h1.length&&y.c13&&y.c13.length);if(mesmo.length<3)continue;
+        const sig=y=>y.h1.map(x=>x.h+x.m+x.lo+x.hi).sort().join('|');if(mesmo.some(y=>sig(y)===sig(c)))continue;
+        const op=[c].concat(mix(mesmo).slice(0,3));
+        const lin=c.h1.slice().sort((a,b)=>(b.lo+b.hi)-(a.lo+a.hi)).map(x=>'δ '+String(x.lo).replace('.',',')+' a '+String(x.hi).replace('.',',')+' ppm · '+x.h+' H · '+x.m).join('<br>');
+        return{t:t,c:c,q:'Qual composto tem estes sinais de ¹H, com a fórmula '+fmt(c.f)+'?',tab:lin,op:mix(op).map(y=>({k:y.n,v:y.n})),ok:c.n,ex:'Os sinais de '+c.n+': '+c.h1.map(x=>x.t+' ('+x.h+' H, '+x.m+')').join('; ')+'.',noF:1};
+      }
+    }
+    return null;
+  }
+  function trnDraw(){
+    const box=$('#trnQ');if(!box)return;const q=trnMake();TCUR=q;
+    if(!q){box.innerHTML='<p class="empty">Não consegui montar uma pergunta agora. Toque em outro tipo.</p>';return;}
+    $('#trnPlacar').textContent=TS.n?'Acertos: '+TS.ok+' de '+TS.n+'.':'Escolha uma resposta.';
+    box.innerHTML='<div class="rule"><h3 style="margin:0 0 8px">'+q.q+'</h3>'
+      +(q.t==='q'?'<p class="mut" style="margin:0 0 8px">'+q.tab+'</p>':'<figure class="st" style="margin:0 0 8px"><div>'+(q.c.si||q.c.s)+'</div></figure>')
+      +'<div class="chips" id="trnOp">'+q.op.map(o=>'<button class="chip" type="button" data-k="'+ea(o.k)+'">'+esc(o.v)+'</button>').join('')+'</div><div id="trnFb" aria-live="polite"></div></div>';
+    $('#trnOp').onclick=e=>{const b=e.target.closest('[data-k]');if(!b||$('#trnOp').dataset.done)return;$('#trnOp').dataset.done=1;
+      const ok=b.dataset.k===q.ok;TS.n++;if(ok)TS.ok++;
+      $('#trnOp').querySelectorAll('[data-k]').forEach(x=>{if(x.dataset.k===q.ok)x.style.cssText='background:var(--keep);color:var(--surface);border-color:var(--keep)';else if(x===b)x.style.cssText='border-color:#b3261e;color:#b3261e';x.disabled=true;});
+      $('#trnFb').innerHTML='<div class="ans" style="margin-top:10px"><span class="t">'+(ok?'Certo.':'Errado.')+'</span> '+q.ex+'</div><div class="row" style="margin-top:8px"><button class="btn" type="button" id="trnNx">Próxima pergunta</button></div>';
+      $('#trnPlacar').textContent='Acertos: '+TS.ok+' de '+TS.n+'.';$('#trnNx').onclick=trnDraw;$('#trnNx').focus();};
+  }
+  document.addEventListener('click',e=>{const b=e.target.closest('[data-tq]');if(!b)return;TQ=b.dataset.tq;document.querySelectorAll('[data-tq]').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));trnDraw();});
   /* ---- troca de painel ---- */
   function rp(k){
     document.querySelectorAll('[data-rpane]').forEach(d=>d.hidden=d.dataset.rpane!==k);
     document.querySelectorAll('.rseg [data-rp]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.rp===k?'true':'false'));
     if(k==='mac')macDraw();
+    if(k==='treino'&&!TCUR)trnDraw();
     try{sessionStorage.setItem('massas-rp',k);}catch(e){}
   }
   window.rmPane=rp;

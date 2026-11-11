@@ -144,6 +144,7 @@
       <button class="chip" type="button" data-rp="mac" aria-pressed="false">Macetes</button>
       <button class="chip" type="button" data-rp="tab" aria-pressed="false">Tabelas</button>
       <button class="chip" type="button" data-rp="teo" aria-pressed="false">Teoria</button>
+      <button class="chip" type="button" data-rp="treino" aria-pressed="false">Treinar</button>
       <button class="chip" type="button" data-rp="comp" aria-pressed="false">Compostos</button>
     </div>
 
@@ -322,6 +323,15 @@
       <p><b>Exemplo: estireno.</b> Os três H do vinil formam um sistema de três spins (AMX), cada um um dubleto de dubletos, porque cada um acopla com os outros dois com J diferentes. Acoplamento trans (através da dupla) é o maior, cerca de 18 Hz; cis cerca de 11 Hz; geminal cerca de 1 Hz. Os H aromáticos (δ 7,2 a 7,5) saem como multipletos mal definidos e em geral não são interpretados em detalhe.</p>
       <p class="srcl"><b>Fonte:</b> resumo dos slides de RMN, 2ª a 4ª partes (Prof. Jeronimo, IFRJ). Nos slides, o δ do H<sub>X</sub> do estireno aparece como 6,73 no texto e como 6,37 na lista final; confira antes de citar. Os espectros de exemplo dos slides (etilbenzeno, cumeno, acetato de benzila, 1-nitropropano, N-metilcarbamato de etila) são imagens e não estão no app: o app mostra a estimativa de cada composto na ficha.</p>
     </details>
+    </div>
+
+    <div data-rpane="treino" hidden>
+    <div class="sec" style="padding-top:12px"><h3 style="margin:0 0 4px">Treinar RMN</h3>
+      <p class="hint" style="margin:0 0 8px">Perguntas geradas dos compostos do app. O gabarito vem das regras de tabela do app, não de espectro medido. Contagem de ¹H e identificação só usam compostos sem anel aromático.</p>
+      <div class="chipbar" role="group" aria-label="Tipo de pergunta"><button class="chip" type="button" data-tq="todas" aria-pressed="true">Todas</button><button class="chip" type="button" data-tq="h" aria-pressed="false">Sinais de ¹H</button><button class="chip" type="button" data-tq="c" aria-pressed="false">Sinais de ¹³C</button><button class="chip" type="button" data-tq="m" aria-pressed="false">Multiplicidade</button><button class="chip" type="button" data-tq="q" aria-pressed="false">Qual é o composto?</button></div>
+      <p class="hint" id="trnPlacar"></p>
+      <div id="trnQ"></div>
+    </div>
     </div>
 
     <div data-rpane="comp" hidden>
