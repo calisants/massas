@@ -312,6 +312,7 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
       <button class="mi" type="button" data-go="p-st"><b>Ajustes</b><span>Cor do app, zoom e treinos sem pistas.</span></button>
       <a class="mi" id="mSug" href="#" target="_blank" rel="noopener" hidden><b>Enviar sugestão ou erro</b><span>Abre o formulário. As respostas vão para uma planilha.</span></a>
       <button class="mi" type="button" data-go="p-pg"><b>Salvar e levar o progresso</b><span>Gere um código para passar o que você estudou para outro aparelho.</span></button>
+      <button class="mi" type="button" data-go="p-av"><b>Avisar erro ou sugestão</b><span>Achou algo errado ou quer pedir uma mudança? Mande daqui.</span></button>
       <button class="mi" type="button" data-go="p-fo"><b>Fontes, avisos e créditos</b><span>De onde vêm as tabelas e o que ainda precisa de conferência.</span></button>
     </div>
   </section>
@@ -968,11 +969,26 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
     <p class="hint">Para um composto que você ainda não resolveu. Preencha o que tiver. O app dá pistas, não a resposta: quem decide é você.</p>
     <div class="row">
       <label for="esF">Fórmula (opcional)<input type="text" id="esF" placeholder="ex.: C6H12O2"></label>
-      <label for="esM">M<input type="number" id="esM" class="f-m" inputmode="numeric" placeholder="ex.: 116"></label>
+      <label for="esM">Massa molar (M)<input type="number" id="esM" class="f-m" inputmode="numeric" placeholder="ex.: 116"></label>
     </div>
     <label for="esP">Picos do espectro de massas<input type="text" id="esP" class="f-p" placeholder="ex.: 87, 85, 74, 57, 43, 29"></label>
     <label for="esI" style="margin-top:10px">Bandas do IV (cm⁻¹)<input type="text" id="esI" class="f-p" placeholder="ex.: 2960, 1743, 1250"></label>
     <div id="esOut" style="margin-top:16px"></div>
+  </section>
+
+  <section id="p-av" role="region" aria-label="Avisar erro ou sugestão" hidden>
+    <button class="back" type="button" data-go="p-in">← Início</button>
+    <h2 class="scr">Avisar erro ou sugestão</h2>
+    <p class="scrsub">Seu aviso vai para a planilha de mudanças do app, marcado como vindo de você.</p>
+    <form id="avF" class="el avf">
+      <div class="avr" role="group" aria-label="Tipo"><label><input type="radio" name="avT" value="Erro" checked> Erro</label><label><input type="radio" name="avT" value="Sugestão"> Sugestão</label></div>
+      <label>Em que tela?<select id="avTela"><option>Geral</option><option>Início</option><option>Compostos</option><option>Identificar</option><option>Espectros</option><option>Ensaios</option><option>Solubilidade</option><option>Problemas</option><option>Outra</option></select></label>
+      <label>O que aconteceu ou o que você quer?<textarea id="avM" rows="5" maxlength="1500" required placeholder="Ex.: na ficha da anilina, o CAS está errado."></textarea></label>
+      <label>Seu contato (opcional)<input id="avC" type="text" maxlength="120" autocomplete="off" placeholder="e-mail ou nome"></label>
+      <button class="btn" type="submit">Enviar aviso</button>
+      <p id="avS" class="hint" role="status"></p>
+    </form>
+    <details class="sec"><summary>Avisos guardados neste aparelho</summary><div id="avL"></div></details>
   </section>
 
   <section id="p-fo" role="region" aria-label="Fontes, avisos e créditos" hidden>
@@ -1879,7 +1895,7 @@ function esRun(){
 function agHoje(){const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
 function agInit2(){}
 function agInit(){
-  fuInit();sgmBind('so','so-');sgmBind('el','el-');sgmBind('fu','fu-');
+  fuInit();avInit();sgmBind('so','so-');sgmBind('el','el-');sgmBind('fu','fu-');
   soInit();elInit();pfInit();ivQuizInit();pbInit();ecInit();
 }
 /* botões segmentados: attr = data-so / data-el; prefixo dos painéis */
@@ -2154,8 +2170,8 @@ function ecInit(){
   miniQuiz('#ecQuiz',bank,'Pergunta');
 }
 
-const SCR=['p-ec','p-pb','p-cs','p-in','p-en','p-pf','p-so','p-el','p-fu','p-an','p-tr','p-tb','p-iv','p-sp','p-ca','p-aj','p-fo','p-pq','p-sl','p-co','p-es','p-pg','p-cp','p-cf','p-ic','p-rm','p-ob','p-st','p-rv'];
-const OWN={'p-ec':'t-en','p-pb':'t-en','p-cs':'t-en','p-pf':'t-en','p-so':'t-en','p-el':'t-en','p-fu':'t-en','p-tr':'t-sp','p-tb':'t-sp','p-an':'t-sp','p-ca':'t-sp','p-aj':'t-sp','p-pq':'t-sp','p-sl':'t-sp','p-iv':'t-sp','p-rm':'t-sp','p-cf':'t-cp','p-ic':'t-cp','p-es':'t-cp','p-ob':'t-in','p-fo':'t-in','p-co':'t-in','p-pg':'t-in','p-st':'t-in','p-rv':'t-in'};
+const SCR=['p-ec','p-pb','p-cs','p-in','p-en','p-pf','p-so','p-el','p-fu','p-an','p-tr','p-tb','p-iv','p-sp','p-ca','p-aj','p-fo','p-pq','p-sl','p-co','p-es','p-pg','p-cp','p-cf','p-ic','p-rm','p-ob','p-st','p-rv','p-av'];
+const OWN={'p-ec':'t-en','p-pb':'t-en','p-cs':'t-en','p-pf':'t-en','p-so':'t-en','p-el':'t-en','p-fu':'t-en','p-tr':'t-sp','p-tb':'t-sp','p-an':'t-sp','p-ca':'t-sp','p-aj':'t-sp','p-pq':'t-sp','p-sl':'t-sp','p-iv':'t-sp','p-rm':'t-sp','p-cf':'t-cp','p-ic':'t-cp','p-es':'t-cp','p-ob':'t-in','p-fo':'t-in','p-co':'t-in','p-pg':'t-in','p-st':'t-in','p-rv':'t-in','p-av':'t-in'};
 const NAV=['t-in','t-cp','t-en','t-sp'];
 function drawSl(){const b=$('#slBody');if(!b||b.dataset.ok||typeof SLD==='undefined')return;b.dataset.ok='1';
   b.innerHTML=SLD.map((s,i)=>'<div class="rule"><h3>'+esc(s[0])+'</h3><p>'+esc(s[1])+'</p><figure class="mech"><button type="button" class="mechb" data-sl="'+i+'"><img src="'+s[2]+'" alt="Slide do professor: '+esc(s[0])+'"></button></figure></div>').join('');

@@ -212,16 +212,60 @@ function fuTubo(a){
   const t=(x,cor,rot)=>'<g transform="translate('+x+',0)"><path d="M14 6v52a14 14 0 0 0 28 0V6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 34h26v24a13 13 0 0 1-26 0z" fill="'+cor+'" stroke="none"/><text x="28" y="92" text-anchor="middle" font-size="10" fill="currentColor">'+rot+'</text></g>';
   return '<svg class="futb" viewBox="0 0 240 100" role="img" aria-label="Tubo do reagente e tubo positivo: '+a.l[0]+' passa a '+a.l[1]+'">'+t(40,a.c[0],a.l[0])+'<path d="M96 40h40m-8-8 8 8-8 8" fill="none" stroke="currentColor" stroke-width="2"/>'+t(158,a.c[1],a.l[1])+'</svg>';
 }
+/* ---- vidraria e utensílios: ícones simples (traço em currentColor) ---- */
+const FUI={
+ tubo:['Tubo de ensaio','<path d="M24 8v38a8 8 0 0 0 16 0V8" /><path d="M21 8h22"/><path d="M24 34h16" stroke-dasharray="2 3"/>'],
+ micro:['Microtubo de ensaio','<path d="M26 14v28a6 6 0 0 0 12 0V14"/><path d="M23 14h18"/><path d="M26 34h12" stroke-dasharray="2 3"/>'],
+ bequer:['Béquer','<path d="M16 12v38a4 4 0 0 0 4 4h24a4 4 0 0 0 4-4V12"/><path d="M13 12h38"/><path d="M16 32h32" stroke-dasharray="2 3"/><path d="M16 20h6M16 26h6M16 38h6M16 44h6"/>'],
+ bunsen:['Bico de Bunsen','<path d="M28 54h8M32 54V28M27 28h10M29 54l-3 4M35 54l3 4"/><path d="M32 24c-5-4-5-9 0-15 5 6 5 11 0 15z" fill="currentColor" fill-opacity=".25"/>'],
+ banho:['Banho-maria','<path d="M10 22v28a4 4 0 0 0 4 4h36a4 4 0 0 0 4-4V22"/><path d="M8 22h48"/><path d="M12 30q5-4 10 0t10 0 10 0 10 0" /><path d="M30 8v26a3 3 0 0 0 6 0V8"/><path d="M28 8h10"/>'],
+ gota:['Conta-gotas ou pipeta Pasteur','<path d="M26 8a6 6 0 0 1 12 0v8H26z"/><path d="M28 16v22l4 8 4-8V16"/><path d="M32 52v4" stroke-dasharray="1 3"/>'],
+ papel:['Papel de filtro','<path d="M14 12h36v40H14z"/><path d="M20 20h24M20 28h24M20 36h14" stroke-dasharray="3 3"/>'],
+ gelo:['Banho de gelo','<path d="M12 24v26a4 4 0 0 0 4 4h32a4 4 0 0 0 4-4V24"/><path d="M10 24h44"/><rect x="18" y="30" width="10" height="9"/><rect x="32" y="34" width="10" height="9"/><rect x="24" y="43" width="10" height="7"/>'],
+ funil:['Funil com papel de filtro','<path d="M14 12h36L36 34v14M28 34v14"/><path d="M28 48h8"/><path d="M20 18l12 14 12-14" stroke-dasharray="2 3"/>'],
+ estufa:['Estufa','<rect x="10" y="10" width="44" height="44" rx="3"/><path d="M10 40h44"/><path d="M22 20q4-4 0-8M32 20q4-4 0-8M42 20q4-4 0-8"/><circle cx="46" cy="47" r="2"/>'],
+ vidro:['Vidro de relógio','<path d="M10 34q22 20 44 0"/><path d="M10 34h44"/><path d="M24 40q8 5 16 0" stroke-dasharray="2 3"/>'],
+ capela:['Capela de exaustão','<rect x="8" y="10" width="48" height="46" rx="3"/><path d="M8 24h48"/><path d="M16 34h32v14H16z"/><path d="M26 17h12" /><path d="M24 54v-6M40 54v-6"/>'],
+ oculos:['Óculos de proteção e luvas','<path d="M8 28h48v8a8 8 0 0 1-8 8h-8a6 6 0 0 1-6-6h-4a6 6 0 0 1-6 6h-8a8 8 0 0 1-8-8z"/><path d="M8 30l-3-4M56 30l3-4"/>']
+};
+function fuIc(k){const d=FUI[k];return '<svg class="fuic" viewBox="0 0 64 64" role="img" aria-label="'+d[0]+'" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">'+d[1]+'</svg>';}
+/* os materiais saem do texto do próprio procedimento: só aparece o que a apostila manda usar */
+function fuMat(a){
+  const t=(a.st.join(' ')+' '+a.rg.map(r=>r[1]).join(' ')).toLowerCase(),m=[];
+  const add=(k,txt)=>{if(!m.some(x=>x[0]===k))m.push([k,txt]);};
+  add('oculos','Óculos de proteção e luvas.');
+  if(/microtubo/.test(t))add('micro','Microtubos de ensaio (para a amostra e o branco).');else add('tubo','Tubos de ensaio, com estante: um para a amostra, um para o branco e um para o controle.');
+  add('gota','Conta-gotas ou pipeta Pasteur para as gotas de amostra e de reagente.');
+  if(/banho-maria/.test(t))add('banho','Banho-maria: béquer com água quente sobre chapa de aquecimento ou bico de Bunsen.');
+  if(/chama|bico de bunsen/.test(t))add('bunsen','Bico de Bunsen.');
+  if(/gelo/.test(t))add('gelo','Banho de gelo.');
+  if(/papel de filtro/.test(t))add('papel','Papel de filtro.');
+  if(/filtr/.test(t)&&!/papel de filtro/.test(t))add('funil','Funil e papel de filtro, para filtrar.');
+  if(/estufa/.test(t))add('estufa','Estufa a 110 °C.');
+  if(/vidro de relógio/.test(t))add('vidro','Vidro de relógio.');
+  if(/capela/.test(t))add('capela','Capela de exaustão (o reagente solta vapores).');
+  if(/béquer/.test(t)&&!m.some(x=>x[0]==='banho'||x[0]==='bequer'))add('bequer','Béquer.');
+  return m;
+}
+/* cena do banho-maria: só nos ensaios que pedem aquecimento assim */
+function fuCena(a){
+  if(!/banho-maria/.test(a.st.join(' ').toLowerCase()))return '';
+  return '<figure class="fucena"><svg viewBox="0 0 220 120" role="img" aria-label="Tubo de ensaio mergulhado em béquer com água quente sobre um bico de Bunsen" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M60 40v46a4 4 0 0 0 4 4h60a4 4 0 0 0 4-4V40"/><path d="M56 40h76"/><path d="M60 56q10-5 20 0t20 0 20 0 14 0" /><path d="M92 10v62a8 8 0 0 0 16 0V10"/><path d="M88 10h24"/><path d="M92 62h16" fill="none" stroke-dasharray="2 3"/><path d="M96 92v10M92 102h8M160 100l-2 6M190 100l2 6"/><path d="M94 100c-4-3-4-6 0-11 4 5 4 8 0 11z" fill="currentColor" fill-opacity=".3"/><path d="M140 50h30M164 44l6 6-6 6" /></svg><figcaption>Banho-maria: o tubo fica dentro do béquer com água quente, preso por uma garra. A água não deve ferver dentro do tubo.</figcaption></figure>';
+}
 function fuCard(a){
-  return '<div class="el fuc"><h3>'+esc(a.n)+'</h3><p>'+esc(a.pr)+'</p>'+fuTubo(a)
-   +'<details class="fur"><summary>Como fazer o reagente</summary>'+a.rg.map(r=>'<p><b>'+esc(r[0])+'.</b> '+esc(r[1])+'</p>').join('')+'</details>'
-   +'<ol class="steps2">'+a.st.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol>'
-   +'<p class="pos"><b>Positivo:</b> '+esc(a.pos)+'</p><p><b>Cuidado:</b> '+esc(a.cu)+'</p>'
-   +'<p class="fusrc"><span class="tag sv">Conferido: apostila IFRJ Nilópolis (2016)</span> Procedimento '+a.p+'. Reagentes: receituário do IFRJ. Cores do tubo aproximadas.</p></div>';
+  const mat=fuMat(a);
+  return '<details class="el fuc"><summary><span class="fuch">'+esc(a.n)+'</span><span class="fudots" aria-hidden="true"><i style="background:'+a.c[0]+'"></i><i style="background:'+a.c[1]+'"></i></span></summary><div class="fucb">'
+   +'<p>'+esc(a.pr)+'</p>'+fuTubo(a)
+   +'<h4>Materiais</h4><ul class="fuul fumt">'+mat.map(x=>'<li>'+fuIc(x[0])+'<span>'+esc(x[1])+'</span></li>').join('')+'</ul>'
+   +'<h4>Reagentes</h4><ul class="fuul">'+a.rg.map(r=>'<li><b>'+esc(r[0])+'</b><details class="fur"><summary>Como preparar</summary><p>'+esc(r[1])+'</p></details></li>').join('')+'</ul>'
+   +'<h4>Procedimento</h4><ol class="steps2">'+a.st.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol>'+fuCena(a)
+   +'<p class="pos"><b>Positivo:</b> '+esc(a.pos)+'</p>'+(a.cu?'<p class="fucu"><b>Cuidado:</b> '+esc(a.cu)+'</p>':'')
+   +'<p class="fusrc"><span class="tag sv">Conferido: apostila IFRJ Nilópolis (2016)</span> Procedimento '+a.p+'. Reagentes: receituário do IFRJ. Cores do tubo aproximadas.</p></div></details>';
 }
 function fuDraw(){
   FUG.forEach(g=>{const box=document.getElementById('fu-'+g[0]);if(!box||box.dataset.ok)return;box.dataset.ok=1;
-    box.innerHTML=FUN.filter(a=>a.g===g[0]).map(fuCard).join('');});
+    box.innerHTML='<p class="fubar"><button type="button" class="chip" data-fuall="1">Abrir todos</button> <button type="button" class="chip" data-fuall="0">Fechar todos</button></p>'+FUN.filter(a=>a.g===g[0]).map(fuCard).join('');
+    box.querySelectorAll('[data-fuall]').forEach(b=>b.onclick=()=>box.querySelectorAll('details.fuc').forEach(d=>d.open=b.dataset.fuall==='1'));});
 }
 function fuInit(){
   const sg=document.querySelector('#p-fu .sgm');if(!sg)return;
@@ -597,3 +641,26 @@ document.addEventListener('change',async e=>{
     out.textContent=r.msg+'. Confira os valores no campo acima: a leitura por imagem pode errar em 1 unidade de m/z ou em barras muito pequenas.';}
   catch(err){out.textContent=PDF_ERR+' (Este navegador pode ser antigo demais para o leitor de PDF.)';}
 },true);
+
+/* ---- avisos de erro e sugestões: vão para a aba "Sugestões de Mudanças" da planilha "Avisos do Claude" ---- */
+/* Endereço do script publicado (Apps Script, termina em /exec). Vazio = o aviso fica só neste aparelho e pode ser copiado/compartilhado. */
+const AV_URL='';
+function avLista(){try{return JSON.parse(localStorage.getItem('anaquim_avisos')||'[]');}catch(e){return[];}}
+function avGuarda(l){try{localStorage.setItem('anaquim_avisos',JSON.stringify(l.slice(-50)));}catch(e){}}
+function avDesenha(){const b=document.getElementById('avL');if(!b)return;const l=avLista();
+  b.innerHTML=l.length?l.slice().reverse().map(x=>'<p><b>'+esc(x.tipo)+'</b> · '+esc(x.tela)+' · '+esc(x.data.slice(0,10))+' · '+(x.enviado?'enviado':'só neste aparelho')+'<br>'+esc(x.msg)+'</p>').join(''):'<p class="hint">Nenhum ainda.</p>';}
+function avInit(){
+  const f=document.getElementById('avF');if(!f)return;avDesenha();
+  f.onsubmit=async ev=>{ev.preventDefault();
+    const m=document.getElementById('avM').value.trim();if(!m)return;
+    const d={origem:'Usuário',tipo:f.avT.value,tela:document.getElementById('avTela').value,msg:m,contato:document.getElementById('avC').value.trim(),versao:String(VERSAO).split(' ')[0],data:new Date().toISOString()};
+    const s=document.getElementById('avS');let ok=false;
+    if(AV_URL){try{await fetch(AV_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)});ok=true;}catch(e){}}
+    d.enviado=ok;const l=avLista();l.push(d);avGuarda(l);avDesenha();
+    if(ok){s.textContent='Enviado. Obrigada!';document.getElementById('avM').value='';}
+    else{const txt='[Anaquim '+d.versao+'] '+d.tipo+' em '+d.tela+': '+d.msg;
+      s.innerHTML='Guardei o aviso neste aparelho, mas o envio automático ainda não está ligado. <button type="button" class="chip" id="avCp">Copiar texto</button>'+(navigator.share?' <button type="button" class="chip" id="avSh">Compartilhar</button>':'');
+      document.getElementById('avCp').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(txt);s.textContent='Texto copiado.';};
+      const sh=document.getElementById('avSh');if(sh)sh.onclick=()=>navigator.share({text:txt}).catch(()=>{});}
+  };
+}

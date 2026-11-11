@@ -375,6 +375,8 @@ function drawIVChips(){
   sel.innerHTML=(sd.length?'<optgroup label="Com espectro do SDBS conferido">'+sd.map(opt).join('')+'</optgroup>':'')+(rest.length?'<optgroup label="Demais compostos">'+rest.map(opt).join('')+'</optgroup>':'')||'<option value="">Nenhum composto encontrado</option>';
   if(ok.length&&!ok.some(c=>c.i===ivC)){ivC=ok[0].i;sel.value=String(ivC);drawIV();}
 }
+/* recorta o desenho da molécula ao que está desenhado, para não sobrar espaço vazio em volta (molécula pequena) */
+function svgCrop(sv){if(!sv)return;try{const b=sv.getBBox();if(b.width<2||b.height<2)return;const p=8;sv.setAttribute('viewBox',[b.x-p,b.y-p,b.width+2*p,b.height+2*p].join(' '));sv.removeAttribute('height');sv.style.maxHeight='190px';}catch(e){}}
 function drawIV(){
   const box=$('#ivout');if(ivC===null){const a=COMP.find(x=>x.n==='acetona');ivC=a?a.i:COMP[0].i;}
   const c=COMP.find(x=>x.i===ivC);if(!c){box.innerHTML='<p class="empty">Escolha um composto acima.</p>';return;}
@@ -392,7 +394,7 @@ function drawIV(){
   h+=fuSug(c.gf);
   if(e&&e.disc.length)h+='<details class="sec"><summary>Como a disciplina atribui</summary><div class="tbl"><table class="obt"><thead><tr><th>Banda (cm⁻¹)</th><th>O que é</th></tr></thead><tbody>'+e.disc.map(r=>'<tr><td class="n">'+r[0]+'</td><td>'+esc(r[1])+'</td></tr>').join('')+'</tbody></table></div></details>';
   h+='<p class="hint" style="margin-top:12px"><button class="btn ghost" type="button" data-cf="'+c.i+'">Abrir a ficha de '+esc(c.n)+'</button></p>';
-  box.innerHTML=h;
+  box.innerHTML=h;svgCrop(box.querySelector('.ivfig svg'));
 }
 document.addEventListener('change',ev=>{if(ev.target.id==='ivSel'){ivC=+ev.target.value;drawIV();}});
 document.addEventListener('input',ev=>{if(ev.target.id==='ivQ')drawIVChips();});

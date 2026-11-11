@@ -59,3 +59,10 @@ O banco só traz picos de massas; não tem bandas de IV nem RMN, e não cita a f
 
 ### Conferência do banco (10/11/2026)
 `analor_pubchem.json` guarda a fórmula do PubChem (por CAS) dos registros em que a fórmula do banco não bate com a do SMILES. `confere()` em `analor_bd.py` usa isso: se o PubChem confirma a estrutura, a fórmula é corrigida; se confirma a fórmula, a estrutura não é usada; se não decide, a estrutura também não é usada. Em todos os casos a ficha mostra o aviso. Registros idênticos repetidos foram removidos (4668 para 4663), e densidade fora de 0,2–6 g/mL é descartada. Pendências conhecidas: 54 CAS que não passam no dígito verificador (alguns são outro tipo de código), 18 espectros com pico acima da massa molar (avisados na ficha), PF e PE sem correção (amostra de 70: 87% de PF e 79% de PE dentro de 5 °C do PubChem).
+
+## v220–v225
+- CAS corrigidos: `fontes/cas_corrigido.json` (gerado por `cas_aplica.py` a partir do PubChem); `analor_bd.py` aplica e registra antes/depois na ficha.
+- Padrão do anel (mono/orto/meta/para) em ficha, lista e filtro; 9 compostos meta em `compostos.py`.
+- Ensaios: cada um em sanfona, materiais montados do texto do procedimento (`fuMat`), ícones em `FUI`.
+- Avisar erro ou sugestão: tela `p-av`; para enviar à planilha, publicar o script da aba "Como ligar o envio" e colocar o link em `AV_URL` (analorg4.js).
+- PDF de IV com rótulos girados: leitura por linhas-guia dos picos; só 4 PDFs desse tipo foram vistos.
