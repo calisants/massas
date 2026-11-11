@@ -325,18 +325,37 @@ async function pdfCarrega(){
   if(_pdfjs)return _pdfjs;
   const m=await import('./vendor/pdf.min.mjs');m.GlobalWorkerOptions.workerSrc='./vendor/pdf.worker.min.mjs';_pdfjs=m;return m;
 }
+async function pdfNativa(pg,P){
+  /* maior imagem embutida na página: tem os pixels originais do SDBS, sem reamostrar */
+  const ol=await pg.getOperatorList();let best=null;
+  for(let i=0;i<ol.fnArray.length;i++){const f=ol.fnArray[i];
+    if(f===P.OPS.paintImageXObject||f===P.OPS.paintJpegXObject){const nm=ol.argsArray[i][0];
+      const o=await new Promise(r=>{try{pg.objs.get(nm,r);}catch(e){r(null);}});
+      if(o&&o.width>=500&&(!best||o.width*o.height>best.width*best.height))best=o;}}
+  if(!best)return null;
+  const W=best.width,H=best.height,n=W*H;let rgba=null;
+  if(best.bitmap){const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.drawImage(best.bitmap,0,0);rgba=x.getImageData(0,0,W,H).data;}
+  else if(best.data&&best.data.length>=n*3){const d=best.data,bpp=Math.round(d.length/n);rgba=new Uint8ClampedArray(n*4);
+    for(let i=0;i<n;i++){rgba[i*4]=d[i*bpp];rgba[i*4+1]=d[i*bpp+1];rgba[i*4+2]=d[i*bpp+2];rgba[i*4+3]=255;}}
+  return rgba?{data:rgba,W,H}:null;
+}
 async function pdfLer(f){
   const P=await pdfCarrega(),doc=await P.getDocument({data:new Uint8Array(await f.arrayBuffer())}).promise,pg=await doc.getPage(1);
   const tc=await pg.getTextContent();let tx='';tc.items.forEach(i=>{tx+=i.str+(i.hasEOL?'\n':' ');});
   if((tx.match(/\d+(?:\.\d+)?/g)||[]).length>=20)return{texto:tx};
+  try{const nat=await pdfNativa(pg,P);if(nat)return{nat};}catch(e){}
   const vp=pg.getViewport({scale:2.5}),cv=document.createElement('canvas');cv.width=Math.round(vp.width);cv.height=Math.round(vp.height);
   const cx=cv.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);
   await pg.render({canvasContext:cx,viewport:vp}).promise;return{canvas:cv};
 }
-function pdfMascara(cv){
-  const W=cv.width,H=cv.height,d=cv.getContext('2d').getImageData(0,0,W,H).data,M=new Uint8Array(W*H);
-  for(let i=0;i<W*H;i++)M[i]=(d[i*4]+d[i*4+1]+d[i*4+2])/3<150?1:0;
-  return{M,W,H};
+function pdfMascaraD(d,W,H){
+  const M=new Uint8Array(W*H),B=new Uint8Array(W*H);
+  for(let i=0;i<W*H;i++){const g=(d[i*4]+d[i*4+1]+d[i*4+2])/3;M[i]=g<140?1:0;B[i]=g<128?1:0;}
+  return{M,B,W,H};
+}
+function pdfMascara(r){
+  if(r.nat)return pdfMascaraD(r.nat.data,r.nat.W,r.nat.H);
+  const cv=r.canvas;return pdfMascaraD(cv.getContext('2d').getImageData(0,0,cv.width,cv.height).data,cv.width,cv.height);
 }
 /* moldura do gráfico: a maior linha vertical é o eixo esquerdo; a linha de baixo parte dela */
 function pdfMoldura(I){
@@ -349,7 +368,7 @@ function pdfMoldura(I){
   return null;
 }
 /* IV do SDBS: eixo de 4000 a 2000 cm⁻¹ ocupa 38,5% da largura e o resto vai até 400 (valores ajustados nas impressões do SDBS) */
-function pdfIV(I,fr){
+function pdfIV(I,fr,guia){
   const {M,W}=I,{xl,yt,yb,xr}=fr,Wd=xr-xl,k=Wd/620;
   const x4=xl-0.002*Wd,xk=xl+0.3848*Wd,x4h=xr+0.0006*Wd,pad=Math.max(3,Math.round((yb-yt)*0.03));
   const V=[],T=[];
@@ -360,12 +379,11 @@ function pdfIV(I,fr){
     let mn=1,mx=0;for(let j=i-2;j<=i+2;j++){mn=Math.min(mn,T[j]);mx=Math.max(mx,T[j]);}
     if(T[i]>mn||T[i]>=mx)continue;
     let hi=0;for(let j=Math.max(0,i-w);j<Math.min(n,i+w+1);j++)hi=Math.max(hi,T[j]);
-    if(hi-T[i]<0.07||V[i]<650||V[i]>4000)continue;
-    /* largura na meia profundidade, medida em cm⁻¹ */
-    let base=0;for(let j=Math.max(0,i-Math.round(60*k)*3);j<Math.min(n,i+Math.round(60*k)*3);j++)base=Math.max(base,T[j]);
-    const half=(T[i]+base)/2;let l=i,r=i;while(l>0&&T[l]<half)l--;while(r<n-1&&T[r]<half)r++;
-    if(1-T[i]>=0.10)res.push({v:Math.round(V[i]),h:1-T[i],w:0});}
-  res.sort((a,b)=>b.h-a.h);const out=[];res.forEach(p=>{if(out.length<20&&!out.some(q=>Math.abs(q.v-p.v)<14))out.push(p);});
+    const pr=hi-T[i];if(pr<0.025||V[i]<450||V[i]>4000)continue;
+    res.push({v:Math.round(V[i]),h:1-T[i],w:0,forte:pr>=0.07&&1-T[i]>=0.10});}
+  /* forte: pico claro na curva. fraco: só entra se a tabela escrita tem um número de onda perto (±14) */
+  const bons=res.filter(p=>p.forte||(guia||[]).some(g=>Math.abs(g-p.v)<=14));
+  bons.sort((a,b)=>b.h-a.h);const out=[];bons.forEach(p=>{if(out.length<30&&!out.some(q=>Math.abs(q.v-p.v)<14))out.push(p);});
   out.sort((a,b)=>b.v-a.v);return out;
 }
 /* MS do SDBS: o primeiro tick maior é m/z 10 e cada tick maior vale 10 unidades; a altura da barra é a altura da coluna */
@@ -383,17 +401,70 @@ function pdfMS(I,fr){
   const top=Math.max(...bins.values(),1);
   return[...bins].map(p=>[p[0],Math.round(p[1]/top*100)]).filter(p=>p[1]>=3&&p[0]>0).sort((a,b)=>b[1]-a[1]).slice(0,12).sort((a,b)=>a[0]-b[0]);
 }
+/* ---- tabela de picos escrita (imagem) das impressões de IV do SDBS ----
+   A fonte é de pontos (5x7) e fica borrada no JPEG: 0, 3, 5, 6, 8 e 9 se confundem. Por isso a tabela só serve de guia (quais picos existem,
+   inclusive os fracos); a posição de cada pico sai da curva. Os padrões abaixo foram rotulados a partir de impressões do SDBS. */
+const PDF_PAT={"3|.#..#..#..#..#..#.###":1,"5|.###.#...##...##...##...##...#.###.":0,"5|...#...##...##..#.#.#####...#....#.":4,"2|.###.#.#.#.###":1,"4|#####..#...#..#..#..#...####":2,"4|.##.#..##..#..#..#..#...####":2,"2|##.#.#.#.#.###":1,"5|.###.#...#...#...#...#...#....#####":2,"4|#####..#...#...#..#...#...#.":7,"5|######...#....#...#....#....#...#..":7,"5|######....#....####.....##...######":5,"5|.###.#...##...######....#....#.###.":9,"5|######...#...#....#....#...#....#..":7,"3|.#.##..#..#..#..#.###":1,"5|.###.#...##...#.###.#...##...######":8,"5|######....#....######...##...#.###.":6,"3|##..#..#..#..#..#.###":1,"5|.###.#....#....######...##...#.###.":6,"4|.####..##..#..#..#..#...####":2,"5|######...#...#....#....#...#.......":7,"4|.####..##...#####..##..#.###":6,"2|#.#.#.#.#.#.##":1,"4|#####..#...#...#..#...#.....":7,"5|...#...##..#.#..#.#.#####...#....#.":4,"4|.##.#..#...#.###...#...#####":3,"4|#####...#...#####..##..#.###":6,"4|.####..#...#.###...##..#.###":3,"4|..##..##.#.#.#.#####...#...#":4,"5|.###.#...##...##...#.####....######":9,"5|...#....#...##..#.#..#.#.#####...#.":4,"4|.####..#...#.###...#...#####":3,"5|.###.#...##..##..#...#...#....#####":2,"5|.###.#...##...#...#...#...#...#####":2,"5|.###.#....#....####.#...##...#.###.":6,"4|.##.#..##..##..##..##..#####":0,"5|.###.#...#.#.#.######...##...#.###.":8,"4|#####...#...####...##..#####":5,"5|.###.#...##...#.####....#.#..#.###.":9,"4|.####..##..##..##..##..#.###":0,"4|.####..##..##..##..##..#####":0,"4|#####..##..##..##..##..#.##.":0,"4|..#..##..##.#.#.####..#...#.":4,"4|..#...#..##.#.#.####..#...#.":4,"5|######....#....####.#...##...#.###.":6,"4|#####..#...#..#...#...#..#..":7,"4|#####..#...#..#...#...#.....":7,"5|..##...##..#.#..#.#.#####...#....#.":4,"4|#####...####...##..##..#.###":5,"4|###....#...####....#...####.":3,"5|.###.#...###..#######...##...#.###.":8,"5|...#....#...##..#.#.#####...#....#.":4,"5|.###.#...##...##...##...##...######":0,"4|.##.#..##..##..#.###...#####":9,"4|###....####....#...#...####.":3,"4|...#..##.#.#.#.#####...#...#":4,"5|######..##...#....#...#....#....#..":7,"4|####...#...#.###...##..#.##.":3,"4|####...#.###...#...##..#.##.":3,"4|###.#..##...###.#..##..#####":6,"5|.###.##..##...#.###.#...##...######":8,"4|.####..##...#####..##..#####":6,"5|######....####.....##...###..#.###.":5,"4|.####..##..######..##..#.###":6,"4|###.#..##..##..##..##..####.":0,"5|.###.#...#.###.#...##...##...#.###.":8,"4|#####..##..##..##..##..####.":0,"4|###....#...#####...#...####.":3,"4|..#...#..##..##.#.#.####..#.":4,"4|.####..##..#.####..##..#####":8,"5|.###.#...##....######...##...#.###.":6,"4|.####..#...#..#..#..#...####":2,"5|.###.#..###...##...##...##...######":0,"4|###.#..##...#####..##..####.":6,"5|.###.#...##...#.####....#....#.###.":9,"4|#####...#...#####..##..#.##.":6,"4|#####...###.#..##..##..#.##.":6,"4|###.#..##..####.#..##..#####":8,"4|.####..##..#.###...#...#.###":3,"5|######...#....#...#....#...#....#..":7,"4|#####...#...###....##..#####":5,"5|.###.#....####.#...##...##...#.###.":6,"5|.###.##..##...#...#...#...#...#####":2,"5|.###.....#....#.###.....#....######":3,"4|.##.#..##...#####..##..####.":6,"5|######....####....###...##..##.###.":5,"5|.###.#....#....####.#...##...######":6,"5|.###.#..#.#....####.#...##...######":6,"4|#####..#...#...#...#..#...#.":7,"5|.###.#...#.#..#######...##...#.###.":8,"5|.###.#...##....####.#...##...######":8,"4|####...#.###...#...##..#.###":3,"4|...#..##..##.#.##..#####...#":4,"4|#####..##..#####...##..#.##.":9,"5|.###.#...#.###.##..##...###..#.###.":8,"5|.###.##...#....####.#...##...######":6,"5|.###.#...###..#.###.#...##...#.###.":8,"4|#####..##..#.###...##..#.###":3,"4|#####...#...#####..##..####.":5,"4|#####..######..##..##..#.##.":8,"5|.###.#...##...##...##...###..#.###.":0,"5|.###.#....####.#..###...##..##.###.":6,"4|#####..######..##..##..#.###":8,"4|.####..##..#####...#...#.###":9,"4|###.#..##..######..##..####.":8,"5|.###.#....####.#...##...###..#.###.":6,"4|#####..######..##..##..####.":8,"5|.###.#...##...#.####....#...##.###.":9,"4|#####..#.####..##..##..#.###":8,"5|.###.#...##..##.###.#...##...#.###.":8,"4|.##.#..#...#.##....#...#####":3,"5|.#####...##...#.####....#.#..#.###.":9,"5|.#####...#.###.#...##...###..#.###.":8,"5|.###.#...##..########...##...#.###.":8,"5|######....####.....##...##...#.###.":6,"5|.###.#...##...###..#.####....#.###.":9,"4|#####..##..######..##..#.##.":6,"4|.##.#..##..#.####..##..#####":0,"4|###.#..##..#..#..#..#...####":2,"4|.##.#..##...#####..##..#.###":6,"5|.###.#...##...##...##...##..##.###.":0,"5|.###..#..#....#.###.....#....######":3,"5|.###.#..###...#...#...#...#...#####":2,"5|.###.#...#.###.##..##...##...#.###.":8,"4|.####..##..#.####..##..#.###":3,"5|.#####....####.#...##...###..#.###.":0,"4|#####...#...#####..##..#####":5,"5|######..##...#....#...#....#.......":7,"4|.####..#.###...#...##..#.###":3,"4|#####..#...#..#...#...#...#.":7,"4|.##.#..##..#####...#...####.":3,"5|.###.##..##...##...##...##...######":0,"4|..#...#..##..##.####..#...#.":4,"5|...#...##..#.#..#.#.#..#.#####...#.":4,"5|...#...##...##..#.#.#..#.#####...#.":4,"5|.###.#...#.###.#..###...##..##.###.":8,"5|.###.#...#.###.#..###...##...#.###.":8,"4|.####..##..##..#.###...#####":0,"4|###.#..##..#####...##..####.":5,"5|######...#...#....#...#....#.......":7,"4|...#..##.#.#.#.##..#####...#":4,"5|...#...##...##..#.#..#.#.#####...#.":4,"4|.##.#..##..######..##..#####":0,"5|.###....##....#.###.....#....######":8,"4|.####..######..##..##..#.###":0,"4|#####..#..#..#..#...#...####":2,"4|###....####...##...#...####.":8,"5|######..##...#....#....#...#....#..":7,"4|.###...#...#.###...#...#####":3,"4|.##.#..#...#.###...##..#.###":3,"4|.##.#..#...#.###...#...####.":3,"4|#####..##..##..##..##..#.###":0,"4|.##.#..##...#####..##..#####":6,"5|.#####...#...#...#...#...#....#####":2,"4|.##.#..##..######..##..####.":0,"4|.####..##..#####...##..#.###":3,"5|.###.#..###...#.###.#...##...######":8,"4|.##.#..##...###.#..##..#####":6,"4|#####...###.#..##..##..####.":0,"5|######....####.....##...##..##.###.":6,"4|####...####....#...##..####.":0,"4|#####...###....##..##..#.##.":6,"5|.###.#...##...#...#...#..##...#####":2,"4|###.#..#...####....#...#####":3,"5|######....####....###...##...#.###.":6,"5|.###.#...##...###..#.####....######":9,"4|###.#..##..##..##..##..#####":0,"5|.#####...#.###.##..##...###..#.###.":8,"5|.###.#...#####.#...##...###..#.###.":0,"4|.##....#...#.###...#...#####":3,"5|.###.#...#...#....#...#..##...#####":2,"4|#####..#...#.##.#...#...####":2,"4|#####..#...#...#..#...#..#..":7,"5|.###.#...##..#.######...##...#.###.":6,"5|####.#....#....######...##...#.###.":6,"4|###....####....#...#..#####.":8,"5|####.#...#####.#..###...##..##.###.":8,"5|####.....#.###....##....##..##.###.":8,"4|.####..#.####..##..##..#.###":0,"5|.###.#...##...##...#.####....#.###.":9,"4|###....#..#.####...#...####.":8,"4|###....#..######...#...####.":9,"4|.####..##..#...#..#..#..####":2,"5|####.#...#...#...#...#...#....#####":2,"5|.###.#...#...##.####....##...#.###.":8,"5|.###.##..##...##...#.####....######":9};
+function pdfCaixaTabela(I,fr){
+  const {B:M,W,H}=I,Wd=fr.xr-fr.xl,fh=fr.yb-fr.yt;let top=-1,bot=-1;
+  const run=y=>{let x=fr.xl;while(x<W&&M[y*W+x])x++;return x-fr.xl;};
+  for(let y=fr.yb+Math.round(fh*0.04);y<Math.min(H,fr.yb+Math.round(fh*0.6));y++){const r=run(y);
+    if(r>Wd*0.25){if(top<0)top=y;else if(y-top>fh*0.06){bot=y;break;}}}
+  if(top<0||bot<0)return null;
+  let b=bot;while(b+1<H&&run(b+1)>Wd*0.25)b++;
+  return{x0:fr.xl,x1:Math.min(W-1,fr.xl+run(top)),y0:top,y1:b};
+}
+function pdfGlifos(I,cx){
+  const {B:M,W}=I,x0=cx.x0,x1=cx.x1,y0=cx.y0+3,y1=cx.y1-3,h=y1-y0;
+  const dc=[];for(let x=x0;x<=x1;x++){let c=0;for(let y=y0;y<=y1;y++)c+=M[y*W+x];if(c>h*0.85)dc.push(x);}
+  const cen=[];dc.forEach(x=>{const l=cen[cen.length-1];if(l&&x-l[1]<=4)l[1]=x;else cen.push([x,x]);});
+  if(cen.length<2)return[];
+  const iv=[];for(let i=0;i+1<cen.length;i++)iv.push([cen[i][1]+2,cen[i+1][0]-2]);
+  const w=iv.map(p=>p[1]-p[0]).sort((p,q)=>p-q),med=w[w.length>>1];
+  const keep=iv.filter(p=>p[1]-p[0]<=med*1.4&&p[1]-p[0]>=med*0.6),rowsAll=[];
+  keep.forEach(([a,c])=>{
+    const has=(x,ya,yb)=>{for(let y=ya;y<=yb;y++)if(M[y*W+x])return true;return false;};
+    const hasR=y=>{for(let x=a;x<=c;x++)if(M[y*W+x])return true;return false;};
+    let y=y0;
+    while(y<=y1){if(hasR(y)){const s0=y;while(y<=y1&&hasR(y))y++;if(y-1-s0>=4){
+      const gl=[];let x=a;while(x<=c){if(has(x,s0,y-1)){const t=x;while(x<=c&&has(x,s0,y-1))x++;gl.push([t,x-1]);}else x++;}
+      rowsAll.push({y:[s0,y-1],gl});}}else y++;}});
+  return rowsAll;
+}
+function pdfPadrao(I,x0,x1,y0,y1){
+  let k=(x1-x0+1)+'|';for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++)k+=I.B[y*I.W+x]?'#':'.';
+  if(PDF_PAT[k]!==undefined)return PDF_PAT[k];
+  /* padrão desconhecido: o mais parecido (alinhando à esquerda ou à direita) */
+  const w=x1-x0+1;let best='?',bd=99;
+  for(const kk in PDF_PAT){const p=kk.indexOf('|'),w2=+kk.slice(0,p),s=kk.slice(p+1);if(Math.abs(w2-w)>1)continue;
+    for(let off=0;off<=Math.abs(w2-w);off++){let d=0;for(let y=0;y<=y1-y0;y++)for(let x=0;x<Math.min(w,w2);x++){const a=I.B[(y0+y)*I.W+x0+x+(w>w2?off:0)],b=s.charCodeAt(y*w2+x+(w2>w?off:0))===35?1:0;if(a!==b)d++;}
+      d+=Math.abs(w-w2)*3;if(d<bd){bd=d;best=PDF_PAT[kk];}}}
+  return bd<=5?best:'?';
+}
+/* números de onda (aprox.) lidos da tabela escrita; devolve [] se não achar a tabela */
+function pdfTabelaIR(I,fr){
+  const cx=pdfCaixaTabela(I,fr);if(!cx)return[];
+  const out=[];
+  pdfGlifos(I,cx).forEach(l=>{
+    const gaps=l.gl.slice(1).map((g,i)=>g[0]-l.gl[i][1]).sort((p,q)=>p-q);
+    const tok=[];let cur=[];l.gl.forEach((g,i)=>{if(i&&g[0]-l.gl[i-1][1]>9){tok.push(cur);cur=[];}cur.push(g);});if(cur.length)tok.push(cur);
+    if(tok.length!==2)return;
+    const s=tok[0].map(g=>pdfPadrao(I,g[0],g[1],l.y[0],l.y[1])).join('');
+    if(/^\d{3,4}$/.test(s)&&+s>=400&&+s<=4000)out.push(+s);});
+  return out;
+}
 const PDF_ERR='Não consegui ler este PDF. O app lê PDF com texto (pares de números) e impressões de espectro do SDBS. Para outro tipo de imagem, digite os números.';
 async function pdfIVArquivo(f){
   const r=await pdfLer(f);
   if(r.texto){const p=ivParseSpec(r.texto);return p&&p.peaks.length?{peaks:p.peaks,msg:'Li '+p.peaks.length+' bandas do texto do PDF'}:null;}
-  const I=pdfMascara(r.canvas),fr=pdfMoldura(I);if(!fr)return null;
-  const pk=pdfIV(I,fr);return pk.length>=3?{peaks:pk,msg:'Li '+pk.length+' bandas da imagem do espectro (impressão do SDBS), por contorno da curva. Não marquei largura (l/e): a imagem não dá isso com segurança'}:null;
+  const I=pdfMascara(r),fr=pdfMoldura(I);if(!fr)return null;
+  const guia=pdfTabelaIR(I,fr),pk=pdfIV(I,fr,guia);
+  return pk.length>=3?{peaks:pk,msg:'Li '+pk.length+' bandas da imagem do espectro (impressão do SDBS)'+(guia.length?', usando a tabela de picos escrita ('+guia.length+' linhas lidas) como guia':'')+'. A posição vem da curva. Não marquei largura (l/e): a imagem não dá isso com segurança'}:null;
 }
 async function pdfMSArquivo(f){
   const r=await pdfLer(f);
   if(r.texto){const p=bdParseSpec(r.texto);return p.length?{pk:p,msg:'Li '+p.length+' picos do texto do PDF'}:null;}
-  const I=pdfMascara(r.canvas),fr=pdfMoldura(I);if(!fr)return null;
+  const I=pdfMascara(r),fr=pdfMoldura(I);if(!fr)return null;
   const pk=pdfMS(I,fr);return pk.length>=2?{pk,msg:'Li '+pk.length+' picos da imagem do espectro (impressão do SDBS), pela altura das barras'}:null;
 }
 const ehPdf=f=>/\.pdf$/i.test(f.name)||f.type==='application/pdf';
