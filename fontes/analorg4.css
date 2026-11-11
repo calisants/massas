@@ -35,3 +35,29 @@ details.fonte[open]>summary::before{content:"▾"}
 .sepa{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .sepa .chip small{color:var(--muted)}
 .sepa .seph{cursor:default}
+
+/* ===== v194: refino visual (capturas 390x844 claro/escuro) ===== */
+/* Compostos: filtros compactos, a primeira ficha aparece mais cedo */
+.cpq{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;margin:0 0 6px}
+.cpq #cpQ{grid-column:1/-1}
+.cpq label{font-size:.78rem;color:var(--muted);min-width:0}
+.cpq select{width:100%;min-height:42px}
+.cpq #cpF{grid-column:auto;min-height:42px;white-space:nowrap}
+#cpN{margin:4px 0 2px;font-size:.82rem}
+.cpa{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
+.cpa .chip{min-height:40px;min-width:40px}
+/* Identificar: o resumo é um status, não um campo */
+.icsum{border:0;border-left:4px solid var(--keep);border-radius:4px 12px 12px 4px;background:var(--keep-soft);font-weight:500;padding:9px 12px}
+.icsum:not(:has(b)){color:var(--muted);font-weight:400}
+#icClr{min-height:40px;padding:6px 14px;font-size:.88rem}
+/* rótulos de seção em caixa normal, mais legíveis que versalete espaçado */
+.mh{text-transform:none;letter-spacing:0;font-size:.86rem;color:var(--muted);font-weight:600;margin:22px 0 8px}
+/* alvos de toque e leitura */
+.chip,.btn{min-height:40px}
+.mi{min-height:56px}
+.scrsub{font-size:.95rem;line-height:1.45}
+@media (min-width:700px){.cpq{grid-template-columns:2fr 1fr 1fr auto}.cpq #cpQ{grid-column:auto}}
+.cpq #cpQ{width:100%;box-sizing:border-box;min-width:0}
+select{font-family:var(--sans)}
+a{color:var(--keep);text-underline-offset:2px}
+a:visited{color:var(--keep)}

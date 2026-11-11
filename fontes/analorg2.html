@@ -1,13 +1,13 @@
   <!-- ===== Analorg v2 ===== -->
   <section id="p-cp" role="tabpanel" aria-labelledby="t-cp" hidden>
     <h2 class="scr">Compostos</h2>
-    <p class="scrsub">Uma ficha por composto, dos 110 do app e de mais de 4 mil do banco Analor. Busque por nome, fórmula ou CAS, ou navegue pela letra.</p>
+    <p class="scrsub">110 compostos do app e mais de 4 mil do banco Analor. Busque por nome, fórmula ou CAS.</p>
     <div class="chipbar rseg msub" role="group" aria-label="Compostos"><button class="chip" type="button" data-go="p-cp" aria-pressed="false">Fichas</button><button class="chip" type="button" data-go="p-ic" aria-pressed="false">Identificar</button><button class="chip" type="button" data-go="p-es" aria-pressed="false">Espectro novo</button></div>
     <div class="cpq">
       <input type="search" id="cpQ" placeholder="Nome, fórmula ou CAS" aria-label="Buscar composto" autocomplete="off">
       <label>Estado<select id="cpE"><option value="">Todos</option><option value="líquido">Líquido</option><option value="sólido">Sólido</option></select></label>
-      <label>Grupo de solubilidade<select id="cpG"><option value="">Todos</option></select></label>
-      <button class="chip" type="button" id="cpF" aria-pressed="false">★ Só favoritos</button>
+      <label>Solubilidade<select id="cpG"><option value="">Todos</option></select></label>
+      <button class="chip" type="button" id="cpF" aria-pressed="false" aria-label="Mostrar só favoritos">★ Favoritos</button>
     </div>
     <p class="hint" id="cpN"></p>
     <div class="chipbar cpa" id="cpA" role="group" aria-label="Banco Analor por letra inicial"></div>
