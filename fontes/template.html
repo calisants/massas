@@ -266,6 +266,7 @@ button.back{border-radius:10px}
 #p-in .scrsub{margin-bottom:12px}
 /*@@ANALORG2_CSS@@*/
 /*@@ANALORG3_CSS@@*/
+/*@@ANALORG4_CSS@@*/
 /* BEGIN temas */
 :root[data-pal="quimica"]{--bg:#F2F7F8;--surface:#FFFFFF;--ink:#142629;--muted:#536B6E;--line:#D0DFE2;--keep:#0A6F7A;--focus:#0A6F7A;--keep-soft:#DDF0F3;--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%230A6F7A' stroke-opacity='.16' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate%2822 24%29 rotate%286%29'%3E%3Cpath d='M-5-13h10M-3-13v9l-9 17a3 3 0 0 0 3 4h18a3 3 0 0 0 3-4l-9-17v-9M-9 8h18'/%3E%3C/g%3E%3Cg transform='translate%2882 18%29 rotate%288%29'%3E%3Ccircle r='3'/%3E%3Ccircle cx='9' cy='-8' r='2'/%3E%3Ccircle cx='-8' cy='-9' r='1.5'/%3E%3C/g%3E%3Cg transform='translate%2852 52%29 rotate%28-20%29'%3E%3Cpath d='M-4-14v22a4 4 0 0 0 8 0v-22M-5-14h10M-4 2h8'/%3E%3C/g%3E%3Cg transform='translate%28104 62%29 rotate%2814%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Cpath d='M0-7l6 3.5v7L0 7l-6-3.5v-7z'/%3E%3C/g%3E%3Cg transform='translate%2820 86%29 rotate%2818%29'%3E%3Ccircle r='3'/%3E%3Ccircle cx='9' cy='-8' r='2'/%3E%3Ccircle cx='-8' cy='-9' r='1.5'/%3E%3C/g%3E%3Cg transform='translate%2874 100%29 rotate%28-2%29'%3E%3Cpath d='M-5-13h10M-3-13v9l-9 17a3 3 0 0 0 3 4h18a3 3 0 0 0 3-4l-9-17v-9M-9 8h18'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"])[data-pal="quimica"]{--bg:#0D1617;--surface:#152123;--ink:#E1EDEF;--muted:#9DB5B8;--line:#2B3D40;--keep:#7BD3E0;--focus:#7BD3E0;--keep-soft:#1C3F45;--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%237BD3E0' stroke-opacity='.2' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate%2822 24%29 rotate%286%29'%3E%3Cpath d='M-5-13h10M-3-13v9l-9 17a3 3 0 0 0 3 4h18a3 3 0 0 0 3-4l-9-17v-9M-9 8h18'/%3E%3C/g%3E%3Cg transform='translate%2882 18%29 rotate%288%29'%3E%3Ccircle r='3'/%3E%3Ccircle cx='9' cy='-8' r='2'/%3E%3Ccircle cx='-8' cy='-9' r='1.5'/%3E%3C/g%3E%3Cg transform='translate%2852 52%29 rotate%28-20%29'%3E%3Cpath d='M-4-14v22a4 4 0 0 0 8 0v-22M-5-14h10M-4 2h8'/%3E%3C/g%3E%3Cg transform='translate%28104 62%29 rotate%2814%29'%3E%3Cpath d='M0-12l10.4 6v12L0 12l-10.4-6v-12z'/%3E%3Cpath d='M0-7l6 3.5v7L0 7l-6-3.5v-7z'/%3E%3C/g%3E%3Cg transform='translate%2820 86%29 rotate%2818%29'%3E%3Ccircle r='3'/%3E%3Ccircle cx='9' cy='-8' r='2'/%3E%3Ccircle cx='-8' cy='-9' r='1.5'/%3E%3C/g%3E%3Cg transform='translate%2874 100%29 rotate%28-2%29'%3E%3Cpath d='M-5-13h10M-3-13v9l-9 17a3 3 0 0 0 3 4h18a3 3 0 0 0 3-4l-9-17v-9M-9 8h18'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}}
@@ -494,10 +495,10 @@ body{background-image:var(--pat,none);background-size:120px 120px;background-att
   <section id="p-fu" role="region" aria-label="Análise funcional" hidden>
     <button class="back" type="button" data-go="p-en">← Ensaios</button>
     <h2 class="scr">Análise funcional</h2>
-    <p class="scrsub">Os ensaios de bancada para nitrocompostos, ácidos carboxílicos e cloro orgânico, com reagente, passo a passo e a cor de cada resultado. Antes da amostra, faça sempre o <b>branco</b> (tudo menos a amostra) e o <b>positivo</b> (um composto que você sabe que responde).</p>
+    <p class="scrsub">Todos os ensaios de grupo funcional em uma tela: escolha o grupo, abra o ensaio e veja o passo a passo, a cor do tubo e como preparar o reagente. Antes da amostra, faça sempre o <b>branco</b> (tudo menos a amostra) e o <b>positivo</b> (um composto que você sabe que responde).</p>
     <div class="chipbar rseg msub" role="group" aria-label="Ensaios"><button class="chip" type="button" data-go="p-pf" aria-pressed="false">Preliminares</button><button class="chip" type="button" data-go="p-so" aria-pressed="false">Solubilidade</button><button class="chip" type="button" data-go="p-el" aria-pressed="false">Elementar</button><button class="chip" type="button" data-go="p-fu" aria-pressed="false">Funcional</button><button class="chip" type="button" data-go="p-pb" aria-pressed="false">Problemas</button><button class="chip" type="button" data-go="p-cs" aria-pressed="false">Consulta rápida</button><button class="chip" type="button" data-go="p-ec" aria-pressed="false">ECGF</button></div>
-    <div class="sgm" role="group" aria-label="Grupo funcional">
-      <button type="button" data-fu="nit" aria-pressed="true">Nitrocomposto</button>
+    <div class="sgm fusg" role="group" aria-label="Grupo funcional">
+      <button type="button" data-fu="nit" aria-pressed="false">Nitrocomposto</button>
       <button type="button" data-fu="aci" aria-pressed="false">Ácido carboxílico</button>
       <button type="button" data-fu="clo" aria-pressed="false">Cloro</button>
     </div>
@@ -1873,11 +1874,12 @@ function esRun(){
 (function(){const v=document.getElementById('vers');if(v)v.textContent=VERSAO;})();
 /*@@ANALORG2_JS@@*/
 /*@@ANALORG3_JS@@*/
+/*@@ANALORG4_JS@@*/
 /* ---------- Analorg: módulos novos (início, ensaios, solubilidade, elementar, identificar) ---------- */
 function agHoje(){const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
 function agInit2(){}
 function agInit(){
-  sgmBind('so','so-');sgmBind('el','el-');sgmBind('fu','fu-');
+  fuInit();sgmBind('so','so-');sgmBind('el','el-');sgmBind('fu','fu-');
   soInit();elInit();pfInit();ivQuizInit();pbInit();ecInit();
 }
 /* botões segmentados: attr = data-so / data-el; prefixo dos painéis */
