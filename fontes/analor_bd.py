@@ -33,37 +33,48 @@ def desenho(smi):
         at.append([0 if e=='C' and a.GetFormalCharge()==0 else e,round(p.x*10),round(p.y*10),a.GetTotalNumHs() if e!='C' else 0,a.GetFormalCharge()])
     return [at,[[b.GetBeginAtomIdx(),b.GetEndAtomIdx(),int(b.GetBondTypeAsDouble())] for b in m.GetBonds()]]
 def grupo_sol(m, grupos, sol, nC):
-    """Grupo de solubilidade ESTIMADO pela tabela de grupos do app (a do professor). O banco só traz a solubilidade em água (g/L);
-    o resto vem do grupo funcional e do número de C. É estimativa, não medida."""
+    """Grupo de solubilidade ESTIMADO pela tabela de grupos do app (a do professor). O banco traz a solubilidade em água em g/100 mL a 25 °C
+    (confirmado pelo professor); solúvel = 3 g/100 mL ou mais. O resto vem do grupo funcional e do número de C. Calibrado contra os 110 compostos
+    do app (grupos do professor). É estimativa, não medida."""
     from rdkit import Chem
     P=lambda s: m.HasSubstructMatch(Chem.MolFromSmarts(s))
     n=lambda s: len(m.GetSubstructMatches(Chem.MolFromSmarts(s)))
     ac=P('[CX3](=O)[OX2H1]') or P('[CX3](=O)[O-]'); sulf=P('[SX4](=O)(=O)[OX2H1,O-]')
     amina=P('[NX3;H2,H1,H0;!$(NC=[O,N,S]);!$(N=O);!$(N-[O,N]);!$(N-a);!$(N-S);!$(NC#N)][CX4]')
-    anil=P('[NX3;H2,H1;!$(NC=O)]c') or P('[NX3;H0;!$(NC=O)](C)(C)c')
+    nitro=P('[N+](=O)[O-]')
+    anil=(P('[NX3;H2,H1;!$(NC=O)]c') or P('[NX3;H0;!$(NC=O)](C)(C)c')) and not P('[NX3;H1](c)c') and not (nitro and P('[NX3;H2]c'))
+    piri=P('[nX2;r6]')
+    ureia=P('[NX3;H2]C(=O)[NX3;H2]')
+    eter_puro=P('[OX2]([#6])[#6]') and not P('[OX2H]') and not P('[CX3]=[OX1]') and not P('[#7]') and not P('[SX4]') and not P('[OX2;R;!a]')
     sal=len(Chem.GetMolFrags(m))>1 or any(a.GetSymbol() in ('Na','K','Li','Ca','Mg','Zn','Cu','Fe','Ag','Hg','Pb','Al','Ba') for a in m.GetAtoms())
     poli=(n('[OX2H][CX4]')+n('[CX3](=O)[OX2H1]')+n('[NX3;H2][CX4]'))>=2 or P('[NX3;H2][CX4][CX3](=O)[OX2H1]')
-    hasN=P('[#7]'); hasS=P('[#16]')
-    fenol=P('[OX2H]c'); ewg=P('[OX2H]c1ccc([N+](=O)[O-])cc1') or P('[OX2H]c1ccccc1[N+](=O)[O-]')
+    anidrido=P('[CX3](=O)O[CX3](=O)')
+    hasN=P('[#7;!$([N+](=O)[O-]);!$(N=N)]'); hasS=P('[#16]')
+    fenol=P('[OX2H]c'); ewg=fenol and n('[N+](=O)[O-]')>=2
     a2=fenol or P('[CX3]=[NX2][OX2H]') or P('[CX3](=O)[NX3][CX3](=O)') or P('[SX4](=O)(=O)[NX3;H1,H2]') or P('[SX2H]c')
     oxi=P('[#8]')
+    poli=poli and not (ac and nC>6 and not sal)
     solu = (sol>=3) if sol is not None else None
     if solu is None:
-        solu = sal or poli or ((ac or amina) and nC<=6) or (nC<=5 and oxi) or (nC<=3 and hasN)
+        solu = sal or poli or ureia or ((ac or amina or piri) and nC<=6) or (nC<=5 and oxi) or (nC<=3 and hasN)
+    if (eter_puro or anidrido) and not sal: solu=False
     if P('[NX3;H2,H3+][CX4][CX3](=O)[OX2H1,O-]'): return 'S2'
     if anil and not amina: return 'B'
     if solu:
+        if ureia: return 'S2'
+        if ac and poli and not sal and nC<=6: return 'SA'
         if sal or poli or sulf and not ac: return 'S2' if (sal or poli) else 'SA'
         if ac or sulf: return 'SA'
-        if amina: return 'SB'
+        if amina or piri: return 'SB'
         return 'S1'
     if ac: return 'A1'
     if fenol: return 'A1' if ewg else 'A2'
     if a2: return 'A2'
-    if amina or anil: return 'B'
+    if amina or anil or piri: return 'B'
     if hasN or hasS: return 'MN'
     if P('[F,Cl,Br,I]') and not oxi: return 'I'
     if oxi or P('[CX3]=[CX3]') or P('C#C'): return 'N'
+    if P('N=N') and not hasN: return 'N'
     if P('c') and not oxi: return 'I'
     return 'I' if not P('[CX3]=[CX3]') else 'N'
 CONF={}
