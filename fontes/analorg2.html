@@ -1,7 +1,7 @@
   <!-- ===== Analorg v2 ===== -->
   <section id="p-cp" role="tabpanel" aria-labelledby="t-cp" hidden>
     <h2 class="scr">Compostos</h2>
-    <p class="scrsub">Uma ficha por composto: estrutura, fórmula, grupo de solubilidade, cor, estado, PF e PE, e o que esperar em IV, MS e RMN. Buscando por nome, fórmula ou CAS, aparecem também os compostos do banco Analor, que o Identificar usa na comparação.</p>
+    <p class="scrsub">Uma ficha por composto: estrutura, fórmula, grupo de solubilidade, cor, estado, PF e PE, e o que esperar em IV, MS e RMN. Abaixo dos compostos do app ficam os do banco Analor (mais de 4 mil, o mesmo que o Identificar usa): navegue pelas letras ou busque por nome, fórmula ou CAS.</p>
     <div class="chipbar rseg msub" role="group" aria-label="Compostos"><button class="chip" type="button" data-go="p-cp" aria-pressed="false">Fichas</button><button class="chip" type="button" data-go="p-ic" aria-pressed="false">Identificar</button><button class="chip" type="button" data-go="p-es" aria-pressed="false">Espectro novo</button></div>
     <div class="cpq">
       <input type="search" id="cpQ" placeholder="Buscar por nome, fórmula ou CAS" aria-label="Buscar composto" autocomplete="off">
@@ -10,7 +10,9 @@
       <button class="chip" type="button" id="cpF" aria-pressed="false">★ Só favoritos</button>
     </div>
     <p class="hint" id="cpN"></p>
+    <div class="chipbar cpa" id="cpA" role="group" aria-label="Banco Analor por letra inicial"></div>
     <div class="cpgrid" id="cpL"></div>
+    <div class="row" style="margin:10px 0"><button class="btn ghost" type="button" id="cpMore" hidden>Mostrar mais</button></div>
   </section>
 
   <section id="p-cf" role="region" aria-label="Ficha do composto" hidden>

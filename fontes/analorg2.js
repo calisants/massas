@@ -24,15 +24,24 @@ function cpInit(){
   sel.onchange=rmDraw;
   cpDraw();rmDraw();
 }
-function cpDraw(){
+let BDLET='',BDN=60;
+const bdLetra=n=>{const c=norm2(n).charAt(0).toUpperCase();return c>='A'&&c<='Z'?c:'#';};
+function cpLetras(){const box=$('#cpA');if(!box||box.dataset.ok)return;box.dataset.ok=1;
+  box.innerHTML=['#'].concat('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')).map(l=>'<button class="chip" type="button" data-let="'+l+'" aria-pressed="false">'+l+'</button>').join('');
+  box.addEventListener('click',ev=>{const b=ev.target.closest('[data-let]');if(!b)return;BDLET=BDLET===b.dataset.let?'':b.dataset.let;
+    box.querySelectorAll('[data-let]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.let===BDLET?'true':'false'));cpDraw();});
+  $('#cpMore').addEventListener('click',()=>{BDN+=60;cpDraw({mais:1});});}
+function cpDraw(opt){
+  cpLetras();if(!(opt&&opt.mais))BDN=60;
   const q=norm2($('#cpQ').value),e=$('#cpE').value,g=$('#cpG').value;
   const l=COMP.filter(c=>(!q||[c.n,...c.a,c.f,c.cas].some(x=>norm2(x).includes(q)))&&(!e||c.est.indexOf(e)===0)&&(!g||c.g===g)&&(!CPFAV||favHas(c))).sort((a,b)=>(favHas(b)-favHas(a))||a.n.localeCompare(b.n,'pt'));
-  /* os compostos do banco do professor só entram quando há busca por texto (são 4 mil: sem busca, só os do app) */
-  let lb=[];if(q.length>=2&&!g&&!CPFAV){lb=bdAll().filter(c=>norm2(c.k).includes(q)&&(!e||c.est.indexOf(e)===0)).sort((a,b)=>a.n.localeCompare(b.n,'pt'));}
-  const nb=lb.length;lb=lb.slice(0,60);
-  $('#cpN').textContent=l.length+' de '+COMP.length+' compostos do app'+(q.length>=2&&!g&&!CPFAV?' + '+nb+' do banco Analor'+(nb>60?' (mostrando 60)':''):'');
-  const bcard=c=>'<button class="cpc" type="button" data-cf="'+c.i+'"><span class="thumb">'+bdSvg(c.r[16])+'</span><span><b>'+esc(c.n)+'</b> <span class="tag sv">banco</span>'+(c.flag?' <span class="tag sm">'+(c.flag[0]===1?'fórmula corrigida':'dado inconsistente')+'</span>':'')+'<span class="m">'+fmt(c.f)+(c.mw?' · '+String(c.mw).replace('.',',')+' g/mol':'')+'</span><span class="m">'+esc(c.est||'')+(c.pf!=null?(c.est?' · ':'')+'PF '+tC(c.pf):'')+(c.pe!=null?' · PE '+tC(c.pe):'')+'</span></span></button>';
-  $('#cpL').innerHTML=(l.length||lb.length)?l.map(c=>'<button class="cpc" type="button" data-cf="'+c.i+'"><span class="thumb">'+c.s+'</span><span><b>'+esc(c.n)+'</b>'+(favHas(c)?' <span class="favst" role="img" aria-label="favorito">★</span>':'')+'<span class="m">'+fmt(c.f)+' · '+SOLNM[c.g]+'</span><span class="m">'+esc(c.est)+(c.pf!=null?' · PF '+tC(c.pf):'')+(c.pe!=null?' · PE '+tC(c.pe):'')+'</span></span></button>').join('')+lb.map(bcard).join(''):'<p class="empty">'+(CPFAV&&!favGet().length?'Nenhum favorito ainda. Abra uma ficha e toque em Favoritar.':'Nenhum composto com esse filtro.')+'</p>';
+  /* banco do professor: aparece sem precisar buscar, por letra e em páginas de 60 (favoritos e a letra "todas" só valem para os do app) */
+  let lb=[];if(!CPFAV){lb=bdAll().filter(c=>(!q||norm2(c.k).includes(q))&&(!e||c.est.indexOf(e)===0)&&(!g||c.ge===g)&&(!BDLET||bdLetra(c.n)===BDLET)).sort((a,b)=>a.n.localeCompare(b.n,'pt'));}
+  const nb=lb.length;lb=lb.slice(0,BDN);
+  $('#cpN').textContent=l.length+' de '+COMP.length+' compostos do app'+(!CPFAV?' + '+nb+' do banco Analor'+(nb>BDN?' (mostrando '+BDN+')':'')+(g?'. No banco, o grupo é estimado.':''):'');
+  const mb=$('#cpMore');mb.hidden=!(nb>BDN);mb.textContent='Mostrar mais '+Math.min(60,nb-BDN)+' (restam '+(nb-BDN)+')';
+  const bcard=c=>'<button class="cpc" type="button" data-cf="'+c.i+'"><span class="thumb">'+bdSvg(c.r[16])+'</span><span><b>'+esc(c.n)+'</b> <span class="tag sv">banco</span>'+(c.flag?' <span class="tag sm">'+(c.flag[0]===1?'fórmula corrigida':c.flag[0]===2?'estrutura corrigida':'dado inconsistente')+'</span>':'')+'<span class="m">'+fmt(c.f)+(c.mw?' · '+String(c.mw).replace('.',',')+' g/mol':'')+'</span><span class="m">'+esc(c.est||'')+(c.pf!=null?(c.est?' · ':'')+'PF '+tC(c.pf):'')+(c.pe!=null?' · PE '+tC(c.pe):'')+'</span></span></button>';
+  $('#cpL').innerHTML=(l.length||lb.length)?l.map(c=>'<button class="cpc" type="button" data-cf="'+c.i+'"><span class="thumb">'+c.s+'</span><span><b>'+esc(c.n)+'</b>'+(favHas(c)?' <span class="favst" role="img" aria-label="favorito">★</span>':'')+'<span class="m">'+fmt(c.f)+' · '+SOLNM[c.g]+'</span><span class="m">'+esc(c.est)+(c.pf!=null?' · PF '+tC(c.pf):'')+(c.pe!=null?' · PE '+tC(c.pe):'')+'</span></span></button>').join('')+(lb.length?'<h3 class="cph">Banco Analor</h3>'+lb.map(bcard).join(''):''):'<p class="empty">'+(CPFAV&&!favGet().length?'Nenhum favorito ainda. Abra uma ficha e toque em Favoritar.':'Nenhum composto com esse filtro.')+'</p>';
 }
 document.addEventListener('click',ev=>{const fb=ev.target.closest('#favBtn');if(fb&&CFI!=null){favToggle(COMP[CFI]);fb.outerHTML=favBtnHtml(COMP[CFI]);const nb=$('#favBtn');if(nb)nb.focus();cpDraw();return;}
   const b=ev.target.closest('[data-cf]');if(b){cfDraw(+b.dataset.cf);go('p-cf');}
@@ -98,6 +107,7 @@ function cfDrawComp(i){
    +rowd('Grupo funcional',esc(c.gf.join(', ')||'hidrocarboneto sem grupo funcional'))
    +rowd('GDH','<b>'+c.gdh+'</b> <span class="mut">(anéis + ligações π)</span>')
    +rowd('M do íon molecular','<b>'+c.M+'</b>')
+   +(bdEn(c.cas)?rowd('Nome em inglês','<span class="mono">'+esc(bdEn(c.cas))+'</span> <button class="btn ghost cpy" type="button" data-copy="'+esc(bdEn(c.cas))+'">Copiar</button>'):'')
    +rowd('CAS','<span class="mono">'+esc(c.cas)+'</span>')
    +(c.obs?rowd('Observação',esc(c.obs)):'')+'</dl>';
   let srcH='';
@@ -128,7 +138,7 @@ function cfDrawComp(i){
   // SDBS
   h+='<details class="sec"><summary>SDBS (espectros reais)</summary><p>O SDBS tem IV, MS, ¹H-RMN e ¹³C-RMN medidos deste composto. Busque pelo nome ou pelo CAS.</p><div class="row" style="margin:0 0 8px">'
    +'<a class="btn" href="'+(sd?'https://sdbs.db.aist.go.jp/sdbs/cgi-bin/landingpage?sdbsno='+sd:'https://sdbs.db.aist.go.jp/')+'" target="_blank" rel="noopener">Abrir o SDBS</a>'
-   +'<button class="btn ghost" type="button" data-copy="'+esc(c.n)+'">Copiar nome</button><button class="btn ghost" type="button" data-copy="'+esc(c.cas)+'">Copiar CAS</button></div>'
+   +'<button class="btn ghost" type="button" data-copy="'+esc(bdEn(c.cas)||c.n)+'">Copiar nome'+(bdEn(c.cas)?' em inglês':'')+'</button><button class="btn ghost" type="button" data-copy="'+esc(c.cas)+'">Copiar CAS</button></div>'
    +(sd?'<p class="srcl">Nº SDBS: <b>'+sd+'</b>. Se o link abrir a página inicial, aceite o aviso e busque por esse número.</p>':'<p class="srcl">Nº SDBS não cadastrado aqui. Use o nome ou o CAS na busca.</p>')
    +'<p class="srcl">Ao usar dados do SDBS, cite: SDBS, National Institute of Advanced Industrial Science and Technology (AIST), https://sdbs.db.aist.go.jp, acessado em '+hoje+'. O SDBS não permite coleta automática nem download em massa; por isso o app só liga para ele.</p></details>';
   h+='<details class="sec"><summary>De onde vêm os dados</summary>'+srcH+'</details>';

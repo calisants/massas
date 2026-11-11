@@ -715,6 +715,8 @@ let BD=null,BDT={b:[],g:[],f:[]},BDC=null;
 const BDMASS={C:12,H:1,N:14,O:16,S:32,P:31,F:19,Cl:35,Br:79,I:127,Si:28,B:11,Se:80};
 function bdLoad(){if(BD)return BD;try{const o=JSON.parse(BDJSON);BD=o.r;BDT=o.t}catch(e){BD=[]}return BD;}
 /* "ACETONA" -> "Acetona"; mantém prefixos curtos (N, o-, p-) como estão */
+let BDEN=null;
+function bdEn(cas,fallback){if(!BDEN){BDEN={};bdLoad().forEach(r=>{if(r[0]&&r[3]&&!BDEN[r[0]])BDEN[r[0]]=bdNome(r[3]);});}return (cas&&BDEN[cas])||fallback||'';}
 function bdNome(s){s=String(s||'').trim();s=s.replace(/[A-ZÀ-Ý]{2,}/g,m=>m.toLowerCase());return s.charAt(0).toUpperCase()+s.slice(1);}
 function bdNominal(f,mw){const el=elCount(f);let m=0;for(const e in el){if(BDMASS[e]===undefined)return mw?Math.round(mw):null;m+=BDMASS[e]*el[e];}return m||(mw?Math.round(mw):null);}
 function bdGdh(f){const e=elCount(f);for(const k in e)if(!['C','H','N','F','Cl','Br','I','O','S'].includes(k))return null;
@@ -803,6 +805,7 @@ function bdFicha(ix){
    +(c.sub.length?rowd('Subestruturas',esc(c.sub.map(k=>{const q=SUBL.find(x=>x[0]===k);return q?q[1].replace(/ \(.*/,''):k;}).join(', '))):'')
    +(c.gdh!=null?rowd('GDH','<b>'+c.gdh+'</b> <span class="mut">(anéis + ligações π)</span>'):'')
    +(c.M?rowd('M nominal','<b>'+c.M+'</b>'):'')
+   +(bdEn(c.cas,bdNome(r[3]))?rowd('Nome em inglês','<span class="mono">'+esc(bdEn(c.cas,bdNome(r[3])))+'</span> <button class="btn ghost cpy" type="button" data-copy="'+esc(bdEn(c.cas,bdNome(r[3])))+'">Copiar</button>'):'')
    +rowd('CAS','<span class="mono">'+esc(c.cas||'sem dado')+'</span>')
    +(r[13]!==null?rowd('Solubilidade em água',r[13]+' g/100 mL'):'')+(r[14]!==null?rowd('Densidade',r[14]+' g/mL a 20 °C'):'')
    +(r[10]?rowd('Derivados (PF °C)',esc(r[10])):'')+'</dl>';
@@ -822,7 +825,7 @@ function bdFicha(ix){
      +(c.h1.length?'<h4 style="margin:10px 0 4px">¹H: '+c.h1.length+(c.h1.length>1?' sinais':' sinal')+'</h4><div class="tbl"><table class="obt nostk"><thead><tr><th>δ (ppm)</th><th>H</th></tr></thead><tbody>'+c.h1.slice().sort((a,b)=>b.hi-a.hi).map(x=>'<tr><td class="n">'+fr(x.lo)+'–'+fr(x.hi)+(x.m?' (largo)':'')+'</td><td>'+x.h+'</td></tr>').join('')+'</tbody></table></div>':'')
      +(c.c13.length?'<h4 style="margin:10px 0 4px">¹³C: '+c.c13.length+(c.c13.length>1?' sinais':' sinal')+'</h4><div class="tbl"><table class="obt nostk"><thead><tr><th>δ (ppm)</th><th>C</th></tr></thead><tbody>'+c.c13.slice().sort((a,b)=>b.hi-a.hi).map(x=>'<tr><td class="n">'+x.lo+'–'+x.hi+'</td><td>'+x.n+'</td></tr>').join('')+'</tbody></table></div>':'')+'</details>';}
   h+='<details class="sec"><summary>SDBS (espectros reais)</summary><p>O SDBS tem IV, MS, ¹H-RMN e ¹³C-RMN medidos de muitos compostos. Busque pelo nome ou pelo CAS.</p><div class="row" style="margin:0 0 8px"><a class="btn" href="https://sdbs.db.aist.go.jp/" target="_blank" rel="noopener">Abrir o SDBS</a>'
-   +'<button class="btn ghost" type="button" data-copy="'+esc(c.n)+'">Copiar nome</button><button class="btn ghost" type="button" data-copy="'+esc(c.cas)+'">Copiar CAS</button></div>'
+   +'<button class="btn ghost" type="button" data-copy="'+esc(bdEn(c.cas,bdNome(r[3]))||c.n)+'">Copiar nome em inglês</button><button class="btn ghost" type="button" data-copy="'+esc(c.cas)+'">Copiar CAS</button></div>'
    +'<p class="srcl">Ao usar dados do SDBS, cite: SDBS, National Institute of Advanced Industrial Science and Technology (AIST), https://sdbs.db.aist.go.jp, acessado em '+hoje+'.</p></details>';
   h+='<details class="sec"><summary>De onde vêm os dados</summary><p class="srcl"><span class="tag sv">Conferido: banco Analor</span> Nome, CAS, fórmula, massa molar, PF, PE, picos de MS, solubilidade, densidade e SMILES vêm do arquivo UNIV1_290926.DBF, passado pelo professor, sem alterar os valores. O banco não cita a fonte de cada número. O desenho da estrutura, o GDH, o grupo funcional, as subestruturas, as bandas de IV esperadas, o RMN estimado, o M nominal e o estado a 25 °C são calculados aqui a partir do SMILES e do PF e PE. O grupo de solubilidade é estimado pelas regras da tabela do professor e pela solubilidade em água do banco (que parece estar em g/100 mL, pelos valores conhecidos de clorofórmio, anilina e naftaleno). O banco não traz cor. Conferência feita em 10/11/2026: comparei a fórmula do banco com a da estrutura (SMILES) em todos os registros e, onde diferiam, usei o PubChem (pelo CAS) para decidir qual está certo. Numa amostra de 421 compostos do banco, fórmula e estrutura bateram com o PubChem em cerca de 99%.</p></details>';
   $('#cfB').innerHTML=h;
