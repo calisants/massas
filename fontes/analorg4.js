@@ -234,3 +234,41 @@ function fuInit(){
   sg.querySelectorAll('[data-fu]').forEach(b=>{b.onclick=()=>{sg.querySelectorAll('button').forEach(x=>{x.setAttribute('aria-pressed',x===b?'true':'false');const p=document.getElementById('fu-'+x.dataset.fu);if(p)p.hidden=x!==b;});};});
   if(first)first.click();
 }
+
+/* ---- da ficha para os ensaios: o grupo funcional do composto aponta para os ensaios que o reconhecem ---- */
+const FUMAP=[
+ [/^(alceno|alcino terminal|vinila)/,['Bromo','Bayer']],
+ [/^(anel |benzeno)/,['Le Rosen']],
+ [/^álcool/,['Nitrato cérico','Xantato','Jones','Lucas','Malaprade']],
+ [/^(éter|epóxido)/,['Iodo em']],
+ [/^fenol/,['Cloreto férrico','Libermann','Cobaltinitrito']],
+ [/^aldeído/,['Jones','2,4-dinitro','Tollens','Fehling','Benedict','Schiff']],
+ [/^cetona/,['2,4-dinitro','m-dinitro','Índigo','Iodofórmio']],
+ [/^(éster|amida|nitrila)/,['Hidroxamato']],
+ [/^amina primária/,['Níquel','Duke I ','Ácido nitroso']],
+ [/^amina secundária/,['Níquel','Duke II']],
+ [/^amina terciária/,['Níquel','Kalnin']]
+];
+const FUOLD=[[/^nitro$/,'nit','Nitrocomposto'],[/^ácido carboxílico/,'aci','Ácido carboxílico'],[/^(cloreto|brometo|iodeto|haloforme|dialeto)/,'clo','Cloro e halogênios']];
+function fuSug(gf){
+  const ids=[],olds=[];
+  (gf||[]).forEach(g=>{
+    FUMAP.forEach(m=>{if(m[0].test(g))m[1].forEach(p=>FUN.forEach((a,i)=>{if(a.n.indexOf(p)===0&&ids.indexOf(i)<0)ids.push(i);}));});
+    FUOLD.forEach(m=>{if(m[0].test(g)&&!olds.some(o=>o[0]===m[1]))olds.push([m[1],m[2]]);});
+  });
+  if(!ids.length&&!olds.length)return '';
+  return '<h3 style="margin:12px 0 4px">Ensaios de bancada para este composto</h3><div class="fusug">'
+   +ids.map(i=>'<button type="button" class="chip" data-fuid="'+i+'">'+esc(FUN[i].n.replace(/ \(.*$/,''))+'</button>').join('')
+   +olds.map(o=>'<button type="button" class="chip" data-fug="'+o[0]+'">'+esc(o[1])+'</button>').join('')+'</div>'
+   +'<p class="sm">Cada botão abre o procedimento na tela Análise funcional. Eles são sugestões pelo grupo funcional da ficha, não um diagnóstico.</p>';
+}
+function fuGo(grupo,idx){
+  go('p-fu');
+  const b=document.querySelector('#p-fu .sgm [data-fu="'+grupo+'"]');if(b)b.click();
+  if(idx!=null){const box=document.getElementById('fu-'+grupo);const card=box&&box.children[FUN.filter(a=>a.g===grupo).indexOf(FUN[idx])];
+    if(card){const d=card.querySelector('details');card.scrollIntoView({block:'start'});card.classList.add('fuhl');setTimeout(()=>card.classList.remove('fuhl'),1800);}}
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest&&e.target.closest('[data-fuid],[data-fug]');if(!b)return;
+  if(b.dataset.fuid!=null){const i=+b.dataset.fuid;fuGo(FUN[i].g,i);}else fuGo(b.dataset.fug);
+});
