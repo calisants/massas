@@ -319,15 +319,110 @@ function ivParseSpec(tx){
   out.sort((p,q)=>q.v-p.v);
   return {T,n,peaks:out};
 }
-document.addEventListener('change',e=>{
+/* ---- PDF: texto do PDF quando existe; senão, leitura de impressões do SDBS (imagem do espectro) ---- */
+let _pdfjs=null;
+async function pdfCarrega(){
+  if(_pdfjs)return _pdfjs;
+  const m=await import('./vendor/pdf.min.mjs');m.GlobalWorkerOptions.workerSrc='./vendor/pdf.worker.min.mjs';_pdfjs=m;return m;
+}
+async function pdfLer(f){
+  const P=await pdfCarrega(),doc=await P.getDocument({data:new Uint8Array(await f.arrayBuffer())}).promise,pg=await doc.getPage(1);
+  const tc=await pg.getTextContent();let tx='';tc.items.forEach(i=>{tx+=i.str+(i.hasEOL?'\n':' ');});
+  if((tx.match(/\d+(?:\.\d+)?/g)||[]).length>=20)return{texto:tx};
+  const vp=pg.getViewport({scale:2.5}),cv=document.createElement('canvas');cv.width=Math.round(vp.width);cv.height=Math.round(vp.height);
+  const cx=cv.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);
+  await pg.render({canvasContext:cx,viewport:vp}).promise;return{canvas:cv};
+}
+function pdfMascara(cv){
+  const W=cv.width,H=cv.height,d=cv.getContext('2d').getImageData(0,0,W,H).data,M=new Uint8Array(W*H);
+  for(let i=0;i<W*H;i++)M[i]=(d[i*4]+d[i*4+1]+d[i*4+2])/3<150?1:0;
+  return{M,W,H};
+}
+/* moldura do gráfico: a maior linha vertical é o eixo esquerdo; a linha de baixo parte dela */
+function pdfMoldura(I){
+  const {M,W,H}=I,C=[];
+  for(let x=0;x<W;x++){let y=0,bb=null;while(y<H){if(M[y*W+x]){const s=y;while(y<H&&M[y*W+x])y++;if(!bb||y-1-s>bb[0])bb=[y-1-s,x,s,y-1];}else y++;}if(bb&&bb[0]>=120)C.push(bb);}
+  C.sort((p,q)=>q[0]-p[0]);
+  for(const [len,xl,yt,yb] of C.slice(0,150)){
+    let ln=0,yy=yb;for(let y=Math.max(yt,yb-Math.round(len*0.06));y<=Math.min(H-1,yb);y++){let x=xl;while(x<W&&M[y*W+x])x++;if(x-xl>ln){ln=x-xl;yy=y;}}
+    if(ln>=len&&ln>250)return{xl,yt,yb:yy,xr:xl+ln-1};}
+  return null;
+}
+/* IV do SDBS: eixo de 4000 a 2000 cm⁻¹ ocupa 38,5% da largura e o resto vai até 400 (valores ajustados nas impressões do SDBS) */
+function pdfIV(I,fr){
+  const {M,W}=I,{xl,yt,yb,xr}=fr,Wd=xr-xl,k=Wd/620;
+  const x4=xl-0.002*Wd,xk=xl+0.3848*Wd,x4h=xr+0.0006*Wd,pad=Math.max(3,Math.round((yb-yt)*0.03));
+  const V=[],T=[];
+  for(let x=xl+pad;x<xr;x++){let my=-1;for(let y=yt+pad;y<yb-pad*2;y++)if(M[y*W+x])my=y;if(my<0)continue;
+    T.push((yb-my)/(yb-yt));V.push(x<=xk?4000-(x-x4)/(xk-x4)*2000:2000-(x-xk)/(x4h-xk)*1600);}
+  const n=T.length,w=Math.max(4,Math.round(12*k)),res=[];
+  for(let i=2;i<n-2;i++){
+    let mn=1,mx=0;for(let j=i-2;j<=i+2;j++){mn=Math.min(mn,T[j]);mx=Math.max(mx,T[j]);}
+    if(T[i]>mn||T[i]>=mx)continue;
+    let hi=0;for(let j=Math.max(0,i-w);j<Math.min(n,i+w+1);j++)hi=Math.max(hi,T[j]);
+    if(hi-T[i]<0.07||V[i]<650||V[i]>4000)continue;
+    /* largura na meia profundidade, medida em cm⁻¹ */
+    let base=0;for(let j=Math.max(0,i-Math.round(60*k)*3);j<Math.min(n,i+Math.round(60*k)*3);j++)base=Math.max(base,T[j]);
+    const half=(T[i]+base)/2;let l=i,r=i;while(l>0&&T[l]<half)l--;while(r<n-1&&T[r]<half)r++;
+    if(1-T[i]>=0.10)res.push({v:Math.round(V[i]),h:1-T[i],w:0});}
+  res.sort((a,b)=>b.h-a.h);const out=[];res.forEach(p=>{if(out.length<20&&!out.some(q=>Math.abs(q.v-p.v)<14))out.push(p);});
+  out.sort((a,b)=>b.v-a.v);return out;
+}
+/* MS do SDBS: o primeiro tick maior é m/z 10 e cada tick maior vale 10 unidades; a altura da barra é a altura da coluna */
+function pdfMS(I,fr){
+  const {M,W,H}=I,{xl,yt,yb,xr}=fr,Wd=xr-xl;
+  let y0=yb+1;while(y0<H&&(()=>{let c=0;for(let x=xl;x<=xr;x++)c+=M[y0*W+x];return c>Wd*0.5;})())y0++;
+  const L=[];for(let x=xl-1;x<=xr+1;x++){let n=0;while(y0+n<H&&M[(y0+n)*W+x])n++;L.push(n);}
+  const mx=Math.max(...L);if(mx<3)return[];
+  const maj=[];for(let x=0;x<L.length;x++){if(L[x]>=mx*0.8){let a=x;while(x<L.length&&L[x]>=mx*0.8)x++;maj.push(xl-1+(a+x-1)/2);}}
+  if(maj.length<3)return[];
+  const u=(maj[maj.length-1]-maj[0])/(10*(maj.length-1)),x0=maj[0],pad=Math.max(3,Math.round((yb-yt)*0.01));
+  const col=new Array(W).fill(0);for(let x=xl+3;x<xr-2;x++){let c=0;for(let y=yt+pad;y<yb-pad;y++)c+=M[y*W+x];col[x]=c;}
+  const bins=new Map();
+  for(let x=xl+3;x<xr-2;x++){if(col[x]>=3&&col[x]>col[x-1]&&col[x]>=col[x+1]){const mz=Math.round(10+(x-x0)/u);bins.set(mz,Math.max(bins.get(mz)||0,col[x]));}}
+  const top=Math.max(...bins.values(),1);
+  return[...bins].map(p=>[p[0],Math.round(p[1]/top*100)]).filter(p=>p[1]>=3&&p[0]>0).sort((a,b)=>b[1]-a[1]).slice(0,12).sort((a,b)=>a[0]-b[0]);
+}
+const PDF_ERR='Não consegui ler este PDF. O app lê PDF com texto (pares de números) e impressões de espectro do SDBS. Para outro tipo de imagem, digite os números.';
+async function pdfIVArquivo(f){
+  const r=await pdfLer(f);
+  if(r.texto){const p=ivParseSpec(r.texto);return p&&p.peaks.length?{peaks:p.peaks,msg:'Li '+p.peaks.length+' bandas do texto do PDF'}:null;}
+  const I=pdfMascara(r.canvas),fr=pdfMoldura(I);if(!fr)return null;
+  const pk=pdfIV(I,fr);return pk.length>=3?{peaks:pk,msg:'Li '+pk.length+' bandas da imagem do espectro (impressão do SDBS), por contorno da curva. Não marquei largura (l/e): a imagem não dá isso com segurança'}:null;
+}
+async function pdfMSArquivo(f){
+  const r=await pdfLer(f);
+  if(r.texto){const p=bdParseSpec(r.texto);return p.length?{pk:p,msg:'Li '+p.length+' picos do texto do PDF'}:null;}
+  const I=pdfMascara(r.canvas),fr=pdfMoldura(I);if(!fr)return null;
+  const pk=pdfMS(I,fr);return pk.length>=2?{pk,msg:'Li '+pk.length+' picos da imagem do espectro (impressão do SDBS), pela altura das barras'}:null;
+}
+const ehPdf=f=>/\.pdf$/i.test(f.name)||f.type==='application/pdf';
+function ivPreenche(peaks,msg,T,n){
+  const out=document.getElementById('icIVMsg'),campo=document.getElementById('icIV');
+  campo.value=peaks.map(p=>p.v+(p.w>=110&&p.v>2400?'l':'')).join(' ');
+  campo.dispatchEvent(new Event('input',{bubbles:true}));
+  out.textContent=msg+(T===undefined?'':' ('+(T?'espectro em transmitância':'espectro em absorbância')+', '+n+' pontos)')+'. Confira a lista no campo acima e apague as que não forem bandas de verdade. Só marquei "l" nas bandas muito largas acima de 2400 cm⁻¹; "e" você mesmo decide.';
+}
+document.addEventListener('change',async e=>{
   if(!e.target||e.target.id!=='icIVFile')return;
   const f=e.target.files[0];if(!f)return;const out=document.getElementById('icIVMsg');
+  if(ehPdf(f)){
+    out.textContent='Lendo o PDF…';
+    try{const r=await pdfIVArquivo(f);if(r)ivPreenche(r.peaks,r.msg);else out.textContent=PDF_ERR;}
+    catch(err){out.textContent=PDF_ERR+' (Este navegador pode ser antigo demais para o leitor de PDF.)';}
+    return;}
   const rd=new FileReader();rd.onload=()=>{
     const r=ivParseSpec(String(rd.result));
-    if(!r||!r.peaks.length){out.textContent='Não consegui ler bandas neste arquivo. Use .jdx ou .csv com duas colunas (número de onda e intensidade). Para uma imagem ou PDF, digite os números acima.';return;}
-    const campo=document.getElementById('icIV');
-    campo.value=r.peaks.map(p=>p.v+(p.w>=110&&p.v>2400?'l':'')).join(' ');
-    campo.dispatchEvent(new Event('input',{bubbles:true}));
-    out.textContent='Li '+r.peaks.length+' bandas ('+(r.T?'espectro em transmitância':'espectro em absorbância')+', '+r.n+' pontos). Confira a lista no campo acima e apague as que não forem bandas de verdade. Só marquei "l" nas bandas muito largas acima de 2400 cm⁻¹; "e" você mesmo decide.';
+    if(!r||!r.peaks.length){out.textContent='Não consegui ler bandas neste arquivo. Use .jdx ou .csv com duas colunas (número de onda e intensidade), ou um PDF. Para uma imagem, digite os números acima.';return;}
+    ivPreenche(r.peaks,'Li '+r.peaks.length+' bandas',r.T,r.n);
   };rd.readAsText(f);
 });
+/* MS em PDF: captura antes do tratador do painel, que só lê texto */
+document.addEventListener('change',async e=>{
+  if(!e.target||e.target.id!=='icFile')return;const f=e.target.files[0];if(!f||!ehPdf(f))return;
+  e.stopImmediatePropagation();const out=document.getElementById('icMsMsg');out.textContent='Lendo o PDF…';
+  try{const r=await pdfMSArquivo(f);if(!r){out.textContent=PDF_ERR;return;}
+    const campo=document.getElementById('icP');campo.value=r.pk.map(q=>q[0]+':'+q[1]).join(' ');campo.dispatchEvent(new Event('input',{bubbles:true}));
+    out.textContent=r.msg+'. Confira os valores no campo acima: a leitura por imagem pode errar em 1 unidade de m/z ou em barras muito pequenas.';}
+  catch(err){out.textContent=PDF_ERR+' (Este navegador pode ser antigo demais para o leitor de PDF.)';}
+},true);

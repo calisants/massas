@@ -155,12 +155,12 @@ const nums=s=>(String(s||'').replace(/,(?=\d)(?![^,]*\d{3}\b)/g,'.').match(/\d+(
 const numsInt=s=>(String(s||'').match(/\d+/g)||[]).map(Number);
 const ELS=[['O','Oxigênio (O)'],['H','Hidrogênio (H)'],['N','Nitrogênio (N)'],['S','Enxofre (S)'],['Cl','Cloro (Cl)'],['Br','Bromo (Br)'],['I','Iodo (I)']];
 const ELORD=['N','S','Cl','Br','I','O','H'];
-const COR=[['inc','Incolor ou branco'],['amarelo','Amarelo'],['laranja','Laranja'],['vermelho','Vermelho ou rosa'],['marrom','Marrom'],['verde','Verde'],['azul','Azul'],['violeta','Violeta ou roxo']];
+const COR=[['inc','Incolor ou branco'],['amarelo','Amarelo'],['laranja','Laranja'],['vermelho','Vermelho ou rosa'],['marrom','Marrom'],['verde','Verde'],['azul','Azul'],['violeta','Violeta ou roxo'],['preto','Preto ou cinza escuro']];
 const IRF={oh:/^O–H/,nh:/^N–H/,co:/^C=O/,ald:/C–H de aldeído/,cn:/^C≡N/,cc:/^C≡C|^≡C–H/,dc:/^C=C \(|^=C–H/,no2:/^N=O/,ar:/anel|aromático/};
 const cIr=(c,k)=>c.iv.some(b=>IRF[k].test(b[2]));
 const elCount=f=>{const m={};String(f).replace(/([A-Z][a-z]?)(\d*)/g,(a,e,n)=>{m[e]=(m[e]||0)+(n?+n:1);return '';});return m;};
 const corFam=s=>{s=String(s||'').toLowerCase();const k=s.indexOf('('),main=k<0?s:s.slice(0,k),par=k<0?'':s.slice(k);
-  const f=t=>{const r=new Set();if(/incolor|branc/.test(t))r.add('inc');if(/amarel/.test(t))r.add('amarelo');if(/laranj/.test(t))r.add('laranja');if(/verm|ros/.test(t))r.add('vermelho');if(/marrom|castanh/.test(t))r.add('marrom');if(/verde/.test(t))r.add('verde');if(/azul/.test(t))r.add('azul');if(/viole|roxo|purpur/.test(t))r.add('violeta');return r;};
+  const f=t=>{const r=new Set();if(/incolor|branc/.test(t))r.add('inc');if(/amarel/.test(t))r.add('amarelo');if(/laranj/.test(t))r.add('laranja');if(/verm|ros/.test(t))r.add('vermelho');if(/marrom|castanh/.test(t))r.add('marrom');if(/verde/.test(t))r.add('verde');if(/azul/.test(t))r.add('azul');if(/viole|roxo|purpur/.test(t))r.add('violeta');if(/preto|negro|cinza|escur/.test(t))r.add('preto');return r;};
   return [f(main),f(par)];};
 const IC_CAMPOS=['#icNome','#icPF','#icPE','#icTol','#icIV','#icMeio','#icM','#icP','#icH','#icC','#icHd','#icF','#icGDH','#icGF'];
 let icSt={est:'',cor:'',g:'',el:{},ir:{},sub:{}};

@@ -741,22 +741,50 @@ function bdScoreIV(c,Qi,meio){
   const hi=Qi.filter(o=>o.v>1500),un=hi.filter(o=>!B.some(b=>covers(b,o))).map(o=>o.v);
   return{rec:keys?hit/keys:1,prec:hi.length?1-un.length/hi.length:1,miss,un};
 }
-function bdSvg(e){
-  if(!e)return'';const at=e[0],bd=e[1],W=230,H=150,P=14;
-  let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;at.forEach(a=>{x0=Math.min(x0,a[1]);x1=Math.max(x1,a[1]);y0=Math.min(y0,a[2]);y1=Math.max(y1,a[2]);});
-  const sc=Math.min((W-2*P)/Math.max(x1-x0,1),(H-2*P)/Math.max(y1-y0,1),3),ox=(W-(x1-x0)*sc)/2-x0*sc,oy=(H-(y1-y0)*sc)/2-y0*sc;
-  const X=a=>a[1]*sc+ox,Y=a=>a[2]*sc+oy,lab=a=>a[0]!==0;
-  let s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Estrutura" class="bdsv">';
-  bd.forEach(b=>{const A=at[b[0]],B=at[b[1]];let ax=X(A),ay=Y(A),bx=X(B),by=Y(B);const dx=bx-ax,dy=by-ay,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,cut=7;
-    if(lab(A)){ax+=ux*cut;ay+=uy*cut;}if(lab(B)){bx-=ux*cut;by-=uy*cut;}
-    const nx=-uy*2.6,ny=ux*2.6,o=b[2],ln=(p,q,r,t)=>'<line x1="'+p.toFixed(1)+'" y1="'+q.toFixed(1)+'" x2="'+r.toFixed(1)+'" y2="'+t.toFixed(1)+'"/>';
-    if(o===2)s+=ln(ax+nx,ay+ny,bx+nx,by+ny)+ln(ax-nx,ay-ny,bx-nx,by-ny);
-    else if(o===3)s+=ln(ax,ay,bx,by)+ln(ax+nx*1.5,ay+ny*1.5,bx+nx*1.5,by+ny*1.5)+ln(ax-nx*1.5,ay-ny*1.5,bx-nx*1.5,by-ny*1.5);
-    else s+=ln(ax,ay,bx,by);});
-  at.forEach(a=>{if(lab(a)||a[4]){let t=a[0]||'C';if(a[3]>0)t+='H'+(a[3]>1?'<tspan dy="3" font-size="7">'+a[3]+'</tspan>':'');
-    if(a[4])t+='<tspan dy="-5" font-size="7">'+(a[4]>0?'+':'−')+'</tspan>';
-    s+='<text x="'+X(a).toFixed(1)+'" y="'+(Y(a)+4).toFixed(1)+'" text-anchor="middle">'+t+'</text>';}});
-  return s+'</svg>';
+/* Estrutura no estilo do RDKit usado nas outras telas: comprimento de ligação fixo, duplas de anel por dentro,
+   ligação dividida na cor de cada átomo, rótulos com H do lado livre (OH, HO, NH₂) e carga em sobrescrito.
+   mod 'f' = ficha (tamanho natural); sem mod = miniatura (largura vem do CSS). */
+function bdSvg(e,mod){
+  if(!e)return'';const at=e[0],bd=e[1],n=at.length;
+  const ln0=bd.map(b=>Math.hypot(at[b[0]][1]-at[b[1]][1],at[b[0]][2]-at[b[1]][2])).sort((p,q)=>p-q),u=ln0.length?ln0[ln0.length>>1]:15,BL=30,k=BL/(u||15);
+  const px=at.map(a=>a[1]*k),py=at.map(a=>a[2]*k);
+  const COR={O:'var(--lost,#e0533d)',N:'var(--blue,#4a6cf0)',S:'#c99a12',P:'#e8923a',F:'#3daa5c',Cl:'#3daa5c',Br:'#b5651d',I:'#8e5bb5'};
+  const lab=at.map(a=>a[0]!==0),cor=at.map(a=>a[0]?(COR[a[0]]||'currentColor'):'currentColor');
+  const nb=at.map(()=>[]);bd.forEach(b=>{nb[b[0]].push(b[1]);nb[b[1]].push(b[0]);});
+  const fs=Math.round(BL*0.48*10)/10,sw=2.1,cut=fs*0.62;
+  /* menor anel que contém a ligação (até 8 átomos); devolve o centro dele */
+  const anel=(i,j)=>{const prev=new Map([[i,-1]]);let fr=[i],d=0;
+    while(fr.length&&d<7){const nx=[];for(const a of fr)for(const c of nb[a]){if(a===i&&c===j)continue;if(prev.has(c))continue;prev.set(c,a);if(c===j){const P=[];let t=j;while(t!==-1){P.push(t);t=prev.get(t);}return[P.reduce((s,t)=>s+px[t],0)/P.length,P.reduce((s,t)=>s+py[t],0)/P.length];}nx.push(c);}fr=nx;d++;}
+    return null;};
+  const f1=v=>v.toFixed(1);
+  const seg=(x1,y1,x2,y2,c1,c2)=>{const L=l=>'<line x1="'+f1(l[0])+'" y1="'+f1(l[1])+'" x2="'+f1(l[2])+'" y2="'+f1(l[3])+'" stroke="';
+    if(c1===c2)return L([x1,y1,x2,y2])+c1+'"/>';const mx=(x1+x2)/2,my=(y1+y2)/2;return L([x1,y1,mx,my])+c1+'"/>'+L([mx,my,x2,y2])+c2+'"/>';};
+  let g='';
+  bd.forEach(b=>{const i=b[0],j=b[1],o=b[2];let ax=px[i],ay=py[i],bx=px[j],by=py[j];const dx=bx-ax,dy=by-ay,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,nx=-uy,ny=ux;
+    const ci=cor[i],cj=cor[j],A=lab[i]?cut:0,B=lab[j]?cut:0;
+    const par=(off,sh)=>{const s1=Math.max(A,sh),s2=Math.max(B,sh);return seg(ax+ux*s1+nx*off,ay+uy*s1+ny*off,bx-ux*s2+nx*off,by-uy*s2+ny*off,ci,cj);};
+    if(o===1)g+=par(0,0);
+    else if(o===3)g+=par(0,0)+par(BL*0.16,0)+par(-BL*0.16,0);
+    else if(o===2){
+      const r=anel(i,j);
+      if(r){const side=((r[0]-ax)*nx+(r[1]-ay)*ny)>=0?1:-1;g+=par(0,0)+par(side*BL*0.17,BL*0.14);}
+      else if(nb[i].length<2||nb[j].length<2)g+=par(BL*0.09,0)+par(-BL*0.09,0);
+      else{let sd=0;nb[i].concat(nb[j]).forEach(c=>{if(c===i||c===j)return;sd+=(px[c]-ax)*nx+(py[c]-ay)*ny;});const side=sd>=0?1:-1;g+=par(0,0)+par(side*BL*0.17,BL*0.14);}
+    }else g+=par(0,0);});
+  let t='';
+  at.forEach((a,i)=>{if(!lab[i]&&!a[4])return;const sym=a[0]||'C',c=cor[i],h=a[3]||0,q=a[4]||0;
+    let sdx=0;nb[i].forEach(j=>{sdx+=px[j]-px[i];});const left=sdx>BL*0.2;
+    const X=px[i],Y=py[i]+fs*0.36,w=fs*0.62*sym.length;
+    t+='<text x="'+f1(X)+'" y="'+f1(Y)+'" text-anchor="middle" fill="'+c+'">'+sym+'</text>';
+    let cx=X+w/2+1;
+    if(q){const qt=(Math.abs(q)>1?Math.abs(q):'')+(q>0?'+':'−');t+='<text x="'+f1(cx)+'" y="'+f1(Y-fs*0.42)+'" font-size="'+f1(fs*0.66)+'" fill="'+c+'">'+qt+'</text>';cx+=fs*0.42*qt.length+1;}
+    if(h>0){const sub=h>1?'<tspan dy="'+f1(fs*0.28)+'" font-size="'+f1(fs*0.68)+'">'+h+'</tspan>':'';
+      if(left)t+='<text x="'+f1(X-w/2-1)+'" y="'+f1(Y)+'" text-anchor="end" fill="'+c+'">H'+sub+'</text>';
+      else t+='<text x="'+f1(cx)+'" y="'+f1(Y)+'" fill="'+c+'">H'+sub+'</text>';}});
+  let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;at.forEach((a,i)=>{const m=lab[i]?fs*1.6:2;x0=Math.min(x0,px[i]-m);x1=Math.max(x1,px[i]+m);y0=Math.min(y0,py[i]-m);y1=Math.max(y1,py[i]+m);});
+  const P=mod==='f'?18:10;let W=x1-x0+2*P,H=y1-y0+2*P;if(mod==='f'){W=Math.max(W,170);H=Math.max(H,110);}
+  const ox=(W-(x1-x0))/2-x0,oy=(H-(y1-y0))/2-y0;
+  return '<svg viewBox="0 0 '+f1(W)+' '+f1(H)+'" role="img" aria-label="Estrutura" class="bdsv"'+(mod==='f'?' style="width:'+Math.round(W)+'px"':'')+'><g transform="translate('+f1(ox)+' '+f1(oy)+')"><g stroke-width="'+sw+'" stroke-linecap="round" stroke-linejoin="round" fill="none">'+g+'</g><g font-size="'+f1(fs)+'" font-family="inherit">'+t+'</g></g></svg>';
 }
 /* ficha de um composto do banco (mesma tela p-cf dos outros) */
 function bdFicha(ix){
@@ -765,7 +793,7 @@ function bdFicha(ix){
   const tx=v=>v&&v!=='-'?esc(v):'sem dado';
   let h='<h2 class="scr">'+esc(c.n)+'</h2>'+''
    +(c.a.length?'<p class="scrsub">Também: '+c.a.map(esc).join(' · ')+'</p>':'')
-   +'<figure class="cfs"><div>'+bdSvg(r[16])+'</div><figcaption>'+fmt(c.f)+(c.mw?' · '+String(c.mw).replace('.',',')+' g/mol':'')+'</figcaption></figure>'
+   +'<figure class="cfs"><div>'+bdSvg(r[16],'f')+'</div><figcaption>'+fmt(c.f)+(c.mw?' · '+String(c.mw).replace('.',',')+' g/mol':'')+'</figcaption></figure>'
    +'<div class="cfq"><div class="cfqi"><span>Estado a 25 °C</span><b>'+(c.est?esc(c.est):'sem dado')+'</b></div>'
    +'<div class="cfqi"><span>Ponto de fusão</span><b>'+tx(r[8])+(r[8]&&r[8]!=='-'?' °C':'')+'</b></div>'
    +'<div class="cfqi"><span>Ponto de ebulição</span><b>'+tx(r[9])+(r[9]&&r[9]!=='-'?' °C':'')+'</b></div></div>'

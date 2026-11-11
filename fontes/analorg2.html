@@ -69,7 +69,7 @@
     <details class="sec icsec"><summary>5. Infravermelho <span class="bdg" data-b="5"></span></summary>
     <div id="icIrR"></div>
     <label for="icIV">Outras bandas que você viu (cm⁻¹, separadas por vírgula ou espaço)<input class="f-p" type="text" id="icIV" placeholder="ex.: 3300l, 2960, 1715" autocomplete="off"></label>
-    <label for="icIVFile">Ou importe um espectro de IV (.jdx, .csv ou .txt com número de onda e intensidade)<input type="file" id="icIVFile" accept=".jdx,.dx,.csv,.txt,text/plain"></label><p class="hint" id="icIVMsg" aria-live="polite">O app procura os picos e preenche o campo acima. Funciona com transmitância ou absorbância.</p>
+    <label for="icIVFile">Ou importe um espectro de IV (.pdf, .jdx, .csv ou .txt)<input type="file" id="icIVFile" accept=".pdf,.jdx,.dx,.csv,.txt,application/pdf,text/plain"></label><p class="hint" id="icIVMsg" aria-live="polite">O app procura os picos e preenche o campo acima. Funciona com transmitância ou absorbância.</p>
     <p class="hint">Marque <b>l</b> depois do número se a banda é larga (3300l) e <b>e</b> se é estreita (2250e). Isso separa, por exemplo, o O–H de ácido (muito largo) do C–H.</p>
     <label for="icMeio">Como o IV foi medido<select id="icMeio"><option value="">Filme líquido ou pastilha de KBr</option><option value="sol">Solução diluída (CCl₄, CHCl₃)</option><option value="gas">Fase gasosa</option></select></label>
     <p class="hint">O meio muda as bandas: em solução diluída o O–H e o N–H livres ficam finos e mais altos, e em gás o C=O sobe. A comparação já leva isso em conta.</p>
@@ -83,7 +83,7 @@
         <label for="icGF">Grupo funcional<select id="icGF"><option value="">não sei</option></select></label>
         <label for="icM">M (íon molecular)<input type="number" id="icM" inputmode="numeric" min="1" max="999"></label>
         <label for="icP" style="grid-column:span 2">Outros picos de MS (m/z)<input type="text" id="icP" placeholder="ex.: 43, 15 ou 43:100 58:42" autocomplete="off" style="font-family:var(--mono)"></label>
-        <label for="icFile" style="grid-column:span 2">Ou importe um espectro de massas (.jdx, .csv ou .txt com pares m/z e intensidade)<input type="file" id="icFile" accept=".jdx,.dx,.csv,.txt,.tsv"></label>
+        <label for="icFile" style="grid-column:span 2">Ou importe um espectro de massas (.pdf, .jdx, .csv ou .txt)<input type="file" id="icFile" accept=".pdf,.jdx,.dx,.csv,.txt,.tsv,application/pdf"></label><p class="hint" id="icMsMsg" aria-live="polite" style="grid-column:span 2;margin:0">O app procura os picos e preenche o campo acima.</p>
         <label for="icH">Nº de sinais de ¹H<input type="number" id="icH" inputmode="numeric" min="1" max="30"></label>
         <label for="icC">Nº de sinais de ¹³C<input type="number" id="icC" inputmode="numeric" min="1" max="30"></label>
         <label for="icHd" style="grid-column:span 2">δ de ¹H (ppm)<input type="text" id="icHd" placeholder="ex.: 2.1" autocomplete="off" style="font-family:var(--mono)"></label>
