@@ -266,11 +266,13 @@ def overtones(m):
     out = []
     aneis = [r for r in m.GetRingInfo().AtomRings() if len(r) == 6 and all(m.GetAtomWithIdx(i).GetSymbol() == 'C' and m.GetAtomWithIdx(i).GetIsAromatic() for i in r)]
     if aneis:
-        iso = []
+        iso = []; bi = []
         for ring in aneis:
             at = [m.GetAtomWithIdx(i) for i in ring]
-            if any(sum(1 for n in a.GetNeighbors() if n.GetIsAromatic()) != 2 for a in at): continue
+            # anel fundido (naftaleno etc.): átomo em 2 anéis com 3 vizinhos aromáticos. Bifenila não é fundida: o outro anel conta como substituinte.
+            if any(sum(1 for n in a.GetNeighbors() if n.GetIsAromatic()) != 2 and m.GetRingInfo().NumAtomRings(a.GetIdx()) > 1 for a in at): continue
             iso.append([k for k, a in enumerate(at) if a.GetTotalNumHs() == 0])
+            bi.append(any(nb.GetIsAromatic() and nb.GetIdx() not in ring for a in at for nb in a.GetNeighbors()))
         if not iso:
             out.append(["Combinação e harmônico do anel", "2000–1650", "Anel fundido (naftaleno e semelhantes): não achei padrão tabelado para esta região.", S_BENZ])
         else:
@@ -287,6 +289,9 @@ def overtones(m):
             else:
                 out.append(["Combinação e harmônico do anel", "2000–1650", "Anel com " + str(n) + " substituintes: não achei padrão tabelado para esta região.", S_BENZ])
             if len(iso) > 1: out[-1][2] += " Há mais de um anel isolado; os padrões se somam."
+            if pad and bi[0]:
+                out[-1][2] += " O outro anel aromático conta como substituinte. A tabela de Smith não cita bifenilas: aqui é extensão dela, sem conferência."
+                out[-1][3] = S_BENZ + " (extensão a bifenilas, sem fonte tabelada)"
     if m.HasSubstructMatch(_OT_ALD):
         out.append(["Ressonância de Fermi (harmônico)", "2850–2700", "Aldeído: aparecem duas bandas de C–H do aldeído, perto de 2820 e 2720. A banda de estiramento C–H interage com o harmônico da deformação C–H do aldeído (fundamental em ~1390). Nem todo aldeído mostra as duas, mas a de ~2720 é a mais útil porque fica livre dos C–H alifáticos.", S_ALD])
     if m.HasSubstructMatch(_OT_CET):

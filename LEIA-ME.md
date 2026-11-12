@@ -66,3 +66,7 @@ O banco só traz picos de massas; não tem bandas de IV nem RMN, e não cita a f
 - Ensaios: cada um em sanfona, materiais montados do texto do procedimento (`fuMat`), ícones em `FUI`.
 - Avisar erro ou sugestão: tela `p-av`; para enviar à planilha, publicar o script da aba "Como ligar o envio" e colocar o link em `AV_URL` (analorg4.js).
 - PDF de IV com rótulos girados: leitura por linhas-guia dos picos; só 4 PDFs desse tipo foram vistos.
+
+## v227
+- Overtones: bifenilas (93 compostos do banco) estavam rotulados como "anel fundido". Agora o outro anel conta como substituinte e o padrão mono/orto/meta/para é mostrado, marcado como extensão da tabela de Smith sem fonte tabelada. Anéis fundidos, com 4 a 6 substituintes e heteroaromáticos continuam sem padrão ("não achei padrão tabelado").
+- `fontes/analor_ot_refaz.py` recalcula só os overtones do `analor_bd.json` (o DBF não está no repositório).
