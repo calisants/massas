@@ -165,7 +165,7 @@ const corFam=s=>{s=String(s||'').toLowerCase();const k=s.indexOf('('),main=k<0?s
   return [f(main),f(par)];};
 const IC_CAMPOS=['#icNome','#icPF','#icPE','#icTol','#icIV','#icMeio','#icM','#icP','#icH','#icC','#icHd','#icF','#icGDH','#icGF'];
 /* Overtones: quem interpreta é o usuário. O padrão do anel (2000–1650) vem do texto dos overtones de cada composto */
-const RING=[['','Anel: não sei'],['mono','Monossubstituído'],['orto','Orto (1,2)'],['meta','Meta (1,3)'],['para','Para (1,4)'],['t123','1,2,3-tri'],['t124','1,2,4-tri'],['t135','1,3,5-tri'],['nenhum','Sem anel benzênico']];
+const RING=[['','Anel: não sei'],['mono','Monossubstituído'],['orto','Orto (1,2)'],['meta','Meta (1,3)'],['para','Para (1,4)'],['t123','1,2,3-tri'],['t124','1,2,4-tri'],['t135','1,3,5-tri'],['t4','4 ou mais substituintes'],['fund','Anel fundido (naftaleno)'],['nenhum','Sem anel benzênico']];
 const OTL=[['ald','Duas bandas fracas do C–H de aldeído, perto de 2820 e 2720 (Fermi)'],['co','Banda fraca em 3500–3350 sem ser O–H (dobro do C=O)'],['am','Banda de amina primária perto de 3200 (Fermi)']];
 const ringLab=k=>(RING.find(r=>r[0]===k)||[0,k])[1];
 function ringPat(c){
@@ -174,9 +174,11 @@ function ringPat(c){
   const t=String(o[2]);
   if(/^Anel monossubst/.test(t))return 'mono';if(/^Anel orto/.test(t))return 'orto';if(/^Anel meta/.test(t))return 'meta';if(/^Anel para/.test(t))return 'para';
   if(/^Anel 1,2,3/.test(t))return 't123';if(/^Anel 1,2,4/.test(t))return 't124';if(/^Anel 1,3,5/.test(t))return 't135';
+  /* anel com 4, 5 ou 6 substituintes (ex.: ácido gálico) e anel fundido (naftaleno): têm anel benzênico, só não há padrão tabelado do 2000–1650 */
+  if(/^Anel com \d+ substituintes/.test(t))return 't4';if(/^Anel fundido/.test(t))return 'fund';
   return 'outro';
 }
-const RINGC={mono:'mono',orto:'orto',meta:'meta',para:'para',t123:'1,2,3',t124:'1,2,4',t135:'1,3,5'};
+const RINGC={mono:'mono',orto:'orto',meta:'meta',para:'para',t123:'1,2,3',t124:'1,2,4',t135:'1,3,5',t4:'4+ subst.',fund:'fundido'};
 function ringTxt(c){const o=(c.ot||[]).find(o=>/^Combinação e harmônico/.test(o[0]));return o?String(o[2]).split(':')[0].replace(/^Anel /,'Anel '):'';}
 function ringTag(c){const p=ringPat(c);return RINGC[p]?' <span class="tag sm" title="'+esc(ringTxt(c))+'">'+RINGC[p]+'</span>':'';}
 function otTem(c,k){

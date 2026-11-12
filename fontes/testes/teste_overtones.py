@@ -34,5 +34,27 @@ with sync_playwright() as p:
     ald=pg.evaluate("COMP.filter(c=>otTem(c,'ald')).map(c=>c.n)")
     print('ok  aldeídos com Fermi 2820/2720:',len(ald),ald[:3])
     assert ald
+    # anel com 4 ou mais substituintes e anel fundido (ex.: ácido gálico, naftaleno): têm anel benzênico, então "Sem anel" não pode ser neutro para eles
+    js_f="""(r)=>{icReset();icSt.ring=r;icDraw();const x=icInputs();
+      return bdAll().concat(COMP).map(c=>{const s=icScore(c,x);const p=s.parts.find(p=>/^Overtones: anel/.test(p.lab));return [c.n,ringPat(c),p?p.f:null]})}"""
+    ids=[k for k,_ in pg.evaluate("RING")]
+    assert 't4' in ids and 'fund' in ids,('faltam as opções de anel com 4+ substituintes e anel fundido',ids)
+    todos=pg.evaluate("bdAll().concat(COMP).map(c=>[c.n,ringPat(c)])")
+    assert not [n for n,k in todos if k=='outro'],'sobrou composto sem classificação de anel'
+    dd=dict(todos)
+    assert dd['Ácido gálico']=='t4',dd['Ácido gálico']
+    assert any(k=='fund' for n,k in todos)
+    for ring in ('nenhum','mono','para','t123'):
+        for n,k,f in pg.evaluate(js_f,ring):
+            if k in ('t4','fund'):
+                assert f is not None and f<0.1,('anel '+ring+': '+n+' ('+k+') deveria perder, fator',f)
+    for ring,k0 in (('t4','t4'),('fund','fund')):
+        res=pg.evaluate(js_f,ring)
+        assert all(f==1 for n,k,f in res if k==k0),('anel '+ring+' não confere com todos os '+k0)
+        assert all(f<0.1 for n,k,f in res if k not in (k0,None) and f is not None),('anel '+ring+' deixa passar outro padrão')
+    # "Sem anel" nunca pode subir a nota de um composto aromático em relação a "não sei"
+    w=lambda ring,nome:pg.evaluate("(a)=>{icReset();icSt.ring=a[0];icDraw();const x=icInputs();return icScore(bdAll().concat(COMP).find(c=>c.n===a[1]),x).w}",[ring,nome])
+    assert w('nenhum','Ácido gálico')<w('','Ácido gálico'),'Sem anel benzênico não pode favorecer o ácido gálico'
+    print('ok  anel com 4+ substituintes e fundido: opções próprias, "Sem anel" derruba esses compostos')
     assert not er,er;print('ok  sem erros de código')
     b.close()
