@@ -70,3 +70,7 @@ O banco só traz picos de massas; não tem bandas de IV nem RMN, e não cita a f
 ## v227
 - Overtones: bifenilas (93 compostos do banco) estavam rotulados como "anel fundido". Agora o outro anel conta como substituinte e o padrão mono/orto/meta/para é mostrado, marcado como extensão da tabela de Smith sem fonte tabelada. Anéis fundidos, com 4 a 6 substituintes e heteroaromáticos continuam sem padrão ("não achei padrão tabelado").
 - `fontes/analor_ot_refaz.py` recalcula só os overtones do `analor_bd.json` (o DBF não está no repositório).
+
+## v232
+- Ensaios ilustrados: Preliminares (cor, aspecto, cheiro, ignição, PF, PEb, pureza), Solubilidade (cada solvente), Análise elementar (cada elemento, halogênios, pirólise, Lassaigne) e Funcional de nitro, ácido carboxílico e cloro (tubo antes/depois e materiais). Tudo em `fontes/analorg5.js` (esquemas em SVG; as cores vêm do texto de cada ensaio).
+- Novo: ficha "Cor da chama" em Preliminares: (1) cor da chama da amostra (Analor e Atividade 1 do Prof. Flávio), (2) alça de cobre / Beilstein (apostila IFRJ 2016, com as interferências), (3) cor da chama de metais do resíduo (Creative Chemistry e RSC, fonte web; passos de roteiros escolares).

@@ -142,7 +142,7 @@ import compostos
 js+="const COMP="+json.dumps(compostos.build_comp(svg,EXD),ensure_ascii=False)+";\n"
 js+="const BDJSON="+json.dumps(open("analor_bd.json",encoding="utf-8").read(),ensure_ascii=False)+";\n"
 js+="const MSFS="+json.dumps(compostos.MSFS,ensure_ascii=False)+";\n"
-for _ph,_f in (("<!--@@ANALORG2_HTML@@-->","analorg2.html"),("/*@@ANALORG2_CSS@@*/","analorg2.css"),("/*@@ANALORG3_CSS@@*/","analorg3.css"),("/*@@ANALORG2_JS@@*/","analorg2.js"),("/*@@ANALORG3_JS@@*/","analorg3.js"),("/*@@ANALORG4_CSS@@*/","analorg4.css"),("/*@@ANALORG4_JS@@*/","analorg4.js")):
+for _ph,_f in (("<!--@@ANALORG2_HTML@@-->","analorg2.html"),("/*@@ANALORG2_CSS@@*/","analorg2.css"),("/*@@ANALORG3_CSS@@*/","analorg3.css"),("/*@@ANALORG2_JS@@*/","analorg2.js"),("/*@@ANALORG3_JS@@*/","analorg3.js"),("/*@@ANALORG4_CSS@@*/","analorg4.css"),("/*@@ANALORG4_JS@@*/","analorg4.js"),("/*@@ANALORG5_CSS@@*/","analorg5.css"),("/*@@ANALORG5_JS@@*/","analorg5.js")):
     _t=open(_f,encoding="utf-8").read()
     if _f=="analorg2.html":
         import gf_tabela
